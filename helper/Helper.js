@@ -562,3 +562,27 @@ const retrievePostData = async (categoryIdFromNotification) => {
     return categoryPostsData;
 }
 
+export const focusOnInputIfFormInvalid = (formState, inputRef) => {
+    if (!formState.isValid)
+        inputRef?.current?.focus();
+}
+
+export const onChangeByValueType = async (inputProps, value, props) => {
+    switch (props.inputName) {
+        case fieldControllerName.PHONE_NUMBER:
+            const phoneValue = value.replace(stringConstants.REPLACE_REGEX, stringConstants.EMPTY);
+            inputProps.onChange(phoneValue);
+            props.isSignUp && props.setSignUpDetails({ ...props.signUpDetails, phoneNumber: phoneValue });
+            break;
+        case fieldControllerName.DOB:
+            inputProps.onChange(value);
+            break;
+        case fieldControllerName.DATE_PICKER:
+            inputProps.onChange(value);
+            props.isFromBloodRequestForm && props.setRequestForm({ ...props.requestForm, needed_request_date: value });
+            break;
+        default:
+            inputProps.onChange(value);
+            break;
+    }
+}

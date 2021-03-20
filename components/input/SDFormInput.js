@@ -4,6 +4,7 @@ import { Text } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { colors, userAuthStyles, SDGenericStyles } from '../../styles/Styles';
 import { countryCodesConstants, miscMessage } from '../../constants/Constants';
+import { onChangeByValueType } from '../../helper/Helper';
 
 export const SDFormInput = props => {
     return (

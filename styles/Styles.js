@@ -164,6 +164,9 @@ export const SDGenericStyles = StyleSheet.create({
     padding10: {
         padding: 10
     },
+    paddingTop80: {
+        paddingTop: 80
+    },
     paddingHorizontal5: {
         paddingHorizontal: 5
     },
@@ -179,6 +182,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingHorizontal25: {
         paddingHorizontal: 25
     },
+    paddingBottom50: {
+        paddingBottom: 50
+    },
     paddingVertical2: {
         paddingVertical: 2
     },
@@ -187,9 +193,6 @@ export const SDGenericStyles = StyleSheet.create({
     },
     textLeftAlign: {
         textAlign: 'left'
-    },
-    paddingVertical50: {
-        paddingVertical: 50
     },
     ml_95: {
         marginLeft: 95
@@ -264,9 +267,13 @@ export const SDGenericStyles = StyleSheet.create({
     backgroundColorWhite: {
         backgroundColor: 'white'
     },
+
+    backgroundColorYellow: {
+        backgroundColor: `#fcc200`
+    },
     colorWhite: {
         color: '#FFFAFA'
-    }
+    },
 });
 
 export const glancePostStyles = StyleSheet.create({
@@ -759,8 +766,36 @@ export const userAuthStyles = StyleSheet.create({
         marginHorizontal: 3,
         paddingHorizontal: 5,
         color: '#05375a',
-        fontSize: 18,
+        fontSize: 16,
         paddingLeft: 5
+    },
+    signInSecondaryButtonView: {
+        alignSelf: 'center',
+        paddingVertical: 100,
+        width: width / 2,
+        marginBottom: 100
+    },
+    registerButtonView: {
+        alignSelf: 'center',
+        paddingVertical: 50,
+        width: width / 2,
+        marginBottom: 100
+    },
+    actionButtonStyle: {
+        flexDirection: `column`,
+        backgroundColor: '#0095f6',
+        borderRadius: 3,
+        paddingVertical: 8,
+        elevation: 3
+    },
+    primaryActionButtonButtonText: {
+        fontSize: 18,
+        textAlign: 'center',
+        elevation: 3,
+        paddingVertical: 8,
+        color: 'white',
+        fontWeight: 'bold',
+        fontFamily: isAndroid && `normal` || `System`
     },
     signInUserInputView: {
         paddingVertical: 1,
@@ -776,6 +811,7 @@ export const userAuthStyles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         paddingStart: 15,
+        backgroundColor: `#fafafa`,
         marginVertical: 5,
         borderColor: `#888888`,
         borderRadius: 3,
@@ -811,7 +847,19 @@ export const userAuthStyles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 14,
         color: '#abb4bd'
-    }
+    },
+    registerLink: {
+        paddingHorizontal: 1
+    },
+    registerDescription: {
+        color: '#989898',
+        textAlign: 'center',
+        fontSize: 16,
+        marginTop: 30,
+        width: width / 1.15,
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
 });
 
 export const errorBoundaryStyles = StyleSheet.create({

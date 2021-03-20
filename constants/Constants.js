@@ -66,6 +66,24 @@ export const keyBoardTypeConst = {
     PASSWORD: `password`
 }
 
+export const actionButtonTextConstants = {
+    SIGN_IN: `Sign in`,
+    REGISTER: `Register`,
+    SUBMIT: `Submit`,
+    SURE: `Sure`,
+    CANCEL: `Cancel`,
+    NOT_NOW: `Not now`,
+    PROCEED: `Proceed`,
+    VERIFY: `Verify`,
+    FORGOT_PASSWORD: `Forgot Password`,
+    RESET_PASSWORD: `Reset Password`,
+    OK: `OK`,
+    DATE: `Date`,
+    FEEDBACK: `Feedback`,
+    SHARE: `Share`,
+    REQUEST_DONERS: `Request Doners`
+}
+
 export const formRequiredRules = {
     mobileInputFormRule: {
         required: {
@@ -187,7 +205,8 @@ export const placeHolderText = {
     NAME: `Enter Name`,
     DOB: `Enter date of birth`,
     SECRET: `Enter 4 digit Password`,
-    CONFIRM_PASSWORD: `Confirm 4 digit Password`
+    CONFIRM_PASSWORD: `Confirm 4 digit Password`,
+    REGISTER_DESCRIPTION: `We will send you a verification code to your phone`,
 }
 
 export const numericConstants = {
