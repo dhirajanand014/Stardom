@@ -26,23 +26,10 @@ export const asyncStorageKeys = {
     SAVE_SELECTED_REPORT: `@save_selected_report`
 }
 
-export const fieldTextName = {
-    MOBILE_NUMBER: `Mobile Number`,
-    MOBILE_NUMBER_TEXT: `Mobile Number : `,
-    PASSWORD: `Password`,
-    CONFIRM_PASSWORD: `Confirm Password`,
-    NAME: `Name : `,
-    AGE: `Age : `,
-    DOB: `Date of birth : `,
-    GENDER: `Gender`,
-    PROFILE_NAME: `Profile Name`,
-    LOCATION: `Location`,
-    INTERESTS: `Interests`,
-    CATEGORIES: `Categories`
-}
-
 export const fieldControllerName = {
     PHONE_NUMBER: `phoneNumber`,
+    FULL_NAME: `fullName`,
+    EMAIL: `email`,
     SECRET: `secret`,
     CONFIRM_SECRET: `confirmSecret`,
     OTP_INPUT: `otpInput`,
@@ -54,16 +41,22 @@ export const fieldControllerName = {
     INTERESTS: `interests`,
     CATEGORIES: `categories`
 }
+
 export const keyBoardTypeConst = {
     DEFAULT: `default`,
     ANDROID_NUMERIC: `numeric`,
     IOS_NUMERIC: `number-pad`,
     TELPHONETYPE: `telephoneNumber`,
+    EMAIL: `email-address`,
     USERNAME: `username`,
     NEW_PASSWORD: `newPassword`,
     ONETIMECODE: `oneTimeCode`,
     NAME: `name`,
     PASSWORD: `password`
+}
+
+export const textContentType = {
+    EMAIL: `emailAddress`,
 }
 
 export const actionButtonTextConstants = {
@@ -127,6 +120,16 @@ export const formRequiredRules = {
         required: {
             value: true,
             message: `Please enter a name`
+        }
+    },
+    emailRule: {
+        required: {
+            value: true,
+            message: `Please enter email address`
+        },
+        pattern: {
+            value: /S+@S+.S+/,
+            message: `Entered value does not match email format`
         }
     },
     dobRule: {
@@ -202,6 +205,8 @@ export const modalTextConstants = {
 }
 export const placeHolderText = {
     PHONE_NUMBER: `Enter 10 digit Number`,
+    FULL_NAME: `Full Name`,
+    EMAIL: `Email Address`,
     NAME: `Enter Name`,
     DOB: `Enter date of birth`,
     SECRET: `Enter 4 digit Password`,
@@ -285,5 +290,8 @@ export const countryCodesConstants = {
 
 export const miscMessage = {
     NONE: `none`,
-    DONT_HAVE_ACCOUNT: `Dont have an account?`
+    DONT_HAVE_ACCOUNT: `Dont have an account?`,
+    DOB_DATE_FORMAT: `DD/MM/YYYY`,
+    DATE: `date`,
+    SELECT_DATE: `Select Date`
 }

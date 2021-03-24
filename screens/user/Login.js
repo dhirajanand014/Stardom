@@ -32,13 +32,13 @@ export const Login = (params) => {
             SDGenericStyles.alignItemsCenter]}>
                 <LoginIcon />
             </View>
-            <SDImageFormInput inputTextName={fieldTextName.MOBILE_NUMBER} inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
-                defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER} style={{ flex: 1, padding: 15, }}
+            <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
+                defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
                 keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} icon={<PhoneIcon stroke={colors.BLACK} />}
                 textContentType={keyBoardTypeConst.TELPHONETYPE} formState={formState} autofocus={true} style={[SDGenericStyles.colorWhite, SDGenericStyles.ft16]}
                 onSubmitEditing={() => focusOnInputIfFormInvalid(formState, secretRef)} />
 
-            <SDImageFormInput inputTextName={fieldTextName.PASSWORD} inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule}
+            <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule}
                 defaultValue={stringConstants.EMPTY} maxLength={numericConstants.FOUR} placeHolderText={placeHolderText.SECRET} refCallback={refCallback}
                 keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} isSecureTextEntry={true} icon={<LoginSecretIcon />}
                 textContentType={keyBoardTypeConst.PASSWORD} formState={formState} style={[SDGenericStyles.colorWhite, SDGenericStyles.ft16]} />

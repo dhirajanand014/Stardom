@@ -802,10 +802,6 @@ export const userAuthStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    userInputTextView: {
-        fontSize: 16,
-        paddingLeft: 18
-    },
     userInput: {
         flexDirection: 'row',
         alignItems: 'center',

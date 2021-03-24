@@ -586,3 +586,21 @@ export const onChangeByValueType = async (inputProps, value, props) => {
             break;
     }
 }
+
+export const convertDate = (event, datePickerProps, props, date) => {
+    const formatedDate = datePickerConvert(event, date);
+    formatedDate && onChangeByValueType(datePickerProps, formatedDate, props);
+}
+
+const datePickerConvert = (event, date) => {
+    try {
+        if (!event.type && isIOS) {
+            return date;
+        } else if (miscMessage.SET == event.type) {
+            return isIOS && date || moment(event.nativeEvent.timestamp).toDate();
+        }
+    } catch (error) {
+        console.error(error);
+    }
+    return false;
+}
