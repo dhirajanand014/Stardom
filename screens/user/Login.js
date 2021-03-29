@@ -4,16 +4,16 @@ import { View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { PhoneIcon } from '../../components/icons/PhoneIcon';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
-import { SDImageFormInput } from '../../components/input/SDImageFormInput'
 import { useNavigation } from '@react-navigation/native';;
 import {
-    fieldTextName, fieldControllerName, formRequiredRules,
+    fieldControllerName, formRequiredRules,
     stringConstants, numericConstants, keyBoardTypeConst,
     placeHolderText, isAndroid, miscMessage, actionButtonTextConstants
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { LoginIcon } from '../../components/icons/LogInIcon';
 import { focusOnInputIfFormInvalid } from '../../helper/Helper';
+import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 export const Login = (params) => {
 
     const { handleSubmit, control, formState, clearErrors } = useForm();

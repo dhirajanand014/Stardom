@@ -104,6 +104,9 @@ export const SDGenericStyles = StyleSheet.create({
     marginVertical5: {
         marginVertical: 5
     },
+    zIndex10: {
+        zIndex: 10
+    },
     mv5: {
         marginVertical: 5
     },
@@ -190,6 +193,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingVertical10: {
         paddingVertical: 10
+    },
+    paddingVertical14: {
+        paddingVertical: 14
     },
     textLeftAlign: {
         textAlign: 'left'
@@ -808,7 +814,7 @@ export const userAuthStyles = StyleSheet.create({
         borderWidth: 1,
         paddingStart: 15,
         backgroundColor: `#fafafa`,
-        marginVertical: 5,
+        marginVertical: 3,
         borderColor: `#888888`,
         borderRadius: 3,
         width: width / 1.15,
@@ -855,6 +861,18 @@ export const userAuthStyles = StyleSheet.create({
         width: width / 1.15,
         textAlign: 'center',
         fontWeight: 'bold'
+    },
+    registrationUserDropDownView: {
+        paddingVertical: 15,
+        marginTop: 15,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start'
+    },
+    dropDownPickerStyle: {
+        justifyContent: 'center',
+        width: width / 1.15,
+        height: 50
     },
 });
 

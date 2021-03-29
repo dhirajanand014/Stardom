@@ -1,7 +1,7 @@
 import React from 'react';
 import { KeyboardAvoidingView, Text, View } from 'react-native';
 import { userAuthStyles } from '../../styles/Styles';
-import { SDFormInput } from './SDFormInput';
+import { SDFormInput } from '../../components/input/SDFormInput';
 export const SDImageFormInput = props => {
     return (
         <KeyboardAvoidingView messagestyle={userAuthStyles.signInUserInputView}>

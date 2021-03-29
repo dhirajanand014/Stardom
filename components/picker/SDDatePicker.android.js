@@ -16,7 +16,7 @@ export const SDDatePicker = props => {
                 <View style={SDGenericStyles.fill}>
                     <TouchableOpacity activeOpacity={.4} onPress={() => setShow(true)}>
                         <Text style={[SDGenericStyles.leftAlignedText, datePickerProps.value && SDGenericStyles.inputTextColor || SDGenericStyles.colorGrey, SDGenericStyles.ft16]}>
-                            {datePickerProps.value && moment(datePickerProps.value).format(miscMessage.DOB_DATE_FORMAT) || miscMessage.SELECT_DATE}</Text>
+                            {datePickerProps.value && moment(datePickerProps.value).format(miscMessage.DOB_DATE_FORMAT) || props.placeHolderText}</Text>
                     </TouchableOpacity>
                 </View>
                 {
