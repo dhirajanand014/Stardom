@@ -11,6 +11,18 @@ export const RESEND_OTP_TIME_LIMIT = 20; // 30 secs
 export const AUTO_SUBMIT_OTP_TIME_LIMIT = 1;
 export const OTP_INPUTS = 6;
 
+export const screenOptions = {
+    gestureEnabled: true, gestureDirection: 'horizontal',
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+}
+
+export const stackOptions = {
+    headerShown: false
+}
+
+export const screens = {
+    CATEGORY: `Category`
+}
 export const urlConstants = {
     fetchCategories: `https://www.wallpiper.app/4RhvfbEGwnsmxcat.php`,
     fetchPosts: `https://www.wallpiper.app/4RhvfbEGwnsmxcpst.php`,
@@ -143,7 +155,14 @@ export const formRequiredRules = {
             value: true,
             message: `Please select a date`
         }
-    }
+    },
+    genderRule: {
+        required: {
+            value: true,
+            message: `Please select a gender`
+        },
+        validate: value => value === 0 && `Please select a value` || true
+    },
 };
 
 export const savePostCountKeys = {
@@ -212,6 +231,7 @@ export const placeHolderText = {
     SECRET: `Enter 4 digit Password`,
     CONFIRM_PASSWORD: `Confirm 4 digit Password`,
     REGISTER_DESCRIPTION: `We will send you a verification code to your phone`,
+    SEARCH_POSTS: `Search Posts`
 }
 
 export const numericConstants = {
@@ -223,7 +243,9 @@ export const numericConstants = {
     FOUR: 4,
     FIVE: 5,
     SIX: 6,
+    SEVEN: 7,
     EIGHT: 8,
+    NINE: 9,
     TEN: 10,
     ELEVEN: 11,
     TWELVE: 12,
@@ -234,6 +256,7 @@ export const numericConstants = {
     TWENTY_TWO: 22,
     TWENTY_FOUR: 24,
     THIRTY: 30,
+    EIGHTY: 80,
     ONE_HUNDRED: 100,
     ONE_HUNDRED_THIRTY: 130,
     ONE_HUNDRED_FIFTY: 150,
@@ -256,6 +279,7 @@ export const errorMessages = {
     ERROR_BOUNDARY: `The app ran into a problem and could not continue.We apologise for any inconvenience this has caused! Press the button below to restart the app and sign back in.Please contact us if this issue persists.`,
     SELECT_OTHER_CATEGORIES: `Selected category has no posts! Please select another category by clicking below.`,
     POST_IMAGE_LOAD_ERROR: `Image failed to load!`,
+    SOMETHING_WENT_WRONG: `Oops, Something Went Wrong`
 }
 
 export const reportAbuseRequestPayloadKeys = {
@@ -291,7 +315,48 @@ export const countryCodesConstants = {
 export const miscMessage = {
     NONE: `none`,
     DONT_HAVE_ACCOUNT: `Dont have an account?`,
+    SELECT_A_GENDER: `Select a gender`,
     DOB_DATE_FORMAT: `DD/MM/YYYY`,
     DATE: `date`,
-    SELECT_DATE: `Select Date`
+    DOB: `Date of Birth`,
+    RELOAD_STARDOM: `Reload Stardom`,
+    SELECT_CATEGORIES: `Select other categories`,
+    NOT_AVAILABLE: `Not Available`,
+    ALWAYS: `always`,
+    CENTER: `center`,
+    SMALL: `small`
 }
+
+export const genderList = [
+    {
+        label: stringConstants.EMPTY,
+        value: -1,
+        untouchable: true
+    }, {
+        label: `Select a gender`,
+        value: 0,
+        untouchable: true,
+        textStyle: {
+            fontWeight: `bold`,
+            fontFamily: isAndroid && `normal` || `System`,
+        }
+    }, {
+        label: `Male`,
+        value: 1,
+        textStyle: {
+            color: 'lightGrey'
+        }
+    }, {
+        label: `Female`,
+        value: 2,
+        textStyle: {
+            color: 'lightGrey'
+        }
+    }, {
+        label: `Other`,
+        value: 3,
+        textStyle: {
+            color: 'lightGrey'
+        }
+    }
+];

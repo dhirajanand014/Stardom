@@ -4,7 +4,7 @@ import { View, Text, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import {
-    fieldTextName, fieldControllerName, formRequiredRules,
+    fieldControllerName, formRequiredRules,
     stringConstants, numericConstants, keyBoardTypeConst,
     placeHolderText, isAndroid, actionButtonTextConstants,
     miscMessage, genderList
@@ -21,7 +21,7 @@ export const Register = (params) => {
         <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite, SDGenericStyles.paddingHorizontal25]}>
             <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom50, SDGenericStyles.paddingTop80,
             SDGenericStyles.alignItemsCenter]}>
-                <RegisterUserIcon />
+                <RegisterUserIcon width={numericConstants.ONE_HUNDRED} height={numericConstants.ONE_HUNDRED} />
             </View>
             <ScrollView>
                 <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
@@ -55,6 +55,6 @@ export const Register = (params) => {
                     <Text style={[userAuthStyles.primaryActionButtonButtonText]}>{actionButtonTextConstants.REGISTER}</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </View >
     )
 }

@@ -56,6 +56,9 @@ export const SDGenericStyles = StyleSheet.create({
     width100: {
         width: 100
     },
+    width100pct: {
+        width: `100%`
+    },
     width120: {
         width: 120
     },
@@ -97,6 +100,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     marginBottom10: {
         marginBottom: 10
+    },
+    marginBottom15: {
+        marginBottom: 15
     },
     marginVertical2: {
         marginVertical: 2
@@ -184,6 +190,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingHorizontal25: {
         paddingHorizontal: 25
+    },
+    paddingHorizontal30: {
+        paddingHorizontal: 30
     },
     paddingBottom50: {
         paddingBottom: 50
