@@ -86,7 +86,10 @@ export const actionButtonTextConstants = {
     DATE: `Date`,
     FEEDBACK: `Feedback`,
     SHARE: `Share`,
-    REQUEST_DONERS: `Request Doners`
+    REQUEST_DONERS: `Request Doners`,
+    SKIP_BUTTON: `skipButton`,
+    SAVE_BUTTON: `saveButton`,
+    SKIP_BUTTON_TEXT: `Skip >>`
 }
 
 export const formRequiredRules = {
@@ -231,7 +234,9 @@ export const placeHolderText = {
     SECRET: `Enter 4 digit Password`,
     CONFIRM_PASSWORD: `Confirm 4 digit Password`,
     REGISTER_DESCRIPTION: `We will send you a verification code to your phone`,
-    SEARCH_POSTS: `Search Posts`
+    SEARCH_POSTS: `Search Posts`,
+    SELECT_A_CATEGORY: `Select a category`,
+    SELECT_A_GENDER: `Select a gender`,
 }
 
 export const numericConstants = {
@@ -249,13 +254,17 @@ export const numericConstants = {
     TEN: 10,
     ELEVEN: 11,
     TWELVE: 12,
+    THIRTEEN: 13,
+    FIFTEEN: 15,
     SIXTEEN: 16,
     EIGHTEEN: 18,
     NINETEEN: 19,
     TWENTY: 20,
     TWENTY_TWO: 22,
     TWENTY_FOUR: 24,
+    TWENTY_EIGHT: 28,
     THIRTY: 30,
+    FORTY_FIVE: 45,
     EIGHTY: 80,
     ONE_HUNDRED: 100,
     ONE_HUNDRED_THIRTY: 130,
@@ -264,7 +273,8 @@ export const numericConstants = {
     THREE_HUNDRED: 300,
     FOUR_HUNDRED_ONE: 401,
     FIVE_HUNDRED: 500,
-    THOUSAND: 1000
+    THOUSAND: 1000,
+    FIVE_THOUSAND: 5000
 }
 
 export const alertTextMessages = {
@@ -272,7 +282,8 @@ export const alertTextMessages = {
     POST_WALLPAPER_TEXT: `Do you want to set the current image as Home Screen and Lock Screen?`,
     POST_REPORT_ABUSED: `You have already submitted the report!`,
     WALLPAPER_SET_SUCESS: `Success`,
-    WALLPAPER_SET_SUCCESS_TEXT: `Image successfully set as wallpaper`
+    WALLPAPER_SET_SUCCESS_TEXT: `Image successfully set as wallpaper`,
+    SKIP_SAVE_CATEGORIES: `Skip or save categories to view posts!`
 }
 
 export const errorMessages = {
@@ -315,7 +326,6 @@ export const countryCodesConstants = {
 export const miscMessage = {
     NONE: `none`,
     DONT_HAVE_ACCOUNT: `Dont have an account?`,
-    SELECT_A_GENDER: `Select a gender`,
     DOB_DATE_FORMAT: `DD/MM/YYYY`,
     DATE: `date`,
     DOB: `Date of Birth`,
@@ -324,7 +334,11 @@ export const miscMessage = {
     NOT_AVAILABLE: `Not Available`,
     ALWAYS: `always`,
     CENTER: `center`,
-    SMALL: `small`
+    SMALL: `small`,
+    RECTANGLE: `rectangle`,
+    RIGHT: `right`,
+    UP: `up`,
+    STRETCH: `stretch`
 }
 
 export const genderList = [

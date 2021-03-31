@@ -167,6 +167,9 @@ export const SDGenericStyles = StyleSheet.create({
     padding5: {
         padding: 5
     },
+    width38: {
+        width: 38
+    },
     marginHorizontal10: {
         marginHorizontal: 10
     },

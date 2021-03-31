@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { miscMessage } from '../../constants/Constants';
+import { miscMessage, placeHolderText } from '../../constants/Constants';
 import { onChangeByValueType } from '../../helper/Helper';
 import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { ArrowDownIcon } from '../icons/ArrowDownIcon';
@@ -18,7 +18,7 @@ export const SDDropDownPicker = props => {
                             <ArrowUpIcon width={size} height={size} color={color} />} customArrowDown={(size, color) =>
                                 <ArrowDownIcon width={size} height={size} color={color} />} controller={props.bloodGroupControllerCallback}
                         onChangeItem={item => onChangeByValueType(inputProps, item.value, props)} defaultValue={props.dropDownDefaultValue}
-                        placeholder={miscMessage.SELECT_A_GENDER} placeholderStyle={[SDGenericStyles.bold, SDGenericStyles.fontFamilyNormal,
+                        placeholder={placeHolderText.SELECT_A_GENDER} placeholderStyle={[SDGenericStyles.bold, SDGenericStyles.fontFamilyNormal,
                         SDGenericStyles.selectedDropDownColor]}
                     />
                 )
