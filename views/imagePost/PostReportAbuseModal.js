@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, TouchableOpacity, View, Modal, ScrollView, ActivityIndicator, Image } from 'react-native';
-import { alertTextMessages, modalTextConstants, reportAbuseRequestPayloadKeys } from '../../constants/Constants';
+import { alertTextMessages, miscMessage, modalTextConstants, reportAbuseRequestPayloadKeys } from '../../constants/Constants';
 import { setReportAbuseSelectedOption, setReportIdForPost, fetchReportAbuseValues, closeReportAbuseModal } from '../../helper/Helper';
-import { glancePostStyles } from '../../styles/Styles';
+import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 
 const post_modal_close_icon = require('../../assets/post_modal_close_icon.png');
 
@@ -40,7 +40,7 @@ export const PostReportAbuseModal = (props) => {
                             }) || selectedReportAbuse[reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_SUBMITTED] &&
                             <Text style={glancePostStyles.reportAbuseAlreadySelected}>{alertTextMessages.POST_REPORT_ABUSED}</Text> ||
                             <ActivityIndicator hidesWhenStopped={reportAbuses.length}
-                                style={glancePostStyles.reportAbusesFetchLoading} size="large" color="#3d3d3d" />
+                                style={glancePostStyles.reportAbusesFetchLoading} size={miscMessage.LARGE} color={SDGenericStyles.colorBlack} />
                         }
                     </ScrollView>
                     {

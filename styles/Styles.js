@@ -231,7 +231,7 @@ export const SDGenericStyles = StyleSheet.create({
         color: '#555555'
     },
     colorBlack: {
-        color: `black`
+        color: `#3d3d3d`
     },
     backGroundColorGreen: {
         backgroundColor: `green`

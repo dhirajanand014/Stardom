@@ -241,6 +241,7 @@ export const placeHolderText = {
     SEARCH_POSTS: `Search Posts`,
     SELECT_A_CATEGORY: `Select a category`,
     SELECT_A_GENDER: `Select a gender`,
+    SELECT_CATEGORIES: 'Select Categories'
 }
 
 export const numericConstants = {
@@ -287,7 +288,8 @@ export const alertTextMessages = {
     POST_REPORT_ABUSED: `You have already submitted the report!`,
     WALLPAPER_SET_SUCESS: `Success`,
     WALLPAPER_SET_SUCCESS_TEXT: `Image successfully set as wallpaper`,
-    SKIP_SAVE_CATEGORIES: `Skip or save categories to view posts!`
+    SKIP_SAVE_CATEGORIES: `Skip or save categories to view posts!`,
+    GO_BACK_TO_POST: `Go back to posts Anytime !!`
 }
 
 export const errorMessages = {
@@ -340,10 +342,12 @@ export const miscMessage = {
     CENTER: `center`,
     SMALL: `small`,
     RECTANGLE: `rectangle`,
+    CIRCLE: `circle`,
     RIGHT: `right`,
     UP: `up`,
     STRETCH: `stretch`,
-    WINDOW: `window`
+    WINDOW: `window`,
+    LARGE: `large`
 }
 
 export const genderList = [

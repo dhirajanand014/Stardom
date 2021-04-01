@@ -5,11 +5,19 @@ import {
     savePostCountKeys, setPostImages,
     permissionsButtons, permissionMessages,
     stringConstants, alertTextMessages,
-    reportAbuseRequestPayloadKeys, responseStringData, actionButtonTextConstants,
+    reportAbuseRequestPayloadKeys, responseStringData,
+    actionButtonTextConstants, colorConstants,
+    miscMessage
 } from '../constants/Constants';
-import { Alert, InteractionManager, NativeModules, PermissionsAndroid, ToastAndroid } from 'react-native';
+import {
+    Alert, InteractionManager, NativeModules,
+    PermissionsAndroid, ToastAndroid
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { withDelay, withSpring } from 'react-native-reanimated';
+import { SDGenericStyles } from '../styles/Styles';
+import { TourGuideZone } from 'rn-tourguide';
+import { HeaderBackButton } from '@react-navigation/stack';
 
 export const fetchCategoryData = async () => {
     debugger
@@ -604,4 +612,23 @@ const datePickerConvert = (event, date) => {
         console.error(error);
     }
     return false;
+}
+
+export const categoryScreenOptions = () => {
+    return ({
+        headerShown: true,
+        headerTitle: placeHolderText.SELECT_CATEGORIES,
+        headerStyle: SDGenericStyles.colorBlack,
+        headerTintColor: colorConstants.WHITE,
+        headerTitleAlign: miscMessage.CENTER,
+        headerTitleStyle: headerStyles.headerText,
+        navigationOptions: ({ navigation }) => ({
+            headerLeft: (
+                <TourGuideZone zone={numericConstants.TWO} borderRadius={numericConstants.EIGHT} shape={miscMessage.CIRCLE}
+                    text={alertTextMessages.GO_BACK_TO_POST}>
+                    <HeaderBackButton tintColor={colorConstants.WHITE} onPress={() => { navigation.goBack() }} />
+                </TourGuideZone>
+            )
+        })
+    })
 }

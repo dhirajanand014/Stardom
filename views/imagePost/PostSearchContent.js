@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, ActivityIndicator } from 'react-native'
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import { miscMessage } from '../../constants/Constants';
+import { colorConstants, miscMessage } from '../../constants/Constants';
 import { togglePostSearchBox } from '../../helper/Helper'
 import { glancePostStyles } from '../../styles/Styles'
 
@@ -46,7 +46,7 @@ export function PostSearchContent(props) {
                                         </TouchableOpacity>
                                     )
                                 }) || <ActivityIndicator style={glancePostStyles.search_content_activity_indicator}
-                                    color="#3d3d3d" size={miscMessage.SMALL} />
+                                    color={colorConstants.BLACK} size={miscMessage.SMALL} />
                         }
                     </ScrollView>
                 </View>
