@@ -50,7 +50,7 @@ export default class App extends React.PureComponent {
           <TourGuideProvider androidStatusBarVisible={true}
             backdropColor={this.props.initialCategorySelection == screens.INTRO && `rgba(145, 63, 146, 0.6)`}>
             <NavigationContainer>
-              <Stack.Navigator initialRouteName={"Glance"} screenOptions={screenOptions}
+              <Stack.Navigator initialRouteName={this.props.navigationRoute} screenOptions={screenOptions}
                 headerMode='float' animation="fade">
                 <Stack.Screen name={screens.INTRO} component={Intro} options={{ headerShown: false }} />
                 <Stack.Screen name={screens.GLANCE} component={Glance} options={{ headerShown: false }} />

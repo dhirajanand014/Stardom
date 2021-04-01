@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { View, Image, TouchableOpacity, StatusBar, Dimensions } from 'react-native';
 import {
     colorConstants, componentErrorConsts, errorMessages,
-    jsonConstants, miscMessage, numericConstants, screens, stringConstants
+    width, jsonConstants, miscMessage, numericConstants,
+    screens, stringConstants
 } from '../../constants/Constants';
 import {
     onSwiperScrollEnd, fetchPostsAndSaveToState,
