@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, Image, TouchableOpacity, StatusBar } from 'react-native';
-import { colorConstants, componentErrorConsts, errorMessages, height, jsonConstants, miscMessage, numericConstants, screens, stringConstants } from '../../constants/Constants';
+import { View, Image, TouchableOpacity, StatusBar, Dimensions } from 'react-native';
+import {
+    colorConstants, componentErrorConsts, errorMessages,
+    jsonConstants, miscMessage, numericConstants, screens, stringConstants
+} from '../../constants/Constants';
 import {
     onSwiperScrollEnd, fetchPostsAndSaveToState,
     resetAnimatePostTextDetails, setImageLoadError
 } from '../../helper/Helper';
-import { PostDescriptionModal } from '../../components/PostDescriptionModal';
-import { PostReportAbuseModal } from '../../components/PostReportAbuseModal';
+import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal';
+import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
 import { glancePostStyles } from '../../styles/Styles';
 import Animated, { useAnimatedScrollHandler, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import Shimmer from 'react-native-shimmer';
@@ -42,6 +45,7 @@ export function Glance({ navigation }) {
             categoryIdFromNotification);
     }, []);
 
+    let { height } = Dimensions.get(miscMessage.WINDOW);
     height += StatusBar.currentHeight;
 
     const textPostDescriptionAnimationValue = useSharedValue(-10);

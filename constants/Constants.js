@@ -21,7 +21,11 @@ export const stackOptions = {
 }
 
 export const screens = {
-    CATEGORY: `Category`
+    INTRO: `Intro`,
+    CATEGORY: `Category`,
+    LOGIN: `Login`,
+    REGISTER: `Register`,
+    GLANCE: `Glance`,
 }
 export const urlConstants = {
     fetchCategories: `https://www.wallpiper.app/4RhvfbEGwnsmxcat.php`,
@@ -338,7 +342,8 @@ export const miscMessage = {
     RECTANGLE: `rectangle`,
     RIGHT: `right`,
     UP: `up`,
-    STRETCH: `stretch`
+    STRETCH: `stretch`,
+    WINDOW: `window`
 }
 
 export const genderList = [

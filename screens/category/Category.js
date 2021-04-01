@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FlatList, View, StatusBar, Text, TouchableOpacity, BackHandler } from 'react-native';
+import { FlatList, View, StatusBar, Text, TouchableOpacity, BackHandler, Dimensions } from 'react-native';
 import { CategoryContext } from '../../App';
 import { categoryViewStyles } from '../../styles/Styles';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -41,6 +41,7 @@ export function Category() {
         }
     }, [canStart]);
 
+    let { height } = Dimensions.get(miscMessage.WINDOW);
     height += StatusBar.currentHeight;
 
     return (

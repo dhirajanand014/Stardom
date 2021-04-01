@@ -1,7 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, View, Text } from 'react-native';
 import Shimmer from 'react-native-shimmer';
-import { stringConstants } from '../constants/Constants';
+import { stringConstants } from '../../constants/Constants';
 import { getCategoryButtonType } from '../../helper/Helper';
 import { flatListItemStyles, glancePostStyles } from '../../styles/Styles';
 import { TourGuideZone } from 'rn-tourguide';

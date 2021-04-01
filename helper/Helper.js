@@ -5,13 +5,14 @@ import {
     savePostCountKeys, setPostImages,
     permissionsButtons, permissionMessages,
     stringConstants, alertTextMessages,
-    reportAbuseRequestPayloadKeys, responseStringData,
+    reportAbuseRequestPayloadKeys, responseStringData, actionButtonTextConstants,
 } from '../constants/Constants';
 import { Alert, InteractionManager, NativeModules, PermissionsAndroid, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { withDelay, withSpring } from 'react-native-reanimated';
 
 export const fetchCategoryData = async () => {
+    debugger
     const responseData = await axios.get(urlConstants.fetchCategories);
     return responseData.data.categories;
 }
@@ -28,12 +29,12 @@ export const fetchAndUpdateCategoryState = async (category, setCategory) => {
         }
 
         let initialCategory = await getCategoryButtonType();
-        initialCategory = initialCategory && initialCategory || 'skipButton';
+        initialCategory = initialCategory && initialCategory || actionButtonTextConstants.SKIP_BUTTON;
 
         setCategory({ ...category, categories: responseCategoryData, initialCategory: initialCategory });
     } catch (error) {
         console.log(error);
-        setCategory({ ...category, categories: [], initialCategory: 'skipButton' });
+        setCategory({ ...category, categories: [], initialCategory: actionButtonTextConstants.SKIP_BUTTON });
     }
 }
 

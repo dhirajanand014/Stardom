@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { Text, View, Image, Linking, TouchableOpacity, Switch } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import { PostSearch } from '../../components/PostSearch';
+import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
     stringConstants, postCountTypes,
     postitionStringConstants, colorConstants,
@@ -11,7 +11,7 @@ import {
 import {
     postWallPaperAlert, increaseAndSetPostCounts,
     downloadImageFromURL, setOptionsStateForDescription, shareImage
-} from '../helper/Helper';
+} from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import ActionButton from '@logvinme/react-native-action-button';
 
