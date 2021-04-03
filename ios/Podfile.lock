@@ -263,8 +263,6 @@ PODS:
     - React-jsi (= 0.64.0)
     - React-perflogger (= 0.64.0)
   - React-jsinspector (0.64.0)
-  - react-native-image-picker (3.3.2):
-    - React-Core
   - react-native-restart (0.0.20):
     - React-Core
   - react-native-safe-area-context (3.2.0):
@@ -348,6 +346,15 @@ PODS:
     - SDWebImageWebPCoder (~> 0.6.1)
   - RNGestureHandler (1.10.3):
     - React-Core
+  - RNImageCropPicker (0.36.0):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.36.0)
+    - TOCropViewController
+  - RNImageCropPicker/QBImagePickerController (0.36.0):
+    - React-Core
+    - React-RCTImage
+    - TOCropViewController
   - RNReanimated (2.0.1):
     - DoubleConversion
     - FBLazyVector
@@ -388,6 +395,7 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
   - Shimmer (1.0.2)
+  - TOCropViewController (2.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -430,7 +438,6 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-shimmer (from `../node_modules/react-native-shimmer`)
@@ -451,6 +458,7 @@ DEPENDENCIES:
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -473,6 +481,7 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - Shimmer
+    - TOCropViewController
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -508,8 +517,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
-  react-native-image-picker:
-    :path: "../node_modules/react-native-image-picker"
   react-native-restart:
     :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
@@ -550,6 +557,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fast-image"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -588,7 +597,6 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
-  react-native-image-picker: 5b2f1ea1f9230b131abbfb8a4aa1eb209aba9ed9
   react-native-restart: 6cc683e208c080581c147d0875609e64572a9443
   react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a
@@ -609,12 +617,14 @@ SPEC CHECKSUMS:
   RNDateTimePicker: e1c24487ab8aa0850403bd90dba75eff8a4e9b84
   RNFastImage: d4870d58f5936111c56218dbd7fcfc18e65b58ff
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNImageCropPicker: e641bf83ac47324994cac139bde74635ec52c17c
   RNReanimated: 7d2b97cf2dd7c8c69956080fe911edc08cf0a8c7
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   SDWebImage: 7acbb57630ac7db4a495547fb73916ff3e432f6b
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
+  TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

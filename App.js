@@ -1,20 +1,19 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { Login } from './screens/user/Login';
 import { Register } from './screens/user/Register';
-import { screenOptions, screens, stackOptions } from './constants/Constants';
+import { screenOptions, screens } from './constants/Constants';
 import { PostSideView } from './views/imagePost/PostSideView';
-
 import { Glance } from './screens/post/Glance';
 import { Category } from './screens/category/Category';
-import { headerStyles } from './styles/Styles';
 import { categoryScreenOptions, fetchAndUpdateCategoryState } from './helper/Helper.js';
 import { Intro } from './screens/Intro';
-import { TourGuideProvider, TourGuideZone } from 'rn-tourguide';
+import { TourGuideProvider } from 'rn-tourguide';
 import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { AddPost } from './screens/post/AddPost';
 
 export const CategoryContext = React.createContext();
 
@@ -26,9 +25,10 @@ export default class App extends React.PureComponent {
 
     const postViewDrawer = () => {
       return (
-        <PostDrawer.Navigator initialRouteName={screens.GLANCE} drawerContent={props => <PostSideView {...props} />}>
+        <PostDrawer.Navigator initialRouteName={screens.LOGIN} drawerContent={props => <PostSideView {...props} />}>
           <PostDrawer.Screen name={screens.GLANCE} component={Glance} />
           <PostDrawer.Screen name={screens.LOGIN} component={Login} />
+          <PostDrawer.Screen name={screens.ADD_POST} component={AddPost} />
           <PostDrawer.Screen name={screens.REGISTER} component={Register} />
         </PostDrawer.Navigator>
       )

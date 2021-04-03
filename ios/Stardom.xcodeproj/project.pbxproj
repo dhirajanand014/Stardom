@@ -145,7 +145,6 @@
 				EC4FCAFC995D6CA845E36480 /* Pods-Stardom-StardomTests.debug.xcconfig */,
 				63422C27D26EF9C244FD63AC /* Pods-Stardom-StardomTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

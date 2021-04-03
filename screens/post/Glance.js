@@ -24,7 +24,7 @@ import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackCompo
 const category_selection = require('../../assets/category_selection_icon.png');
 const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
 
-export function Glance({ navigation }) {
+export const Glance = ({ navigation }) => {
 
     const [sdomDatastate, setSdomDatastate] = useState([]);
     const [optionsState, setOptionsState] = useState({

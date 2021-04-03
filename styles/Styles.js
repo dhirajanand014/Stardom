@@ -661,6 +661,60 @@ export const glancePostStyles = StyleSheet.create({
     preloaderStyle: {
         width: 30,
         height: 30
+    },
+    addPostSelectText: {
+        textAlign: 'center',
+        fontSize: 14,
+        color: '#abb4bd'
+    },
+    addPostView: {
+        borderWidth: 0.7,
+        borderRadius: 1,
+        borderStyle: 'dashed'
+    },
+    bottomSheetHeader: {
+        backgroundColor: `#FFFFFF`,
+        shadowColor: `#333333`,
+        shadowOffset: { width: - 1, height: -3 },
+        shadowRadius: 2,
+        shadowOpacity: 0.4,
+        paddingTop: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20
+    },
+    panelHandle: {
+        width: 40,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: `#00000040`,
+        marginBottom: 10
+    },
+    bottomSheetPanel: {
+        padding: 20,
+        backgroundColor: '#FFFFFF',
+        paddingTop: 20
+    },
+    bottomSheetPanelTitle: {
+        fontSize: 27,
+        height: 35,
+    },
+    bottomSheetPanelSubTitle: {
+        fontSize: 14,
+        color: 'gray',
+        height: 30,
+        marginBottom: 10,
+    },
+    bottomSheetPanelButton: {
+        padding: 13,
+        borderRadius: 10,
+        backgroundColor: '#FF6347',
+        alignItems: 'center',
+        marginVertical: 7,
+    },
+    bottomSheetPanelButtonTitle: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: 'white',
     }
 });
 
@@ -835,7 +889,7 @@ export const userAuthStyles = StyleSheet.create({
         borderColor: 'red',
     },
     normalInputBorder: {
-        borderColor: '#999999',
+        borderColor: '#999',
     },
     formInputError: {
         color: 'red',

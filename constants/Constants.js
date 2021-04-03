@@ -24,6 +24,7 @@ export const screens = {
     INTRO: `Intro`,
     CATEGORY: `Category`,
     LOGIN: `Login`,
+    ADD_POST: `Add Post`,
     REGISTER: `Register`,
     GLANCE: `Glance`,
 }
@@ -276,6 +277,7 @@ export const numericConstants = {
     ONE_HUNDRED_FIFTY: 150,
     TWO_HUNDRED: 200,
     THREE_HUNDRED: 300,
+    THREE_HUNDRED_THIRTY: 330,
     FOUR_HUNDRED_ONE: 401,
     FIVE_HUNDRED: 500,
     THOUSAND: 1000,
@@ -315,7 +317,7 @@ export const postitionStringConstants = {
 
 export const colorConstants = {
     TRANSPARENT_BUTTON: `rgba(0, 0, 0, 0.0)`,
-    GREY: `#99999`,
+    GREY: `#999`,
     YELLOW: `#fcc200`,
     WHITE: `#ffffff`,
     BLACK: `#3d3d3d`
@@ -332,6 +334,7 @@ export const countryCodesConstants = {
 export const miscMessage = {
     NONE: `none`,
     DONT_HAVE_ACCOUNT: `Dont have an account?`,
+    CLICK_TO_ADD_IMAGE: `Click + to add or select image`,
     DOB_DATE_FORMAT: `DD/MM/YYYY`,
     DATE: `date`,
     DOB: `Date of Birth`,
