@@ -375,12 +375,12 @@ export const glancePostStyles = StyleSheet.create({
     searchInputBox: {
         flex: 1,
         flexDirection: 'row',
-        height: 40,
+        height: 200,
         alignItems: 'center',
         position: 'absolute',
         justifyContent: 'center',
         top: 0,
-        right: -20,
+        bottom: -20,
     },
     close_button_search_input: {
         justifyContent: 'center',
@@ -532,9 +532,6 @@ export const glancePostStyles = StyleSheet.create({
         fontSize: 14,
         textDecorationLine: 'underline',
         fontFamily: 'wallpiper_roman_font'
-    },
-    reportAbuseModalHeader: {
-        alignItems: 'center'
     },
     reportAbuseModalTitle: {
         fontFamily: 'wallpiper_bold_font',
@@ -715,7 +712,49 @@ export const glancePostStyles = StyleSheet.create({
         fontSize: 17,
         fontWeight: 'bold',
         color: 'white',
-    }
+    },
+    addPostDetailsButtonText: {
+        color: "#000000",
+        textAlign: 'center',
+        fontSize: 18,
+        fontFamily: 'wallpiper_bold_font',
+    },
+    addPostDetailsButtonView: {
+        position: 'absolute',
+        bottom: 0,
+        alignSelf: 'center',
+        padding: 2,
+        borderWidth: 3,
+        borderRadius: 28,
+        marginBottom: 20,
+        borderColor: '#e3ddda',
+    },
+    addPostDetailsHeaderTitle: {
+        fontFamily: 'wallpiper_bold_font',
+        fontSize: 20,
+        padding: 10
+    },
+    addPostDetailsTitleDivider: {
+        width: width / 1.2,
+        height: 1,
+        backgroundColor: "lightgray"
+    },
+    addPostDetailsView: {
+        flex: 1,
+        width: width / 1.11,
+        height: height / 1.11,
+        margin: 20,
+        elevation: 10,
+        borderRadius: 8,
+        shadowRadius: 18,
+        shadowOpacity: .7,
+        alignItems: 'center',
+        backgroundColor: 'rgba(61,61,61,.7)',
+        opacity: .7,
+        position: 'absolute',
+        top: 0,
+        bottom: -20,
+    },
 });
 
 export const categoryViewStyles = StyleSheet.create({

@@ -56,7 +56,9 @@ export const fieldControllerName = {
     PROFILE_NAME: `profileName`,
     LOCATION: `location`,
     INTERESTS: `interests`,
-    CATEGORIES: `categories`
+    CATEGORIES: `categories`,
+    ADD_POST_TITLE: `postTitle`,
+    ADD_POST_DESCRIPTION: `postDescription`
 }
 
 export const keyBoardTypeConst = {
@@ -164,6 +166,18 @@ export const formRequiredRules = {
             message: `Please select a date`
         }
     },
+    addPostTitleRule: {
+        required: {
+            value: true,
+            message: `Please enter a title`
+        }
+    },
+    addPostDescription: {
+        required: {
+            value: true,
+            message: `Please enter a description`
+        }
+    },
     genderRule: {
         required: {
             value: true,
@@ -226,6 +240,7 @@ export const stringConstants = {
 
 export const modalTextConstants = {
     REPORT_ABUSE_TITLE: `Report this post`,
+    ADD_POST_DETAILS: `Add post details`,
     CANCEL_BUTTON: `Cancel`,
     CLOSE_BUTTON: `Close`,
     SUBMIT_BUTTON: `Submit`
@@ -242,7 +257,9 @@ export const placeHolderText = {
     SEARCH_POSTS: `Search Posts`,
     SELECT_A_CATEGORY: `Select a category`,
     SELECT_A_GENDER: `Select a gender`,
-    SELECT_CATEGORIES: 'Select Categories'
+    SELECT_CATEGORIES: 'Select Categories',
+    ADD_POST_TITLE: `Enter Title`,
+    ADD_POST_DESCRIPTION: `Enter Description`
 }
 
 export const numericConstants = {
@@ -350,7 +367,9 @@ export const miscMessage = {
     UP: `up`,
     STRETCH: `stretch`,
     WINDOW: `window`,
-    LARGE: `large`
+    LARGE: `large`,
+    CAMERA: `camera`,
+    GALLERY: `gallery`
 }
 
 export const genderList = [

@@ -1,16 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { SDBottomSheet } from '../../components/bottomsheet/SDBottomSheet';
-import { numericConstants, stringConstants } from '../../constants/Constants';
-import ImagePicker from 'react-native-image-crop-picker';
+import { miscMessage, numericConstants } from '../../constants/Constants';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
+import { showSelectedImage } from '../../helper/Helper';
 export const BottomSheetView = props => {
-
-    const [addPost, setAddPost] = useState({
-        capturedImage: stringConstants.EMPTY,
-        showDetails: false
-    })
-
     const renderHeader = () => {
         return (
             <View style={glancePostStyles.bottomSheetHeader}>
@@ -29,23 +23,18 @@ export const BottomSheetView = props => {
                     <Text style={glancePostStyles.bottomSheetPanelSubTitle}>Choose Your Profile Picture</Text>
                 </View>
                 <TouchableOpacity activeOpacity={.7} style={glancePostStyles.bottomSheetPanelButton}
-                    onPress={async () => {
-                        props.bottomSheetRef?.current?.snapTo(numericConstants.ONE)
-                        const value = await ImagePicker.openCamera({
-                            width: 300, height: 400, cropping: true, mediaType: `photo`
-                        })
-                        console.log(value)
-                    }}>
+                    onPress={async () => await showSelectedImage(miscMessage.CAMERA, props.bottomSheetRef, props.addPost, props.setAddPost)}>
                     <Text style={glancePostStyles.bottomSheetPanelButtonTitle}>Take Photo</Text>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={.7} style={glancePostStyles.bottomSheetPanelButton}>
+                <TouchableOpacity activeOpacity={.7} style={glancePostStyles.bottomSheetPanelButton}
+                    onPress={async () => await showSelectedImage(miscMessage.GALLERY, props.bottomSheetRef, props.addPost, props.setAddPost)}>
                     <Text style={glancePostStyles.bottomSheetPanelButtonTitle}>Choose from gallery</Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={.7} style={glancePostStyles.bottomSheetPanelButton}
                     onPress={() => props.bottomSheetRef?.current?.snapTo(numericConstants.ONE)}>
                     <Text style={glancePostStyles.bottomSheetPanelButtonTitle}>Cancel</Text>
                 </TouchableOpacity>
-            </View>
+            </View >
         )
     }
     return (

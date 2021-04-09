@@ -7,7 +7,11 @@ import {
     stringConstants, alertTextMessages,
     reportAbuseRequestPayloadKeys, responseStringData,
     actionButtonTextConstants, colorConstants,
-    miscMessage
+    miscMessage,
+    width,
+    height,
+    numericConstants,
+    placeHolderText
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -15,12 +19,12 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { withDelay, withSpring } from 'react-native-reanimated';
-import { SDGenericStyles } from '../styles/Styles';
+import { headerStyles, SDGenericStyles } from '../styles/Styles';
 import { TourGuideZone } from 'rn-tourguide';
+import ImagePicker from 'react-native-image-crop-picker';
 import { HeaderBackButton } from '@react-navigation/stack';
 
 export const fetchCategoryData = async () => {
-    debugger
     const responseData = await axios.get(urlConstants.fetchCategories);
     return responseData.data.categories;
 }
@@ -631,4 +635,39 @@ export const categoryScreenOptions = () => {
             )
         })
     })
+}
+
+export const showSelectedImage = async (type, bottomSheetRef, addPost, setAddPost) => {
+    try {
+        let imageValue;
+        switch (type) {
+            case miscMessage.CAMERA:
+                imageValue = await ImagePicker.openCamera({ width: width, height: height, mediaType: `photo` })
+                break;
+            case miscMessage.GALLERY:
+                imageValue = await ImagePicker.openPicker({ width: width, height: height });
+                break;
+            default:
+                break;
+        }
+        setAddPost({ ...addPost, capturedImage: imageValue.path });
+        bottomSheetRef?.current?.snapTo(numericConstants.ONE)
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const toggleAddPostDetailsPanel = (add_post_translate_y, content_opacity) => {
+    try {
+        const add_post_panel_y_config = {
+            damping: 120
+        }
+        const add_post_panel_opacity_config = {
+            damping: 120
+        }
+        add_post_translate_y.value = withSpring(numericConstants.ONE, add_post_panel_y_config);
+        content_opacity.value = withSpring(numericConstants.ONE, add_post_panel_opacity_config)
+    } catch (error) {
+        console.log(error);
+    }
 }

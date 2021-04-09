@@ -15,7 +15,7 @@ export const PostReportAbuseModal = (props) => {
             onShow={async () => await fetchReportAbuseValues(optionsState, setOptionsState)}>
             <View style={glancePostStyles.modalContainer}>
                 <View style={glancePostStyles.radioButtonModalView}>
-                    <View style={glancePostStyles.reportAbuseModalHeader}>
+                    <View style={SDGenericStyles.alignItemsCenter}>
                         <Text style={glancePostStyles.reportAbuseModalTitle}>{modalTextConstants.REPORT_ABUSE_TITLE}</Text>
                         <View style={glancePostStyles.reportAbuseModalTitleDivider}></View>
                     </View>
