@@ -15,10 +15,13 @@ export const SDGenericStyles = StyleSheet.create({
         elevation: 3
     },
     bold: {
-        fontWeight: 'bold',
+        fontWeight: 'bold'
     },
     fontFamilyNormal: {
-        fontFamily: isAndroid && `normal` || `System`,
+        fontFamily: isAndroid && `normal` || `System`
+    },
+    fontFamilyRoman: {
+        fontFamily: `wallpiper_roman_font`
     },
     mr12: {
         marginRight: 12,
@@ -292,6 +295,12 @@ export const SDGenericStyles = StyleSheet.create({
     colorWhite: {
         color: '#FFFAFA'
     },
+    borderRadius20: {
+        borderRadius: 20
+    },
+    height100: {
+        height: 100
+    }
 });
 
 export const glancePostStyles = StyleSheet.create({
@@ -741,9 +750,12 @@ export const glancePostStyles = StyleSheet.create({
     },
     addPostDetailsView: {
         flex: 1,
-        width: width / 1.11,
+        width: width / 1.06,
         height: height / 1.11,
-        margin: 20,
+        marginBottom: 15,
+        marginTop: 15,
+        marginRight: 10,
+        marginLeft: 10,
         elevation: 10,
         borderRadius: 8,
         shadowRadius: 18,
@@ -755,6 +767,31 @@ export const glancePostStyles = StyleSheet.create({
         top: 0,
         bottom: -20,
     },
+    addPostDetailInputView: {
+        paddingVertical: isIOS && 5 || 2,
+        justifyContent: 'center',
+        width: width / 1.10
+    },
+    addPostDetailInputViewStyle: {
+        marginTop: 16
+    },
+    addPostDetailsInputError: {
+        color: 'red',
+        marginVertical: isIOS && 5 || 2,
+        justifyContent: 'center',
+        alignItems: 'flex-start'
+    },
+    addPostDetailUnderlineTextInput: {
+        flex: 1,
+        paddingLeft: 3,
+        justifyContent: 'center',
+        marginTop: isIOS && 0 || -25,
+        paddingVertical: isIOS && 1 || 1,
+        borderBottomWidth: 1,
+        borderBottomColor: `#fcc200`,
+        fontSize: 16,
+        color: '#05375a'
+    }
 });
 
 export const categoryViewStyles = StyleSheet.create({
@@ -924,6 +961,16 @@ export const userAuthStyles = StyleSheet.create({
         borderRadius: 3,
         width: width / 1.15,
     },
+    userInputPostDetails: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        backgroundColor: `#fafafa`,
+        marginVertical: 3,
+        borderColor: `#888888`,
+        borderRadius: 3,
+        width: width / 1.15,
+    },
     errorInputBorder: {
         borderColor: 'red',
     },
@@ -940,7 +987,6 @@ export const userAuthStyles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 10,
         paddingLeft: 3,
-        marginLeft: 3,
         textAlign: 'left',
         color: '#05375a'
     },

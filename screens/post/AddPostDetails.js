@@ -10,7 +10,7 @@ import {
 } from '../../constants/Constants'
 import { toggleAddPostDetailsPanel } from '../../helper/Helper'
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles'
-import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput'
+import { SDPostDetailsInput } from '../../views/fromInputView/SDPostDetailsInput'
 
 export const AddPostDetails = props => {
 
@@ -59,16 +59,18 @@ export const AddPostDetails = props => {
                     <Text style={glancePostStyles.addPostDetailsHeaderTitle}>{modalTextConstants.ADD_POST_DETAILS}</Text>
                     <View style={glancePostStyles.addPostDetailsTitleDivider} />
                 </View>
-                <View>
-                    <SDImageFormInput inputName={fieldControllerName.ADD_POST_TITLE} control={control} rules={formRequiredRules.addPostTitleRule}
+                <View style={SDGenericStyles.mt36}>
+                    <SDPostDetailsInput inputName={fieldControllerName.ADD_POST_TITLE} control={control} rules={formRequiredRules.addPostTitleRule}
                         defaultValue={stringConstants.EMPTY} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.ADD_POST_TITLE}
                         keyboardType={keyBoardTypeConst.DEFAULT} textContentType={keyBoardTypeConst.DEFAULT} formState={formState}
-                        style={[SDGenericStyles.colorWhite, SDGenericStyles.ft16]} />
+                        extraStyles={[SDGenericStyles.backgroundColorYellow, SDGenericStyles.fontFamilyRoman, SDGenericStyles.borderRadius20]} isAddPostDetails={true} />
 
-                    <SDImageFormInput inputName={fieldControllerName.ADD_POST_DESCRIPTION} control={control} rules={formRequiredRules.addPostDescription}
+                    <SDPostDetailsInput inputName={fieldControllerName.ADD_POST_DESCRIPTION} control={control} rules={formRequiredRules.addPostDescription}
                         defaultValue={stringConstants.EMPTY} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.ADD_POST_DESCRIPTION}
-                        keyboardType={keyBoardTypeConst.DEFAULT} textContentType={keyBoardTypeConst.DEFAULT} formState={formState}
-                        style={[SDGenericStyles.colorWhite, SDGenericStyles.ft16]} />
+                        keyboardType={keyBoardTypeConst.DEFAULT} textContentType={keyBoardTypeConst.DEFAULT} formState={formState} isMultiline={true}
+                        extraStyles={[SDGenericStyles.backgroundColorYellow, SDGenericStyles.fontFamilyRoman, SDGenericStyles.height100,
+                        SDGenericStyles.borderRadius20]} numberOfLines={numericConstants.TWO}
+                        isAddPostDetails={true} />
                 </View>
             </Animated.View>
         </View>

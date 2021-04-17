@@ -19,8 +19,9 @@ export const SDFormInput = props => {
                         <TextInput {...inputProps} maxLength={props.maxLength} value={inputProps.value} textContentType={props.textContentType}
                             autoCapitalize={miscMessage.NONE} placeholder={props.placeHolderText} secureTextEntry={props.isSecureTextEntry}
                             keyboardType={props.keyboardType} placeholderTextColor={colors.DARK_GREY} autoFocus={props.autofocus}
-                            style={[userAuthStyles.textInputStyle, SDGenericStyles.ft16]} onSubmitEditing={props.onSubmitEditing}
-                            onChangeText={value => onChangeByValueType(inputProps, value, props)} ref={props.refCallback} />
+                            style={[userAuthStyles.textInputStyle, SDGenericStyles.ft16, props.extraStyles]} onSubmitEditing={props.onSubmitEditing}
+                            onChangeText={value => onChangeByValueType(inputProps, value, props)} ref={props.refCallback} multiline={props.isMultiline}
+                            numberOfLines={props.numberOfLines} />
                     </React.Fragment>
                 )
             }} />
