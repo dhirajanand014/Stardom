@@ -45,7 +45,7 @@ export const Register = (params) => {
 
                 <SDDropDownView inputName={fieldControllerName.GENDER} control={control} rules={formRequiredRules.genderRule}
                     defaultValue={stringConstants.EMPTY} formState={formState} list={genderList.filter(gender => gender.value != numericConstants.MINUS_ONE)}
-                    dropDownDefaultValue={genderList.find(gender => gender.value == numericConstants.ZERO).value} />
+                    dropDownDefaultValue={genderList.find(gender => gender.value == numericConstants.ZERO).value} placeHolderText={placeHolderText.SELECT_A_GENDER} />
 
             </ScrollView>
 

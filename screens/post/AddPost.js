@@ -12,7 +12,8 @@ export const AddPost = () => {
 
     const [addPost, setAddPost] = useState({
         capturedImage: stringConstants.EMPTY,
-        showDetails: false
+        showDetails: false,
+        categories: []
     });
 
     const bottomSheetRef = useRef(null);
@@ -29,7 +30,7 @@ export const AddPost = () => {
             <View style={[SDGenericStyles.fill, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter]}>
                 {
                     addPost.capturedImage &&
-                    <AddPostDetails addPost={addPost} /> || <View>
+                    <AddPostDetails addPost={addPost} setAddPost={setAddPost} /> || <View>
                         <TouchableOpacity activeOpacity={.7} onPress={() => bottomSheetRef?.current?.snapTo(numericConstants.ZERO)}>
                             <View style={glancePostStyles.addPostView}>
                                 <PlusIcon width={numericConstants.TWO_HUNDRED} height={numericConstants.TWO_HUNDRED} />

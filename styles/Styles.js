@@ -738,6 +738,10 @@ export const glancePostStyles = StyleSheet.create({
         marginBottom: 20,
         borderColor: '#e3ddda',
     },
+    addPostDetailsButton: {
+        padding: 10, backgroundColor: `transparent`,
+        borderRadius: 28, elevation: 5
+    },
     addPostDetailsHeaderTitle: {
         fontFamily: 'wallpiper_bold_font',
         fontSize: 20,

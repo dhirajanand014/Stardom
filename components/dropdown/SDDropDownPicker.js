@@ -1,7 +1,6 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { miscMessage, placeHolderText } from '../../constants/Constants';
 import { onChangeByValueType } from '../../helper/Helper';
 import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { ArrowDownIcon } from '../icons/ArrowDownIcon';
@@ -16,10 +15,10 @@ export const SDDropDownPicker = props => {
                         selectedLabelStyle={[SDGenericStyles.bold, SDGenericStyles.fontFamilyNormal, SDGenericStyles.selectedDropDownColor]}
                         dropDownStyle={SDGenericStyles.dropDownBackGround} itemStyle={SDGenericStyles.justifyItemsStart} customArrowUp={(size, color) =>
                             <ArrowUpIcon width={size} height={size} color={color} />} customArrowDown={(size, color) =>
-                                <ArrowDownIcon width={size} height={size} color={color} />} controller={props.bloodGroupControllerCallback}
+                                <ArrowDownIcon width={size} height={size} color={color} />} controller={instance => props.callback.current = props.callback && instance || null}
                         onChangeItem={item => onChangeByValueType(inputProps, item.value, props)} defaultValue={props.dropDownDefaultValue}
-                        placeholder={placeHolderText.SELECT_A_GENDER} placeholderStyle={[SDGenericStyles.bold, SDGenericStyles.fontFamilyNormal,
-                        SDGenericStyles.selectedDropDownColor]}
+                        placeholder={props.placeHolderText} placeholderStyle={[SDGenericStyles.bold, SDGenericStyles.fontFamilyNormal,
+                        SDGenericStyles.selectedDropDownColor]} multiple={props.isMultiple} searchable={props.isSearchable}
                     />
                 )
             }} />

@@ -8,7 +8,7 @@ import { screenOptions, screens } from './constants/Constants';
 import { PostSideView } from './views/imagePost/PostSideView';
 import { Glance } from './screens/post/Glance';
 import { Category } from './screens/category/Category';
-import { categoryScreenOptions, fetchAndUpdateCategoryState } from './helper/Helper.js';
+import { fetchAndUpdateCategoryState } from './helper/Helper.js';
 import { Intro } from './screens/Intro';
 import { TourGuideProvider, TourGuideZone } from 'rn-tourguide';
 import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';

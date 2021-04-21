@@ -7,11 +7,8 @@ import {
     stringConstants, alertTextMessages,
     reportAbuseRequestPayloadKeys, responseStringData,
     actionButtonTextConstants, colorConstants,
-    miscMessage,
-    width,
-    height,
-    numericConstants,
-    placeHolderText
+    miscMessage, width, height, defaultPickerValue,
+    numericConstants, placeHolderText
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -657,7 +654,7 @@ export const showSelectedImage = async (type, bottomSheetRef, addPost, setAddPos
     }
 }
 
-export const toggleAddPostDetailsPanel = (add_post_translate_y, content_opacity) => {
+export const toggleAddPostDetailsPanel = async (add_post_translate_y, content_opacity, dropDownController) => {
     try {
         const add_post_panel_y_config = {
             damping: 120
@@ -665,8 +662,15 @@ export const toggleAddPostDetailsPanel = (add_post_translate_y, content_opacity)
         const add_post_panel_opacity_config = {
             damping: 120
         }
+        debugger
         add_post_translate_y.value = withSpring(numericConstants.ONE, add_post_panel_y_config);
-        content_opacity.value = withSpring(numericConstants.ONE, add_post_panel_opacity_config)
+        content_opacity.value = withSpring(numericConstants.ONE, add_post_panel_opacity_config);
+
+        InteractionManager.runAfterInteractions(async () => {
+            const categories = await fetchCategoryData();
+            const postCategories = categories.map(category => { return ({ label: category.categoryTitle, value: parseInt(category.categoryId), icon: () => { } }); });
+            dropDownController.current.reset(postCategories);
+        });
     } catch (error) {
         console.log(error);
     }

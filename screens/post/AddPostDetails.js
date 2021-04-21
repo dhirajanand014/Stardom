@@ -1,24 +1,28 @@
 import { useNavigation } from '@react-navigation/core'
-import React from 'react'
+import React, { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { ImageBackground, Text, TouchableOpacity, View } from 'react-native'
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated'
 import {
     fieldControllerName, formRequiredRules, stringConstants,
     height, modalTextConstants, numericConstants,
-    width, placeHolderText, keyBoardTypeConst
+    width, placeHolderText, keyBoardTypeConst, defaultPickerValue
 } from '../../constants/Constants'
 import { toggleAddPostDetailsPanel } from '../../helper/Helper'
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles'
+import { SDDropDownView } from '../../views/dropDownView/SDDropDownView'
 import { SDPostDetailsInput } from '../../views/fromInputView/SDPostDetailsInput'
+import { CategorySlider } from '../category/CategorySlider'
 
 export const AddPostDetails = props => {
 
-    const { addPost } = props;
+    const { addPost, setAddPost } = props;
 
     const { handleSubmit, control, formState, clearErrors } = useForm();
 
     const navigation = useNavigation();
+
+    let dropDownController = useRef(null);
 
     const add_post_details_y = useSharedValue(height);
     const add_post_details_opacity = useSharedValue(numericConstants.ZERO);
@@ -47,10 +51,8 @@ export const AddPostDetails = props => {
                     style={{ width: width, height: height }} resizeMode={'cover'} blurRadius={10} />
             </View>
             <View style={glancePostStyles.addPostDetailsButtonView}>
-                <TouchableOpacity activeOpacity={.7} style={{
-                    padding: 10, backgroundColor: `transparent`,
-                    borderRadius: 28, elevation: 5
-                }} onPress={() => toggleAddPostDetailsPanel(add_post_translate_y, content_opacity)}>
+                <TouchableOpacity activeOpacity={.7} style={glancePostStyles.addPostDetailsButton}
+                    onPress={async () => await toggleAddPostDetailsPanel(add_post_translate_y, content_opacity, addPost, setAddPost)}>
                     <Text style={[SDGenericStyles.bold, SDGenericStyles.fontFamilyNormal, glancePostStyles.addPostDetailsButtonText]}>{`Details >>`}</Text>
                 </TouchableOpacity>
             </View>
@@ -63,7 +65,8 @@ export const AddPostDetails = props => {
                     <SDPostDetailsInput inputName={fieldControllerName.ADD_POST_TITLE} control={control} rules={formRequiredRules.addPostTitleRule}
                         defaultValue={stringConstants.EMPTY} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.ADD_POST_TITLE}
                         keyboardType={keyBoardTypeConst.DEFAULT} textContentType={keyBoardTypeConst.DEFAULT} formState={formState}
-                        extraStyles={[SDGenericStyles.backgroundColorYellow, SDGenericStyles.fontFamilyRoman, SDGenericStyles.borderRadius20]} isAddPostDetails={true} />
+                        extraStyles={[SDGenericStyles.backgroundColorYellow, SDGenericStyles.fontFamilyRoman, SDGenericStyles.borderRadius20]}
+                        isAddPostDetails={true} />
 
                     <SDPostDetailsInput inputName={fieldControllerName.ADD_POST_DESCRIPTION} control={control} rules={formRequiredRules.addPostDescription}
                         defaultValue={stringConstants.EMPTY} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.ADD_POST_DESCRIPTION}
@@ -71,6 +74,19 @@ export const AddPostDetails = props => {
                         extraStyles={[SDGenericStyles.backgroundColorYellow, SDGenericStyles.fontFamilyRoman, SDGenericStyles.height100,
                         SDGenericStyles.borderRadius20]} numberOfLines={numericConstants.TWO}
                         isAddPostDetails={true} />
+
+                    <SDDropDownView inputName={fieldControllerName.CATEGORIES} control={control} rules={formRequiredRules.categoryRule}
+                        defaultValue={stringConstants.EMPTY} formState={formState} multiple={true} searchable={true}
+                        dropDownDefaultValue={defaultPickerValue.value} placeHolderText={placeHolderText.SELECT_CATEGORIES}
+                        callback={dropDownController} list={addPost.categories} />
+                    <View>
+
+                        <View>
+                            <CategorySlider />
+                        </View>
+
+                    </View>
+
                 </View>
             </Animated.View>
         </View>

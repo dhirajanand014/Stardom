@@ -178,6 +178,12 @@ export const formRequiredRules = {
             message: `Please enter a description`
         }
     },
+    categoryRule: {
+        required: {
+            value: true,
+            message: `Please select atleast one category`
+        }
+    },
     genderRule: {
         required: {
             value: true,
@@ -405,3 +411,13 @@ export const genderList = [
         }
     }
 ];
+
+export const defaultPickerValue = {
+    label: `Select a category`,
+    value: 0,
+    untouchable: true,
+    textStyle: {
+        fontWeight: `bold`,
+        fontFamily: `wallpiper_bold_font`,
+    }
+}
