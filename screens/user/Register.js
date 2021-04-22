@@ -9,13 +9,13 @@ import {
     placeHolderText, isAndroid, actionButtonTextConstants,
     miscMessage, genderList
 } from '../../constants/Constants';
-import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
+import { glancePostStyles, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
 import { SDDropDownView } from '../../views/dropDownView/SDDropDownView';
 import { SDDatePickerView } from '../../views/datePickerView/SDDatePickerView';
-export const Register = (params) => {
+export const Register = () => {
 
-    const { handleSubmit, control, formState, clearErrors } = useForm();
+    const { control, formState } = useForm();
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite, SDGenericStyles.paddingHorizontal25]}>
@@ -43,7 +43,7 @@ export const Register = (params) => {
                     defaultValue={stringConstants.EMPTY} formState={formState} mode={miscMessage.DATE} dateFormat={miscMessage.DOB_DATE_FORMAT}
                     display={keyBoardTypeConst.DEFAULT} placeHolderText={miscMessage.DOB} />
 
-                <SDDropDownView inputName={fieldControllerName.GENDER} control={control} rules={formRequiredRules.genderRule}
+                <SDDropDownView inputName={fieldControllerName.GENDER} control={control} rules={formRequiredRules.genderRule} containerStyle={glancePostStyles.dropDownPickerStyle}
                     defaultValue={stringConstants.EMPTY} formState={formState} list={genderList.filter(gender => gender.value != numericConstants.MINUS_ONE)}
                     dropDownDefaultValue={genderList.find(gender => gender.value == numericConstants.ZERO).value} placeHolderText={placeHolderText.SELECT_A_GENDER} />
 

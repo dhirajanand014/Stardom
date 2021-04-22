@@ -12,7 +12,7 @@ import {
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
-    PermissionsAndroid, ToastAndroid
+    PermissionsAndroid, Text, ToastAndroid
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { withDelay, withSpring } from 'react-native-reanimated';
@@ -662,14 +662,28 @@ export const toggleAddPostDetailsPanel = async (add_post_translate_y, content_op
         const add_post_panel_opacity_config = {
             damping: 120
         }
-        debugger
         add_post_translate_y.value = withSpring(numericConstants.ONE, add_post_panel_y_config);
         content_opacity.value = withSpring(numericConstants.ONE, add_post_panel_opacity_config);
 
         InteractionManager.runAfterInteractions(async () => {
             const categories = await fetchCategoryData();
-            const postCategories = categories.map(category => { return ({ label: category.categoryTitle, value: parseInt(category.categoryId), icon: () => { } }); });
-            dropDownController.current.reset(postCategories);
+            const postCategories = categories.map(category => {
+                return ({
+                    label: category.categoryTitle, value: parseInt(category.categoryId), icon: () => { },
+                    viewStyle: () => {
+                        <View style={SDGenericStyles.rowFlexDirection}>
+                            <Text style={SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyBold}>
+                                {category.categoryTitle}</Text>
+                            <FastImage source={{
+                                uri: category.categoryCover,
+                                priority: FastImage.priority.normal
+                            }} style={{ width: 20, height: 20 }} />
+                        </View>
+                    },
+                    textStyle: [SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyBold]
+                });
+            });
+            dropDownController.current.addItems(postCategories);
         });
     } catch (error) {
         console.log(error);

@@ -23,6 +23,9 @@ export const SDGenericStyles = StyleSheet.create({
     fontFamilyRoman: {
         fontFamily: `wallpiper_roman_font`
     },
+    fontFamilyBold: {
+        fontFamily: `wallpiper_bold_font`
+    },
     mr12: {
         marginRight: 12,
     },
@@ -511,6 +514,13 @@ export const glancePostStyles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
+    addPostDropDownStyle: {
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        backgroundColor: colorConstants.GREY,
+        justifyContent: 'center',
+        width: width / 1.15
+    },
     radioButtonModalView: {
         marginRight: 20,
         backgroundColor: "white",
@@ -732,17 +742,19 @@ export const glancePostStyles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         alignSelf: 'center',
+        backgroundColor: colorConstants.YELLOW,
         padding: 2,
         borderWidth: 3,
         borderRadius: 28,
         marginBottom: 20,
         borderColor: '#e3ddda',
+        elevation: 5
     },
     addPostDetailsButton: {
-        padding: 10, backgroundColor: `transparent`,
-        borderRadius: 28, elevation: 5
+        padding: 10,
     },
     addPostDetailsHeaderTitle: {
+        color: 'white',
         fontFamily: 'wallpiper_bold_font',
         fontSize: 20,
         padding: 10
@@ -755,21 +767,21 @@ export const glancePostStyles = StyleSheet.create({
     addPostDetailsView: {
         flex: 1,
         width: width / 1.06,
-        height: height / 1.11,
+        height: height / 1.15,
         marginBottom: 15,
         marginTop: 15,
         marginRight: 10,
         marginLeft: 10,
-        elevation: 10,
+        elevation: 3,
         borderRadius: 8,
         shadowRadius: 18,
         shadowOpacity: .7,
         alignItems: 'center',
         backgroundColor: 'rgba(61,61,61,.7)',
+        borderColor: colorConstants.YELLOW,
         opacity: .7,
         position: 'absolute',
         top: 0,
-        bottom: -20,
     },
     addPostDetailInputView: {
         paddingVertical: isIOS && 5 || 2,
@@ -795,6 +807,10 @@ export const glancePostStyles = StyleSheet.create({
         borderBottomColor: `#fcc200`,
         fontSize: 16,
         color: '#05375a'
+    },
+    addPostDetailsBottomButtonStyle: {
+        alignSelf: 'flex-end',
+        marginTop: 170
     }
 });
 
@@ -1028,7 +1044,7 @@ export const userAuthStyles = StyleSheet.create({
         justifyContent: 'center',
         width: width / 1.15,
         height: 50
-    },
+    }
 });
 
 export const errorBoundaryStyles = StyleSheet.create({
