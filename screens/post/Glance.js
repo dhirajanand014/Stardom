@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { View, Image, TouchableOpacity, StatusBar, Dimensions } from 'react-native';
 import {
-    colorConstants, componentErrorConsts, errorMessages,
+    componentErrorConsts, errorMessages,
     width, jsonConstants, miscMessage, numericConstants,
     screens, stringConstants
 } from '../../constants/Constants';
@@ -11,7 +11,7 @@ import {
 } from '../../helper/Helper';
 import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal';
 import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
-import { glancePostStyles } from '../../styles/Styles';
+import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import Animated, { useAnimatedScrollHandler, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import Shimmer from 'react-native-shimmer';
 import Swiper from 'react-native-swiper';
@@ -74,16 +74,12 @@ export const Glance = ({ navigation }) => {
     console.log(sdomDatastate);
 
     return (
-        <View style={{ flex: 1 }}>
-            <TouchableOpacity style={glancePostStyles.category_selection}
-                onPress={() => navigation.navigate(screens.CATEGORY)}>
-                <Image source={category_selection} style={glancePostStyles.category_selection_image} />
-            </TouchableOpacity>
+        <View style={SDGenericStyles.fill}>
             {
                 sdomDatastate.posts && sdomDatastate.posts.length &&
-                <View style={{ flex: 1, backgroundColor: colorConstants.YELLOW }}>
+                <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorYellow]}>
                     <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
-                        bounces={true} onMomentumScrollBegin={(event) => {
+                        bounces={true} onMomentumScrollBegin={() => {
                             if (optionsState.isImageLoadError) {
                                 setImageLoadError(optionsState, setOptionsState, false);
                             }
@@ -125,6 +121,10 @@ export const Glance = ({ navigation }) => {
                     </Shimmer>
                 </View>
             }
+            <TouchableOpacity style={glancePostStyles.category_selection}
+                onPress={() => navigation.openDrawer()}>
+                <Image source={category_selection} style={glancePostStyles.category_selection_image} />
+            </TouchableOpacity>
             <PostDescriptionModal optionsState={optionsState} setOptionsState={setOptionsState}
                 reportAbuseIcon={post_report_abuse} />
             <PostReportAbuseModal optionsState={optionsState} setOptionsState={setOptionsState} />

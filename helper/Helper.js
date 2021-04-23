@@ -8,7 +8,7 @@ import {
     reportAbuseRequestPayloadKeys, responseStringData,
     actionButtonTextConstants, colorConstants,
     miscMessage, width, height, defaultPickerValue,
-    numericConstants, placeHolderText
+    numericConstants, placeHolderText, screens
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -398,7 +398,7 @@ export const togglePostSearchBox = (searchValues, setSearchValues, post,
                         ...searchValues,
                         searchForPostId: post.postId
                     });
-                }, 200);
+                }, numericConstants.TWO_HUNDRED);
             }
         });
     }
@@ -647,14 +647,15 @@ export const showSelectedImage = async (type, bottomSheetRef, addPost, setAddPos
             default:
                 break;
         }
-        setAddPost({ ...addPost, capturedImage: imageValue.path });
+        setAddPost({ ...addPost, capturedImage: imageValue.path, showBottomOptions: false });
         bottomSheetRef?.current?.snapTo(numericConstants.ONE)
     } catch (error) {
         console.log(error);
     }
 }
 
-export const toggleAddPostDetailsPanel = async (add_post_translate_y, content_opacity, dropDownController) => {
+export const toggleAddPostDetailsPanel = async (add_post_translate_y, content_opacity, dropDownController, toggleButton,
+    navigation) => {
     try {
         const add_post_panel_y_config = {
             damping: 120
@@ -662,29 +663,38 @@ export const toggleAddPostDetailsPanel = async (add_post_translate_y, content_op
         const add_post_panel_opacity_config = {
             damping: 120
         }
-        add_post_translate_y.value = withSpring(numericConstants.ONE, add_post_panel_y_config);
-        content_opacity.value = withSpring(numericConstants.ONE, add_post_panel_opacity_config);
 
-        InteractionManager.runAfterInteractions(async () => {
-            const categories = await fetchCategoryData();
-            const postCategories = categories.map(category => {
-                return ({
-                    label: category.categoryTitle, value: parseInt(category.categoryId), icon: () => { },
-                    viewStyle: () => {
-                        <View style={SDGenericStyles.rowFlexDirection}>
-                            <Text style={SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyBold}>
-                                {category.categoryTitle}</Text>
-                            <FastImage source={{
-                                uri: category.categoryCover,
-                                priority: FastImage.priority.normal
-                            }} style={{ width: 20, height: 20 }} />
-                        </View>
-                    },
-                    textStyle: [SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyBold]
+        switch (toggleButton) {
+            case actionButtonTextConstants.ADD_DETAILS:
+
+                add_post_translate_y.value = withSpring(numericConstants.ONE, add_post_panel_y_config);
+                content_opacity.value = withSpring(numericConstants.ONE, add_post_panel_opacity_config);
+
+                InteractionManager.runAfterInteractions(async () => {
+                    const categories = await fetchCategoryData();
+                    const postCategories = categories.map(category => {
+                        return ({
+                            label: category.categoryTitle, value: parseInt(category.categoryId), icon: () => { },
+                            textStyle: [SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyBold]
+                        });
+                    });
+                    dropDownController.current.addItems(postCategories);
                 });
-            });
-            dropDownController.current.addItems(postCategories);
-        });
+                break;
+            case actionButtonTextConstants.ADD_POST:
+                add_post_translate_y.value = withSpring(height, add_post_panel_y_config);
+                content_opacity.value = withSpring(numericConstants.ZERO, add_post_panel_opacity_config);
+                navigation.navigate(screens.GLANCE);
+                break;
+            case actionButtonTextConstants.CANCEL:
+                add_post_translate_y.value = withSpring(height, add_post_panel_y_config);
+                content_opacity.value = withSpring(numericConstants.ZERO, add_post_panel_opacity_config);
+            default:
+                add_post_translate_y.value = withSpring(height, add_post_panel_y_config);
+                content_opacity.value = withSpring(numericConstants.ZERO, add_post_panel_opacity_config);
+                break;
+        }
+
     } catch (error) {
         console.log(error);
     }

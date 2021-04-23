@@ -514,6 +514,12 @@ export const glancePostStyles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
+    dropDownStyle: {
+        backgroundColor: colorConstants.GREY,
+        justifyContent: 'center',
+        width: width / 1.15,
+        height: 50
+    },
     addPostDropDownStyle: {
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
@@ -723,7 +729,7 @@ export const glancePostStyles = StyleSheet.create({
     bottomSheetPanelButton: {
         padding: 13,
         borderRadius: 10,
-        backgroundColor: '#FF6347',
+        backgroundColor: colorConstants.YELLOW,
         alignItems: 'center',
         marginVertical: 7,
     },
@@ -732,11 +738,9 @@ export const glancePostStyles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
     },
-    addPostDetailsButtonText: {
+    addPostButtonText: {
         color: "#000000",
-        textAlign: 'center',
-        fontSize: 18,
-        fontFamily: 'wallpiper_bold_font',
+        textAlign: 'center'
     },
     addPostDetailsButtonView: {
         position: 'absolute',
@@ -752,6 +756,15 @@ export const glancePostStyles = StyleSheet.create({
     },
     addPostDetailsButton: {
         padding: 10,
+    },
+    cancelAddPostButton: {
+        padding: 10
+    },
+    addPostButton: {
+        borderWidth: 1,
+        paddingHorizontal: 20,
+        backgroundColor: colorConstants.YELLOW,
+        padding: 10
     },
     addPostDetailsHeaderTitle: {
         color: 'white',
@@ -778,7 +791,6 @@ export const glancePostStyles = StyleSheet.create({
         shadowOpacity: .7,
         alignItems: 'center',
         backgroundColor: 'rgba(61,61,61,.7)',
-        borderColor: colorConstants.YELLOW,
         opacity: .7,
         position: 'absolute',
         top: 0,
@@ -947,7 +959,7 @@ export const userAuthStyles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 50,
         width: width / 2,
-        marginBottom: 100
+        marginBottom: 20
     },
     actionButtonStyle: {
         flexDirection: `column`,

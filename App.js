@@ -26,7 +26,7 @@ export default class App extends React.PureComponent {
 
     const postViewDrawer = () => {
       return (
-        <PostDrawer.Navigator initialRouteName={screens.LOGIN} drawerContent={props => <PostSideView {...props} />}>
+        <PostDrawer.Navigator initialRouteName={screens.GLANCE} drawerContent={props => <PostSideView {...props} />}>
           <PostDrawer.Screen name={screens.GLANCE} component={Glance} />
           <PostDrawer.Screen name={screens.LOGIN} component={Login} />
           <PostDrawer.Screen name={screens.ADD_POST} component={AddPost} />

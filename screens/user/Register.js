@@ -43,7 +43,7 @@ export const Register = () => {
                     defaultValue={stringConstants.EMPTY} formState={formState} mode={miscMessage.DATE} dateFormat={miscMessage.DOB_DATE_FORMAT}
                     display={keyBoardTypeConst.DEFAULT} placeHolderText={miscMessage.DOB} />
 
-                <SDDropDownView inputName={fieldControllerName.GENDER} control={control} rules={formRequiredRules.genderRule} containerStyle={glancePostStyles.dropDownPickerStyle}
+                <SDDropDownView inputName={fieldControllerName.GENDER} control={control} rules={formRequiredRules.genderRule} containerStyle={glancePostStyles.addPostDropDownStyle}
                     defaultValue={stringConstants.EMPTY} formState={formState} list={genderList.filter(gender => gender.value != numericConstants.MINUS_ONE)}
                     dropDownDefaultValue={genderList.find(gender => gender.value == numericConstants.ZERO).value} placeHolderText={placeHolderText.SELECT_A_GENDER} />
 

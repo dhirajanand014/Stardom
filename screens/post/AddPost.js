@@ -1,9 +1,9 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
 import { PlusIcon } from '../../components/icons/PlusIcon';
-import { numericConstants, miscMessage, stringConstants, height, width } from '../../constants/Constants';
+import { numericConstants, miscMessage, stringConstants } from '../../constants/Constants';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView';
 import { AddPostDetails } from './AddPostDetails';
@@ -13,7 +13,7 @@ export const AddPost = () => {
     const [addPost, setAddPost] = useState({
         capturedImage: stringConstants.EMPTY,
         showDetails: false,
-        categories: []
+        showBottomOptions: true
     });
 
     const bottomSheetRef = useRef(null);
@@ -42,8 +42,10 @@ export const AddPost = () => {
                     </View>
                 }
             </View>
-            <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef} snapPoints={snapPoints} fall={fallValue} addPost={addPost}
-                setAddPost={setAddPost} />
+            {
+                addPost.showBottomOptions && <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef} snapPoints={snapPoints}
+                    fall={fallValue} addPost={addPost} setAddPost={setAddPost} />
+            }
         </React.Fragment>
     )
 }

@@ -56,10 +56,7 @@ export function PostSearch(props) {
                 <Animated.View style={[glancePostStyles.searchInputBox, translateSearchInputBox, { width: screenWidth - numericConstants.EIGHTY }]}>
                     <TextInput ref={inputTextRef} placeholder={placeHolderText.SEARCH_POSTS} clearButtonMode={miscMessage.ALWAYS}
                         placeholderTextColor={colorConstants.BLACK} textAlignVertical={miscMessage.CENTER} value={searchValues.searchText}
-                        onChangeText={(value) => setSearchValues({
-                            ...searchValues,
-                            searchText: value
-                        })} style={glancePostStyles.search_input_text}>
+                        onChangeText={(value) => setSearchValues({ ...searchValues, searchText: value })} style={glancePostStyles.search_input_text}>
                     </TextInput>
                     <TouchableOpacity style={glancePostStyles.close_button_search_input} onPress={() => togglePostSearchBox(searchValues, setSearchValues, post,
                         input_search_box_translate_x, content_translate_y, content_opacity, screenWidth, screenWidth, false, inputTextRef, viewPagerRef)}>

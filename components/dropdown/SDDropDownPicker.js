@@ -19,7 +19,10 @@ export const SDDropDownPicker = props => {
                         selectedLabelStyle={[SDGenericStyles.bold, SDGenericStyles.fontFamilyNormal, SDGenericStyles.selectedDropDownColor]} selectedLabelStyle={props.selectedLabelStyle}
                         dropDownStyle={SDGenericStyles.dropDownBackGround} itemStyle={SDGenericStyles.justifyItemsStart} customArrowUp={(size, color) =>
                             <ArrowUpIcon width={size} height={size} color={color} />} customArrowDown={(size, color) =>
-                                <ArrowDownIcon width={size} height={size} color={color} />} controller={instance => props.callback.current = props.callback && instance || null}
+                                <ArrowDownIcon width={size} height={size} color={color} />} controller={instance => {
+                                    if (props.callback)
+                                        props.callback.current = instance;
+                                }}
                         onChangeItem={item => onChangeByValueType(inputProps, item.value, props)} defaultValue={props.dropDownDefaultValue} dropDownMaxHeight={numericConstants.ONE_HUNDER_EIGHTY}
                         placeholder={props.placeHolderText} placeholderStyle={[SDGenericStyles.bold, SDGenericStyles.fontFamilyNormal,
                         SDGenericStyles.selectedDropDownColor]} multiple={props.multiple} searchable={props.searchable} onChangeList={(items, callback) =>
