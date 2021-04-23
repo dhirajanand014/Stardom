@@ -15,7 +15,7 @@ import {
     PermissionsAndroid, Text, ToastAndroid
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { withDelay, withSpring } from 'react-native-reanimated';
+import { runOnJS, withDelay, withSpring } from 'react-native-reanimated';
 import { headerStyles, SDGenericStyles } from '../styles/Styles';
 import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -394,7 +394,7 @@ export const togglePostSearchBox = (searchValues, setSearchValues, post,
             } else {
                 setTimeout(() => {
                     inputTextRef.current.focus();
-                    setSearchValues({
+                    runOnJS(setSearchValues)({
                         ...searchValues,
                         searchForPostId: post.postId
                     });
