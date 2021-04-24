@@ -387,11 +387,12 @@ export const glancePostStyles = StyleSheet.create({
     searchInputBox: {
         flex: 1,
         flexDirection: 'row',
-        height: 200,
+        height: height / 25,
         alignItems: 'center',
         position: 'absolute',
         justifyContent: 'center',
         top: 0,
+        right: width / 35,
         bottom: -20,
     },
     close_button_search_input: {
@@ -406,9 +407,9 @@ export const glancePostStyles = StyleSheet.create({
         height: 20
     },
     search_content: {
-        height: 280,
+        height: height / 3.4,
         position: 'absolute',
-        width: 500,
+        width: width / 2,
         top: 25,
         right: 0,
         zIndex: 999,

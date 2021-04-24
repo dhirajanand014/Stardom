@@ -7,15 +7,14 @@ import {
     stringConstants, alertTextMessages,
     reportAbuseRequestPayloadKeys, responseStringData,
     actionButtonTextConstants, colorConstants,
-    miscMessage, width, height, defaultPickerValue,
-    numericConstants, placeHolderText, screens
+    miscMessage, width, height, numericConstants, placeHolderText, screens
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
-    PermissionsAndroid, Text, ToastAndroid
+    PermissionsAndroid, ToastAndroid
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { runOnJS, withDelay, withSpring } from 'react-native-reanimated';
+import { withDelay, withSpring } from 'react-native-reanimated';
 import { headerStyles, SDGenericStyles } from '../styles/Styles';
 import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -394,7 +393,7 @@ export const togglePostSearchBox = (searchValues, setSearchValues, post,
             } else {
                 setTimeout(() => {
                     inputTextRef.current.focus();
-                    runOnJS(setSearchValues)({
+                    setSearchValues({
                         ...searchValues,
                         searchForPostId: post.postId
                     });
