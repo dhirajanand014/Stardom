@@ -10,7 +10,6 @@ export const SDCameraView = props => {
 
     const [devices, setDevices] = useState();
     // const device = useMemo(() => devices && devices.find((d) => d.position === 'back'), [devices]);
-    debugger
     const [permissons, setPermissons] = useState(false)
     const getPermissons = async () => {
 
@@ -24,8 +23,7 @@ export const SDCameraView = props => {
     useEffect(() => {
         const loadDevices = async () => {
             try {
-                const availableCameraDevices = await Camera.getAvailableCameraDevices()
-                debugger
+                const availableCameraDevices = await Camera.getAvailableCameraDevices();
                 const sortedDevices = availableCameraDevices.sort(sortDevices)
                 setDevices(sortedDevices)
             } catch (e) {

@@ -9,12 +9,13 @@ import {
     reportAbuseRequestPayloadKeys, responseStringData,
     actionButtonTextConstants, colorConstants,
     miscMessage, width, height, numericConstants,
-    screens, headerStrings
+    screens, headerStrings, fieldControllerName, isAndroid, isIOS, OTP_INPUTS
 } from '../constants/Constants';
 import {
     Alert, Image, InteractionManager, NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
+import RNOtpVerify from 'react-native-otp-verify';
 import AsyncStorage from '@react-native-community/async-storage';
 import { withDelay, withSpring } from 'react-native-reanimated';
 import { glancePostStyles, headerStyles, SDGenericStyles } from '../styles/Styles';
@@ -705,8 +706,8 @@ export const authorizationHeader = props => {
     return ({
         headerShown: true,
         headerTitle: props.title,
-        headerStyle: SDGenericStyles.backgroundColorWhite,
-        headerTintColor: colorConstants.BLACK,
+        headerStyle: SDGenericStyles.backGroundColorBlack,
+        headerTintColor: colorConstants.WHITE,
         headerTitleAlign: miscMessage.CENTER,
         drawerIcon: ({ focused, size }) => {
             return <Image source={require('../assets/category_selection_icon.png')}
@@ -719,4 +720,180 @@ export const authorizationHeader = props => {
             )
         })
     })
+}
+
+export const onResendOtpButtonPress = async (firstTextInputRef, setOtpArray, setResendButtonDisabledTime, setAttemptsRemaining,
+    attemptsRemaining, startResendOtpTimer, phoneNumber, isFrom, navigation, clearErrors, setLoader) => {
+    // clear last OTP
+    if (firstTextInputRef) {
+        setOtpArray(Array(OTP_INPUTS).fill(stringConstants.EMPTY));
+        firstTextInputRef.current.focus();
+    }
+    setResendButtonDisabledTime(RESEND_OTP_TIME_LIMIT);
+    setAttemptsRemaining(--attemptsRemaining);
+    startResendOtpTimer();
+    const signUpDetails = {
+        [fieldControllerName.PHONE_NUMBER]: phoneNumber
+    };
+    await handleUserSignUpOtp(signUpDetails, isFrom, navigation, true, setLoader);
+    clearErrors(fieldControllerName.OTP_INPUT);
+};
+
+// only backspace key press event is fired on Android
+// to have consistency, using this event just to detect backspace key press and
+// onOtpChange for other digits press
+export const onOtpKeyPress = (index, otpArray, firstTextInputRef, secondTextInputRef, thirdTextInputRef, fourthTextInputRef,
+    fifthTextInputRef, setOtpArray, setError, clearErrors, setAutoSubmittingOtp) => {
+    return ({ nativeEvent: { key: value } }) => {
+        // auto focus to previous InputText if value is blank and existing value is also blank
+        if (value === miscMessage.BACKSPACE && otpArray[index] === stringConstants.EMPTY) {
+            setAutoSubmittingOtp(false)
+            switch (index) {
+                case numericConstants.ONE:
+                    firstTextInputRef.current.focus();
+                    break;
+                case numericConstants.TWO:
+                    secondTextInputRef.current.focus();
+                    break;
+                case numericConstants.THREE:
+                    thirdTextInputRef.current.focus();
+                    break;
+                case numericConstants.FOUR:
+                    fourthTextInputRef.current.focus();
+                    break;
+                case numericConstants.FIVE:
+                    fifthTextInputRef.current.focus();
+                    break;
+                default:
+                    break;
+            }
+            /**
+             * clear the focused text box as well only on Android because on mweb onOtpChange will be also called
+             * doing this thing for us
+             * todo check this behaviour on ios
+             */
+            if (index > numericConstants.ZERO) {
+                const otpArrayCopy = otpArray.concat();
+                otpArrayCopy[index - numericConstants.ONE] = stringConstants.EMPTY; // clear the previous box which will be in focus
+                setOtpArray(otpArrayCopy);
+            }
+        }
+        if (isAndroid) {
+            const otpString = otpArray.reduce((result, item) => { return `${result}${item}` }, stringConstants.EMPTY);
+            identifyOtpError(otpString, otpArray, setError, clearErrors);
+        }
+    };
+};
+
+// this event won't be fired when text changes from '' to '' i.e. backspace is pressed
+// using onOtpKeyPress for this purpose
+export const onOtpChange = (index, otpArray, setOtpArray, secondTextInputRef, thirdTextInputRef, fourthTextInputRef,
+    fifthTextInputRef, sixththTextInputRef, setError, clearErrors) => {
+    return value => {
+        if (isNaN(Number(value))) {
+            // do nothing when a non digit is pressed
+            return;
+        }
+        const otpArrayCopy = otpArray.concat();
+        otpArrayCopy[index] = value;
+        setOtpArray(otpArrayCopy);
+
+        if (isIOS) {
+            const otpString = otpArrayCopy.reduce((result, item) => { return `${result}${item}` }, stringConstants.EMPTY);
+            identifyOtpError(otpString, otpArrayCopy, setError, clearErrors);
+        }
+
+        // auto focus to next InputText if value is not blank
+        if (value !== stringConstants.EMPTY) {
+            switch (index) {
+                case numericConstants.ZERO:
+                    secondTextInputRef.current.focus();
+                    break;
+                case numericConstants.ONE:
+                    thirdTextInputRef.current.focus();
+                    break;
+                case numericConstants.TWO:
+                    fourthTextInputRef.current.focus();
+                    break;
+                case numericConstants.THREE:
+                    fifthTextInputRef.current.focus();
+                    break;
+                case numericConstants.FOUR:
+                    sixththTextInputRef.current.focus();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+};
+
+export const identifyOtpError = (otpString, otpArray, setError, clearErrors) => {
+    if (otpString === stringConstants.EMPTY || otpString.length < OTP_INPUTS) {
+        setError(fieldControllerName.OTP_INPUT, {
+            type: `length`,
+            message: `Please enter 6 digit OTP`
+        })
+        return false;
+    }
+    if (otpArray && otpArray.length === OTP_INPUTS) {
+        clearErrors(fieldControllerName.OTP_INPUT);
+        return true;
+    }
+    return false;
+}
+
+export const verifyOtpRequest = async (otpString, randomNumber) => {
+    if (randomNumber) {
+        if (parseInt(otpString) === randomNumber) {
+            return miscMessage.CONFIRM_SECRET;
+        }
+        showErrorPopup()
+        showSnackBar(errorModalMessageConstants.INCORRECT_OTP_ENTERED, false);
+        return miscMessage.INCORRECT_OTP;
+    }
+}
+
+export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isResendOtp) => {
+    try {
+        const { phoneNumber } = signUpDetails;
+
+        // Math.random() returns float between 0 and 1, 
+        // so minimum number will be 100000, max - 999999. 
+        const random6Digit = Math.floor(Math.random() * 899999 + 100000);
+
+        const hashValue = isAndroid && await RNOtpVerify.getHash() || "RaZGrAI03n4";
+
+        const otpRequestData = {
+            phone: phoneNumber,
+            rand_number: random6Digit,
+            hash_value: hashValue[numericConstants.ZERO]
+        }
+
+        const otpRequestDataJSON = JSON.stringify(otpRequestData);
+
+        // const response = await axios.post(urlConstants.TRIGGER_SMS_OTP, otpRequestDataJSON);
+
+        // if (response && response.data && !isResendOtp) {
+        const params = getSignUpParams(signUpDetails, random6Digit, isFrom);
+
+        navigation.navigate(screens.OTP_VERIFICATION, params);
+        // setLoader(false);
+        return true;
+        //}
+        // showSnackBar(successFulMessages.SENT_SMS_SUCCESSFULLY, true);
+    } catch (error) {
+        console.error(`${errorModalMessageConstants.REQUEST_OTP_FAILED} : ${signUpDetails.phoneNumber}`, error);
+    }
+    return false;
+}
+
+export const getSignUpParams = (signUpDetails, random6Digit, isFrom) => {
+    let returnValue = {};
+    if (isFrom) {
+        returnValue.isFrom = isFrom;
+    }
+    returnValue.phoneNumber = signUpDetails.phoneNumber;
+    returnValue.rand_number = random6Digit;
+    return returnValue;
 }

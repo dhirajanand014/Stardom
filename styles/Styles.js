@@ -206,6 +206,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingHorizontal30: {
         paddingHorizontal: 30
     },
+    paddingBottom20: {
+        paddingBottom: 20
+    },
     paddingBottom50: {
         paddingBottom: 50
     },
@@ -297,7 +300,6 @@ export const SDGenericStyles = StyleSheet.create({
     backgroundColorWhite: {
         backgroundColor: 'white'
     },
-
     backgroundColorYellow: {
         backgroundColor: `#fcc200`
     },
@@ -967,6 +969,69 @@ export const userAuthStyles = StyleSheet.create({
         fontSize: 16,
         paddingLeft: 5
     },
+    otpInputStyle: {
+        fontSize: 18,
+        width: '100%'
+    },
+    otpFieldRows: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    otpFieldRows: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    otpContainerStyle: {
+        flexDirection: 'row',
+        borderWidth: 1.5,
+        borderRadius: 5,
+        marginHorizontal: 6,
+        padding: 8,
+    },
+    otpErrorMessageStyle: {
+        marginVertical: 20,
+        color: 'red',
+        marginBottom: 6,
+        marginHorizontal: 15
+    },
+    otpInputStyle: {
+        padding: 0,
+    },
+    otpResendTimerText: {
+        fontSize: 12,
+    },
+    otpResendLinkStyle: {
+        paddingTop: 8,
+        paddingBottom: 8,
+        paddingLeft: 16,
+        paddingRight: 16,
+        borderWidth: 1,
+        borderRadius: 3,
+        alignSelf: 'flex-start',
+    },
+    otpResendTextStyle: {
+        textTransform: 'uppercase',
+        fontSize: 12,
+        color: '#3543bf',
+    },
+    otpResendButton: {
+        alignItems: 'center',
+        width: '100%',
+        marginTop: 16,
+    },
+    otpResendButtonText: {
+        color: '#fe7d32',
+        textTransform: 'none',
+        textDecorationLine: 'underline',
+    },
+    otpResendDisabled: {
+        opacity: 0.5,
+    },
+    otpVerifyButton: {
+        alignItems: 'center',
+        elevation: 8,
+        marginTop: 20,
+    },
     signInSecondaryButtonView: {
         alignSelf: 'center',
         paddingVertical: 100,
@@ -975,9 +1040,9 @@ export const userAuthStyles = StyleSheet.create({
     },
     registerButtonView: {
         alignSelf: 'center',
-        paddingVertical: 50,
+        paddingVertical: 20,
         width: width / 2,
-        marginBottom: 20
+        paddingBottom: 100
     },
     actionButtonStyle: {
         flexDirection: `column`,
@@ -991,9 +1056,14 @@ export const userAuthStyles = StyleSheet.create({
         textAlign: 'center',
         elevation: 3,
         paddingVertical: 8,
-        color: 'white',
-        fontWeight: 'bold',
-        fontFamily: isAndroid && `normal` || `System`
+        color: 'white'
+    },
+    signUpFooter: {
+        flex: 3,
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30
     },
     signInUserInputView: {
         paddingVertical: 1,
@@ -1058,7 +1128,7 @@ export const userAuthStyles = StyleSheet.create({
         color: '#989898',
         textAlign: 'center',
         fontSize: 16,
-        marginTop: 30,
+        paddingTop: 20,
         width: width / 1.15,
         textAlign: 'center',
         fontWeight: 'bold'

@@ -32,8 +32,10 @@ export const screens = {
     LOGIN: `Login`,
     ADD_POST: `Add Post`,
     REGISTER: `Register`,
+    REGISTRATION_DETAILS: `Registration Details`,
     GLANCE: `Glance`,
-    CAMERA: `Camera`
+    CAMERA: `Camera`,
+    OTP_VERIFICATION: `OTP Verification`
 }
 
 export const headerStrings = {
@@ -252,6 +254,7 @@ export const permissionMessages = {
 }
 
 export const stringConstants = {
+    NODE: {},
     EMPTY: "",
     COMMA: `,`,
     PLUS: `+`,
@@ -358,6 +361,9 @@ export const colorConstants = {
     TRANSPARENT_BUTTON: `rgba(0, 0, 0, 0.0)`,
     GREY: `#999`,
     YELLOW: `#fcc200`,
+    BLUE: '#3543bf',
+    ORANGE: '#fe7d32',
+    GREEN: '#30a960',
     WHITE: `#ffffff`,
     BLACK: `#3d3d3d`
 }
@@ -379,9 +385,11 @@ export const miscMessage = {
     DOB: `Date of Birth`,
     RELOAD_STARDOM: `Reload Stardom`,
     SELECT_CATEGORIES: `Select other categories`,
+    SIGN_UP: `Sign Up`,
     NOT_AVAILABLE: `Not Available`,
     ALWAYS: `always`,
     CENTER: `center`,
+    ATTEMPT_REMAINING: `Attempts remaining`,
     SMALL: `small`,
     RECTANGLE: `rectangle`,
     CIRCLE: `circle`,
@@ -390,8 +398,11 @@ export const miscMessage = {
     STRETCH: `stretch`,
     WINDOW: `window`,
     LARGE: `large`,
+    INCORRECT_OTP: `Incorrect OTP`,
     CAMERA: `camera`,
+    RESEND_OTP: `Resend OTP`,
     GALLERY: `gallery`,
+    CONFIRM_SECRET: `OTP Confirmed`,
     CATEGORY_BACK: `Go back to posts Anytime !!`
 }
 
