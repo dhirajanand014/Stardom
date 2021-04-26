@@ -1,4 +1,5 @@
-import axios from 'axios'
+import React from 'react';
+import axios from 'axios';
 import {
     urlConstants, asyncStorageKeys,
     postCountTypes, postCountRequestKeys,
@@ -7,15 +8,16 @@ import {
     stringConstants, alertTextMessages,
     reportAbuseRequestPayloadKeys, responseStringData,
     actionButtonTextConstants, colorConstants,
-    miscMessage, width, height, numericConstants, placeHolderText, screens
+    miscMessage, width, height, numericConstants,
+    screens, headerStrings
 } from '../constants/Constants';
 import {
-    Alert, InteractionManager, NativeModules,
+    Alert, Image, InteractionManager, NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { withDelay, withSpring } from 'react-native-reanimated';
-import { headerStyles, SDGenericStyles } from '../styles/Styles';
+import { glancePostStyles, headerStyles, SDGenericStyles } from '../styles/Styles';
 import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
 import { HeaderBackButton } from '@react-navigation/stack';
@@ -614,25 +616,6 @@ const datePickerConvert = (event, date) => {
     return false;
 }
 
-export const categoryScreenOptions = () => {
-    return ({
-        headerShown: true,
-        headerTitle: placeHolderText.SELECT_CATEGORIES,
-        headerStyle: SDGenericStyles.colorBlack,
-        headerTintColor: colorConstants.WHITE,
-        headerTitleAlign: miscMessage.CENTER,
-        headerTitleStyle: headerStyles.headerText,
-        navigationOptions: ({ navigation }) => ({
-            headerLeft: (
-                <TourGuideZone zone={numericConstants.TWO} borderRadius={numericConstants.EIGHT} shape={miscMessage.CIRCLE}
-                    text={alertTextMessages.GO_BACK_TO_POST}>
-                    <HeaderBackButton tintColor={colorConstants.WHITE} onPress={() => { navigation.goBack() }} />
-                </TourGuideZone>
-            )
-        })
-    })
-}
-
 export const showSelectedImage = async (type, bottomSheetRef, addPost, setAddPost) => {
     try {
         let imageValue;
@@ -697,4 +680,43 @@ export const toggleAddPostDetailsPanel = async (add_post_translate_y, content_op
     } catch (error) {
         console.log(error);
     }
+}
+
+export const categoryHeader = props => {
+    return ({
+        headerShown: true,
+        headerTitle: headerStrings.SELECT_CATEGORY,
+        headerStyle: SDGenericStyles.backGroundColorBlack,
+        headerTintColor: colorConstants.WHITE,
+        headerTitleAlign: miscMessage.CENTER,
+        headerTitleStyle: headerStyles.headerText,
+        navigationOptions: ({ navigation }) => ({
+            headerLeft: (
+                <TourGuideZone zone={numericConstants.TWO} borderRadius={numericConstants.EIGHT} shape={miscMessage.CIRCLE}
+                    text={miscMessage.CATEGORY_BACK}>
+                    <HeaderBackButton tintColor={SDGenericStyles.colorWhite} onPress={() => { navigation.goBack() }} />
+                </TourGuideZone>
+            )
+        })
+    })
+}
+
+export const authorizationHeader = props => {
+    return ({
+        headerShown: true,
+        headerTitle: props.title,
+        headerStyle: SDGenericStyles.backgroundColorWhite,
+        headerTintColor: colorConstants.BLACK,
+        headerTitleAlign: miscMessage.CENTER,
+        drawerIcon: ({ focused, size }) => {
+            return <Image source={require('../assets/category_selection_icon.png')}
+                style={glancePostStyles.category_selection_image} />
+        },
+        headerTitleStyle: headerStyles.headerText,
+        navigationOptions: ({ navigation }) => ({
+            headerLeft: (
+                <HeaderBackButton tintColor={SDGenericStyles.colorWhite} onPress={() => { navigation.goBack() }} />
+            )
+        })
+    })
 }

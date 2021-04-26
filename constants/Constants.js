@@ -16,7 +16,13 @@ export const screenOptions = {
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
 }
 
-export const stackOptions = {
+export const tabBarOptions = {
+    showLabel: false,
+    scrollEnabled: true,
+    style: { height: 0 }
+}
+
+export const headerLessStackOptions = {
     headerShown: false
 }
 
@@ -27,7 +33,13 @@ export const screens = {
     ADD_POST: `Add Post`,
     REGISTER: `Register`,
     GLANCE: `Glance`,
+    CAMERA: `Camera`
 }
+
+export const headerStrings = {
+    SELECT_CATEGORY: `Select Categories`,
+}
+
 export const urlConstants = {
     fetchCategories: `https://www.wallpiper.app/4RhvfbEGwnsmxcat.php`,
     fetchPosts: `https://www.wallpiper.app/4RhvfbEGwnsmxcpst.php`,
@@ -379,7 +391,8 @@ export const miscMessage = {
     WINDOW: `window`,
     LARGE: `large`,
     CAMERA: `camera`,
-    GALLERY: `gallery`
+    GALLERY: `gallery`,
+    CATEGORY_BACK: `Go back to posts Anytime !!`
 }
 
 export const genderList = [

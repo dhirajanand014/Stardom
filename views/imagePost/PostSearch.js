@@ -41,7 +41,7 @@ export function PostSearch(props) {
                 </TouchableOpacity>
             </View>
             <React.Fragment>
-                <Animated.View style={[glancePostStyles.searchInputBox, translateSearchInputBox, { width: screenWidth - 110 }]}>
+                <Animated.View style={[glancePostStyles.searchInputBox, translateSearchInputBox]}>
                     <TextInput ref={inputTextRef} placeholder={placeHolderText.SEARCH_POSTS} clearButtonMode={miscMessage.ALWAYS}
                         placeholderTextColor={colorConstants.BLACK} textAlignVertical={miscMessage.CENTER} value={searchValues.searchText}
                         onChangeText={(value) => setSearchValues({ ...searchValues, searchText: value })} style={glancePostStyles.search_input_text}>

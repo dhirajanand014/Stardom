@@ -104,6 +104,9 @@ export const SDGenericStyles = StyleSheet.create({
     marginBottom4: {
         marginBottom: 4
     },
+    marginRight4: {
+        marginRight: 4
+    },
     marginBottom10: {
         marginBottom: 10
     },
@@ -113,14 +116,14 @@ export const SDGenericStyles = StyleSheet.create({
     marginVertical2: {
         marginVertical: 2
     },
-    marginVertical5: {
-        marginVertical: 5
-    },
     zIndex10: {
         zIndex: 10
     },
     mv5: {
         marginVertical: 5
+    },
+    mv8: {
+        marginVertical: 8
     },
     mv10: {
         marginVertical: 10
@@ -241,6 +244,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     backGroundColorGreen: {
         backgroundColor: `green`
+    },
+    backGroundColorBlack: {
+        backgroundColor: `#3d3d3d`
     },
     colorWhite: {
         color: `white`
@@ -392,7 +398,8 @@ export const glancePostStyles = StyleSheet.create({
         position: 'absolute',
         justifyContent: 'center',
         top: 0,
-        right: width / 35,
+        width: width - 80,
+        right: width - 410,
         bottom: -20,
     },
     close_button_search_input: {
@@ -863,6 +870,16 @@ export const categoryViewStyles = StyleSheet.create({
     skipTourZoneStyle: {
         width: 95,
         paddingVertical: 18
+    }
+})
+
+export const drawerStyles = StyleSheet.create({
+    drawerHeaderStyle: {
+        width: 60,
+        height: 60,
+        borderRadius: 40,
+        borderWidth: 3,
+        borderColor: colorConstants.YELLOW
     }
 })
 

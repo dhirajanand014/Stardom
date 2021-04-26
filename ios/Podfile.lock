@@ -263,6 +263,14 @@ PODS:
     - React-jsi (= 0.64.0)
     - React-perflogger (= 0.64.0)
   - React-jsinspector (0.64.0)
+  - react-native-camera (3.43.6):
+    - React-Core
+    - react-native-camera/RCT (= 3.43.6)
+    - react-native-camera/RN (= 3.43.6)
+  - react-native-camera/RCT (3.43.6):
+    - React-Core
+  - react-native-camera/RN (3.43.6):
+    - React-Core
   - react-native-restart (0.0.20):
     - React-Core
   - react-native-safe-area-context (3.2.0):
@@ -438,6 +446,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-shimmer (from `../node_modules/react-native-shimmer`)
@@ -517,6 +526,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-camera:
+    :path: "../node_modules/react-native-camera"
   react-native-restart:
     :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
@@ -597,6 +608,7 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
+  react-native-camera: 68bc0c37d11df806570bfe53e8d7561bd984cb76
   react-native-restart: 6cc683e208c080581c147d0875609e64572a9443
   react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a

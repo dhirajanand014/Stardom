@@ -3,7 +3,7 @@ import { View, Image, TouchableOpacity, StatusBar, Dimensions } from 'react-nati
 import {
     componentErrorConsts, errorMessages,
     width, jsonConstants, miscMessage, numericConstants,
-    screens, stringConstants
+    stringConstants
 } from '../../constants/Constants';
 import {
     onSwiperScrollEnd, fetchPostsAndSaveToState,
