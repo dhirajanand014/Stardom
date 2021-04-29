@@ -706,13 +706,9 @@ export const authorizationHeader = props => {
     return ({
         headerShown: true,
         headerTitle: props.title,
-        headerStyle: SDGenericStyles.backGroundColorBlack,
+        headerStyle: [SDGenericStyles.fontFamilyBold, SDGenericStyles.backGroundColorBlack],
         headerTintColor: colorConstants.WHITE,
         headerTitleAlign: miscMessage.CENTER,
-        drawerIcon: ({ focused, size }) => {
-            return <Image source={require('../assets/category_selection_icon.png')}
-                style={glancePostStyles.category_selection_image} />
-        },
         headerTitleStyle: headerStyles.headerText,
         navigationOptions: ({ navigation }) => ({
             headerLeft: (
@@ -747,7 +743,7 @@ export const onOtpKeyPress = (index, otpArray, firstTextInputRef, secondTextInpu
     return ({ nativeEvent: { key: value } }) => {
         // auto focus to previous InputText if value is blank and existing value is also blank
         if (value === miscMessage.BACKSPACE && otpArray[index] === stringConstants.EMPTY) {
-            setAutoSubmittingOtp(false)
+            setAutoSubmittingOtp(false);
             switch (index) {
                 case numericConstants.ONE:
                     firstTextInputRef.current.focus();
@@ -854,7 +850,7 @@ export const verifyOtpRequest = async (otpString, randomNumber) => {
     }
 }
 
-export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isResendOtp) => {
+export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isResendOtp, setSignUpDetails) => {
     try {
         const { phoneNumber } = signUpDetails;
 
@@ -875,7 +871,7 @@ export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isR
         // const response = await axios.post(urlConstants.TRIGGER_SMS_OTP, otpRequestDataJSON);
 
         // if (response && response.data && !isResendOtp) {
-        const params = getSignUpParams(signUpDetails, random6Digit, isFrom);
+        const params = getSignUpParams(signUpDetails, random6Digit, isFrom, setSignUpDetails);
 
         navigation.navigate(screens.OTP_VERIFICATION, params);
         // setLoader(false);
@@ -888,12 +884,13 @@ export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isR
     return false;
 }
 
-export const getSignUpParams = (signUpDetails, random6Digit, isFrom) => {
+export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDetails) => {
     let returnValue = {};
     if (isFrom) {
         returnValue.isFrom = isFrom;
     }
     returnValue.phoneNumber = signUpDetails.phoneNumber;
     returnValue.rand_number = random6Digit;
+    returnValue.setSignUpDetails = setSignUpDetails;
     return returnValue;
 }

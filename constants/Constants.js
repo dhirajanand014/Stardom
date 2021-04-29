@@ -33,8 +33,10 @@ export const screens = {
     ADD_POST: `Add Post`,
     REGISTER: `Register`,
     REGISTRATION_DETAILS: `Registration Details`,
+    REGISTRATION_CONFIRMATION: `Confirm Registration`,
     GLANCE: `Glance`,
     CAMERA: `Camera`,
+    MENU: `Menu`,
     OTP_VERIFICATION: `OTP Verification`
 }
 
@@ -60,6 +62,7 @@ export const asyncStorageKeys = {
 export const fieldControllerName = {
     PHONE_NUMBER: `phoneNumber`,
     FULL_NAME: `fullName`,
+    USER_ID: `userId`,
     EMAIL: `email`,
     SECRET: `secret`,
     CONFIRM_SECRET: `confirmSecret`,
@@ -105,6 +108,7 @@ export const actionButtonTextConstants = {
     PROCEED: `Proceed`,
     VERIFY: `Verify`,
     FORGOT_PASSWORD: `Forgot Password`,
+    CHECK_AVAILABILITY: `Check Availability`,
     RESET_PASSWORD: `Reset Password`,
     OK: `OK`,
     DATE: `Date`,
@@ -161,6 +165,12 @@ export const formRequiredRules = {
             message: `Please enter a name`
         }
     },
+    usedIdFormRule: {
+        required: {
+            value: true,
+            message: `Please enter a user id`
+        }
+    },
     emailRule: {
         required: {
             value: true,
@@ -202,6 +212,7 @@ export const formRequiredRules = {
         }
     },
     genderRule: {
+        name: fieldControllerName.GENDER,
         required: {
             value: true,
             message: `Please select a gender`
@@ -271,8 +282,9 @@ export const modalTextConstants = {
 }
 export const placeHolderText = {
     PHONE_NUMBER: `Enter 10 digit Number`,
-    FULL_NAME: `Full Name`,
-    EMAIL: `Email Address`,
+    FULL_NAME: `Enter Full Name`,
+    USER_ID: `Enter User ID`,
+    EMAIL: `Enter Email Address`,
     NAME: `Enter Name`,
     DOB: `Enter date of birth`,
     SECRET: `Enter 4 digit Password`,
@@ -283,7 +295,8 @@ export const placeHolderText = {
     SELECT_A_GENDER: `Select a gender`,
     SELECT_CATEGORIES: 'Select Categories',
     ADD_POST_TITLE: `Enter Title`,
-    ADD_POST_DESCRIPTION: `Enter Description`
+    ADD_POST_DESCRIPTION: `Enter Description`,
+    SELECT_GENDER: `Select a gender`
 }
 
 export const numericConstants = {
@@ -312,6 +325,7 @@ export const numericConstants = {
     TWENTY_EIGHT: 28,
     THIRTY: 30,
     FORTY_FIVE: 45,
+    FIFTY: 50,
     EIGHTY: 80,
     ONE_HUNDRED: 100,
     ONE_HUNDRED_THIRTY: 130,
@@ -365,6 +379,7 @@ export const colorConstants = {
     ORANGE: '#fe7d32',
     GREEN: '#30a960',
     WHITE: `#ffffff`,
+    INPUT_GRAY: `#fafafa`,
     BLACK: `#3d3d3d`
 }
 
@@ -396,12 +411,17 @@ export const miscMessage = {
     RIGHT: `right`,
     UP: `up`,
     STRETCH: `stretch`,
+    BACKSPACE: `Backspace`,
     WINDOW: `window`,
     LARGE: `large`,
     INCORRECT_OTP: `Incorrect OTP`,
     CAMERA: `camera`,
     RESEND_OTP: `Resend OTP`,
     GALLERY: `gallery`,
+    MALE: `male`,
+    MALE_TEXT: `Male`,
+    FEMALE_TEXT: `Female`,
+    FEMALE: `female`,
     CONFIRM_SECRET: `OTP Confirmed`,
     CATEGORY_BACK: `Go back to posts Anytime !!`
 }

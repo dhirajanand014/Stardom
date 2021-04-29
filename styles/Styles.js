@@ -29,6 +29,9 @@ export const SDGenericStyles = StyleSheet.create({
     mr12: {
         marginRight: 12,
     },
+    mt3: {
+        marginTop: 3,
+    },
     mt12: {
         marginTop: 12,
     },
@@ -134,6 +137,9 @@ export const SDGenericStyles = StyleSheet.create({
     mv20: {
         marginVertical: 20
     },
+    borderRightWidth1: {
+        borderRightWidth: 1
+    },
     borderBottomWidth1: {
         borderBottomWidth: 1
     },
@@ -184,6 +190,12 @@ export const SDGenericStyles = StyleSheet.create({
     },
     padding10: {
         padding: 10
+    },
+    paddingTop20: {
+        paddingTop: 20
+    },
+    paddingTop40: {
+        paddingTop: 40
     },
     paddingTop80: {
         paddingTop: 80
@@ -247,6 +259,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     backGroundColorGreen: {
         backgroundColor: `green`
+    },
+    backGroundColorGray: {
+        backgroundColor: `#fafafa`
     },
     backGroundColorBlack: {
         backgroundColor: `#3d3d3d`
@@ -833,6 +848,17 @@ export const glancePostStyles = StyleSheet.create({
     addPostDetailsBottomButtonStyle: {
         alignSelf: 'flex-end',
         marginTop: 170
+    },
+    genderSelectionPanel: {
+        height: 65,
+        borderWidth: 0.5,
+        borderRadius: 12
+    },
+    genderCardView: {
+        borderWidth: 1,
+        borderRadius: 20,
+        borderColor: colorConstants.YELLOW,
+        height: 90
     }
 });
 
@@ -983,7 +1009,7 @@ export const userAuthStyles = StyleSheet.create({
     },
     otpContainerStyle: {
         flexDirection: 'row',
-        borderWidth: 1.5,
+        borderWidth: 2,
         borderRadius: 5,
         marginHorizontal: 6,
         padding: 8,
@@ -991,6 +1017,7 @@ export const userAuthStyles = StyleSheet.create({
     otpErrorMessageStyle: {
         marginVertical: 20,
         color: 'red',
+        alignSelf: 'center',
         marginBottom: 6,
         marginHorizontal: 15
     },
@@ -1042,7 +1069,19 @@ export const userAuthStyles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 20,
         width: width / 2,
-        paddingBottom: 100
+        paddingBottom: 230
+    },
+    registrationConfirmationView: {
+        alignSelf: 'center',
+        paddingVertical: 20,
+        width: width / 2,
+        paddingBottom: 50
+    },
+    registerationDetailsView: {
+        alignSelf: 'center',
+        paddingVertical: 20,
+        width: width / 2,
+        paddingBottom: 20
     },
     actionButtonStyle: {
         flexDirection: `column`,
@@ -1067,17 +1106,16 @@ export const userAuthStyles = StyleSheet.create({
     },
     signInUserInputView: {
         paddingVertical: 1,
+        elevation: 3,
         alignItems: 'center',
         justifyContent: 'center'
     },
     userInput: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderWidth: 1,
         paddingStart: 15,
         backgroundColor: `#fafafa`,
-        marginVertical: 3,
-        borderColor: `#888888`,
+        marginVertical: 8,
         borderRadius: 3,
         width: width / 1.15,
     },
@@ -1092,10 +1130,12 @@ export const userAuthStyles = StyleSheet.create({
         width: width / 1.15,
     },
     errorInputBorder: {
+        borderWidth: 2,
         borderColor: 'red',
     },
     normalInputBorder: {
-        borderColor: '#999',
+        borderWidth: 2,
+        borderColor: `#fcc200`,
     },
     formInputError: {
         color: 'red',
@@ -1128,10 +1168,8 @@ export const userAuthStyles = StyleSheet.create({
         color: '#989898',
         textAlign: 'center',
         fontSize: 16,
-        paddingTop: 20,
         width: width / 1.15,
         textAlign: 'center',
-        fontWeight: 'bold'
     },
     registrationUserDropDownView: {
         paddingVertical: 15,
@@ -1205,6 +1243,7 @@ export const colors = {
     SEMI_TRANSPARENT: 'rgba(0,0,0,0.5)',
     LIGHT_RED: '#fef3ec',
     YELLOW: '#fec72e',
+    SDOM_YELLOW: `#fcc200`,
     LIGHT_GREY: '#a9a9a9',
     PALE_YELLOW: '#fff6ef',
     DARK_BLUE: '#2e68b2',

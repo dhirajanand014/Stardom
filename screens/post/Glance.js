@@ -121,8 +121,7 @@ export const Glance = ({ navigation }) => {
                     </Shimmer>
                 </View>
             }
-            <TouchableOpacity style={glancePostStyles.category_selection}
-                onPress={() => navigation.openDrawer()}>
+            <TouchableOpacity style={glancePostStyles.category_selection}>
                 <Image source={category_selection} style={glancePostStyles.category_selection_image} />
             </TouchableOpacity>
             <PostDescriptionModal optionsState={optionsState} setOptionsState={setOptionsState}
