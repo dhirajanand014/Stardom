@@ -73,6 +73,9 @@ export const fieldControllerName = {
     GENDER: `gender`,
     PROFILE_NAME: `profileName`,
     LOCATION: `location`,
+    GENDER_MALE: `male`,
+    GENDER_FEMALE: `female`,
+    RATHER_NOT_SAY: `ratherNotSay`,
     INTERESTS: `interests`,
     CATEGORIES: `categories`,
     ADD_POST_TITLE: `postTitle`,
@@ -280,6 +283,11 @@ export const modalTextConstants = {
     ADD_POST_DETAILS: `Add post details`,
     CANCEL_BUTTON: `Cancel`,
     CLOSE_BUTTON: `Close`,
+    REGISTER_TITLE_TEXT: `Create New Account`,
+    CONFIRM_REGISTRATION: `Confirm Registration`,
+    OTP_VERIFICATION: `OTP Verification`,
+    ACCOUNT_DETAILS: `Account Details`,
+    LOGIN_TO_CONTINUE: `Login to continue`,
     SUBMIT_BUTTON: `Submit`
 }
 export const placeHolderText = {
@@ -322,6 +330,7 @@ export const numericConstants = {
     EIGHTEEN: 18,
     NINETEEN: 19,
     TWENTY: 20,
+    TWENTY_ONE: 21,
     TWENTY_TWO: 22,
     TWENTY_FOUR: 24,
     TWENTY_EIGHT: 28,
@@ -349,7 +358,8 @@ export const alertTextMessages = {
     WALLPAPER_SET_SUCESS: `Success`,
     WALLPAPER_SET_SUCCESS_TEXT: `Image successfully set as wallpaper`,
     SKIP_SAVE_CATEGORIES: `Skip or save categories to view posts!`,
-    GO_BACK_TO_POST: `Go back to posts Anytime !!`
+    GO_BACK_TO_POST: `Go back to posts Anytime !!`,
+    SUCCESSFULLY_REGISTERED: `Successfully Registered!`
 }
 
 export const errorMessages = {
@@ -363,7 +373,8 @@ export const errorMessages = {
     CANNOT_REGISITER_USER: `Could not register user`,
     USER_ALREADY_REGISTERED: `User is already registered`,
     REGISTER_WITH_DIFFERENT_CREDENTIALS: `Please register with different credentials`,
-    COULD_NOT_PARSE_RESPONSE: `Could not parse response`
+    COULD_NOT_PARSE_RESPONSE: `Could not parse response`,
+    CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`
 }
 
 export const reportAbuseRequestPayloadKeys = {
@@ -408,7 +419,6 @@ export const miscMessage = {
     CLICK_TO_ADD_IMAGE: `Click + to add or select image`,
     DOB_DATE_FORMAT: `DD/MM/YYYY`,
     DATE: `date`,
-    DOB: `Date of Birth`,
     RESET: `Reset`,
     SUCCESSFUL: `Successful`,
     RELOAD_STARDOM: `Reload Stardom`,
@@ -421,6 +431,7 @@ export const miscMessage = {
     SMALL: `small`,
     RECTANGLE: `rectangle`,
     CIRCLE: `circle`,
+    DUPLICATE: `Duplicate`,
     FORGOT_PASSWORD: `Forgot Password`,
     RIGHT: `right`,
     UP: `up`,
@@ -428,14 +439,15 @@ export const miscMessage = {
     BACKSPACE: `Backspace`,
     WINDOW: `window`,
     LARGE: `large`,
+    VERIFIED: `Verified`,
     INCORRECT_OTP: `Incorrect OTP`,
+    MALE_TEXT: `Male`,
+    FEMALE_TEXT: `Female`,
+    RATHER_NOT_SAY_TEXT: `I'd rather not say`,
     CAMERA: `camera`,
     RESEND_OTP: `Resend OTP`,
     GALLERY: `gallery`,
-    MALE: `male`,
-    MALE_TEXT: `Male`,
-    FEMALE_TEXT: `Female`,
-    FEMALE: `female`,
+    SET: `set`,
     CONFIRM_SECRET: `OTP Confirmed`,
     CATEGORY_BACK: `Go back to posts Anytime !!`
 }
@@ -444,6 +456,7 @@ export const requestConstants = {
     PHONE_NUMBER: `phone_number`,
     SECRET: `password`,
     USER_ID: `user_id`,
+    ACCOUNT_STATUS: `account_status`
 }
 
 export const genderList = [

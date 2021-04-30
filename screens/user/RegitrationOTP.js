@@ -12,7 +12,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import {
     numericConstants, AUTO_SUBMIT_OTP_TIME_LIMIT, keyBoardTypeConst,
     isAndroid, RESEND_OTP_TIME_LIMIT, stringConstants, OTP_INPUTS,
-    actionButtonTextConstants, miscMessage, screens, colorConstants
+    actionButtonTextConstants, miscMessage, screens, modalTextConstants
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { OTPTimeText } from '../../components/texts/OTPTimeText';
@@ -20,7 +20,7 @@ import { OTPResendButton } from '../../components/button/OTPResendButton';
 import { OTPTextView } from '../../components/texts/OTPTextView';
 import { OTPInputText } from '../../components/input/OTPInputText';
 import { CategoryContext } from '../../App';
-import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
+import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 
 let resendOtpTimerInterval;
 let autoSubmitOtpTimerInterval;
@@ -42,8 +42,10 @@ export const RegistrationOTP = props => {
 
     const errorMod = route?.params?.errorMod;
     const setErrorMod = route?.params?.setErrorMod;
+    const signUpDetails = route?.params?.signUpDetails;
+    const setSignUpDetails = route?.params?.setSignUpDetails;
 
-    const phoneNumber = route?.params?.phoneNumber || stringConstants.EMPTY;
+    const phoneNumber = signUpDetails.phoneNumber || stringConstants.EMPTY;
 
     const { handleSubmit, control, setError, formState, clearErrors } = useForm();
 
@@ -116,7 +118,7 @@ export const RegistrationOTP = props => {
         textInputRef.current = node;
     };
 
-    const onSubmit = async data => {
+    const onSubmit = async () => {
         // setLoader(true);
         const otpString = otpArray.reduce((result, item) => { return `${result}${item}` }, stringConstants.EMPTY);
         const isValid = identifyOtpError(otpString, otpArray, setError, clearErrors);
@@ -125,10 +127,12 @@ export const RegistrationOTP = props => {
             const navigationResponse = await verifyOtpRequest(otpString, randomNumber);
             if (miscMessage.CONFIRM_SECRET == navigationResponse) {
                 clearInterval(resendOtpTimerInterval);
-                navigation.navigate(screens.REGISTRATION_CONFIRMATION, {
-                    isFrom: isFrom, phoneNumber: phoneNumber, errorMod: errorMod,
-                    setErrorMod: setErrorMod
-                });
+                navigation.navigate(screens.REGISTRATION_CONFIRMATION,
+                    {
+                        isFrom: isFrom, signUpDetails: signUpDetails,
+                        setSignUpDetails: setSignUpDetails,
+                        errorMod: errorMod, setErrorMod: setErrorMod
+                    });
             }
         }
         //setLoader(false);
@@ -137,16 +141,13 @@ export const RegistrationOTP = props => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
-                <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom20, SDGenericStyles.paddingTop40,
-                SDGenericStyles.alignItemsCenter]}>
-                    <RegisterUserIcon width={numericConstants.ONE_HUNDRED} height={numericConstants.ONE_HUNDRED} stroke={colorConstants.WHITE} />
-                </View>
+                <AuthHeaderText titleText={modalTextConstants.OTP_VERIFICATION} />
                 <View style={[userAuthStyles.otpFieldRows, SDGenericStyles.mt12]}>
                     {
                         [firstTextInputRef, secondTextInputRef, thirdTextInputRef, fourthTextInputRef, fifthTextInputRef,
                             sixththTextInputRef].map((textInputRef, index) => (
                                 <OTPInputText control={control} containerStyle={[SDGenericStyles.fill, SDGenericStyles.mr12,
-                                { borderColor: otpArray[index] && colors.GREEN || textInputRef?.current?.isFocused() && !otpArray[index] && colors.WHITE || colors.SDOM_YELLOW }]} value={otpArray[index].toString()}
+                                { borderColor: otpArray[index] && colors.GREEN || textInputRef?.current?.isFocused() && !otpArray[index] && colors.BLUE || colors.SDOM_YELLOW }]} value={otpArray[index].toString()}
                                     onKeyPress={onOtpKeyPress(index, otpArray, firstTextInputRef, secondTextInputRef, thirdTextInputRef, fourthTextInputRef,
                                         fifthTextInputRef, setOtpArray, setError, clearErrors, setAutoSubmittingOtp)}
                                     onChangeText={onOtpChange(index, otpArray, setOtpArray, secondTextInputRef, thirdTextInputRef, fourthTextInputRef,

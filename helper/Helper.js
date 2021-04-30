@@ -20,10 +20,13 @@ import * as Keychain from 'react-native-keychain';
 import RNOtpVerify from 'react-native-otp-verify';
 import AsyncStorage from '@react-native-community/async-storage';
 import { withDelay, withSpring } from 'react-native-reanimated';
-import { headerStyles, SDGenericStyles } from '../styles/Styles';
+import { colors, headerStyles, SDGenericStyles } from '../styles/Styles';
 import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
 import { HeaderBackButton } from '@react-navigation/stack';
+import Snackbar from 'react-native-snackbar';
+import moment from 'moment';
+
 
 export const fetchCategoryData = async () => {
     const responseData = await axios.get(urlConstants.fetchCategories);
@@ -685,7 +688,7 @@ export const toggleAddPostDetailsPanel = async (add_post_translate_y, content_op
     }
 }
 
-export const categoryHeader = props => {
+export const categoryHeader = () => {
     return ({
         headerShown: true,
         headerTitle: headerStrings.SELECT_CATEGORY,
@@ -869,7 +872,6 @@ export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isR
             hash_value: hashValue[numericConstants.ZERO]
         }
 
-        const otpRequestDataJSON = JSON.stringify(otpRequestData);
 
         // const response = await axios.post(urlConstants.TRIGGER_SMS_OTP, otpRequestDataJSON);
 
@@ -893,7 +895,7 @@ export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDe
     if (isFrom) {
         returnValue.isFrom = isFrom;
     }
-    returnValue.phoneNumber = signUpDetails.phoneNumber;
+    returnValue.signUpDetails = signUpDetails;
     returnValue.rand_number = random6Digit;
     returnValue.setSignUpDetails = setSignUpDetails;
     returnValue.errorMod = error;
@@ -901,7 +903,7 @@ export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDe
     return returnValue;
 }
 
-export const handleUserLogin = (data, messaging) => {
+export const handleUserLogin = () => {
     try {
 
     } catch (error) {
@@ -922,12 +924,15 @@ export const handleUserRegistration = async (phoneNumber, data, isFrom, errorMod
         });
         return processResponseData(response, errorMod, setErrorMod);
     } catch (error) {
-        if (error.response && error.response.status == 500) {
-            setErrorModal(errorMod, setErrorMod, errorMessages.USER_ALREADY_REGISTERED,
-                errorMessages.REGISTER_WITH_DIFFERENT_CREDENTIALS, true);
-        }
-        console.error(errorMessages.USER_REGISTRATION_ERROR, error);
+        const modalHeaderText = error.response && error.response.data.message.includes(miscMessage.DUPLICATE) &&
+            errorMessages.USER_ALREADY_REGISTERED || errorMessages.SOMETHING_WENT_WRONG;
+        const modalText = error.response && error.response.data.message.includes(miscMessage.DUPLICATE) &&
+            errorMessages.REGISTER_WITH_DIFFERENT_CREDENTIALS || errorMessages.USER_REGISTRATION_ERROR;
+        processResponseData(error.response, errorMod, setErrorMod, modalHeaderText, modalText);
+        showSnackBar(error.response.data.message.includes(miscMessage.DUPLICATE) &&
+            errorMessages.USER_ALREADY_REGISTERED, false);
     }
+    console.error(errorMessages.USER_REGISTRATION_ERROR, error);
     return false;
 }
 
@@ -960,7 +965,7 @@ export const setErrorModal = (error, setError, title, message, showModal) => {
     setError({ ...error, title: title, message: message, showModal: showModal });
 }
 
-export const processResponseData = (response, error, setError) => {
+export const processResponseData = (response, error, setError, errorMessageHeader, errorMessageText) => {
     try {
         if (response) {
             switch (response.status) {
@@ -978,13 +983,34 @@ export const processResponseData = (response, error, setError) => {
                 case 403:
                     break;
                 case 500:
-                    setErrorModal(error, setError, errorMessages.USER_ALREADY_REGISTERED,
-                        errorMessages.REGISTER_WITH_DIFFERENT_CREDENTIALS, true);
+                    setErrorModal(error, setError, errorMessageHeader, errorMessageText, true);
+                    return response.data;
                 default:
                     break;
             }
         }
     } catch (error) {
         console.error(errorMessages.COULD_NOT_PARSE_RESPONSE, error);
+    }
+}
+
+export const showSnackBar = (message, success, isLong) => {
+    Snackbar.show({
+        text: message,
+        textColor: colors.SDOM_WHITE,
+        duration: isLong && Snackbar.LENGTH_LONG || Snackbar.LENGTH_SHORT,
+        backgroundColor: success && colors.GREEN || colors.RED
+    })
+}
+
+export const saveRegistrationStatus = async (phoneNumber, status) => {
+    try {
+        const status_value = {
+            [requestConstants.ACCOUNT_STATUS]: status
+        }
+        await Keychain.setGenericPassword(`${phoneNumber}_${status}`, JSON.stringify(status_value),
+            { service: requestConstants.ACCOUNT_STATUS });
+    } catch (error) {
+        console.error(errorMessages.CANNOT_SAVE_ACCOUNT_STATUS, error);
     }
 }

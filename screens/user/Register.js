@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import {
     fieldControllerName, formRequiredRules,
     stringConstants, numericConstants, keyBoardTypeConst,
-    placeHolderText, isAndroid, actionButtonTextConstants, miscMessage, colorConstants
+    placeHolderText, isAndroid, actionButtonTextConstants, miscMessage, modalTextConstants
 } from '../../constants/Constants';
-import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
-import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
+import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { handleUserSignUpOtp } from '../../helper/Helper';
+import { PhoneIcon } from '../../components/icons/PhoneIcon';
+import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 export const Register = () => {
 
     const [signUpDetails, setSignUpDetails] = useState({
@@ -30,18 +31,13 @@ export const Register = () => {
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}>
-            <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom20, SDGenericStyles.paddingTop40,
-            SDGenericStyles.alignItemsCenter]}>
-                <RegisterUserIcon width={numericConstants.ONE_HUNDRED} height={numericConstants.ONE_HUNDRED} stroke={colorConstants.WHITE} />
-            </View>
-            <ScrollView>
-                <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
-                    defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
-                    keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} textContentType={keyBoardTypeConst.TELPHONETYPE}
-                    formState={formState} autofocus={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
-                    signUpDetails={signUpDetails} setSignUpDetails={setSignUpDetails} isSignUp={true} />
-            </ScrollView>
-
+            <AuthHeaderText titleText={modalTextConstants.REGISTER_TITLE_TEXT} />
+            <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
+                defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
+                keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} textContentType={keyBoardTypeConst.TELPHONETYPE}
+                formState={formState} autofocus={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
+                signUpDetails={signUpDetails} setSignUpDetails={setSignUpDetails} isSignUp={true} icon={<PhoneIcon stroke={formState.errors[fieldControllerName.PHONE_NUMBER]?.message &&
+                    colors.RED || colors.SDOM_PLACEHOLDER} />} />
             <Text style={[userAuthStyles.registerDescription, SDGenericStyles.fontFamilyBold]}>{placeHolderText.REGISTER_DESCRIPTION}</Text>
             <View style={userAuthStyles.registerButtonView}>
                 <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
@@ -50,6 +46,6 @@ export const Register = () => {
                     <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.PROCEED}</Text>
                 </TouchableOpacity>
             </View>
-        </View >
+        </View>
     )
 }

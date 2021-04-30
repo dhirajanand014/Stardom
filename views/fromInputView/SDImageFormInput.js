@@ -8,8 +8,8 @@ export const SDImageFormInput = props => {
         <KeyboardAvoidingView messagestyle={userAuthStyles.signInUserInputView}>
             <View style={[userAuthStyles.userInput, props.formState.errors[props.inputName]?.message &&
                 userAuthStyles.errorInputBorder || userAuthStyles.normalInputBorder]}>
-                {props.icon && props.icon}
                 <SDFormInput {...props} />
+                {props.icon && props.icon}
             </View>
             {
                 props.isUserId &&

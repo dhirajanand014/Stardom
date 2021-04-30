@@ -29,7 +29,7 @@ export const PostReportAbuseModal = (props) => {
                             reportAbuses.length && reportAbuses.map((item, index) => {
                                 return (
                                     <View key={`${item.reportId}_${index}`} style={glancePostStyles.reportAbuseModalContainer}>
-                                        <Text style={glancePostStyles.reportAbuseRadioText}>{item.reportTitle}</Text>
+                                        <Text style={[glancePostStyles.reportAbuseRadioText, SDGenericStyles.fontFamilyRoman]}>{item.reportTitle}</Text>
                                         <TouchableOpacity style={glancePostStyles.reportAbuseRadioCircle}
                                             onPress={() => setReportAbuseSelectedOption(optionsState, setOptionsState, item.reportId)}>
                                             {item.reportId == selectedReportAbuse[reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_ID] &&

@@ -8,6 +8,7 @@ export const SDDatePickerView = props => {
             <View style={[userAuthStyles.userInput, SDGenericStyles.paddingVertical14, SDGenericStyles.backGroundColorSDOMGray,
             props.formState.errors[props.inputName]?.message && userAuthStyles.errorInputBorder || userAuthStyles.normalInputBorder]}>
                 <SDDatePicker {...props} />
+                {props.icon && props.icon}
             </View>
         </KeyboardAvoidingView>
     );

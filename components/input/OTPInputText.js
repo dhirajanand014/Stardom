@@ -6,7 +6,7 @@ import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 export const OTPInputText = props => {
     const { containerStyle, LeftComponent, RightComponent, control, refCallback, ...remainingProps } = props;
     return (
-        <View style={[userAuthStyles.otpContainerStyle, containerStyle, SDGenericStyles.backGroundColorGray]}>
+        <View style={[userAuthStyles.otpContainerStyle, containerStyle, SDGenericStyles.textBoxGray]}>
             {LeftComponent}
             <TextInput {...remainingProps} style={[userAuthStyles.otpInputStyle, SDGenericStyles.fill, SDGenericStyles.fontFamilyBold,
             SDGenericStyles.centerAlignedText, SDGenericStyles.textColorWhite]} ref={refCallback} />
