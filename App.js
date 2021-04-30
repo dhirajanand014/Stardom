@@ -54,7 +54,7 @@ export default function App({ navigationRef }) {
           <Stack.Screen name={screens.CATEGORY} component={Category} options={categoryHeader} />
           <Stack.Screen name={screens.LOGIN} component={Login} options={authorizationHeader} />
           <Stack.Screen name={screens.ADD_POST} component={AddPost} />
-          <Stack.Screen name={screens.REGISTER} component={RegistrationDetails} options={authorizationHeader} />
+          <Stack.Screen name={screens.REGISTER} component={Register} options={authorizationHeader} />
         </Stack.Navigator>
       </NavigationContainer>
     )

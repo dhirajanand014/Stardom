@@ -230,6 +230,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingVertical10: {
         paddingVertical: 10
     },
+    paddingVertical20: {
+        paddingVertical: 20
+    },
     paddingVertical14: {
         paddingVertical: 14
     },
@@ -260,14 +263,23 @@ export const SDGenericStyles = StyleSheet.create({
     backGroundColorGreen: {
         backgroundColor: `green`
     },
+    backGroundColorLightGray: {
+        backgroundColor: `lightgray`
+    },
     backGroundColorGray: {
+        backgroundColor: `gray`
+    },
+    backGroundColorSDOMGray: {
         backgroundColor: `#fafafa`
     },
     backGroundColorBlack: {
         backgroundColor: `#3d3d3d`
     },
-    colorWhite: {
-        color: `white`
+    colorYellow: {
+        color: '#fcc200'
+    },
+    textColorWhite: {
+        color: `#fafafa`
     },
     colorRed: {
         color: `red`
@@ -1095,7 +1107,7 @@ export const userAuthStyles = StyleSheet.create({
         textAlign: 'center',
         elevation: 3,
         paddingVertical: 8,
-        color: 'white'
+        color: '#fafafa'
     },
     signUpFooter: {
         flex: 3,
@@ -1114,7 +1126,7 @@ export const userAuthStyles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingStart: 15,
-        backgroundColor: `#fafafa`,
+        backgroundColor: `gray`,
         marginVertical: 8,
         borderRadius: 3,
         width: width / 1.15,
@@ -1147,19 +1159,13 @@ export const userAuthStyles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 10,
         paddingLeft: 3,
-        textAlign: 'left',
-        color: '#05375a'
+        textAlign: 'left'
     },
     signInCreateAccount: {
         marginTop: 10,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row'
-    },
-    signInCreateAccountText: {
-        textAlign: 'center',
-        fontSize: 14,
-        color: '#abb4bd'
     },
     registerLink: {
         paddingHorizontal: 1
@@ -1224,6 +1230,64 @@ export const errorBoundaryStyles = StyleSheet.create({
         fontFamily: 'wallpiper_roman_font',
         textAlign: "center",
         fontSize: 20
+    },
+    modalErrorImage: {
+        width: 35,
+        height: 35,
+        tintColor: 'red'
+    },
+    modalTitleDivider: {
+        width: 290,
+        height: 1,
+        backgroundColor: "lightgray"
+    },
+    errorModalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 45
+    },
+    modalTitleTextStyle: {
+        fontSize: 20,
+        padding: 4
+    },
+    modalMessageViewStyle: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    modalMessageTextStyle: {
+        fontSize: 16,
+        textAlign: 'center',
+        padding: 10
+    },
+    modalOKButtonStyle: {
+        borderRadius: 25,
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        marginVertical: 15,
+        width: 150,
+        elevation: 3,
+        borderColor: 'white',
+        borderWidth: 1,
+        backgroundColor: '#fec72e'
+    },
+    modalViewStyle: {
+        margin: 200,
+        backgroundColor: '#fafafa',
+        borderRadius: 20,
+        padding: 25,
+        width: 300,
+        height: 300,
+        alignItems: "center",
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
     }
 });
 
@@ -1244,6 +1308,7 @@ export const colors = {
     LIGHT_RED: '#fef3ec',
     YELLOW: '#fec72e',
     SDOM_YELLOW: `#fcc200`,
+    SDOM_WHITE: `#fafafa`,
     LIGHT_GREY: '#a9a9a9',
     PALE_YELLOW: '#fff6ef',
     DARK_BLUE: '#2e68b2',

@@ -49,7 +49,8 @@ export const urlConstants = {
     fetchPosts: `https://www.wallpiper.app/4RhvfbEGwnsmxcpst.php`,
     setPostCounts: `https://www.wallpiper.app/4RhvfbEGwnsmxliks.php`,
     fetchReportAbuses: `https://www.wallpiper.app/4RhvfbEGwnsmxrpts.php`,
-    setReportAbuseIdWithPostId: `https://www.wallpiper.app/4RhvfbEGwnsmxrptlist.php`
+    setReportAbuseIdWithPostId: `https://www.wallpiper.app/4RhvfbEGwnsmxrptlist.php`,
+    registerUser: `https://stardom.zevcore.in/api/auth/register`
 }
 
 export const asyncStorageKeys = {
@@ -267,6 +268,7 @@ export const permissionMessages = {
 export const stringConstants = {
     NODE: {},
     EMPTY: "",
+    REPLACE_REGEX: /[- #*;,.<>\{\}\[\]\\\/]/gi,
     COMMA: `,`,
     PLUS: `+`,
     SPACE: ` `,
@@ -354,7 +356,14 @@ export const errorMessages = {
     ERROR_BOUNDARY: `The app ran into a problem and could not continue.We apologise for any inconvenience this has caused! Press the button below to restart the app and sign back in.Please contact us if this issue persists.`,
     SELECT_OTHER_CATEGORIES: `Selected category has no posts! Please select another category by clicking below.`,
     POST_IMAGE_LOAD_ERROR: `Image failed to load!`,
-    SOMETHING_WENT_WRONG: `Oops, Something Went Wrong`
+    SOMETHING_WENT_WRONG: `Oops, Something Went Wrong`,
+    CANNOT_REQUEST_PERMISSION_TO_USER: `Could not provide permission to user`,
+    USER_DENIED_NOTIFICATION: `Permission denied by user`,
+    USER_REGISTRATION_ERROR: `Failed to register user`,
+    CANNOT_REGISITER_USER: `Could not register user`,
+    USER_ALREADY_REGISTERED: `User is already registered`,
+    REGISTER_WITH_DIFFERENT_CREDENTIALS: `Please register with different credentials`,
+    COULD_NOT_PARSE_RESPONSE: `Could not parse response`
 }
 
 export const reportAbuseRequestPayloadKeys = {
@@ -364,7 +373,9 @@ export const reportAbuseRequestPayloadKeys = {
 }
 
 export const responseStringData = {
-    SUCCESS: `Success`
+    SUCCESS: `Success`,
+    RESPONSE_MESSAGE: `Response Message : `,
+    USER_SUCCESSFULLY_REGISTER: `Registration Successful`
 }
 
 export const postitionStringConstants = {
@@ -398,6 +409,8 @@ export const miscMessage = {
     DOB_DATE_FORMAT: `DD/MM/YYYY`,
     DATE: `date`,
     DOB: `Date of Birth`,
+    RESET: `Reset`,
+    SUCCESSFUL: `Successful`,
     RELOAD_STARDOM: `Reload Stardom`,
     SELECT_CATEGORIES: `Select other categories`,
     SIGN_UP: `Sign Up`,
@@ -408,6 +421,7 @@ export const miscMessage = {
     SMALL: `small`,
     RECTANGLE: `rectangle`,
     CIRCLE: `circle`,
+    FORGOT_PASSWORD: `Forgot Password`,
     RIGHT: `right`,
     UP: `up`,
     STRETCH: `stretch`,
@@ -424,6 +438,12 @@ export const miscMessage = {
     FEMALE: `female`,
     CONFIRM_SECRET: `OTP Confirmed`,
     CATEGORY_BACK: `Go back to posts Anytime !!`
+}
+
+export const requestConstants = {
+    PHONE_NUMBER: `phone_number`,
+    SECRET: `password`,
+    USER_ID: `user_id`,
 }
 
 export const genderList = [

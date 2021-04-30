@@ -9,16 +9,18 @@ import {
     reportAbuseRequestPayloadKeys, responseStringData,
     actionButtonTextConstants, colorConstants,
     miscMessage, width, height, numericConstants,
-    screens, headerStrings, fieldControllerName, isAndroid, isIOS, OTP_INPUTS
+    screens, headerStrings, fieldControllerName, isAndroid,
+    isIOS, OTP_INPUTS, errorMessages, requestConstants
 } from '../constants/Constants';
 import {
-    Alert, Image, InteractionManager, NativeModules,
+    Alert, InteractionManager, NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
+import * as Keychain from 'react-native-keychain';
 import RNOtpVerify from 'react-native-otp-verify';
 import AsyncStorage from '@react-native-community/async-storage';
 import { withDelay, withSpring } from 'react-native-reanimated';
-import { glancePostStyles, headerStyles, SDGenericStyles } from '../styles/Styles';
+import { headerStyles, SDGenericStyles } from '../styles/Styles';
 import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
 import { HeaderBackButton } from '@react-navigation/stack';
@@ -706,7 +708,7 @@ export const authorizationHeader = props => {
     return ({
         headerShown: true,
         headerTitle: props.title,
-        headerStyle: [SDGenericStyles.fontFamilyBold, SDGenericStyles.backGroundColorBlack],
+        headerStyle: SDGenericStyles.backGroundColorBlack,
         headerTintColor: colorConstants.WHITE,
         headerTitleAlign: miscMessage.CENTER,
         headerTitleStyle: headerStyles.headerText,
@@ -850,7 +852,8 @@ export const verifyOtpRequest = async (otpString, randomNumber) => {
     }
 }
 
-export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isResendOtp, setSignUpDetails) => {
+export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isResendOtp, setSignUpDetails,
+    error, setError) => {
     try {
         const { phoneNumber } = signUpDetails;
 
@@ -871,7 +874,8 @@ export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isR
         // const response = await axios.post(urlConstants.TRIGGER_SMS_OTP, otpRequestDataJSON);
 
         // if (response && response.data && !isResendOtp) {
-        const params = getSignUpParams(signUpDetails, random6Digit, isFrom, setSignUpDetails);
+        const params = getSignUpParams(signUpDetails, random6Digit, isFrom, setSignUpDetails,
+            error, setError);
 
         navigation.navigate(screens.OTP_VERIFICATION, params);
         // setLoader(false);
@@ -884,7 +888,7 @@ export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isR
     return false;
 }
 
-export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDetails) => {
+export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDetails, error, setError) => {
     let returnValue = {};
     if (isFrom) {
         returnValue.isFrom = isFrom;
@@ -892,5 +896,95 @@ export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDe
     returnValue.phoneNumber = signUpDetails.phoneNumber;
     returnValue.rand_number = random6Digit;
     returnValue.setSignUpDetails = setSignUpDetails;
+    returnValue.errorMod = error;
+    returnValue.setErrorMod = setError;
     return returnValue;
+}
+
+export const handleUserLogin = (data, messaging) => {
+    try {
+
+    } catch (error) {
+
+    }
+}
+
+export const handleUserRegistration = async (phoneNumber, data, isFrom, errorMod, setErrorMod) => {
+    try {
+        const requestInput = {
+            [requestConstants.PHONE_NUMBER]: phoneNumber,
+            [requestConstants.SECRET]: data.secret,
+            [requestConstants.USER_ID]: data.userId
+        }
+        const requestJSON = JSON.stringify(requestInput);
+        const response = await axios.post(urlConstants.registerUser, requestJSON, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return processResponseData(response, errorMod, setErrorMod);
+    } catch (error) {
+        if (error.response && error.response.status == 500) {
+            setErrorModal(errorMod, setErrorMod, errorMessages.USER_ALREADY_REGISTERED,
+                errorMessages.REGISTER_WITH_DIFFERENT_CREDENTIALS, true);
+        }
+        console.error(errorMessages.USER_REGISTRATION_ERROR, error);
+    }
+    return false;
+}
+
+export const resetTokens = async () => {
+    try {
+        await Keychain.resetGenericPassword({ service: miscMessage.USER_SERVICE_TOKEN_KEY });
+        await Keychain.resetGenericPassword({ service: tokenRequestResponseConst.ACCOUNT_STATUS });
+        return true;
+    } catch (error_response) {
+        console.error(error_response);
+        setErrorModal(error, setError, errorModalMessageConstants.UNEXPECTED_ERROR,
+            errorModalMessageConstants.SOMETHING_WENT_WRONG, true);
+    }
+    return false;
+}
+
+export const requestNotificationPermission = async (messaging) => {
+    try {
+        const authStatus = await messaging().requestPermission();
+        return authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+            authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    } catch (error) {
+        console.error(errorMessages.CANNOT_REQUEST_PERMISSION_TO_USER, error);
+    }
+    console.warn(errorMessages.USER_DENIED_NOTIFICATION);
+    return false;
+}
+
+export const setErrorModal = (error, setError, title, message, showModal) => {
+    setError({ ...error, title: title, message: message, showModal: showModal });
+}
+
+export const processResponseData = (response, error, setError) => {
+    try {
+        if (response) {
+            switch (response.status) {
+                case 200:
+                    return response.data;
+                    break;
+                case 201:
+                    console.log(responseStringData.RESPONSE_MESSAGE, response.data.message);
+                    return response.data;
+                    break;
+                case 400:
+                    break;
+                case 401:
+                    break;
+                case 403:
+                    break;
+                case 500:
+                    setErrorModal(error, setError, errorMessages.USER_ALREADY_REGISTERED,
+                        errorMessages.REGISTER_WITH_DIFFERENT_CREDENTIALS, true);
+                default:
+                    break;
+            }
+        }
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_PARSE_RESPONSE, error);
+    }
 }

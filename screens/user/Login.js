@@ -4,7 +4,8 @@ import { View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { PhoneIcon } from '../../components/icons/PhoneIcon';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
-import { useNavigation } from '@react-navigation/native';;
+import { useNavigation } from '@react-navigation/native';
+import messaging from '@react-native-firebase/messaging';
 import {
     fieldControllerName, formRequiredRules,
     stringConstants, numericConstants, keyBoardTypeConst,
@@ -12,11 +13,11 @@ import {
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { LoginIcon } from '../../components/icons/LogInIcon';
-import { focusOnInputIfFormInvalid } from '../../helper/Helper';
+import { focusOnInputIfFormInvalid, handleUserLogin } from '../../helper/Helper';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 export const Login = (params) => {
 
-    const { handleSubmit, control, formState, clearErrors } = useForm();
+    const { handleSubmit, control, formState } = useForm();
 
     const navigation = useNavigation();
 
@@ -26,32 +27,40 @@ export const Login = (params) => {
         secretRef.current = node;
     };
 
+    const onSubmit = async data => {
+        await handleUserLogin(data, messaging);
+    }
+
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}>
-            <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom50, SDGenericStyles.paddingTop40,
+            <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingVertical20,
             SDGenericStyles.alignItemsCenter]}>
-                <LoginIcon />
+                <LoginIcon stroke={colors.SDOM_WHITE} />
             </View>
             <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
                 defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
-                keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} icon={<PhoneIcon stroke={colors.BLACK} />}
-                textContentType={keyBoardTypeConst.TELPHONETYPE} formState={formState} autofocus={true} style={[SDGenericStyles.colorWhite, SDGenericStyles.ft16]}
+                keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} icon={<PhoneIcon stroke={colors.SDOM_WHITE} />}
+                textContentType={keyBoardTypeConst.TELPHONETYPE} formState={formState} autofocus={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman,
+                SDGenericStyles.textColorWhite]}
                 onSubmitEditing={() => focusOnInputIfFormInvalid(formState, secretRef)} />
 
             <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule}
                 defaultValue={stringConstants.EMPTY} maxLength={numericConstants.FOUR} placeHolderText={placeHolderText.SECRET} refCallback={refCallback}
-                keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} isSecureTextEntry={true} icon={<LoginSecretIcon />}
-                textContentType={keyBoardTypeConst.PASSWORD} formState={formState} style={[SDGenericStyles.colorWhite, SDGenericStyles.ft16]} />
+                keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} isSecureTextEntry={true} icon={<LoginSecretIcon stroke={colors.SDOM_WHITE} />}
+                textContentType={keyBoardTypeConst.PASSWORD} formState={formState} eextraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman,
+                SDGenericStyles.textColorWhite]} />
 
             <View activeOpacity={.7} style={userAuthStyles.signInCreateAccount}>
-                <Text style={[userAuthStyles.signInCreateAccountText, SDGenericStyles.ft16]}>{miscMessage.DONT_HAVE_ACCOUNT}{stringConstants.SPACE}</Text>
+                <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
+                    {miscMessage.DONT_HAVE_ACCOUNT}{stringConstants.SPACE}
+                </Text>
                 <TouchableOpacity onPress={() => navigation.navigate(actionButtonTextConstants.REGISTER)}>
-                    <Text style={[userAuthStyles.registerLink, SDGenericStyles.ft16]}>{actionButtonTextConstants.REGISTER}</Text>
+                    <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.ft14, SDGenericStyles.colorYellow, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.REGISTER}</Text>
                 </TouchableOpacity>
             </View>
             <View style={userAuthStyles.signInSecondaryButtonView}>
-                <TouchableOpacity activeOpacity={.7} style={userAuthStyles.actionButtonStyle}>
-                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.bold, SDGenericStyles.fontFamilyNormal]}>
+                <TouchableOpacity activeOpacity={.7} style={userAuthStyles.actionButtonStyle} onPress={handleSubmit(onSubmit)}>
+                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>
                         {actionButtonTextConstants.SIGN_IN}
                     </Text>
                 </TouchableOpacity>

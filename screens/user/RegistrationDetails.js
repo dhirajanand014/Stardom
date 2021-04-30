@@ -25,7 +25,7 @@ export const RegistrationDetails = () => {
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}>
-            <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom50, SDGenericStyles.paddingTop40,
+            <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom20, SDGenericStyles.paddingTop40,
             SDGenericStyles.alignItemsCenter]}>
                 <RegisterUserIcon width={numericConstants.ONE_HUNDRED} height={numericConstants.ONE_HUNDRED} stroke={colorConstants.WHITE} />
             </View>

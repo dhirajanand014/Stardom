@@ -38,8 +38,10 @@ export const RegistrationOTP = props => {
     const [autoSubmittingOtp, setAutoSubmittingOtp] = useState(false);
 
     const route = useRoute();
-
     const isFrom = route?.params?.isFrom;
+
+    const errorMod = route?.params?.errorMod;
+    const setErrorMod = route?.params?.setErrorMod;
 
     const phoneNumber = route?.params?.phoneNumber || stringConstants.EMPTY;
 
@@ -114,7 +116,7 @@ export const RegistrationOTP = props => {
         textInputRef.current = node;
     };
 
-    const onSubmit = async () => {
+    const onSubmit = async data => {
         // setLoader(true);
         const otpString = otpArray.reduce((result, item) => { return `${result}${item}` }, stringConstants.EMPTY);
         const isValid = identifyOtpError(otpString, otpArray, setError, clearErrors);
@@ -123,7 +125,10 @@ export const RegistrationOTP = props => {
             const navigationResponse = await verifyOtpRequest(otpString, randomNumber);
             if (miscMessage.CONFIRM_SECRET == navigationResponse) {
                 clearInterval(resendOtpTimerInterval);
-                navigation.navigate(screens.REGISTRATION_CONFIRMATION, { isFrom: isFrom, phoneNumber: phoneNumber });
+                navigation.navigate(screens.REGISTRATION_CONFIRMATION, {
+                    isFrom: isFrom, phoneNumber: phoneNumber, errorMod: errorMod,
+                    setErrorMod: setErrorMod
+                });
             }
         }
         //setLoader(false);
@@ -132,7 +137,7 @@ export const RegistrationOTP = props => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
-                <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom50, SDGenericStyles.paddingTop40,
+                <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom20, SDGenericStyles.paddingTop40,
                 SDGenericStyles.alignItemsCenter]}>
                     <RegisterUserIcon width={numericConstants.ONE_HUNDRED} height={numericConstants.ONE_HUNDRED} stroke={colorConstants.WHITE} />
                 </View>
