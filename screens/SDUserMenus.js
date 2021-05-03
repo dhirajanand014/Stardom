@@ -1,14 +1,16 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { ErrorModal } from '../components/modals/ErrorModal';
-import { screens, stringConstants } from '../constants/Constants';
-import { SDGenericStyles } from '../styles/Styles';
+import { actionButtonTextConstants, numericConstants, screens, stringConstants } from '../constants/Constants';
+import { prepareSDOMMenu } from '../helper/Helper';
+import { SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';
+import { MenuRenderer } from '../views/menus/MenuRenderer';
 
 export const SDOMContext = React.createContext();
 
 export const SDUserMenus = props => {
-
 
     const navigation = useNavigation();
 
@@ -18,32 +20,40 @@ export const SDUserMenus = props => {
         showModal: false
     });
 
+    const userMenus = prepareSDOMMenu();
+
     return (
-        <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter]}>
-            <TouchableOpacity>
-                <Text>Glance</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <Text>Category</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate(screens.ADD_POST, {
-                errorMod: errorMod,
-                setErrorMod: setErrorMod
-            })}>
-                <Text>Posts</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate(screens.LOGIN, {
-                errorMod: errorMod,
-                setErrorMod: setErrorMod
-            })}>
-                <Text>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate(screens.REGISTER, {
-                errorMod: errorMod,
-                setErrorMod: setErrorMod
-            })}>
-                <Text>Register</Text>
-            </TouchableOpacity>
+        <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
+            <View style={[userMenuStyles.profileImageView, SDGenericStyles.mb40]}>
+                <TouchableOpacity activeOpacity={.7}>
+                    <FastImage resizeMode={FastImage.resizeMode.contain} source={{
+                        uri: `https://reactnative.dev/img/tiny_logo.png`,
+                        priority: FastImage.priority.normal,
+                        cache: FastImage.cacheControl.immutable
+                    }} style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]} />
+                </TouchableOpacity>
+
+                <Text style={[SDGenericStyles.paddingVertical5, SDGenericStyles.paddingHorizontal10, SDGenericStyles.placeHolderTextColor]}>
+                    Profile name
+                    </Text>
+            </View>
+            <FlatList data={userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => item.categoryId}
+                renderItem={({ item, index }) => MenuRenderer(item, index)}
+                ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />) }} />
+
+            <View style={userAuthStyles.menuLoginButton}>
+                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
+                    onPress={() => navigation.navigate(screens.LOGIN)}>
+                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.LOGIN}</Text>
+                </TouchableOpacity>
+
+            </View>
+            <View style={userAuthStyles.menuRegisterButton}>
+                <TouchableOpacity activeOpacity={.7} onPress={() => navigation.navigate(screens.REGISTER)}>
+                    <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRoman,
+                    SDGenericStyles.colorYellow]}>{actionButtonTextConstants.REGISTER}</Text>
+                </TouchableOpacity>
+            </View>
             <ErrorModal error={errorMod} setError={setErrorMod} />
         </View>
     )

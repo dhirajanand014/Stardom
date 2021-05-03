@@ -8,7 +8,7 @@ import {
     placeHolderText, isAndroid, actionButtonTextConstants, miscMessage, modalTextConstants
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
-import { useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import { handleUserSignUpOtp } from '../../helper/Helper';
 import { PhoneIcon } from '../../components/icons/PhoneIcon';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
@@ -25,10 +25,6 @@ export const Register = () => {
     const { control, formState, handleSubmit } = useForm();
     const navigation = useNavigation();
 
-    const route = useRoute();
-    const errorMod = route?.params?.errorMod;
-    const setErrorMod = route?.params?.setErrorMod;
-
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}>
             <AuthHeaderText titleText={modalTextConstants.REGISTER_TITLE_TEXT} />
@@ -41,9 +37,8 @@ export const Register = () => {
             <Text style={[userAuthStyles.registerDescription, SDGenericStyles.fontFamilyBold]}>{placeHolderText.REGISTER_DESCRIPTION}</Text>
             <View style={userAuthStyles.registerButtonView}>
                 <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
-                    onPress={handleSubmit(() => handleUserSignUpOtp(signUpDetails, miscMessage.SIGN_UP, navigation, false, setSignUpDetails, errorMod,
-                        setErrorMod))}>
-                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.PROCEED}</Text>
+                    onPress={handleSubmit(() => handleUserSignUpOtp(signUpDetails, miscMessage.SIGN_UP, navigation, false, setSignUpDetails))}>
+                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman]}>{actionButtonTextConstants.PROCEED}</Text>
                 </TouchableOpacity>
             </View>
         </View>

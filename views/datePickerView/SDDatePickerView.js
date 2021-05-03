@@ -1,5 +1,5 @@
 import React from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import { KeyboardAvoidingView, Text, View } from 'react-native';
 import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { SDDatePicker } from '../../components/picker/SDDatePicker';
 export const SDDatePickerView = props => {
@@ -10,6 +10,7 @@ export const SDDatePickerView = props => {
                 <SDDatePicker {...props} />
                 {props.icon && props.icon}
             </View>
+            <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyBold]}>{props.formState.errors[props.inputName]?.message}</Text>
         </KeyboardAvoidingView>
     );
 }

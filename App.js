@@ -9,14 +9,12 @@ import {
   headerLessStackOptions,
   tabBarOptions
 } from './constants/Constants';
-import { PostSideView } from './views/imagePost/PostSideView';
 import { Glance } from './screens/post/Glance';
 import { Category } from './screens/category/Category';
 import { categoryHeader, fetchAndUpdateCategoryState, authorizationHeader } from './helper/Helper.js';
 import { Intro } from './screens/Intro';
 import { TourGuideProvider } from 'rn-tourguide';
 import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { AddPost } from './screens/post/AddPost';
 import { SDCameraView } from './views/cameraView/SDCameraView';
@@ -24,19 +22,30 @@ import { RegistrationOTP } from './screens/user/RegitrationOTP';
 import { RegistrationDetails } from './screens/user/RegistrationDetails';
 import { RegistrationConfirmation } from './screens/user/RegisterConfirmation';
 import { SDUserMenus } from './screens/SDUserMenus';
+import { Profile } from './screens/user/Profile';
 
 export const CategoryContext = React.createContext();
 
 export default function App({ navigationRef }) {
   const Stack = createStackNavigator();
-  const PostDrawer = createDrawerNavigator();
+  const RootStack = createStackNavigator();
   const TabNavigator = createMaterialTopTabNavigator();
+
+  const RootStackNavigator = () => {
+    return (
+      <RootStack.Navigator initialRouteName={screens.GLANCE/*navigationRef.navigationRoute*/} screenOptions={screenOptions}
+        headerMode={`float`} animation={`fade`} mode="modal">
+        <RootStack.Screen name={screens.GLANCE} component={Glance} />
+        <RootStack.Screen name={screens.PROFILE} component={Profile} />
+      </RootStack.Navigator>
+    )
+  }
 
   const TabNavigation = () => {
     return (
       <TabNavigator.Navigator initialRouteName={screens.GLANCE} tabBarOptions={tabBarOptions}>
         <TabNavigator.Screen name={screens.CAMERA} component={SDCameraView} />
-        <TabNavigator.Screen name={screens.GLANCE} component={Glance} />
+        <TabNavigator.Screen name={screens.GLANCE} component={RootStackNavigator} />
         <TabNavigator.Screen name={screens.MENU} component={SDUserMenus} />
       </TabNavigator.Navigator>
     )
@@ -57,18 +66,6 @@ export default function App({ navigationRef }) {
           <Stack.Screen name={screens.REGISTER} component={Register} options={headerLessStackOptions} />
         </Stack.Navigator>
       </NavigationContainer>
-    )
-  }
-
-  const ViewDrawer = () => {
-    return (
-      <PostDrawer.Navigator initialRouteName={screens.GLANCE} drawerContent={props => <PostSideView {...props} />} drawerPosition={`right`}>
-        <PostDrawer.Screen name={screens.GLANCE} component={Glance} />
-        <PostDrawer.Screen name={screens.LOGIN} component={Login} options={authorizationHeader} />
-        <PostDrawer.Screen name={screens.CATEGORY} component={Category} options={categoryHeader} />
-        <PostDrawer.Screen name={screens.ADD_POST} component={AddPost} />
-        <PostDrawer.Screen name={screens.REGISTER} component={Register} options={authorizationHeader} />
-      </PostDrawer.Navigator>
     )
   }
 

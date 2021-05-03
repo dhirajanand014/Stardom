@@ -45,7 +45,7 @@ export function Category() {
     height += StatusBar.currentHeight;
 
     return (
-        <View style={categoryViewStyles.categoryView} >
+        <View style={categoryViewStyles.categoryView}>
             <FlatList data={category.categories}
                 renderItem={({ item, index }) => CategoryRenderer(item, index, category, setCategory)} numColumns={3}
                 keyExtractor={(item) => item.categoryId} />

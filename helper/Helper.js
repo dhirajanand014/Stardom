@@ -10,14 +10,13 @@ import {
     actionButtonTextConstants, colorConstants,
     miscMessage, width, height, numericConstants,
     screens, headerStrings, fieldControllerName, isAndroid,
-    isIOS, OTP_INPUTS, errorMessages, requestConstants
+    isIOS, OTP_INPUTS, errorMessages, requestConstants, jsonConstants, defaultProfilesValue, SDMenuOptions, keyChainConstansts
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
 import * as Keychain from 'react-native-keychain';
-import RNOtpVerify from 'react-native-otp-verify';
 import AsyncStorage from '@react-native-community/async-storage';
 import { withDelay, withSpring } from 'react-native-reanimated';
 import { colors, headerStyles, SDGenericStyles } from '../styles/Styles';
@@ -27,10 +26,14 @@ import { HeaderBackButton } from '@react-navigation/stack';
 import Snackbar from 'react-native-snackbar';
 import moment from 'moment';
 
-
 export const fetchCategoryData = async () => {
-    const responseData = await axios.get(urlConstants.fetchCategories);
-    return responseData.data.categories;
+    try {
+        const responseData = await axios.get(urlConstants.fetchCategories);
+        return responseData.data.categories;
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_CATEGORIES, error);
+    }
+    return jsonConstants.EMPTY
 }
 
 export const fetchAndUpdateCategoryState = async (category, setCategory) => {
@@ -849,14 +852,12 @@ export const verifyOtpRequest = async (otpString, randomNumber) => {
         if (parseInt(otpString) === randomNumber) {
             return miscMessage.CONFIRM_SECRET;
         }
-        showErrorPopup()
-        showSnackBar(errorModalMessageConstants.INCORRECT_OTP_ENTERED, false);
+        showSnackBar(errorMessages.INCORRECT_OTP_ENTERED, false);
         return miscMessage.INCORRECT_OTP;
     }
 }
 
-export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isResendOtp, setSignUpDetails,
-    error, setError) => {
+export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, _isResendOtp, setSignUpDetails) => {
     try {
         const { phoneNumber } = signUpDetails;
 
@@ -864,20 +865,10 @@ export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isR
         // so minimum number will be 100000, max - 999999. 
         const random6Digit = Math.floor(Math.random() * 899999 + 100000);
 
-        const hashValue = isAndroid && await RNOtpVerify.getHash() || "RaZGrAI03n4";
-
-        const otpRequestData = {
-            phone: phoneNumber,
-            rand_number: random6Digit,
-            hash_value: hashValue[numericConstants.ZERO]
-        }
-
-
         // const response = await axios.post(urlConstants.TRIGGER_SMS_OTP, otpRequestDataJSON);
 
         // if (response && response.data && !isResendOtp) {
-        const params = getSignUpParams(signUpDetails, random6Digit, isFrom, setSignUpDetails,
-            error, setError);
+        const params = getSignUpParams(signUpDetails, random6Digit, isFrom, setSignUpDetails);
 
         navigation.navigate(screens.OTP_VERIFICATION, params);
         // setLoader(false);
@@ -890,7 +881,7 @@ export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, isR
     return false;
 }
 
-export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDetails, error, setError) => {
+export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDetails) => {
     let returnValue = {};
     if (isFrom) {
         returnValue.isFrom = isFrom;
@@ -898,20 +889,43 @@ export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDe
     returnValue.signUpDetails = signUpDetails;
     returnValue.rand_number = random6Digit;
     returnValue.setSignUpDetails = setSignUpDetails;
-    returnValue.errorMod = error;
-    returnValue.setErrorMod = setError;
     return returnValue;
 }
 
-export const handleUserLogin = () => {
+export const handleUserLogin = async (data, messaging) => {
     try {
-
+        const loginRequest = {
+            [requestConstants.PHONE_NUMBER]: data.phoneNumber,
+            [requestConstants.SECRET]: data.secret
+        }
+        const loginJson = JSON.stringify(loginRequest);
+        const response = await axiosPostWithHeaders(urlConstants.login, loginJson);
+        const responseData = processResponseData(response);
+        if (responseData) {
+            const userName = `${data.phoneNumber}_${responseData.access_token}`;
+            const userDetailsJSON = JSON.stringify(responseData.user);
+            await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER, userName,
+                userDetailsJSON);
+            redirectUserToGlance();
+        }
     } catch (error) {
-
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(errorMessages.COULD_NOT_LOGIN_USER, false);
     }
+    return false;
 }
 
-export const handleUserRegistration = async (phoneNumber, data, isFrom, errorMod, setErrorMod) => {
+export const saveDetailsToKeyChain = async (key, username, password) => {
+    try {
+        await Keychain.setGenericPassword(username, password, { service: key });
+        return true;
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_SAVE_TO_KEYCHAIN, error);
+    }
+    return false
+}
+
+export const handleUserRegistration = async (phoneNumber, data, isFrom) => {
     try {
         const requestInput = {
             [requestConstants.PHONE_NUMBER]: phoneNumber,
@@ -919,20 +933,17 @@ export const handleUserRegistration = async (phoneNumber, data, isFrom, errorMod
             [requestConstants.USER_ID]: data.userId
         }
         const requestJSON = JSON.stringify(requestInput);
-        const response = await axios.post(urlConstants.registerUser, requestJSON, {
-            headers: { 'Content-Type': 'application/json' }
-        });
-        return processResponseData(response, errorMod, setErrorMod);
+        const response = await axiosPostWithHeaders(urlConstants.registerUser, requestJSON);
+        return processResponseData(response);
     } catch (error) {
         const modalHeaderText = error.response && error.response.data.message.includes(miscMessage.DUPLICATE) &&
             errorMessages.USER_ALREADY_REGISTERED || errorMessages.SOMETHING_WENT_WRONG;
         const modalText = error.response && error.response.data.message.includes(miscMessage.DUPLICATE) &&
             errorMessages.REGISTER_WITH_DIFFERENT_CREDENTIALS || errorMessages.USER_REGISTRATION_ERROR;
-        processResponseData(error.response, errorMod, setErrorMod, modalHeaderText, modalText);
+        processResponseData(error.response, modalHeaderText, modalText);
         showSnackBar(error.response.data.message.includes(miscMessage.DUPLICATE) &&
-            errorMessages.USER_ALREADY_REGISTERED, false);
+            errorMessages.USER_ALREADY_REGISTERED || modalText, false);
     }
-    console.error(errorMessages.USER_REGISTRATION_ERROR, error);
     return false;
 }
 
@@ -965,7 +976,7 @@ export const setErrorModal = (error, setError, title, message, showModal) => {
     setError({ ...error, title: title, message: message, showModal: showModal });
 }
 
-export const processResponseData = (response, error, setError, errorMessageHeader, errorMessageText) => {
+export const processResponseData = (response, errorText) => {
     try {
         if (response) {
             switch (response.status) {
@@ -983,7 +994,7 @@ export const processResponseData = (response, error, setError, errorMessageHeade
                 case 403:
                     break;
                 case 500:
-                    setErrorModal(error, setError, errorMessageHeader, errorMessageText, true);
+                    console.error(errorText, response.data);
                     return response.data;
                 default:
                     break;
@@ -1008,9 +1019,72 @@ export const saveRegistrationStatus = async (phoneNumber, status) => {
         const status_value = {
             [requestConstants.ACCOUNT_STATUS]: status
         }
-        await Keychain.setGenericPassword(`${phoneNumber}_${status}`, JSON.stringify(status_value),
-            { service: requestConstants.ACCOUNT_STATUS });
+        await saveDetailsToKeyChain(keyChainConstansts.ACCOUNT_STATUS, `${phoneNumber}_${status}`,
+            JSON.stringify(status_value));
+        return true;
     } catch (error) {
         console.error(errorMessages.CANNOT_SAVE_ACCOUNT_STATUS, error);
+    }
+    return false;
+}
+
+export const getAllProfiles = async () => {
+    try {
+        let profiles = [{
+            label: stringConstants.EMPTY, value: -1, untouchable: true
+        }, defaultProfilesValue];
+        let response = await axiosGetWithHeaders(urlConstants.fetchAllProfiles);
+        response.data && response.data.map(profile => profile.textStyle = {
+            fontFamily: `wallpiper_bold_font`,
+        });
+        return profiles.concat(response.data);
+    } catch (error) {
+        console.log(errorMessages.COULD_NOT_FETCH_PROFILES, error);
+    }
+    return false;
+}
+
+export const axiosGetWithHeaders = async (url) => {
+    return await axios.get(url, { headers: { [miscMessage.CONTENT_TYPE]: miscMessage.APPLICATION_JSON } });
+}
+
+export const axiosPostWithHeaders = async (url, data) => {
+    return await axios.post(url, data, { headers: { [miscMessage.CONTENT_TYPE]: miscMessage.APPLICATION_JSON } });
+}
+
+export const updateRegistrationDetails = async (phoneNumber, data) => {
+    try {
+        const requestData = {
+            [requestConstants.PHONE_NUMBER]: phoneNumber,
+            [requestConstants.NAME]: data.name,
+            [requestConstants.EMAIL_ID]: data.email,
+            [requestConstants.DOB]: moment(data.dob).format(miscMessage.DATE_PICKER_FORMAT),
+            [requestConstants.GENDER]: data.gender,
+            [requestConstants.PROFILE_ID]: data.profile
+        }
+        const requestJSON = JSON.stringify(requestData);
+        const response = await axiosPostWithHeaders(urlConstants.registerUser, requestJSON);
+        return processResponseData(response);
+    } catch (error) {
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(errorMessages.FAILED_TO_UPDATE_REGISTRATION_DETAILS, false);
+    }
+    return false;
+}
+
+
+export const prepareSDOMMenu = () => {
+    try {
+        return SDMenuOptions;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const redirectUserToGlance = () => {
+    try {
+
+    } catch (error) {
+
     }
 }

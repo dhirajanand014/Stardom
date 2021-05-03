@@ -15,7 +15,7 @@ import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { LoginIcon } from '../../components/icons/LogInIcon';
 import { focusOnInputIfFormInvalid, handleUserLogin } from '../../helper/Helper';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
-export const Login = (params) => {
+export const Login = props => {
 
     const { handleSubmit, control, formState } = useForm();
 
@@ -28,7 +28,7 @@ export const Login = (params) => {
     };
 
     const onSubmit = async data => {
-        await handleUserLogin(data, messaging);
+        const respons = await handleUserLogin(data, messaging);
     }
 
     return (
@@ -41,14 +41,12 @@ export const Login = (params) => {
                 defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
                 keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} icon={<PhoneIcon stroke={colors.SDOM_WHITE} />}
                 textContentType={keyBoardTypeConst.TELPHONETYPE} formState={formState} autofocus={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman,
-                SDGenericStyles.textColorWhite]}
-                onSubmitEditing={() => focusOnInputIfFormInvalid(formState, secretRef)} />
+                SDGenericStyles.textColorWhite]} onSubmitEditing={() => focusOnInputIfFormInvalid(formState, secretRef)} />
 
             <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule}
                 defaultValue={stringConstants.EMPTY} maxLength={numericConstants.FOUR} placeHolderText={placeHolderText.SECRET} refCallback={refCallback}
                 keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} isSecureTextEntry={true} icon={<LoginSecretIcon stroke={colors.SDOM_WHITE} />}
-                textContentType={keyBoardTypeConst.PASSWORD} formState={formState} eextraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman,
-                SDGenericStyles.textColorWhite]} />
+                textContentType={keyBoardTypeConst.PASSWORD} formState={formState} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} />
 
             <View activeOpacity={.7} style={userAuthStyles.signInCreateAccount}>
                 <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
@@ -58,10 +56,10 @@ export const Login = (params) => {
                     <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.ft14, SDGenericStyles.colorYellow, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.REGISTER}</Text>
                 </TouchableOpacity>
             </View>
-            <View style={userAuthStyles.signInSecondaryButtonView}>
-                <TouchableOpacity activeOpacity={.7} style={userAuthStyles.actionButtonStyle} onPress={handleSubmit(onSubmit)}>
-                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>
-                        {actionButtonTextConstants.SIGN_IN}
+            <View style={userAuthStyles.registerButtonView}>
+                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]} onPress={handleSubmit(onSubmit)}>
+                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman]}>
+                        {actionButtonTextConstants.LOGIN}
                     </Text>
                 </TouchableOpacity>
             </View>

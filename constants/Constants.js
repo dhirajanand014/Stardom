@@ -10,6 +10,7 @@ export const { width, height } = Dimensions.get(`window`);
 export const RESEND_OTP_TIME_LIMIT = 20; // 30 secs
 export const AUTO_SUBMIT_OTP_TIME_LIMIT = 1;
 export const OTP_INPUTS = 6;
+const BASE_URI = `https://stardom.wallpiper.app/api`;
 
 export const screenOptions = {
     gestureEnabled: true, gestureDirection: 'horizontal',
@@ -35,6 +36,8 @@ export const screens = {
     REGISTRATION_DETAILS: `Registration Details`,
     REGISTRATION_CONFIRMATION: `Confirm Registration`,
     GLANCE: `Glance`,
+    NON_MODAL: `NonModal`,
+    PROFILE: `Profile`,
     CAMERA: `Camera`,
     MENU: `Menu`,
     OTP_VERIFICATION: `OTP Verification`
@@ -50,7 +53,9 @@ export const urlConstants = {
     setPostCounts: `https://www.wallpiper.app/4RhvfbEGwnsmxliks.php`,
     fetchReportAbuses: `https://www.wallpiper.app/4RhvfbEGwnsmxrpts.php`,
     setReportAbuseIdWithPostId: `https://www.wallpiper.app/4RhvfbEGwnsmxrptlist.php`,
-    registerUser: `https://stardom.zevcore.in/api/auth/register`
+    login: `${BASE_URI}/auth/login`,
+    registerUser: `${BASE_URI}/auth/register`,
+    fetchAllProfiles: `${BASE_URI}/profile`
 }
 
 export const asyncStorageKeys = {
@@ -62,7 +67,6 @@ export const asyncStorageKeys = {
 
 export const fieldControllerName = {
     PHONE_NUMBER: `phoneNumber`,
-    FULL_NAME: `fullName`,
     USER_ID: `userId`,
     EMAIL: `email`,
     SECRET: `secret`,
@@ -71,7 +75,7 @@ export const fieldControllerName = {
     NAME: `name`,
     DOB: `dob`,
     GENDER: `gender`,
-    PROFILE_NAME: `profileName`,
+    PROFILE: `profile`,
     LOCATION: `location`,
     GENDER_MALE: `male`,
     GENDER_FEMALE: `female`,
@@ -89,6 +93,7 @@ export const keyBoardTypeConst = {
     TELPHONETYPE: `telephoneNumber`,
     EMAIL: `email-address`,
     USERNAME: `username`,
+    NONE: `none`,
     NEW_PASSWORD: `newPassword`,
     ONETIMECODE: `oneTimeCode`,
     NAME: `name`,
@@ -100,7 +105,7 @@ export const textContentType = {
 }
 
 export const actionButtonTextConstants = {
-    SIGN_IN: `Sign in`,
+    LOGIN: `Login`,
     REGISTER: `Register`,
     SUBMIT: `Submit`,
     SURE: `Sure`,
@@ -181,7 +186,7 @@ export const formRequiredRules = {
             message: `Please enter email address`
         },
         pattern: {
-            value: /S+@S+.S+/,
+            value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/,
             message: `Entered value does not match email format`
         }
     },
@@ -223,7 +228,14 @@ export const formRequiredRules = {
         },
         validate: value => value === 0 && `Please select a value` || true
     },
+    profileRule: {
+        required: {
+            value: true,
+            message: `Please select your profile`
+        }
+    },
 };
+
 
 export const savePostCountKeys = {
     SELECTED_POST_LIKES: `selectedPostIdLikesCount`
@@ -270,7 +282,7 @@ export const permissionMessages = {
 
 export const stringConstants = {
     NODE: {},
-    EMPTY: "",
+    EMPTY: ``,
     REPLACE_REGEX: /[- #*;,.<>\{\}\[\]\\\/]/gi,
     COMMA: `,`,
     PLUS: `+`,
@@ -303,6 +315,7 @@ export const placeHolderText = {
     SEARCH_POSTS: `Search Posts`,
     SELECT_A_CATEGORY: `Select a category`,
     SELECT_A_GENDER: `Select a gender`,
+    SELECT_A_PROFILE: `Select a profile`,
     SELECT_CATEGORIES: 'Select Categories',
     ADD_POST_TITLE: `Enter Title`,
     ADD_POST_DESCRIPTION: `Enter Description`,
@@ -358,6 +371,7 @@ export const alertTextMessages = {
     WALLPAPER_SET_SUCESS: `Success`,
     WALLPAPER_SET_SUCCESS_TEXT: `Image successfully set as wallpaper`,
     SKIP_SAVE_CATEGORIES: `Skip or save categories to view posts!`,
+    USER_DETAILS_ADDED_SUCCESSFULLY: `User details added successfully`,
     GO_BACK_TO_POST: `Go back to posts Anytime !!`,
     SUCCESSFULLY_REGISTERED: `Successfully Registered!`
 }
@@ -370,11 +384,17 @@ export const errorMessages = {
     CANNOT_REQUEST_PERMISSION_TO_USER: `Could not provide permission to user`,
     USER_DENIED_NOTIFICATION: `Permission denied by user`,
     USER_REGISTRATION_ERROR: `Failed to register user`,
+    FAILED_TO_UPDATE_REGISTRATION_DETAILS: `Failed to update Registration Details`,
     CANNOT_REGISITER_USER: `Could not register user`,
     USER_ALREADY_REGISTERED: `User is already registered`,
     REGISTER_WITH_DIFFERENT_CREDENTIALS: `Please register with different credentials`,
     COULD_NOT_PARSE_RESPONSE: `Could not parse response`,
-    CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`
+    CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`,
+    COULD_NOT_FETCH_CATEGORIES: `Could not fetch categories`,
+    COULD_NOT_FETCH_PROFILES: `Could not fetch all profiles`,
+    INCORRECT_OTP_ENTERED: `Incorrect OTP entered`,
+    COULD_NOT_SAVE_TO_KEYCHAIN: `Could not save data to Keychain`,
+    COULD_NOT_LOGIN_USER: `Error logging in user`
 }
 
 export const reportAbuseRequestPayloadKeys = {
@@ -433,6 +453,7 @@ export const miscMessage = {
     CIRCLE: `circle`,
     DUPLICATE: `Duplicate`,
     FORGOT_PASSWORD: `Forgot Password`,
+    DATE_PICKER_FORMAT: `DD/MM/YYYY`,
     RIGHT: `right`,
     UP: `up`,
     STRETCH: `stretch`,
@@ -449,49 +470,28 @@ export const miscMessage = {
     GALLERY: `gallery`,
     SET: `set`,
     CONFIRM_SECRET: `OTP Confirmed`,
-    CATEGORY_BACK: `Go back to posts Anytime !!`
+    CATEGORY_BACK: `Go back to posts Anytime !!`,
+    CONTENT_TYPE: 'Content-Type',
+    APPLICATION_JSON: `application/json`,
 }
 
 export const requestConstants = {
     PHONE_NUMBER: `phone_number`,
     SECRET: `password`,
-    USER_ID: `user_id`,
-    ACCOUNT_STATUS: `account_status`
-}
+    NAME: `name`,
+    EMAIL_ID: 'email',
+    DOB: `dob`,
+    GENDER: `gender`,
+    USER_TYPE: `user_type`,
+    PROFILE_ID: `profile_id`,
+    PHONE_NUMBER: `phone_number`,
+    SECRET: `password`,
+};
 
-export const genderList = [
-    {
-        label: stringConstants.EMPTY,
-        value: -1,
-        untouchable: true
-    }, {
-        label: `Select a gender`,
-        value: 0,
-        untouchable: true,
-        textStyle: {
-            fontWeight: `bold`,
-            fontFamily: isAndroid && `normal` || `System`,
-        }
-    }, {
-        label: `Male`,
-        value: 1,
-        textStyle: {
-            color: 'lightGrey'
-        }
-    }, {
-        label: `Female`,
-        value: 2,
-        textStyle: {
-            color: 'lightGrey'
-        }
-    }, {
-        label: `Other`,
-        value: 3,
-        textStyle: {
-            color: 'lightGrey'
-        }
-    }
-];
+export const keyChainConstansts = {
+    LOGGED_IN_USER: `loggedInUser`,
+    ACCOUNT_STATUS: `accountStatus`
+}
 
 export const defaultPickerValue = {
     label: `Select a category`,
@@ -502,3 +502,28 @@ export const defaultPickerValue = {
         fontFamily: `wallpiper_bold_font`,
     }
 }
+
+export const defaultProfilesValue = {
+    label: `Select a profile`,
+    value: 0,
+    untouchable: true,
+    textStyle: {
+        colors: `#fafafa`,
+        fontFamily: `wallpiper_roman_font`,
+    }
+}
+
+export const SDMenuOptions = [
+    {
+        label: `Following`,
+        key: `following`,
+        value: 20
+    }, {
+        label: `Followers`,
+        key: `followers`,
+        value: 10
+    }, {
+        label: `Posts`,
+        key: `posts`
+    }
+];

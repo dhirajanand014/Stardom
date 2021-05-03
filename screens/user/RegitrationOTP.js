@@ -40,8 +40,6 @@ export const RegistrationOTP = props => {
     const route = useRoute();
     const isFrom = route?.params?.isFrom;
 
-    const errorMod = route?.params?.errorMod;
-    const setErrorMod = route?.params?.setErrorMod;
     const signUpDetails = route?.params?.signUpDetails;
     const setSignUpDetails = route?.params?.setSignUpDetails;
 
@@ -127,13 +125,12 @@ export const RegistrationOTP = props => {
             const navigationResponse = await verifyOtpRequest(otpString, randomNumber);
             if (miscMessage.CONFIRM_SECRET == navigationResponse) {
                 clearInterval(resendOtpTimerInterval);
-                navigation.navigate(screens.REGISTRATION_CONFIRMATION,
-                    {
-                        isFrom: isFrom, signUpDetails: signUpDetails,
-                        setSignUpDetails: setSignUpDetails,
-                        errorMod: errorMod, setErrorMod: setErrorMod
-                    });
+                navigation.navigate(screens.REGISTRATION_CONFIRMATION, {
+                    isFrom: isFrom, signUpDetails: signUpDetails, setSignUpDetails: setSignUpDetails
+                });
             }
+        } else {
+
         }
         //setLoader(false);
     };
@@ -174,7 +171,7 @@ export const RegistrationOTP = props => {
                         <View style={userAuthStyles.registerButtonView}>
                             <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
                                 onPress={handleSubmit(onSubmit)}>
-                                <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.VERIFY}</Text>
+                                <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman]}>{actionButtonTextConstants.VERIFY}</Text>
                             </TouchableOpacity>
                         </View>
                     }

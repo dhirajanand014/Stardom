@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, Image, TouchableOpacity, StatusBar, Dimensions } from 'react-native';
+import { View, Image, TouchableOpacity, StatusBar, Dimensions, Text } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
     width, jsonConstants, miscMessage, numericConstants,
-    stringConstants
+    stringConstants,
+    screens
 } from '../../constants/Constants';
 import {
     onSwiperScrollEnd, fetchPostsAndSaveToState,
@@ -123,6 +124,9 @@ export const Glance = ({ navigation }) => {
             }
             <TouchableOpacity style={glancePostStyles.category_selection}>
                 <Image source={category_selection} style={glancePostStyles.category_selection_image} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate(screens.PROFILE)}>
+                <Text>Profile</Text>
             </TouchableOpacity>
             <PostDescriptionModal optionsState={optionsState} setOptionsState={setOptionsState}
                 reportAbuseIcon={post_report_abuse} />

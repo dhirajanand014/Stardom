@@ -62,6 +62,9 @@ export const SDGenericStyles = StyleSheet.create({
     mb30: {
         marginBottom: 30,
     },
+    mb40: {
+        marginBottom: 40,
+    },
     width100: {
         width: 100
     },
@@ -227,23 +230,32 @@ export const SDGenericStyles = StyleSheet.create({
     paddingHorizontal30: {
         paddingHorizontal: 30
     },
+    paddingBottom5: {
+        paddingBottom: 5
+    },
     paddingBottom20: {
         paddingBottom: 20
     },
     paddingBottom50: {
         paddingBottom: 50
     },
-    paddingBottom80: {
-        paddingBottom: 80
+    paddingBottom60: {
+        paddingBottom: 60
     },
     paddingVertical2: {
         paddingVertical: 2
+    },
+    paddingVertical5: {
+        paddingVertical: 5
     },
     paddingVertical10: {
         paddingVertical: 10
     },
     paddingVertical20: {
         paddingVertical: 20
+    },
+    paddingVertical12: {
+        paddingVertical: 12
     },
     paddingVertical14: {
         paddingVertical: 14
@@ -282,7 +294,7 @@ export const SDGenericStyles = StyleSheet.create({
         backgroundColor: `#1b1f2b`
     },
     colorYellow: {
-        color: '#fcc200'
+        color: '#eabe05'
     },
     textBoxGray: {
         backgroundColor: `#343642`
@@ -306,11 +318,8 @@ export const SDGenericStyles = StyleSheet.create({
         color: 'green'
     },
     dropDownBackGround: {
-        backgroundColor: '#fafafa',
+        backgroundColor: 'gray',
         zIndex: 10
-    },
-    selectedDropDownColor: {
-        color: '#39739d',
     },
     ml_8: {
         marginLeft: 8
@@ -923,16 +932,6 @@ export const categoryViewStyles = StyleSheet.create({
     }
 })
 
-export const drawerStyles = StyleSheet.create({
-    drawerHeaderStyle: {
-        width: 60,
-        height: 60,
-        borderRadius: 40,
-        borderWidth: 3,
-        borderColor: colorConstants.YELLOW
-    }
-})
-
 export const flatListItemStyles = StyleSheet.create({
     headerText: {
         fontSize: 20,
@@ -1081,18 +1080,33 @@ export const userAuthStyles = StyleSheet.create({
         elevation: 8,
         marginTop: 20,
     },
-    signInSecondaryButtonView: {
-        alignSelf: 'center',
-        paddingVertical: 100,
-        width: width / 2,
-        marginBottom: 100
-    },
     registerButtonView: {
         alignSelf: 'center',
         paddingVertical: 20,
         width: width / 2,
         elevation: 3,
         paddingBottom: 50
+    },
+    menuLoginButton: {
+        alignSelf: 'center',
+        paddingVertical: 20,
+        width: width / 1.8,
+        elevation: 3,
+        paddingBottom: 50
+    },
+    menuRegisterButton: {
+        alignSelf: 'center',
+        paddingVertical: 5,
+        width: width / 1.8,
+        elevation: 3,
+        paddingBottom: 50
+    },
+    menuRightCountView: {
+        padding: 15,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        bottom: 0
     },
     registrationConfirmationView: {
         alignSelf: 'center',
@@ -1105,13 +1119,6 @@ export const userAuthStyles = StyleSheet.create({
         paddingVertical: 20,
         width: width / 2,
         paddingBottom: 20
-    },
-    actionButtonStyle: {
-        flexDirection: `column`,
-        backgroundColor: '#0095f6',
-        borderRadius: 3,
-        paddingVertical: 8,
-        elevation: 3
     },
     primaryActionButtonButtonText: {
         fontSize: 18,
@@ -1190,8 +1197,6 @@ export const userAuthStyles = StyleSheet.create({
         textAlign: 'center',
     },
     registrationUserDropDownView: {
-        paddingVertical: 15,
-        marginTop: 15,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start'
@@ -1200,7 +1205,25 @@ export const userAuthStyles = StyleSheet.create({
         justifyContent: 'center',
         width: width / 1.15,
         height: 50
-    }
+    },
+    listingDetailsView: {
+        flex: 1,
+        width: width / 1.06,
+        height: height / 1.15,
+        marginBottom: 15,
+        marginTop: 15,
+        marginRight: 10,
+        marginLeft: 10,
+        elevation: 3,
+        borderRadius: 8,
+        shadowRadius: 18,
+        shadowOpacity: .7,
+        alignItems: 'center',
+        backgroundColor: 'rgba(61,61,61,.7)',
+        opacity: .7,
+        position: 'absolute',
+        top: 0,
+    },
 });
 
 export const errorBoundaryStyles = StyleSheet.create({
@@ -1319,10 +1342,25 @@ export const colors = {
     SEMI_TRANSPARENT: 'rgba(0,0,0,0.5)',
     LIGHT_RED: '#fef3ec',
     YELLOW: '#fec72e',
-    SDOM_YELLOW: `#fcc200`,
+    SDOM_YELLOW: `#eabe05`,
     SDOM_PLACEHOLDER: `#969696`,
     LIGHT_GREY: '#a9a9a9',
     PALE_YELLOW: '#fff6ef',
     DARK_BLUE: '#2e68b2',
     LIGHT_BLUE: '#EEEFF9',
 };
+
+export const userMenuStyles = {
+    profileImageView: {
+        alignItems: 'flex-start',
+        paddingTop: 20,
+        paddingLeft: 20
+    },
+    profileImageStyle: {
+        width: 100,
+        height: 100,
+        borderRadius: 58,
+        borderWidth: 3,
+        borderColor: `#f4f4f4`
+    }
+}

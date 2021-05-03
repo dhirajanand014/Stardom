@@ -27,9 +27,6 @@ export const RegistrationConfirmation = () => {
     const route = useRoute();
     const isFrom = route?.params?.isFrom;
 
-    const errorMod = route?.params?.errorMod;
-    const setErrorMod = route?.params?.setErrorMod;
-
     const signUpDetails = route?.params?.signUpDetails;
     const setSignUpDetails = route?.params?.setSignUpDetails;
 
@@ -54,7 +51,7 @@ export const RegistrationConfirmation = () => {
                 }]
             });
         } else {
-            showSnackBar(successFulMessages.SUCCESSFULLY_RESET_PASSWORD, true);
+            showSnackBar(alertTextMessages.SUCCESSFULLY_REGISTERED, true);
             navigation.reset({
                 index: numericConstants.ZERO, routes: [{ name: routeConsts.HOME }]
             });
@@ -65,8 +62,7 @@ export const RegistrationConfirmation = () => {
         if (data.confirmSecret !== data.secret) {
             setError(fieldControllerName.CONFIRM_SECRET, formRequiredRules.confirmPasswordRule);
         } else if (data.confirmSecret === data.secret) {
-            const registrationResponse = await handleUserRegistration(phoneNumber, data, isFrom,
-                errorMod, setErrorMod);
+            const registrationResponse = await handleUserRegistration(phoneNumber, data, isFrom);
             if (registrationResponse) {
                 let isFromForgotPassword = false;
                 if (registrationResponse == `${miscMessage.RESET}_${miscMessage.SUCCESSFUL}`) {
@@ -106,7 +102,7 @@ export const RegistrationConfirmation = () => {
             <View style={userAuthStyles.registrationConfirmationView}>
                 <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
                     onPress={handleSubmit(onSubmit)}>
-                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.PROCEED}</Text>
+                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman]}>{actionButtonTextConstants.PROCEED}</Text>
                 </TouchableOpacity>
             </View>
         </View>
