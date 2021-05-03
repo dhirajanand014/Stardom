@@ -9,12 +9,14 @@ import messaging from '@react-native-firebase/messaging';
 import {
     fieldControllerName, formRequiredRules,
     stringConstants, numericConstants, keyBoardTypeConst,
-    placeHolderText, isAndroid, miscMessage, actionButtonTextConstants
+    placeHolderText, isAndroid, miscMessage, actionButtonTextConstants,
+    screens, alertTextMessages, errorMessages, modalTextConstants
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { LoginIcon } from '../../components/icons/LogInIcon';
-import { focusOnInputIfFormInvalid, handleUserLogin } from '../../helper/Helper';
+import { focusOnInputIfFormInvalid, handleUserLogin, redirectUserToGlance, showSnackBar } from '../../helper/Helper';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
+import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 export const Login = props => {
 
     const { handleSubmit, control, formState } = useForm();
@@ -28,15 +30,20 @@ export const Login = props => {
     };
 
     const onSubmit = async data => {
-        const respons = await handleUserLogin(data, messaging);
+        const responseData = await handleUserLogin(data, messaging);
+        if (responseData) {
+            const initialCategories = await redirectUserToGlance();
+            showSnackBar(alertTextMessages.LOGIN_SUCCESSFUL, true);
+            navigation.navigate(initialCategories && screens.GLANCE || screens.CATEGORY);
+            return true;
+        }
+        showSnackBar(errorMessages.COULD_NOT_LOGIN_USER, false);
+        return false;
     }
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}>
-            <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingVertical20,
-            SDGenericStyles.alignItemsCenter]}>
-                <LoginIcon stroke={colors.SDOM_WHITE} />
-            </View>
+            <AuthHeaderText titleTextHeader={modalTextConstants.LOGIN_TITLE_HEADER} titleText={modalTextConstants.LOGIN_TITLE_TEXT} />
             <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
                 defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
                 keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} icon={<PhoneIcon stroke={colors.SDOM_WHITE} />}

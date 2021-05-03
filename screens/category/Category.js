@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FlatList, View, StatusBar, Text, TouchableOpacity, BackHandler, Dimensions } from 'react-native';
 import { CategoryContext } from '../../App';
-import { categoryViewStyles } from '../../styles/Styles';
+import { categoryViewStyles, SDGenericStyles } from '../../styles/Styles';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { saveCategoryButtonType, saveCategoryIdsToStorage } from '../../helper/Helper'
 import { CategoryRenderer } from './CategoryRenderer.js';
@@ -45,13 +45,13 @@ export function Category() {
     height += StatusBar.currentHeight;
 
     return (
-        <View style={categoryViewStyles.categoryView}>
+        <View style={[categoryViewStyles.categoryView, SDGenericStyles.backGroundColorBlack]}>
             <FlatList data={category.categories}
                 renderItem={({ item, index }) => CategoryRenderer(item, index, category, setCategory)} numColumns={3}
                 keyExtractor={(item) => item.categoryId} />
             {
                 category.initialCategory == actionButtonTextConstants.SKIP_BUTTON &&
-                <View style={categoryViewStyles.bottomButtonLayout}>
+                <View style={[categoryViewStyles.bottomButtonLayout, SDGenericStyles.backGroundColorBlack]}>
                     <TouchableOpacity activeOpacity={.7} onPress={async () => {
                         await saveCategoryButtonType(actionButtonTextConstants.SAVE_BUTTON);
                         navigation.reset({ index: numericConstants, routes: [{ name: "Glance" }], });
@@ -66,7 +66,7 @@ export function Category() {
             }
             {
                 category.initialCategory == actionButtonTextConstants.SAVE_BUTTON &&
-                <View style={categoryViewStyles.bottomButtonLayout}>
+                <View style={[categoryViewStyles.bottomButtonLayout, SDGenericStyles.backGroundColorBlack]}>
                     <TouchableOpacity activeOpacity={.7} onPress={async () => {
                         const categoryIds = category.categories.filter(item => item.isSelected).map(selectedCategory => {
                             const categoryJson = {

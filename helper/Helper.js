@@ -892,7 +892,7 @@ export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDe
     return returnValue;
 }
 
-export const handleUserLogin = async (data, messaging) => {
+export const handleUserLogin = async (data) => {
     try {
         const loginRequest = {
             [requestConstants.PHONE_NUMBER]: data.phoneNumber,
@@ -904,13 +904,11 @@ export const handleUserLogin = async (data, messaging) => {
         if (responseData) {
             const userName = `${data.phoneNumber}_${responseData.access_token}`;
             const userDetailsJSON = JSON.stringify(responseData.user);
-            await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER, userName,
+            return await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER, userName,
                 userDetailsJSON);
-            redirectUserToGlance();
         }
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
-        showSnackBar(errorMessages.COULD_NOT_LOGIN_USER, false);
     }
     return false;
 }
@@ -927,30 +925,43 @@ export const saveDetailsToKeyChain = async (key, username, password) => {
 
 export const handleUserRegistration = async (phoneNumber, data, isFrom) => {
     try {
-        const requestInput = {
-            [requestConstants.PHONE_NUMBER]: phoneNumber,
-            [requestConstants.SECRET]: data.secret,
-            [requestConstants.USER_ID]: data.userId
+        let requestData;
+        switch (isFrom) {
+            case miscMessage.CREATE:
+                requestData = {
+                    [requestConstants.PHONE_NUMBER]: phoneNumber,
+                    [requestConstants.SECRET]: data.secret,
+                    [requestConstants.USER_ID]: data.userId
+                }
+                break;
+            case miscMessage.UPDATE:
+                requestData = {
+                    [requestConstants.PHONE_NUMBER]: phoneNumber,
+                    [requestConstants.NAME]: data.name,
+                    [requestConstants.EMAIL_ID]: data.email,
+                    [requestConstants.DOB]: moment(data.dob).format(miscMessage.DATE_PICKER_FORMAT),
+                    [requestConstants.GENDER]: data.gender,
+                    [requestConstants.PROFILE_ID]: data.profile
+                }
+                break
+            default:
+                break;
         }
-        const requestJSON = JSON.stringify(requestInput);
-        const response = await axiosPostWithHeaders(urlConstants.registerUser, requestJSON);
-        return processResponseData(response);
+        const requestJSON = JSON.stringify(requestData);
+        const responseData = await axiosPostWithHeaders(urlConstants.registerUser, requestJSON);
+        return processResponseData(responseData);
     } catch (error) {
-        const modalHeaderText = error.response && error.response.data.message.includes(miscMessage.DUPLICATE) &&
-            errorMessages.USER_ALREADY_REGISTERED || errorMessages.SOMETHING_WENT_WRONG;
-        const modalText = error.response && error.response.data.message.includes(miscMessage.DUPLICATE) &&
-            errorMessages.REGISTER_WITH_DIFFERENT_CREDENTIALS || errorMessages.USER_REGISTRATION_ERROR;
-        processResponseData(error.response, modalHeaderText, modalText);
-        showSnackBar(error.response.data.message.includes(miscMessage.DUPLICATE) &&
-            errorMessages.USER_ALREADY_REGISTERED || modalText, false);
+        debugger
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(errorMessages.USER_ALREADY_REGISTERED, false);
     }
     return false;
 }
 
 export const resetTokens = async () => {
     try {
-        await Keychain.resetGenericPassword({ service: miscMessage.USER_SERVICE_TOKEN_KEY });
-        await Keychain.resetGenericPassword({ service: tokenRequestResponseConst.ACCOUNT_STATUS });
+        await Keychain.resetGenericPassword({ service: keyChainConstansts.ACCOUNT_STATUS });
+        await Keychain.resetGenericPassword({ service: keyChainConstansts.LOGGED_IN_USER });
         return true;
     } catch (error_response) {
         console.error(error_response);
@@ -1052,22 +1063,11 @@ export const axiosPostWithHeaders = async (url, data) => {
     return await axios.post(url, data, { headers: { [miscMessage.CONTENT_TYPE]: miscMessage.APPLICATION_JSON } });
 }
 
-export const updateRegistrationDetails = async (phoneNumber, data) => {
+const getKeyChainDetails = async (key) => {
     try {
-        const requestData = {
-            [requestConstants.PHONE_NUMBER]: phoneNumber,
-            [requestConstants.NAME]: data.name,
-            [requestConstants.EMAIL_ID]: data.email,
-            [requestConstants.DOB]: moment(data.dob).format(miscMessage.DATE_PICKER_FORMAT),
-            [requestConstants.GENDER]: data.gender,
-            [requestConstants.PROFILE_ID]: data.profile
-        }
-        const requestJSON = JSON.stringify(requestData);
-        const response = await axiosPostWithHeaders(urlConstants.registerUser, requestJSON);
-        return processResponseData(response);
+        return await Keychain.getGenericPassword({ service: key });
     } catch (error) {
-        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
-        showSnackBar(errorMessages.FAILED_TO_UPDATE_REGISTRATION_DETAILS, false);
+        console.error(errorMessages.COULD_NOT_FETCH_DETAILS_FROM_KEYCHAIN, error)
     }
     return false;
 }
@@ -1081,10 +1081,12 @@ export const prepareSDOMMenu = () => {
     }
 }
 
-const redirectUserToGlance = () => {
+export const redirectUserToGlance = async () => {
     try {
-
+        const categoryData = await getKeyChainDetails(keyChainConstansts.INITIAL_CATEGORY_SELECTIONS);
+        return categoryData;
     } catch (error) {
-
+        console.error(errorMessages.COULD_NOT_REDIRECT_TO_GLANCE, error);
     }
+    return false
 }

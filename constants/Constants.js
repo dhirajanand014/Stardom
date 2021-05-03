@@ -295,7 +295,10 @@ export const modalTextConstants = {
     ADD_POST_DETAILS: `Add post details`,
     CANCEL_BUTTON: `Cancel`,
     CLOSE_BUTTON: `Close`,
-    REGISTER_TITLE_TEXT: `Create New Account`,
+    REGISTER_TITLE_HEADER: `Create New`,
+    REGISTER_TITLE_TEXT: `Account`,
+    LOGIN_TITLE_HEADER: `Welcome Back`,
+    LOGIN_TITLE_TEXT: `Please login to continue`,
     CONFIRM_REGISTRATION: `Confirm Registration`,
     OTP_VERIFICATION: `OTP Verification`,
     ACCOUNT_DETAILS: `Account Details`,
@@ -383,18 +386,18 @@ export const errorMessages = {
     SOMETHING_WENT_WRONG: `Oops, Something Went Wrong`,
     CANNOT_REQUEST_PERMISSION_TO_USER: `Could not provide permission to user`,
     USER_DENIED_NOTIFICATION: `Permission denied by user`,
-    USER_REGISTRATION_ERROR: `Failed to register user`,
     FAILED_TO_UPDATE_REGISTRATION_DETAILS: `Failed to update Registration Details`,
     CANNOT_REGISITER_USER: `Could not register user`,
     USER_ALREADY_REGISTERED: `User is already registered`,
-    REGISTER_WITH_DIFFERENT_CREDENTIALS: `Please register with different credentials`,
     COULD_NOT_PARSE_RESPONSE: `Could not parse response`,
     CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`,
     COULD_NOT_FETCH_CATEGORIES: `Could not fetch categories`,
     COULD_NOT_FETCH_PROFILES: `Could not fetch all profiles`,
     INCORRECT_OTP_ENTERED: `Incorrect OTP entered`,
     COULD_NOT_SAVE_TO_KEYCHAIN: `Could not save data to Keychain`,
-    COULD_NOT_LOGIN_USER: `Error logging in user`
+    COULD_NOT_FETCH_DETAILS_FROM_KEYCHAIN: `Could not fetch details from keychain`,
+    COULD_NOT_LOGIN_USER: `Error logging in user`,
+    COULD_NOT_REDIRECT_TO_GLANCE: `Could not redirect to glance`
 }
 
 export const reportAbuseRequestPayloadKeys = {
@@ -441,6 +444,8 @@ export const miscMessage = {
     DATE: `date`,
     RESET: `Reset`,
     SUCCESSFUL: `Successful`,
+    CREATE: `create`,
+    UPDATE: `update`,
     RELOAD_STARDOM: `Reload Stardom`,
     SELECT_CATEGORIES: `Select other categories`,
     SIGN_UP: `Sign Up`,
@@ -461,6 +466,7 @@ export const miscMessage = {
     WINDOW: `window`,
     LARGE: `large`,
     VERIFIED: `Verified`,
+    REGISTERED: `Registered`,
     INCORRECT_OTP: `Incorrect OTP`,
     MALE_TEXT: `Male`,
     FEMALE_TEXT: `Female`,
@@ -483,6 +489,7 @@ export const requestConstants = {
     DOB: `dob`,
     GENDER: `gender`,
     USER_TYPE: `user_type`,
+    USER_ID: `user_id`,
     PROFILE_ID: `profile_id`,
     PHONE_NUMBER: `phone_number`,
     SECRET: `password`,
@@ -490,7 +497,8 @@ export const requestConstants = {
 
 export const keyChainConstansts = {
     LOGGED_IN_USER: `loggedInUser`,
-    ACCOUNT_STATUS: `accountStatus`
+    ACCOUNT_STATUS: `accountStatus`,
+    INITIAL_CATEGORY_SELECTIONS: `initialCategories`,
 }
 
 export const defaultPickerValue = {

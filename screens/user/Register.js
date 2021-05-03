@@ -27,7 +27,7 @@ export const Register = () => {
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}>
-            <AuthHeaderText titleText={modalTextConstants.REGISTER_TITLE_TEXT} />
+            <AuthHeaderText titleTextHeader={modalTextConstants.REGISTER_TITLE_HEADER} titleText={modalTextConstants.REGISTER_TITLE_TEXT} />
             <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
                 defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
                 keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} textContentType={keyBoardTypeConst.TELPHONETYPE}

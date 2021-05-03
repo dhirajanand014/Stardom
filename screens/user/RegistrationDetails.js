@@ -16,7 +16,10 @@ import { CalenderIcon } from '../../components/icons/CalenderIcon';
 import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
 import Animated from 'react-native-reanimated';
 import { SDDropDownView } from '../../views/dropDownView/SDDropDownView';
-import { getAllProfiles, showSnackBar, updateRegistrationDetails } from '../../helper/Helper';
+import {
+    getAllProfiles, showSnackBar,
+    redirectUserToGlance, handleUserRegistration, saveRegistrationStatus
+} from '../../helper/Helper';
 import { useNavigation, useRoute } from '@react-navigation/core';
 
 export const RegistrationDetails = () => {
@@ -27,7 +30,6 @@ export const RegistrationDetails = () => {
     const navigation = useNavigation();
 
     const route = useRoute();
-    const isFrom = route?.params?.isFrom;
     const signUpDetails = route?.params?.signUpDetails;
 
     const genderValue = watch(fieldControllerName.GENDER);
@@ -40,10 +42,15 @@ export const RegistrationDetails = () => {
     }, []);
 
     const onSubmit = async (data) => {
-        const registrationUpdated = await updateRegistrationDetails(signUpDetails.phoneNumber, data);
+        const registrationUpdated = await handleUserRegistration(signUpDetails.phoneNumber, data,
+            miscMessage.UPDATE);
         if (registrationUpdated) {
+            const initialCategories = await redirectUserToGlance();
+            debugger
             showSnackBar(alertTextMessages.USER_DETAILS_ADDED_SUCCESSFULLY, true);
-            navigation.navigate(screens.CATEGORY);
+            navigation.navigate(initialCategories && screens.GLANCE || screens.CATEGORY);
+        } else {
+            await saveRegistrationStatus(phoneNumber, miscMessage.VERIFIED);
         }
     }
 

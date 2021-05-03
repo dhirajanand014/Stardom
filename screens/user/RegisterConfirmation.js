@@ -25,7 +25,6 @@ export const RegistrationConfirmation = () => {
 
     let confirmSecretRef = useRef(null);
     const route = useRoute();
-    const isFrom = route?.params?.isFrom;
 
     const signUpDetails = route?.params?.signUpDetails;
     const setSignUpDetails = route?.params?.setSignUpDetails;
@@ -62,12 +61,14 @@ export const RegistrationConfirmation = () => {
         if (data.confirmSecret !== data.secret) {
             setError(fieldControllerName.CONFIRM_SECRET, formRequiredRules.confirmPasswordRule);
         } else if (data.confirmSecret === data.secret) {
-            const registrationResponse = await handleUserRegistration(phoneNumber, data, isFrom);
+            const registrationResponse = await handleUserRegistration(phoneNumber, data, miscMessage.CREATE);
             if (registrationResponse) {
                 let isFromForgotPassword = false;
                 if (registrationResponse == `${miscMessage.RESET}_${miscMessage.SUCCESSFUL}`) {
-                    await resetTokens(error, setError);
+                    await resetTokens();
                     isFromForgotPassword = true;
+                } else {
+                    await saveRegistrationStatus(phoneNumber, miscMessage.REGISTERED);
                 }
                 await navigateUser(data, isFromForgotPassword);
             }

@@ -897,8 +897,7 @@ export const categoryViewStyles = StyleSheet.create({
     categoryView: {
         flex: 1,
         width: '100%',
-        height: '100%',
-        backgroundColor: '#3d3d3d'
+        height: '100%'
     },
     saveButtonContainer: {
         marginVertical: 10,
@@ -917,8 +916,7 @@ export const categoryViewStyles = StyleSheet.create({
         borderRadius: 30
     },
     bottomButtonLayout: {
-        height: 63,
-        backgroundColor: '#3d3d3d'
+        height: 63
     },
     textSave: {
         color: "#000000",
