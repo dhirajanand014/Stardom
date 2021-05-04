@@ -21,7 +21,7 @@ export const SDDropDownPicker = props => {
                         onChangeItem={item => onChangeByValueType(inputProps, item.value, props)} defaultValue={props.dropDownDefaultValue} activeItemStyle={SDGenericStyles.colorGreen}
                         placeholder={props.placeHolderText} placeholderStyle={[SDGenericStyles.placeHolderTextColor]} multiple={props.multiple} searchable={props.searchable}
                         style={[props.formState.errors[props.inputName]?.message && userAuthStyles.errorInputBorder || userAuthStyles.normalInputBorder, props.extraStyles]}
-                        globalTextStyle={props.globalTextStyle} dropDownDirection="BOTTOM" />)
+                        globalTextStyle={props.globalTextStyle} />)
             }} />
     )
 }
