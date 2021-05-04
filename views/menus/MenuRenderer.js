@@ -15,8 +15,8 @@ export const MenuRenderer = (item, index, navigation) => {
                     </View>
                     {
                         item.value &&
-                        <View style={[userAuthStyles.menuRightCountView, SDGenericStyles.backgroundColorYellow, SDGenericStyles.alignItemsEnd]}>
-                            <Text style={[SDGenericStyles.placeHolderTextColor, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16]}>
+                        <View style={[userAuthStyles.menuRightCountView, SDGenericStyles.textBoxGray, SDGenericStyles.alignItemsEnd]}>
+                            <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16]}>
                                 {item.value}
                             </Text>
                         </View>

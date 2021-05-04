@@ -20,7 +20,7 @@ export const BottomSheetView = props => {
 
     const renderContent = () => {
         return (
-            <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical20]}>
+            <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical20, SDGenericStyles.alignItemsCenter]}>
                 <View style={SDGenericStyles.alignItemsCenter}>
                     <Text style={[SDGenericStyles.ft24, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
                         {modalTextConstants.UPLOAD_PHOTO}
@@ -37,7 +37,7 @@ export const BottomSheetView = props => {
                         props.isFrom == miscMessage.ADD_POST && props.navigation.navigate(screens.ADD_POST_DETAILS,
                             { addPost: props.addPost });
                     }}>
-                    <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.TAKE_PHOTO}</Text>
+                    <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.TAKE_PHOTO}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.bottomSheetPanelButton, SDGenericStyles.alignItemsCenter,
                 SDGenericStyles.backgroundColorYellow]}
@@ -46,12 +46,12 @@ export const BottomSheetView = props => {
                         props.isFrom == miscMessage.ADD_POST && props.navigation.navigate(screens.ADD_POST_DETAILS,
                             { addPost: props.addPost });
                     }}>
-                    <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.CHOOSE_FROM_LIBRARY}</Text>
+                    <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.CHOOSE_FROM_LIBRARY}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.bottomSheetPanelButton, SDGenericStyles.alignItemsCenter,
                 SDGenericStyles.backgroundColorYellow]}
                     onPress={() => props.bottomSheetRef?.current?.snapTo(numericConstants.ONE)}>
-                    <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.CANCEL}</Text>
+                    <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.CANCEL}</Text>
                 </TouchableOpacity>
             </View >
         )

@@ -626,54 +626,10 @@ export const showSelectedImage = async (type, bottomSheetRef, addPost, setAddPos
             default:
                 break;
         }
-        setAddPost({ ...addPost, capturedImage: imageValue.path, showBottomOptions: false });
+        addPost.capturedImage = imageValue.path;
+        addPost.showBottomOptions = false;
+        setAddPost({ ...addPost });
         bottomSheetRef?.current?.snapTo(numericConstants.ONE);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export const toggleAddPostDetailsPanel = async (add_post_translate_y, content_opacity, dropDownController, toggleButton,
-    navigation) => {
-    try {
-        const add_post_panel_y_config = {
-            damping: 120
-        }
-        const add_post_panel_opacity_config = {
-            damping: 120
-        }
-
-        switch (toggleButton) {
-            case actionButtonTextConstants.ADD_DETAILS:
-
-                add_post_translate_y.value = withSpring(numericConstants.ONE, add_post_panel_y_config);
-                content_opacity.value = withSpring(numericConstants.ONE, add_post_panel_opacity_config);
-
-                InteractionManager.runAfterInteractions(async () => {
-                    const categories = await fetchCategoryData();
-                    const postCategories = categories.map(category => {
-                        return ({
-                            label: category.categoryTitle, value: parseInt(category.categoryId), icon: () => { },
-                            textStyle: [SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyBold]
-                        });
-                    });
-                    dropDownController.current.addItems(postCategories);
-                });
-                break;
-            case actionButtonTextConstants.ADD_POST:
-                add_post_translate_y.value = withSpring(height, add_post_panel_y_config);
-                content_opacity.value = withSpring(numericConstants.ZERO, add_post_panel_opacity_config);
-                navigation.navigate(screens.GLANCE);
-                break;
-            case actionButtonTextConstants.CANCEL:
-                add_post_translate_y.value = withSpring(height, add_post_panel_y_config);
-                content_opacity.value = withSpring(numericConstants.ZERO, add_post_panel_opacity_config);
-            default:
-                add_post_translate_y.value = withSpring(height, add_post_panel_y_config);
-                content_opacity.value = withSpring(numericConstants.ZERO, add_post_panel_opacity_config);
-                break;
-        }
-
     } catch (error) {
         console.log(error);
     }

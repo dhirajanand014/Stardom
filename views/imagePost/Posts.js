@@ -2,7 +2,7 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, View } from "react-native";
-import { jsonConstants, numericConstants, stringConstants } from '../../constants/Constants';
+import { jsonConstants, miscMessage, numericConstants, stringConstants } from '../../constants/Constants';
 import AddPostConstant from '../../constants/AddPostConstant.json';
 import { fetchUserPosts } from '../../helper/Helper';
 import { SDGenericStyles } from '../../styles/Styles';
@@ -26,7 +26,8 @@ export const Posts = props => {
     });
 
     const bottomSheetRef = useRef(null);
-    const snapPoints = useMemo(() => [numericConstants.THREE_HUNDRED_THIRTY, numericConstants.ZERO], []);
+    const snapPoints = useMemo(() => [numericConstants.THREE_HUNDRED_THIRTY, numericConstants.ZERO],
+        jsonConstants.EMPTY);
 
     const bottomSheetRefCallback = node => {
         bottomSheetRef.current = node;
@@ -48,7 +49,7 @@ export const Posts = props => {
                 renderItem={({ item, index }) => PostRenderer(item, index, addPostCallBack, navigation)} />
             {
                 addPost.showBottomOptions && <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef} snapPoints={snapPoints}
-                    fall={fallValue} addPost={addPost} setAddPost={setAddPost} />
+                    fall={fallValue} addPost={addPost} setAddPost={setAddPost} isFrom={miscMessage.ADD_POST} navigation={navigation} />
             }
         </View>
     )

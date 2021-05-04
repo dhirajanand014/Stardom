@@ -50,7 +50,7 @@ export const Category = props => {
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
             <FlatList data={category.categories} numColumns={numericConstants.THREE}
-                renderItem={({ item, index }) => CategoryRenderer(item, index, category, setCategory)}
+                renderItem={({ item, index }) => CategoryRenderer(item, index, category, setCategory, miscMessage.SELECT_CATEGORIES)}
                 keyExtractor={(item) => item.categoryId} />
             {
                 category.initialCategory == actionButtonTextConstants.SKIP_BUTTON &&

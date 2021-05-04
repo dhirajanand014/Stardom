@@ -77,6 +77,9 @@ export const SDGenericStyles = StyleSheet.create({
     width130: {
         width: 130
     },
+    ft12: {
+        fontSize: 12
+    },
     ft14: {
         fontSize: 14
     },
@@ -187,6 +190,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     padding5: {
         padding: 5
+    },
+    padding12: {
+        padding: 12
     },
     width38: {
         width: 38
@@ -321,7 +327,7 @@ export const SDGenericStyles = StyleSheet.create({
         color: 'green'
     },
     dropDownBackGround: {
-        backgroundColor: 'gray',
+        backgroundColor: `#1b1f2b`,
         zIndex: 10
     },
     ml_8: {
@@ -584,7 +590,6 @@ export const glancePostStyles = StyleSheet.create({
     addPostDropDownStyle: {
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
-        backgroundColor: colorConstants.GREY,
         justifyContent: 'center',
         width: width / 1.15
     },
@@ -785,27 +790,9 @@ export const glancePostStyles = StyleSheet.create({
     },
     bottomSheetPanelButton: {
         padding: 13,
+        width: width / 1.1,
         borderRadius: 10,
         marginVertical: 7,
-    },
-    addPostButtonText: {
-        color: "#000000",
-        textAlign: 'center'
-    },
-    addPostDetailsButtonView: {
-        position: 'absolute',
-        bottom: 0,
-        alignSelf: 'center',
-        backgroundColor: colorConstants.YELLOW,
-        padding: 2,
-        borderWidth: 3,
-        borderRadius: 28,
-        marginBottom: 20,
-        borderColor: '#e3ddda',
-        elevation: 5
-    },
-    addPostDetailsButton: {
-        padding: 10,
     },
     cancelAddPostButton: {
         padding: 10
@@ -816,34 +803,9 @@ export const glancePostStyles = StyleSheet.create({
         backgroundColor: colorConstants.YELLOW,
         padding: 10
     },
-    addPostDetailsHeaderTitle: {
-        color: 'white',
-        fontFamily: 'wallpiper_bold_font',
-        fontSize: 20,
-        padding: 10
-    },
     addPostDetailsTitleDivider: {
         width: width / 1.2,
         height: 1,
-        backgroundColor: "lightgray"
-    },
-    addPostDetailsView: {
-        flex: 1,
-        width: width / 1.06,
-        height: height / 1.15,
-        marginBottom: 15,
-        marginTop: 15,
-        marginRight: 10,
-        marginLeft: 10,
-        elevation: 3,
-        borderRadius: 8,
-        shadowRadius: 18,
-        shadowOpacity: .7,
-        alignItems: 'center',
-        backgroundColor: 'rgba(61,61,61,.7)',
-        opacity: .7,
-        position: 'absolute',
-        top: 0,
     },
     addPostDetailInputView: {
         paddingVertical: isIOS && 5 || 2,
@@ -870,10 +832,22 @@ export const glancePostStyles = StyleSheet.create({
         fontSize: 16,
         color: '#05375a'
     },
-    addPostDetailsBottomButtonStyle: {
-        alignSelf: 'flex-end',
-        marginTop: 170
+    addPostDetailsStyle: {
+        borderWidth: 0.5,
+        borderColor: '#969696'
     },
+    addPostCategoriesStyle: {
+        borderWidth: 1,
+        borderColor: '#fafafa',
+        borderRadius: 30,
+    },
+    addPostDetailsCategoryImageStyle: {
+        width: 40,
+        height: 40,
+        borderRadius: 58,
+        alignItems: 'flex-start',
+        marginLeft: 1
+    }
 });
 
 export const categoryViewStyles = StyleSheet.create({
@@ -1118,16 +1092,6 @@ export const userAuthStyles = StyleSheet.create({
         backgroundColor: `#343642`,
         marginVertical: 8,
         borderRadius: 8,
-        width: width / 1.15,
-    },
-    userInputPostDetails: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderWidth: 1,
-        backgroundColor: `#fafafa`,
-        marginVertical: 3,
-        borderColor: `#888888`,
-        borderRadius: 3,
         width: width / 1.15,
     },
     errorInputBorder: {
