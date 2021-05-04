@@ -37,8 +37,8 @@ export const SDUserMenus = props => {
                     Profile name
                     </Text>
             </View>
-            <FlatList data={userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => item.categoryId}
-                renderItem={({ item, index }) => MenuRenderer(item, index)}
+            <FlatList data={userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => item.key}
+                renderItem={({ item, index }) => MenuRenderer(item, index, navigation)}
                 ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />) }} />
 
             <View style={userAuthStyles.menuLoginButton}>

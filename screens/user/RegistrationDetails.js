@@ -46,7 +46,6 @@ export const RegistrationDetails = () => {
             miscMessage.UPDATE);
         if (registrationUpdated) {
             const initialCategories = await redirectUserToGlance();
-            debugger
             showSnackBar(alertTextMessages.USER_DETAILS_ADDED_SUCCESSFULLY, true);
             navigation.navigate(initialCategories && screens.GLANCE || screens.CATEGORY);
         } else {

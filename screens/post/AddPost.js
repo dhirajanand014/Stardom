@@ -32,8 +32,8 @@ export const AddPost = () => {
                     addPost.capturedImage &&
                     <AddPostDetails addPost={addPost} setAddPost={setAddPost} /> || <View>
                         <TouchableOpacity activeOpacity={.7} onPress={() => bottomSheetRef?.current?.snapTo(numericConstants.ZERO)}>
-                            <View style={glancePostStyles.addPostView}>
-                                <PlusIcon width={numericConstants.TWO_HUNDRED} height={numericConstants.TWO_HUNDRED} />
+                            <View style={[glancePostStyles.addPostView, SDGenericStyles.placeHolderTextColor]}>
+                                <PlusIcon width={numericConstants.ONE_HUNDRED_TWENTY} height={numericConstants.ONE_HUNDRED_TWENTY} />
                             </View>
                         </TouchableOpacity>
                         <View activeOpacity={.7} style={SDGenericStyles.mv15}>

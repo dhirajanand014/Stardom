@@ -23,10 +23,13 @@ import { RegistrationDetails } from './screens/user/RegistrationDetails';
 import { RegistrationConfirmation } from './screens/user/RegisterConfirmation';
 import { SDUserMenus } from './screens/SDUserMenus';
 import { Profile } from './screens/user/Profile';
+import { Posts } from './views/imagePost/Posts';
+import { AddPostDetails } from './screens/post/AddPostDetails';
 
 export const CategoryContext = React.createContext();
 
 export default function App({ navigationRef }) {
+
   const Stack = createStackNavigator();
   const RootStack = createStackNavigator();
   const TabNavigator = createMaterialTopTabNavigator();
@@ -35,8 +38,8 @@ export default function App({ navigationRef }) {
     return (
       <RootStack.Navigator initialRouteName={screens.GLANCE/*navigationRef.navigationRoute*/} screenOptions={screenOptions}
         headerMode={`float`} animation={`fade`} mode="modal">
-        <RootStack.Screen name={screens.GLANCE} component={Glance} />
-        <RootStack.Screen name={screens.PROFILE} component={Profile} />
+        <RootStack.Screen name={screens.GLANCE} component={Glance} options={headerLessStackOptions} />
+        <RootStack.Screen name={screens.PROFILE} component={Profile} options={headerLessStackOptions} />
       </RootStack.Navigator>
     )
   }
@@ -62,7 +65,8 @@ export default function App({ navigationRef }) {
           <Stack.Screen name={screens.REGISTRATION_CONFIRMATION} component={RegistrationConfirmation} options={headerLessStackOptions} />
           <Stack.Screen name={screens.CATEGORY} component={Category} options={categoryHeader} />
           <Stack.Screen name={screens.LOGIN} component={Login} options={headerLessStackOptions} />
-          <Stack.Screen name={screens.ADD_POST} component={AddPost} />
+          <Stack.Screen name={screens.ADD_POST_DETAILS} component={AddPostDetails} options={headerLessStackOptions} />
+          <Stack.Screen name={screens.POSTS} component={Posts} options={authorizationHeader} />
           <Stack.Screen name={screens.REGISTER} component={Register} options={headerLessStackOptions} />
         </Stack.Navigator>
       </NavigationContainer>

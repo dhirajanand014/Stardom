@@ -3,16 +3,16 @@ import { FlatList, View, StatusBar, Text, TouchableOpacity, BackHandler, Dimensi
 import { CategoryContext } from '../../App';
 import { categoryViewStyles, SDGenericStyles } from '../../styles/Styles';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { saveCategoryButtonType, saveCategoryIdsToStorage } from '../../helper/Helper'
+import { saveCategoryDetailsToKeyChain } from '../../helper/Helper'
 import { CategoryRenderer } from './CategoryRenderer.js';
 import { TourGuideZone, useTourGuideController } from 'rn-tourguide';
 import {
     backHandlerConstants, jsonConstants, stringConstants,
-    height, actionButtonTextConstants, numericConstants,
-    miscMessage, alertTextMessages
+    actionButtonTextConstants, numericConstants,
+    miscMessage, alertTextMessages, screens, keyChainConstansts
 } from '../../constants/Constants';
 
-export function Category() {
+export const Category = props => {
 
     const { fetchCategories, initialCategorySelection } = useContext(CategoryContext);
 
@@ -21,7 +21,10 @@ export function Category() {
 
     const { canStart, start, stop } = useTourGuideController();
 
-    const [category, setCategory] = useState({ categories: jsonConstants.EMPTY, initialCategory: stringConstants.EMPTY });
+    const [category, setCategory] = useState({
+        categories: jsonConstants.EMPTY,
+        initialCategory: stringConstants.EMPTY
+    });
 
     useEffect(() => {
         fetchCategories(category, setCategory, initialCategorySelection);
@@ -45,43 +48,50 @@ export function Category() {
     height += StatusBar.currentHeight;
 
     return (
-        <View style={[categoryViewStyles.categoryView, SDGenericStyles.backGroundColorBlack]}>
-            <FlatList data={category.categories}
-                renderItem={({ item, index }) => CategoryRenderer(item, index, category, setCategory)} numColumns={3}
+        <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
+            <FlatList data={category.categories} numColumns={numericConstants.THREE}
+                renderItem={({ item, index }) => CategoryRenderer(item, index, category, setCategory)}
                 keyExtractor={(item) => item.categoryId} />
             {
                 category.initialCategory == actionButtonTextConstants.SKIP_BUTTON &&
-                <View style={[categoryViewStyles.bottomButtonLayout, SDGenericStyles.backGroundColorBlack]}>
-                    <TouchableOpacity activeOpacity={.7} onPress={async () => {
-                        await saveCategoryButtonType(actionButtonTextConstants.SAVE_BUTTON);
-                        navigation.reset({ index: numericConstants, routes: [{ name: "Glance" }], });
-                        stop();
-                    }} style={categoryViewStyles.saveButtonContainer}>
-                        <TourGuideZone zone={numericConstants.THREE} borderRadius={numericConstants.THIRTY} shape={miscMessage.RECTANGLE}
-                            style={categoryViewStyles.skipTourZoneStyle} text={alertTextMessages.SKIP_SAVE_CATEGORIES}>
-                            <Text style={categoryViewStyles.textSave}>{actionButtonTextConstants.SKIP_BUTTON_TEXT}</Text>
-                        </TourGuideZone>
-                    </TouchableOpacity>
+                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack]}>
+                    <TourGuideZone zone={numericConstants.THREE} borderRadius={numericConstants.TWENTY}
+                        text={alertTextMessages.SKIP_SAVE_CATEGORIES} shape={miscMessage.RECTANGLE}>
+                        <TouchableOpacity activeOpacity={.7} onPress={async () => {
+                            await saveCategoryDetailsToKeyChain(keyChainConstansts.SAVE_CATEGORY_BUTTON_TYPE,
+                                actionButtonTextConstants.SAVE_BUTTON);
+                            navigation.reset({ index: numericConstants, routes: [{ name: screens.GLANCE }], });
+                            stop();
+                        }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
+                        SDGenericStyles.backgroundColorYellow]}>
+                            <Text style={[categoryViewStyles.textSave, SDGenericStyles.textCenterAlign]}>
+                                {actionButtonTextConstants.SKIP_BUTTON_TEXT}
+                            </Text>
+                        </TouchableOpacity>
+                    </TourGuideZone>
                 </View>
             }
             {
                 category.initialCategory == actionButtonTextConstants.SAVE_BUTTON &&
-                <View style={[categoryViewStyles.bottomButtonLayout, SDGenericStyles.backGroundColorBlack]}>
+                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack]}>
                     <TouchableOpacity activeOpacity={.7} onPress={async () => {
                         const categoryIds = category.categories.filter(item => item.isSelected).map(selectedCategory => {
-                            const categoryJson = {
+                            return {
                                 selectedCategoryId: selectedCategory.categoryId,
                                 selectedCategoryTitle: selectedCategory.categoryTitle
                             }
-                            return categoryJson;
                         });
                         const jsonCategoryIds = JSON.stringify(categoryIds);
-                        await saveCategoryIdsToStorage(jsonCategoryIds);
-                        await saveCategoryButtonType(actionButtonTextConstants.SAVE_BUTTON);
-                        navigation.reset({ index: numericConstants.ZERO, routes: [{ name: "Glance" }], });
+                        await saveCategoryDetailsToKeyChain(keyChainConstansts.SAVE_CATEGORY_ID, jsonCategoryIds);
+                        await saveCategoryDetailsToKeyChain(keyChainConstansts.SAVE_CATEGORY_BUTTON_TYPE,
+                            actionButtonTextConstants.SAVE_BUTTON);
+                        navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }], });
                         stop();
-                    }} style={categoryViewStyles.saveButtonContainer}>
-                        <Text style={categoryViewStyles.textSave}>Save</Text>
+                    }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
+                    SDGenericStyles.backgroundColorYellow]}>
+                        <Text style={[categoryViewStyles.textSave, SDGenericStyles.textCenterAlign]}>
+                            {actionButtonTextConstants.SAVE}
+                        </Text>
                     </TouchableOpacity>
                 </View>
             }

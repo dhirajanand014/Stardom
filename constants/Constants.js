@@ -31,7 +31,7 @@ export const screens = {
     INTRO: `Intro`,
     CATEGORY: `Category`,
     LOGIN: `Login`,
-    ADD_POST: `Add Post`,
+    ADD_POST_DETAILS: `Add Post Details`,
     REGISTER: `Register`,
     REGISTRATION_DETAILS: `Registration Details`,
     REGISTRATION_CONFIRMATION: `Confirm Registration`,
@@ -39,6 +39,7 @@ export const screens = {
     NON_MODAL: `NonModal`,
     PROFILE: `Profile`,
     CAMERA: `Camera`,
+    POSTS: `Posts`,
     MENU: `Menu`,
     OTP_VERIFICATION: `OTP Verification`
 }
@@ -54,15 +55,9 @@ export const urlConstants = {
     fetchReportAbuses: `https://www.wallpiper.app/4RhvfbEGwnsmxrpts.php`,
     setReportAbuseIdWithPostId: `https://www.wallpiper.app/4RhvfbEGwnsmxrptlist.php`,
     login: `${BASE_URI}/auth/login`,
+    fetchPostsByUserId: `${BASE_URI}/post/userid`,
     registerUser: `${BASE_URI}/auth/register`,
     fetchAllProfiles: `${BASE_URI}/profile`
-}
-
-export const asyncStorageKeys = {
-    SAVE_CATEGORY_ID: `@save_category_id`,
-    SAVE_CATEGORY_BUTTON_TYPE: `@save_category_button_type`,
-    SAVE_POST_COUNTS: `@save_post_counts`,
-    SAVE_SELECTED_REPORT: `@save_selected_report`
 }
 
 export const fieldControllerName = {
@@ -109,6 +104,7 @@ export const actionButtonTextConstants = {
     REGISTER: `Register`,
     SUBMIT: `Submit`,
     SURE: `Sure`,
+    SAVE: `Save`,
     CANCEL: `Cancel`,
     ADD_POST: `Add Post`,
     CANCEL_POST: `<<Cancel`,
@@ -285,9 +281,11 @@ export const stringConstants = {
     EMPTY: ``,
     REPLACE_REGEX: /[- #*;,.<>\{\}\[\]\\\/]/gi,
     COMMA: `,`,
+    UNDERSCORE: `_`,
     PLUS: `+`,
     SPACE: ` `,
-    PIPELINE_JOIN: ` | `
+    PIPELINE_JOIN: ` | `,
+    SLASH: `/`
 }
 
 export const modalTextConstants = {
@@ -303,7 +301,11 @@ export const modalTextConstants = {
     OTP_VERIFICATION: `OTP Verification`,
     ACCOUNT_DETAILS: `Account Details`,
     LOGIN_TO_CONTINUE: `Login to continue`,
-    SUBMIT_BUTTON: `Submit`
+    SUBMIT_BUTTON: `Submit`,
+    UPLOAD_PHOTO: `Upload Photo`,
+    CHOOSE_BELOW_OPTIONS: `Choose below options`,
+    TAKE_PHOTO: `Take Photo`,
+    CHOOSE_FROM_LIBRARY: `Choose from library`
 }
 export const placeHolderText = {
     PHONE_NUMBER: `Enter 10 digit Number`,
@@ -355,6 +357,7 @@ export const numericConstants = {
     FIFTY: 50,
     EIGHTY: 80,
     ONE_HUNDRED: 100,
+    ONE_HUNDRED_TWENTY: 120,
     ONE_HUNDRED_THIRTY: 130,
     ONE_HUNDRED_FIFTY: 150,
     ONE_HUNDER_EIGHTY: 180,
@@ -376,7 +379,8 @@ export const alertTextMessages = {
     SKIP_SAVE_CATEGORIES: `Skip or save categories to view posts!`,
     USER_DETAILS_ADDED_SUCCESSFULLY: `User details added successfully`,
     GO_BACK_TO_POST: `Go back to posts Anytime !!`,
-    SUCCESSFULLY_REGISTERED: `Successfully Registered!`
+    SUCCESSFULLY_REGISTERED: `Successfully Registered!`,
+    SUCCESSFULLY_LOGGED_IN: `Login successful`
 }
 
 export const errorMessages = {
@@ -388,14 +392,17 @@ export const errorMessages = {
     USER_DENIED_NOTIFICATION: `Permission denied by user`,
     FAILED_TO_UPDATE_REGISTRATION_DETAILS: `Failed to update Registration Details`,
     CANNOT_REGISITER_USER: `Could not register user`,
-    USER_ALREADY_REGISTERED: `User is already registered`,
+    COULD_NOT_REGISTER_USER: `Could not register user`,
     COULD_NOT_PARSE_RESPONSE: `Could not parse response`,
     CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`,
     COULD_NOT_FETCH_CATEGORIES: `Could not fetch categories`,
+    COULD_NOT_SAVE_CATEGORY_DETAILS_TO_KEYCHAIN: `Could not save category details to Key Chain`,
     COULD_NOT_FETCH_PROFILES: `Could not fetch all profiles`,
     INCORRECT_OTP_ENTERED: `Incorrect OTP entered`,
     COULD_NOT_SAVE_TO_KEYCHAIN: `Could not save data to Keychain`,
     COULD_NOT_FETCH_DETAILS_FROM_KEYCHAIN: `Could not fetch details from keychain`,
+    COULD_NOT_FETCH_LOGIN_DETAILS_FROM_KEYCHAIN: `Could not fetch login details from keychain`,
+    COULD_NOT_PARSE_LOGIN_TOKEN: `Could not parse login token`,
     COULD_NOT_LOGIN_USER: `Error logging in user`,
     COULD_NOT_REDIRECT_TO_GLANCE: `Could not redirect to glance`
 }
@@ -463,6 +470,9 @@ export const miscMessage = {
     UP: `up`,
     STRETCH: `stretch`,
     BACKSPACE: `Backspace`,
+    PHONE_NUMBER: `phoneNumber`,
+    TOKEN: `token`,
+    USER_DETAILS: `details`,
     WINDOW: `window`,
     LARGE: `large`,
     VERIFIED: `Verified`,
@@ -478,7 +488,11 @@ export const miscMessage = {
     CONFIRM_SECRET: `OTP Confirmed`,
     CATEGORY_BACK: `Go back to posts Anytime !!`,
     CONTENT_TYPE: 'Content-Type',
+    AUTHORIZATION: `Authorization`,
+    BEARER: `Bearer`,
     APPLICATION_JSON: `application/json`,
+    CREATE: `create`,
+    ADD_POST: `Add Post`
 }
 
 export const requestConstants = {
@@ -499,6 +513,10 @@ export const keyChainConstansts = {
     LOGGED_IN_USER: `loggedInUser`,
     ACCOUNT_STATUS: `accountStatus`,
     INITIAL_CATEGORY_SELECTIONS: `initialCategories`,
+    SAVE_CATEGORY_ID: `save_category_id`,
+    SAVE_CATEGORY_BUTTON_TYPE: `save_category_button_type`,
+    SAVE_POST_COUNTS: `save_post_counts`,
+    SAVE_SELECTED_REPORT: `save_selected_report`
 }
 
 export const defaultPickerValue = {
@@ -532,6 +550,14 @@ export const SDMenuOptions = [
         value: 10
     }, {
         label: `Posts`,
-        key: `posts`
+        key: screens.POSTS
+    }, {
+        label: `Category`,
+        key: screens.CATEGORY
     }
 ];
+
+export const tokenMessageConstants = {
+    TOKEN_INVALID: `Token is Invalid`,
+    TOKEN_EXPIRED: `Token is Expired`
+}

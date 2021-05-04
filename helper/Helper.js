@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {
-    urlConstants, asyncStorageKeys,
+    urlConstants, keyChainConstansts,
     postCountTypes, postCountRequestKeys,
     savePostCountKeys, setPostImages,
     permissionsButtons, permissionMessages,
@@ -10,14 +10,14 @@ import {
     actionButtonTextConstants, colorConstants,
     miscMessage, width, height, numericConstants,
     screens, headerStrings, fieldControllerName, isAndroid,
-    isIOS, OTP_INPUTS, errorMessages, requestConstants, jsonConstants, defaultProfilesValue, SDMenuOptions, keyChainConstansts
+    isIOS, OTP_INPUTS, errorMessages, requestConstants,
+    jsonConstants, defaultProfilesValue, SDMenuOptions, tokenMessageConstants,
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
 import * as Keychain from 'react-native-keychain';
-import AsyncStorage from '@react-native-community/async-storage';
 import { withDelay, withSpring } from 'react-native-reanimated';
 import { colors, headerStyles, SDGenericStyles } from '../styles/Styles';
 import { TourGuideZone } from 'rn-tourguide';
@@ -41,14 +41,14 @@ export const fetchAndUpdateCategoryState = async (category, setCategory) => {
         const responseCategoryData = await fetchCategoryData();
         if (responseCategoryData) {
             const selectedCategories = await getSelectedCategoryIdsFromStorage();
-            const parsedSelectedCategoryIds = selectedCategories.length && JSON.parse(selectedCategories) || [];
+            const parsedSelectedCategoryIds = selectedCategories.password.length &&
+                JSON.parse(selectedCategories.password) || [];
             responseCategoryData.sort((cat1, cat2) => cat1.categoryTitle.localeCompare(cat2.categoryTitle))
                 .map((category) => category.isSelected = parsedSelectedCategoryIds.some(selectedCategory =>
                     category.categoryId == selectedCategory.selectedCategoryId))
         }
-
         let initialCategory = await getCategoryButtonType();
-        initialCategory = initialCategory && initialCategory || actionButtonTextConstants.SKIP_BUTTON;
+        initialCategory = initialCategory && initialCategory.password || actionButtonTextConstants.SKIP_BUTTON;
 
         setCategory({ ...category, categories: responseCategoryData, initialCategory: initialCategory });
     } catch (error) {
@@ -69,17 +69,10 @@ export const fetchPostsAndSaveToState = async (sdomDatastate, setSdomDatastate, 
     }
 }
 
-export const saveCategoryIdsToStorage = async (categoryIds) => {
-    try {
-        await AsyncStorage.setItem(asyncStorageKeys.SAVE_CATEGORY_ID, categoryIds);
-    } catch (error) {
-        console.log('Cannot save categoryIds to the storage', error);
-    }
-}
 
 export const getSelectedCategoryIdsFromStorage = async () => {
     try {
-        return await AsyncStorage.getItem(asyncStorageKeys.SAVE_CATEGORY_ID) || stringConstants.EMPTY;
+        return await getKeyChainDetails(keyChainConstansts.SAVE_CATEGORY_ID) || stringConstants.EMPTY
     } catch (error) {
         console.log('Cannot fetch the categoryIds from the storage', error);
     }
@@ -120,7 +113,7 @@ export const increaseAndSetPostCounts = async (post, sdomDatastate, setSdomDatas
 
 export const savePostCounts = async (postId, postIdForSelectedCountType, sdomDatastate, setSdomDatastate) => {
     try {
-        const getPostIdOfPostForCount = await getPostCounts(asyncStorageKeys.SAVE_POST_COUNTS);
+        const getPostIdOfPostForCount = await getPostCounts(keyChainConstansts.SAVE_POST_COUNTS);
         let postCounts, postIds = [], postIdsJson;
         if (getPostIdOfPostForCount) {
             postCounts = JSON.parse(getPostIdOfPostForCount) || stringConstants.EMPTY;
@@ -139,7 +132,8 @@ export const savePostCounts = async (postId, postIdForSelectedCountType, sdomDat
             sdomDatastate.posts.filter(post => post.postId == postId).map(item => item.likeDisabled = true);
             setSdomDatastate({ ...sdomDatastate });
             postIdsJson = JSON.stringify(postCounts);
-            await AsyncStorage.setItem(asyncStorageKeys.SAVE_POST_COUNTS, postIdsJson)
+            await saveDetailsToKeyChain(keyChainConstansts.SAVE_POST_COUNTS, keyChainConstansts.SAVE_POST_COUNTS,
+                postIdsJson);
         }
     } catch (error) {
         console.log(`Cannot save the post counts for the post id ${postId}`, error);
@@ -148,7 +142,7 @@ export const savePostCounts = async (postId, postIdForSelectedCountType, sdomDat
 
 export const getPostCounts = async () => {
     try {
-        return await AsyncStorage.getItem(asyncStorageKeys.SAVE_POST_COUNTS);
+        return await getKeyChainDetails(keyChainConstansts.SAVE_POST_COUNTS);
     } catch (error) {
         console.log(`Cannot fetch the post ids from the selected post counts for type: ${postIdForSelectedCountType}`,
             error);
@@ -180,17 +174,9 @@ export const shareImage = async (post) => {
     }
 }
 
-export const saveCategoryButtonType = async (inCategoryButtonType) => {
-    try {
-        await AsyncStorage.setItem(asyncStorageKeys.SAVE_CATEGORY_BUTTON_TYPE, inCategoryButtonType);
-    } catch (error) {
-        console.log('Cannot save button type to the storage', error);
-    }
-}
-
 export const getCategoryButtonType = async () => {
     try {
-        return await AsyncStorage.getItem(asyncStorageKeys.SAVE_CATEGORY_BUTTON_TYPE) || stringConstants.EMPTY;
+        return await getKeyChainDetails(keyChainConstansts.SAVE_CATEGORY_BUTTON_TYPE);
     } catch (error) {
         console.log('Cannot fetch the save button type from the storage', error);
     }
@@ -451,7 +437,8 @@ export const fetchReportAbuseValues = async (optionsState, setOptionsState) => {
 
 export const setReportAbuseOptions = async (saveReportsJSON) => {
     try {
-        await AsyncStorage.setItem(asyncStorageKeys.SAVE_SELECTED_REPORT, saveReportsJSON);
+        await saveDetailsToKeyChain(keyChainConstansts.SAVE_SELECTED_REPORT,
+            keyChainConstansts.SAVE_SELECTED_REPORT, saveReportsJSON);
     } catch (error) {
         console.log('Cannot set selected report abuse to the storage', error);
     }
@@ -459,7 +446,7 @@ export const setReportAbuseOptions = async (saveReportsJSON) => {
 
 export const fetchSavedReportAbuseOptions = async () => {
     try {
-        return await AsyncStorage.getItem(asyncStorageKeys.SAVE_SELECTED_REPORT) || stringConstants.EMPTY;
+        return await getKeyChainDetails(keyChainConstansts.SAVE_SELECTED_REPORT);
     } catch (error) {
         console.log('Cannot fetch selected saved report abuses from storage', error);
     }
@@ -532,7 +519,8 @@ export const checkAndAddCategoriesFromFCMNotification = async (selectedCategorie
                 });
 
                 selectedCategories = JSON.stringify(selectCategories);
-                await saveCategoryIdsToStorage(selectedCategories);
+                await saveDetailsToKeyChain(keyChainConstansts.SAVE_CATEGORY_ID, keyChainConstansts.SAVE_CATEGORY_ID,
+                    selectedCategories);
             }
         }
         return selectedCategories;
@@ -556,7 +544,7 @@ const retrievePostData = async (categoryIdFromNotification) => {
         const responsePostsData = responseData.data.posts;
         let selectedCategories = await getSelectedCategoryIdsFromStorage();
 
-        selectedCategories = await checkAndAddCategoriesFromFCMNotification(selectedCategories,
+        selectedCategories = await checkAndAddCategoriesFromFCMNotification(selectedCategories.password,
             categoryIdFromNotification);
 
         const fetchedPostCounts = await getPostCounts();
@@ -639,7 +627,7 @@ export const showSelectedImage = async (type, bottomSheetRef, addPost, setAddPos
                 break;
         }
         setAddPost({ ...addPost, capturedImage: imageValue.path, showBottomOptions: false });
-        bottomSheetRef?.current?.snapTo(numericConstants.ONE)
+        bottomSheetRef?.current?.snapTo(numericConstants.ONE);
     } catch (error) {
         console.log(error);
     }
@@ -951,9 +939,8 @@ export const handleUserRegistration = async (phoneNumber, data, isFrom) => {
         const responseData = await axiosPostWithHeaders(urlConstants.registerUser, requestJSON);
         return processResponseData(responseData);
     } catch (error) {
-        debugger
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
-        showSnackBar(errorMessages.USER_ALREADY_REGISTERED, false);
+        showSnackBar(errorMessages.COULD_NOT_REGISTER_USER, false);
     }
     return false;
 }
@@ -992,12 +979,13 @@ export const processResponseData = (response, errorText) => {
         if (response) {
             switch (response.status) {
                 case 200:
+                    if (response.data.status) {
+                        return tokenStatusDetails(response);
+                    }
                     return response.data;
-                    break;
                 case 201:
                     console.log(responseStringData.RESPONSE_MESSAGE, response.data.message);
                     return response.data;
-                    break;
                 case 400:
                     break;
                 case 401:
@@ -1090,3 +1078,91 @@ export const redirectUserToGlance = async () => {
     }
     return false
 }
+
+export const saveCategoryDetailsToKeyChain = async (key, data) => {
+    try {
+        await saveDetailsToKeyChain(key, key, data);
+        return true;
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_SAVE_CATEGORY_DETAILS_TO_KEYCHAIN, error);
+    }
+    return false;
+}
+
+export const getLoggedInUser = async () => {
+    try {
+        return await getKeyChainDetails(keyChainConstansts.LOGGED_IN_USER);
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_LOGIN_DETAILS_FROM_KEYCHAIN, error);
+    }
+    return false;
+}
+
+export const axiosGetWithAuthorization = async (url, token) => {
+    return await axios.get(url, {
+        headers: {
+            [miscMessage.CONTENT_TYPE]: miscMessage.APPLICATION_JSON,
+            [miscMessage.AUTHORIZATION]: `${miscMessage.BEARER}${stringConstants.SPACE}${token}`
+        }
+    });
+}
+
+export const axiosPostWithAuthorization = async (url, data) => {
+    return await axios.post(url, data, {
+        headers: {
+            [miscMessage.CONTENT_TYPE]: miscMessage.APPLICATION_JSON,
+            [miscMessage.AUTHORIZATION]: `${miscMessage.BEARER}${stringConstants.SPACE}`
+        }
+    });
+}
+
+
+
+export const getLoggedInUserDetails = async () => {
+    try {
+        const loggedInUser = await getLoggedInUser();
+        if (loggedInUser) {
+            return {
+                [miscMessage.PHONE_NUMBER]: loggedInUser.username.split(stringConstants.UNDERSCORE)[numericConstants.ZERO],
+                [miscMessage.TOKEN]: loggedInUser.username.split(stringConstants.UNDERSCORE)[numericConstants.ONE],
+                [miscMessage.USER_DETAILS]: loggedInUser.password
+            }
+        }
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_PARSE_LOGIN_TOKEN, error);
+    }
+    return false;
+}
+
+export const fetchUserPosts = async (userPosts, setUserPosts) => {
+    try {
+        const user = await getLoggedInUserDetails();
+        if (user) {
+            const userDetails = JSON.parse(user.details);
+            const url = `${urlConstants.fetchPostsByUserId}${stringConstants.SLASH}${userDetails.id}`;
+            const response = await axiosGetWithAuthorization(url, user.token);
+            const responseData = processResponseData(response);
+            if (responseData == tokenMessageConstants.TOKEN_INVALID || responseData == tokenMessageConstants.TOKEN_EXPIRED) {
+                console.error('login redirect')
+            } else {
+                userPosts.posts.push(...responseData.posts);
+                setUserPosts({ ...userPosts });
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const tokenStatusDetails = (response) => {
+    switch (response.data.status) {
+        case tokenMessageConstants.TOKEN_INVALID:
+            return tokenMessageConstants.TOKEN_INVALID;
+        case tokenMessageConstants.TOKEN_EXPIRED:
+            return tokenMessageConstants.TOKEN_EXPIRED;
+        default:
+            return response.data;
+    }
+    return false;
+}
+

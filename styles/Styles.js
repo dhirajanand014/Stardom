@@ -293,6 +293,9 @@ export const SDGenericStyles = StyleSheet.create({
     backGroundColorBlack: {
         backgroundColor: `#1b1f2b`
     },
+    backGroundColorGray: {
+        backgroundColor: `#969696`
+    },
     colorYellow: {
         color: '#eabe05'
     },
@@ -356,6 +359,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     height100: {
         height: 100
+    },
+    height63: {
+        height: 63
     }
 });
 
@@ -757,13 +763,13 @@ export const glancePostStyles = StyleSheet.create({
         color: '#abb4bd'
     },
     addPostView: {
-        borderWidth: 0.7,
+        borderWidth: 1,
         borderRadius: 1,
-        borderStyle: 'dashed'
+        borderStyle: 'dashed',
+        borderColor: `#969696`
     },
     bottomSheetHeader: {
-        backgroundColor: `#FFFFFF`,
-        shadowColor: `#333333`,
+        shadowColor: `#969696`,
         shadowOffset: { width: - 1, height: -3 },
         shadowRadius: 2,
         shadowOpacity: 0.4,
@@ -775,35 +781,12 @@ export const glancePostStyles = StyleSheet.create({
         width: 40,
         height: 8,
         borderRadius: 4,
-        backgroundColor: `#00000040`,
         marginBottom: 10
-    },
-    bottomSheetPanel: {
-        padding: 20,
-        backgroundColor: '#FFFFFF',
-        paddingTop: 20
-    },
-    bottomSheetPanelTitle: {
-        fontSize: 27,
-        height: 35,
-    },
-    bottomSheetPanelSubTitle: {
-        fontSize: 14,
-        color: 'gray',
-        height: 30,
-        marginBottom: 10,
     },
     bottomSheetPanelButton: {
         padding: 13,
         borderRadius: 10,
-        backgroundColor: colorConstants.YELLOW,
-        alignItems: 'center',
         marginVertical: 7,
-    },
-    bottomSheetPanelButtonTitle: {
-        fontSize: 17,
-        fontWeight: 'bold',
-        color: 'white',
     },
     addPostButtonText: {
         color: "#000000",
@@ -894,39 +877,19 @@ export const glancePostStyles = StyleSheet.create({
 });
 
 export const categoryViewStyles = StyleSheet.create({
-    categoryView: {
-        flex: 1,
-        width: '100%',
-        height: '100%'
-    },
     saveButtonContainer: {
-        marginVertical: 10,
-        height: 45,
-        width: 140,
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
-        left: 100,
-        marginHorizontal: 30,
-        justifyContent: 'center',
-        backgroundColor: "#fcc200",
-        borderColor: '#e3ddda',
-        alignItems: 'center',
-        elevation: 3,
-        borderRadius: 30
+        marginVertical: 8,
+        paddingVertical: 8,
+        borderRadius: 20,
+        width: width / 2.2,
     },
     bottomButtonLayout: {
         height: 63
     },
     textSave: {
         color: "#000000",
-        textAlign: 'center',
         fontSize: 18,
         fontFamily: 'wallpiper_bold_font',
-    },
-    skipTourZoneStyle: {
-        width: 95,
-        paddingVertical: 18
     }
 })
 
@@ -948,6 +911,16 @@ export const flatListItemStyles = StyleSheet.create({
         borderWidth: 3,
         overflow: 'hidden',
         shadowColor: '#fcc200',
+        shadowRadius: 18,
+        borderRadius: 8,
+        shadowOpacity: .7
+    },
+    postImageSelected: {
+        width: '100%',
+        height: '100%',
+        borderWidth: 3,
+        overflow: 'hidden',
+        shadowColor: '#969696',
         shadowRadius: 18,
         borderRadius: 8,
         shadowOpacity: .7
@@ -1087,20 +1060,19 @@ export const userAuthStyles = StyleSheet.create({
     },
     menuLoginButton: {
         alignSelf: 'center',
-        paddingVertical: 20,
+        paddingVertical: 15,
         width: width / 1.8,
         elevation: 3,
-        paddingBottom: 50
+        paddingBottom: 20
     },
     menuRegisterButton: {
         alignSelf: 'center',
-        paddingVertical: 5,
         width: width / 1.8,
         elevation: 3,
-        paddingBottom: 50
+        paddingBottom: 40
     },
     menuRightCountView: {
-        padding: 15,
+        padding: 10,
         position: 'absolute',
         right: 0,
         top: 0,

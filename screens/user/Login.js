@@ -33,7 +33,7 @@ export const Login = props => {
         const responseData = await handleUserLogin(data, messaging);
         if (responseData) {
             const initialCategories = await redirectUserToGlance();
-            showSnackBar(alertTextMessages.LOGIN_SUCCESSFUL, true);
+            showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
             navigation.navigate(initialCategories && screens.GLANCE || screens.CATEGORY);
             return true;
         }
