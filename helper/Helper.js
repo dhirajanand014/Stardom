@@ -1141,7 +1141,6 @@ export const handleAddPostDetails = async (data, postImagePath) => {
         const categories = data.categories.
             reduce((result, item) => { return `${result}${item}` },
                 data.categories.length > numericConstants.ONE && stringConstants.COMMA || stringConstants.EMPTY);
-        debugger
         const user = await getLoggedInUserDetails();
         if (user) {
             const token = user.token;
