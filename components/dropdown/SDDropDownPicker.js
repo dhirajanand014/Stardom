@@ -8,7 +8,6 @@ import { ArrowDownIcon } from '../icons/ArrowDownIcon';
 import { ArrowUpIcon } from '../icons/ArrowUpIcon';
 
 export const SDDropDownPicker = props => {
-
     return (
         <Controller name={props.inputName} control={props.control} defaultValue={props.defaultValue} rules={props.rules}
             render={inputProps => {

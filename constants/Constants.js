@@ -57,7 +57,8 @@ export const urlConstants = {
     login: `${BASE_URI}/auth/login`,
     fetchPostsByUserId: `${BASE_URI}/post/userid`,
     registerUser: `${BASE_URI}/auth/register`,
-    fetchAllProfiles: `${BASE_URI}/profile`
+    fetchAllProfiles: `${BASE_URI}/profile`,
+    addPost: `${BASE_URI}/post/details/add`
 }
 
 export const fieldControllerName = {
@@ -73,7 +74,10 @@ export const fieldControllerName = {
     PROFILE: `profile`,
     LOCATION: `location`,
     GENDER_MALE: `male`,
+    POST_TYPE_PRIVATE: `private`,
+    POST_TYPE_PUBLIC: `public`,
     GENDER_FEMALE: `female`,
+    POST_TYPE: `postType`,
     RATHER_NOT_SAY: `ratherNotSay`,
     INTERESTS: `interests`,
     CATEGORIES: `categories`,
@@ -223,12 +227,29 @@ export const formRequiredRules = {
         },
         validate: value => value === 0 && `Please select a value` || true
     },
+    postTypeRule: {
+        name: fieldControllerName.POST_TYPE,
+        required: {
+            value: true,
+            message: `Please select a Post Type`
+        },
+        validate: value => value === 0 && `Please select a value` || true
+    },
     profileRule: {
         required: {
             value: true,
             message: `Please select your profile`
         }
     },
+    postCategoryRule: {
+        name: fieldControllerName.CATEGORIES,
+        required: {
+            value: true,
+            message: `Please select atleast one category`
+        },
+        validate: value => !value.length && `Please select atlease one category` ||
+            true
+    }
 };
 
 
@@ -323,7 +344,8 @@ export const placeHolderText = {
     SELECT_CATEGORIES: 'Select Categories',
     ADD_POST_TITLE: `Enter Title`,
     ADD_POST_DESCRIPTION: `Enter Description`,
-    SELECT_GENDER: `Select a gender`
+    SELECT_GENDER: `Select a gender`,
+    SELECT_POST_TYPE: `Select Post type`
 }
 
 export const numericConstants = {
@@ -379,7 +401,11 @@ export const alertTextMessages = {
     USER_DETAILS_ADDED_SUCCESSFULLY: `User details added successfully`,
     GO_BACK_TO_POST: `Go back to posts Anytime !!`,
     SUCCESSFULLY_REGISTERED: `Successfully Registered!`,
-    SUCCESSFULLY_LOGGED_IN: `Login successful`
+    ONLY_THREE_CATEGORIES: `Select only upto 3 categories`,
+    SUCCESSFULLY_LOGGED_IN: `Login successful`,
+    MAX_THREE_CATEGORIES: `(Select maximum 3)`,
+    POST_ADDED_SUCCESSFULLY: `Added Successfully`,
+    POST_UPDATED_SUCCESSFULLY: `Updated Successfully`
 }
 
 export const errorMessages = {
@@ -392,6 +418,7 @@ export const errorMessages = {
     FAILED_TO_UPDATE_REGISTRATION_DETAILS: `Failed to update Registration Details`,
     CANNOT_REGISITER_USER: `Could not register user`,
     COULD_NOT_REGISTER_USER: `Could not register user`,
+    COULD_NOT_UPLOAD_POST: `Could not upload post`,
     COULD_NOT_PARSE_RESPONSE: `Could not parse response`,
     CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`,
     COULD_NOT_FETCH_CATEGORIES: `Could not fetch categories`,
@@ -480,17 +507,22 @@ export const miscMessage = {
     INCORRECT_OTP: `Incorrect OTP`,
     MALE_TEXT: `Male`,
     FEMALE_TEXT: `Female`,
+    POST_TYPE_PUBLIC_TEXT: `Public`,
+    POST_TYPE_PRIVATE_TEXT: `Private`,
     RATHER_NOT_SAY_TEXT: `I'd rather not say`,
     CAMERA: `camera`,
+    MAX_LENGTH: `maxLength`,
     RESEND_OTP: `Resend OTP`,
     GALLERY: `gallery`,
     SET: `set`,
+    IMAGE_TYPE: `image/*`,
     CONFIRM_SECRET: `OTP Confirmed`,
     CATEGORY_BACK: `Go back to posts Anytime !!`,
     CONTENT_TYPE: 'Content-Type',
     AUTHORIZATION: `Authorization`,
     BEARER: `Bearer`,
     APPLICATION_JSON: `application/json`,
+    MULTIPART_FORM: `multipart/form-data`,
     CREATE: `create`,
     ADD_POST: `Add Post`
 }
@@ -507,6 +539,11 @@ export const requestConstants = {
     PROFILE_ID: `profile_id`,
     PHONE_NUMBER: `phone_number`,
     SECRET: `password`,
+    POST_TITLE: `post_title`,
+    POST_DESCRIPTION: `post_description`,
+    POST_CATEGORIES: `post_categories`,
+    POST_TYPE: `post_type`,
+    POST_IMAGE: `post_image`
 };
 
 export const keyChainConstansts = {
@@ -534,7 +571,7 @@ export const defaultProfilesValue = {
     value: 0,
     untouchable: true,
     textStyle: {
-        colors: `#fafafa`,
+        color: `#fafafa`,
         fontFamily: `wallpiper_roman_font`,
     }
 }

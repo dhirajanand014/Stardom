@@ -3,7 +3,7 @@ import { Controller } from 'react-hook-form';
 import { Text } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { colors, userAuthStyles, SDGenericStyles } from '../../styles/Styles';
-import { countryCodesConstants, miscMessage, stringConstants } from '../../constants/Constants';
+import { countryCodesConstants, miscMessage } from '../../constants/Constants';
 import { onChangeByValueType } from '../../helper/Helper';
 
 export const SDFormInput = props => {

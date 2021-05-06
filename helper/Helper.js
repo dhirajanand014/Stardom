@@ -860,6 +860,7 @@ export const handleUserLogin = async (data) => {
 export const saveDetailsToKeyChain = async (key, username, password) => {
     try {
         await Keychain.setGenericPassword(username, password, { service: key });
+        console.log(username);
         return true;
     } catch (error) {
         console.error(errorMessages.COULD_NOT_SAVE_TO_KEYCHAIN, error);
@@ -1016,6 +1017,13 @@ const getKeyChainDetails = async (key) => {
     return false;
 }
 
+export const axiosPostUploadImageWithHeaders = async (url, data, token) => {
+    return await axios.post(url, data, {
+        headers: {
+            [miscMessage.CONTENT_TYPE]: miscMessage.MULTIPART_FORM, [miscMessage.AUTHORIZATION]: `${miscMessage.BEARER}${stringConstants.SPACE}${token}`
+        }
+    });
+}
 
 export const prepareSDOMMenu = () => {
     try {
@@ -1077,12 +1085,10 @@ export const axiosPostWithAuthorization = async (url, data) => {
 export const getLoggedInUserDetails = async () => {
     try {
         const loggedInUser = await getLoggedInUser();
-        if (loggedInUser) {
-            return {
-                [miscMessage.PHONE_NUMBER]: loggedInUser.username.split(stringConstants.UNDERSCORE)[numericConstants.ZERO],
-                [miscMessage.TOKEN]: loggedInUser.username.split(stringConstants.UNDERSCORE)[numericConstants.ONE],
-                [miscMessage.USER_DETAILS]: loggedInUser.password
-            }
+        return loggedInUser && {
+            [miscMessage.PHONE_NUMBER]: loggedInUser.username.split(stringConstants.UNDERSCORE)[numericConstants.ZERO],
+            [miscMessage.TOKEN]: loggedInUser.username.split(stringConstants.UNDERSCORE)[numericConstants.ONE],
+            [miscMessage.USER_DETAILS]: loggedInUser.password
         }
     } catch (error) {
         console.error(errorMessages.COULD_NOT_PARSE_LOGIN_TOKEN, error);
@@ -1122,3 +1128,38 @@ const tokenStatusDetails = (response) => {
     return false;
 }
 
+const config = () => {
+    onUploadProgress: (progressEvent) => {
+        var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        console.log(percentCompleted)
+    }
+}
+
+export const handleAddPostDetails = async (data, postImagePath) => {
+    try {
+        const formData = new FormData();
+        const categories = data.categories.
+            reduce((result, item) => { return `${result}${item}` },
+                data.categories.length > numericConstants.ONE && stringConstants.COMMA || stringConstants.EMPTY);
+        debugger
+        const user = await getLoggedInUserDetails();
+        if (user) {
+            const token = user.token;
+            const userDetails = JSON.parse(user.details);
+            const imageName = postImagePath.substring(postImagePath.lastIndexOf(stringConstants.SLASH) +
+                numericConstants.ONE, postImagePath.length)
+            formData.append(requestConstants.USER_ID, userDetails.id)
+            formData.append(requestConstants.POST_TITLE, data.postTitle);
+            formData.append(requestConstants.POST_DESCRIPTION, data.postDescription);
+            formData.append(requestConstants.POST_CATEGORIES, categories);
+            formData.append(requestConstants.POST_TYPE, data.postType);
+            formData.append(requestConstants.PROFILE_ID, data.profile);
+            formData.append(requestConstants.POST_IMAGE, { uri: postImagePath, name: imageName, type: miscMessage.IMAGE_TYPE });
+            const response = await axiosPostUploadImageWithHeaders(urlConstants.addPost, formData, token);
+            return processResponseData(response);
+        }
+    } catch (error) {
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(errorMessages.COULD_NOT_UPLOAD_POST, false);
+    }
+}

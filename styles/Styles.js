@@ -188,6 +188,12 @@ export const SDGenericStyles = StyleSheet.create({
     justifyContentCenter: {
         justifyContent: 'center'
     },
+    alignSelfStart: {
+        alignSelf: `flex-start`
+    },
+    marginTop8: {
+        marginTop: 8
+    },
     padding5: {
         padding: 5
     },
@@ -724,7 +730,7 @@ export const glancePostStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    genderRadioCircle: {
+    radioCircle: {
         height: 20,
         width: 20,
         padding: 8,
@@ -748,7 +754,7 @@ export const glancePostStyles = StyleSheet.create({
         borderRadius: 40,
         backgroundColor: 'black',
     },
-    genderSelectedRb: {
+    selectedRb: {
         width: 10,
         height: 10,
         borderRadius: 40,
@@ -800,8 +806,9 @@ export const glancePostStyles = StyleSheet.create({
     addPostButton: {
         borderWidth: 1,
         paddingHorizontal: 20,
+        borderRadius: 10,
         backgroundColor: colorConstants.YELLOW,
-        padding: 10
+        padding: 15
     },
     addPostDetailsTitleDivider: {
         width: width / 1.2,

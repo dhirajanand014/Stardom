@@ -24,8 +24,7 @@ export const PostRenderer = (item, index, addPostCallBack, navigation) => {
                         <PlusIcon width={numericConstants.ONE_HUNDRED_TWENTY} height={numericConstants.ONE_HUNDRED_TWENTY} />
                     </View> || <FastImage source={{
                         uri: item.postImage,
-                        priority: FastImage.priority.normal,
-                        cache: FastImage.cacheControl.immutable,
+                        priority: FastImage.priority.normal
                     }}
                         style={flatListItemStyles.imageBackGround}>
                         <View style={flatListItemStyles.textsView}>
