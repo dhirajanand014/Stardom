@@ -17,7 +17,7 @@ export const SDDropDownPicker = props => {
                         itemStyle={SDGenericStyles.justifyItemsStart} customArrowUp={(size, color) =>
                             <ArrowUpIcon width={size} height={size} color={color} />} customArrowDown={(size, color) =>
                                 <ArrowDownIcon width={size} height={size} color={color} />}
-                        onChangeItem={item => onChangeByValueType(inputProps, item.value, props)} defaultValue={props.dropDownDefaultValue} activeItemStyle={SDGenericStyles.colorGreen}
+                        onChangeItem={item => onChangeByValueType(inputProps, item.value, props)} defaultValue={inputProps.value} activeItemStyle={SDGenericStyles.colorGreen}
                         placeholder={props.placeHolderText} placeholderStyle={[SDGenericStyles.placeHolderTextColor]} multiple={props.multiple} searchable={props.searchable}
                         style={[props.formState.errors[props.inputName]?.message && userAuthStyles.errorInputBorder || userAuthStyles.normalInputBorder, props.extraStyles]}
                         globalTextStyle={props.globalTextStyle} />)

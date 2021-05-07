@@ -58,7 +58,9 @@ export const urlConstants = {
     fetchPostsByUserId: `${BASE_URI}/post/userid`,
     registerUser: `${BASE_URI}/auth/register`,
     fetchAllProfiles: `${BASE_URI}/profile`,
-    addPost: `${BASE_URI}/post/details/add`
+    addPost: `${BASE_URI}/post/details/add`,
+    updatePost: `${BASE_URI}/post/details/update`,
+    deletePost: `${BASE_URI}/post/delete`,
 }
 
 export const fieldControllerName = {
@@ -72,6 +74,8 @@ export const fieldControllerName = {
     DOB: `dob`,
     GENDER: `gender`,
     PROFILE: `profile`,
+    POST_PROFILE: `postProfile`,
+    POST_CATEGORIES: `postCategories`,
     LOCATION: `location`,
     GENDER_MALE: `male`,
     POST_TYPE_PRIVATE: `private`,
@@ -81,8 +85,8 @@ export const fieldControllerName = {
     RATHER_NOT_SAY: `ratherNotSay`,
     INTERESTS: `interests`,
     CATEGORIES: `categories`,
-    ADD_POST_TITLE: `postTitle`,
-    ADD_POST_DESCRIPTION: `postDescription`
+    POST_TITLE: `postTitle`,
+    POST_DESCRIPTION: `postDescription`
 }
 
 export const keyBoardTypeConst = {
@@ -111,6 +115,8 @@ export const actionButtonTextConstants = {
     SAVE: `Save`,
     CANCEL: `Cancel`,
     ADD_POST: `Add Post`,
+    UPDATE_POST: `Update Post`,
+    DELETE_POST: `Delete Post`,
     CANCEL_POST: `<<Cancel`,
     NOT_NOW: `Not now`,
     PROCEED: `Proceed`,
@@ -405,7 +411,8 @@ export const alertTextMessages = {
     SUCCESSFULLY_LOGGED_IN: `Login successful`,
     MAX_THREE_CATEGORIES: `(Select maximum 3)`,
     POST_ADDED_SUCCESSFULLY: `Added Successfully`,
-    POST_UPDATED_SUCCESSFULLY: `Updated Successfully`
+    POST_UPDATED_SUCCESSFULLY: `Updated Successfully`,
+    POST_DELETED_SUCCESSFULLY: `Deleted successfully`
 }
 
 export const errorMessages = {
@@ -419,6 +426,8 @@ export const errorMessages = {
     CANNOT_REGISITER_USER: `Could not register user`,
     COULD_NOT_REGISTER_USER: `Could not register user`,
     COULD_NOT_UPLOAD_POST: `Could not upload post`,
+    COULD_NOT_UPDATE_POST: `Could not update post`,
+    COULD_NOT_DELETE_POST: `Could not delete post`,
     COULD_NOT_PARSE_RESPONSE: `Could not parse response`,
     CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`,
     COULD_NOT_FETCH_CATEGORIES: `Could not fetch categories`,
@@ -479,6 +488,7 @@ export const miscMessage = {
     SUCCESSFUL: `Successful`,
     CREATE: `create`,
     UPDATE: `update`,
+    CREATE: `create`,
     RELOAD_STARDOM: `Reload Stardom`,
     SELECT_CATEGORIES: `Select other categories`,
     SIGN_UP: `Sign Up`,
@@ -489,6 +499,7 @@ export const miscMessage = {
     SMALL: `small`,
     RECTANGLE: `rectangle`,
     CIRCLE: `circle`,
+    MESSAGE: `message`,
     DUPLICATE: `Duplicate`,
     FORGOT_PASSWORD: `Forgot Password`,
     DATE_PICKER_FORMAT: `DD/MM/YYYY`,
@@ -523,8 +534,7 @@ export const miscMessage = {
     BEARER: `Bearer`,
     APPLICATION_JSON: `application/json`,
     MULTIPART_FORM: `multipart/form-data`,
-    CREATE: `create`,
-    ADD_POST: `Add Post`
+    ADD_POST: `Add Post`,
 }
 
 export const requestConstants = {
@@ -543,7 +553,8 @@ export const requestConstants = {
     POST_DESCRIPTION: `post_description`,
     POST_CATEGORIES: `post_categories`,
     POST_TYPE: `post_type`,
-    POST_IMAGE: `post_image`
+    POST_IMAGE: `post_image`,
+    POST_ID: `id`
 };
 
 export const keyChainConstansts = {

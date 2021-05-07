@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { SDBottomSheet } from '../../components/bottomsheet/SDBottomSheet';
 import {
     actionButtonTextConstants, miscMessage,
-    modalTextConstants, numericConstants, screens
+    modalTextConstants, numericConstants
 } from '../../constants/Constants';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import { showSelectedImage } from '../../helper/Helper';
@@ -34,8 +34,7 @@ export const BottomSheetView = props => {
                 SDGenericStyles.backgroundColorYellow]}
                     onPress={async () => {
                         await showSelectedImage(miscMessage.CAMERA, props.bottomSheetRef, props.addPost, props.setAddPost);
-                        props.isFrom == miscMessage.ADD_POST && props.navigation.navigate(screens.ADD_POST_DETAILS,
-                            { addPost: props.addPost });
+                        props.postDetailsCallback(miscMessage.CAMERA);
                     }}>
                     <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.TAKE_PHOTO}</Text>
                 </TouchableOpacity>
@@ -43,8 +42,7 @@ export const BottomSheetView = props => {
                 SDGenericStyles.backgroundColorYellow]}
                     onPress={async () => {
                         await showSelectedImage(miscMessage.GALLERY, props.bottomSheetRef, props.addPost, props.setAddPost);
-                        props.isFrom == miscMessage.ADD_POST && props.navigation.navigate(screens.ADD_POST_DETAILS,
-                            { addPost: props.addPost });
+                        props.postDetailsCallback(miscMessage.GALLERY);
                     }}>
                     <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.CHOOSE_FROM_LIBRARY}</Text>
                 </TouchableOpacity>

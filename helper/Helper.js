@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import AddPostConstant from '../constants/AddPostConstant.json';
 import {
     urlConstants, keyChainConstansts,
     postCountTypes, postCountRequestKeys,
@@ -582,13 +583,6 @@ export const onChangeByValueType = async (inputProps, value, props) => {
             inputProps.onChange(phoneValue);
             props.isSignUp && props.setSignUpDetails({ ...props.signUpDetails, phoneNumber: phoneValue });
             break;
-        case fieldControllerName.DOB:
-            inputProps.onChange(value);
-            break;
-        case fieldControllerName.DATE_PICKER:
-            inputProps.onChange(value);
-            props.isFromBloodRequestForm && props.setRequestForm({ ...props.requestForm, needed_request_date: value });
-            break;
         default:
             inputProps.onChange(value);
             break;
@@ -803,7 +797,6 @@ export const verifyOtpRequest = async (otpString, randomNumber) => {
 
 export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, _isResendOtp, setSignUpDetails) => {
     try {
-        const { phoneNumber } = signUpDetails;
 
         // Math.random() returns float between 0 and 1, 
         // so minimum number will be 100000, max - 999999. 
@@ -936,7 +929,7 @@ export const processResponseData = (response, errorText) => {
         if (response) {
             switch (response.status) {
                 case 200:
-                    if (response.data.status) {
+                    if (response.data && response.data.status) {
                         return tokenStatusDetails(response);
                     }
                     return response.data;
@@ -944,15 +937,12 @@ export const processResponseData = (response, errorText) => {
                     console.log(responseStringData.RESPONSE_MESSAGE, response.data.message);
                     return response.data;
                 case 400:
-                    break;
                 case 401:
-                    break;
                 case 403:
-                    break;
                 case 500:
                     console.error(errorText, response.data);
                     return response.data;
-                default:
+                default: console.log(response);
                     break;
             }
         }
@@ -1071,16 +1061,13 @@ export const axiosGetWithAuthorization = async (url, token) => {
     });
 }
 
-export const axiosPostWithAuthorization = async (url, data) => {
-    return await axios.post(url, data, {
+export const deleteWithAuthorization = async (url, id, token) => {
+    return await axios.delete(`${url}${stringConstants.SLASH}${id}`, {
         headers: {
-            [miscMessage.CONTENT_TYPE]: miscMessage.APPLICATION_JSON,
-            [miscMessage.AUTHORIZATION]: `${miscMessage.BEARER}${stringConstants.SPACE}`
+            [miscMessage.AUTHORIZATION]: `${miscMessage.BEARER}${stringConstants.SPACE}${token}`
         }
     });
 }
-
-
 
 export const getLoggedInUserDetails = async () => {
     try {
@@ -1107,7 +1094,7 @@ export const fetchUserPosts = async (userPosts, setUserPosts) => {
             if (responseData == tokenMessageConstants.TOKEN_INVALID || responseData == tokenMessageConstants.TOKEN_EXPIRED) {
                 console.error('login redirect')
             } else {
-                userPosts.posts.push(...responseData.posts);
+                userPosts.posts = [AddPostConstant, ...responseData.posts];
                 setUserPosts({ ...userPosts });
             }
         }
@@ -1125,40 +1112,63 @@ const tokenStatusDetails = (response) => {
         default:
             return response.data;
     }
-    return false;
 }
 
-const config = () => {
-    onUploadProgress: (progressEvent) => {
-        var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-        console.log(percentCompleted)
-    }
+export const setAddPostStateValues = (action, addPost, setAddPost, item) => {
+    addPost.postTitle = action == miscMessage.UPDATE && item.postTitle || stringConstants.EMPTY;
+    addPost.postDescription = action == miscMessage.UPDATE && item.postDescription || stringConstants.EMPTY;
+    addPost.postProfile = action == miscMessage.UPDATE && item.profile.id;
+    addPost.postCategories = action == miscMessage.UPDATE && item.categoryIds.split(stringConstants.COMMA) ||
+        jsonConstants.EMPTY;
+    addPost.postType = action == miscMessage.UPDATE && item.postType || stringConstants.EMPTY;
+    addPost.capturedImage = action == miscMessage.UPDATE && item.postImage || stringConstants.EMPTY;
+    setAddPost({ ...addPost });
 }
 
-export const handleAddPostDetails = async (data, postImagePath) => {
+export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem) => {
     try {
         const formData = new FormData();
-        const categories = data.categories.
+        const categories = data.postCategories.
             reduce((result, item) => { return `${result}${item}` },
-                data.categories.length > numericConstants.ONE && stringConstants.COMMA || stringConstants.EMPTY);
+                data.postCategories.length > numericConstants.ONE && stringConstants.COMMA || stringConstants.EMPTY);
         const user = await getLoggedInUserDetails();
         if (user) {
-            const token = user.token;
             const userDetails = JSON.parse(user.details);
             const imageName = postImagePath.substring(postImagePath.lastIndexOf(stringConstants.SLASH) +
-                numericConstants.ONE, postImagePath.length)
-            formData.append(requestConstants.USER_ID, userDetails.id)
+                numericConstants.ONE, postImagePath.length);
+            if (toAction == miscMessage.UPDATE)
+                formData.append(requestConstants.POST_ID, selectedItem.id);
+            else
+                formData.append(requestConstants.USER_ID, userDetails.id)
             formData.append(requestConstants.POST_TITLE, data.postTitle);
             formData.append(requestConstants.POST_DESCRIPTION, data.postDescription);
             formData.append(requestConstants.POST_CATEGORIES, categories);
             formData.append(requestConstants.POST_TYPE, data.postType);
-            formData.append(requestConstants.PROFILE_ID, data.profile);
+            formData.append(requestConstants.PROFILE_ID, data.postProfile);
             formData.append(requestConstants.POST_IMAGE, { uri: postImagePath, name: imageName, type: miscMessage.IMAGE_TYPE });
-            const response = await axiosPostUploadImageWithHeaders(urlConstants.addPost, formData, token);
+            const response = await axiosPostUploadImageWithHeaders(toAction == miscMessage.UPDATE && urlConstants.updatePost ||
+                urlConstants.addPost, formData, user.token);
             return processResponseData(response);
         }
+        //handle login here
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
-        showSnackBar(errorMessages.COULD_NOT_UPLOAD_POST, false);
+        showSnackBar(toAction == miscMessage.UPDATE && errorMessages.COULD_NOT_UPDATE_POST ||
+            errorMessages.COULD_NOT_UPLOAD_POST, false);
+    }
+}
+
+export const handlePostDelete = async (postId) => {
+    try {
+        const user = await getLoggedInUserDetails();
+        if (user) {
+            let response = await deleteWithAuthorization(urlConstants.deletePost, postId, user.token);
+            response.data = { [miscMessage.MESSAGE]: alertTextMessages.POST_DELETED_SUCCESSFULLY }
+            return processResponseData(response);
+        }
+        //handle login here
+    } catch (error) {
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(errorMessages.COULD_NOT_DELETE_POST, false);
     }
 }

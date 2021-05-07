@@ -6,15 +6,13 @@ import { PlusIcon } from '../../components/icons/PlusIcon';
 import { miscMessage, numericConstants } from '../../constants/Constants';
 import { flatListItemStyles, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 
-export const PostRenderer = (item, index, addPostCallBack, navigation) => {
+export const PostRenderer = (item, postCallback) => {
     return (
         <TouchableOpacity activeOpacity={.7} style={[flatListItemStyles.GridViewContainer, SDGenericStyles.mv20]}
             onPress={async () => {
-                if (item.id == numericConstants.MINUS_ONE && item.type == miscMessage.CREATE) {
-                    addPostCallBack();
-                } else {
-
-                }
+                const action = item.id == numericConstants.MINUS_ONE && item.type == miscMessage.CREATE &&
+                    miscMessage.CREATE || miscMessage.UPDATE;
+                postCallback(action, item);
             }}>
 
             <View style={flatListItemStyles.cardSurface}>

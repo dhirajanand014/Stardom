@@ -32,6 +32,9 @@ export const SDGenericStyles = StyleSheet.create({
     mt3: {
         marginTop: 3,
     },
+    mt5: {
+        marginTop: 5
+    },
     mt12: {
         marginTop: 12,
     },
@@ -242,6 +245,7 @@ export const SDGenericStyles = StyleSheet.create({
     paddingHorizontal30: {
         paddingHorizontal: 30
     },
+
     paddingBottom5: {
         paddingBottom: 5
     },
