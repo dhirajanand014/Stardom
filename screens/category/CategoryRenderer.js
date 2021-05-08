@@ -15,7 +15,7 @@ export const CategoryRenderer = (item, index, category, setCategory) => {
             onPress={async () => {
                 category.categories[index].isSelected = !category.categories[index].isSelected;
                 const initialCategoryFromStorage = await getCategoryButtonType();
-                const initialCategory = ((!initialCategoryFromStorage == stringConstants.EMPTY && initialCategoryFromStorage == actionButtonTextConstants.SAVE_BUTTON)
+                const initialCategory = ((!initialCategoryFromStorage == stringConstants.EMPTY && initialCategoryFromStorage.password == actionButtonTextConstants.SAVE_BUTTON)
                     || category.categories.some((item) => { return true == item.isSelected })) && actionButtonTextConstants.SAVE_BUTTON || actionButtonTextConstants.SKIP_BUTTON;
                 setCategory({ ...category, initialCategory: initialCategory });
             }}>

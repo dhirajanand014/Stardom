@@ -6,7 +6,8 @@ import {
     stringConstants, postCountTypes,
     postitionStringConstants, colorConstants,
     permissionsButtons,
-    numericConstants
+    numericConstants,
+    screens
 } from '../../constants/Constants';
 import {
     postWallPaperAlert, increaseAndSetPostCounts,
@@ -84,13 +85,27 @@ export const PostDetails = forwardRef((props, ref) => {
                         }
                     </Animated.View>
                     <Animated.View style={[glancePostStyles.postTitleAndProfileStyle, postDetailsState.animationVisible && postDescriptionSpringStyle]}>
-                        <Text style={posts[postDetailsState.currentPostIndex].profileName && glancePostStyles.postProfileName}>
+                        <Text style={[posts[postDetailsState.currentPostIndex].profileName && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
+                        SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft9]}>
                             {posts[postDetailsState.currentPostIndex].profileName && posts[postDetailsState.currentPostIndex].profileName.toUpperCase()}
                         </Text>
-                        <Text style={glancePostStyles.postCategoriesIn}>{
-                            posts[postDetailsState.currentPostIndex].profileName && posts[postDetailsState.currentPostIndex].postCategoriesIn &&
-                            stringConstants.PIPELINE_JOIN.concat(posts[postDetailsState.currentPostIndex].postCategoriesIn) ||
-                            posts[postDetailsState.currentPostIndex].postCategoriesIn}
+                        <View style={SDGenericStyles.rowFlexDirection}>
+                            <Text style={[posts[postDetailsState.currentPostIndex].user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
+                            SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
+                                {`by `}
+                            </Text>
+                            <TouchableOpacity activeOpacity={.7} onPress={() => props.navigation.navigate(screens.PROFILE, { profile: posts[postDetailsState.currentPostIndex].user })}>
+                                <Text style={[posts[postDetailsState.currentPostIndex].user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
+                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
+                                    {posts[postDetailsState.currentPostIndex].user.name && posts[postDetailsState.currentPostIndex].user.name}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
+                        SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>{
+                                posts[postDetailsState.currentPostIndex].profileName && posts[postDetailsState.currentPostIndex].postCategoriesIn &&
+                                stringConstants.PIPELINE_JOIN.concat(posts[postDetailsState.currentPostIndex].postCategoriesIn) ||
+                                posts[postDetailsState.currentPostIndex].postCategoriesIn}
                         </Text>
                     </Animated.View>
                 </View>

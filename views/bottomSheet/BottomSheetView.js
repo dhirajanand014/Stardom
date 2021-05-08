@@ -33,7 +33,7 @@ export const BottomSheetView = props => {
                 <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.bottomSheetPanelButton, SDGenericStyles.alignItemsCenter,
                 SDGenericStyles.backgroundColorYellow]}
                     onPress={async () => {
-                        await showSelectedImage(miscMessage.CAMERA, props.bottomSheetRef, props.addPost, props.setAddPost);
+                        await showSelectedImage(miscMessage.CAMERA, props.bottomSheetRef, props.userPosts, props.setUserPosts);
                         props.postDetailsCallback(miscMessage.CAMERA);
                     }}>
                     <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.TAKE_PHOTO}</Text>
@@ -41,7 +41,7 @@ export const BottomSheetView = props => {
                 <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.bottomSheetPanelButton, SDGenericStyles.alignItemsCenter,
                 SDGenericStyles.backgroundColorYellow]}
                     onPress={async () => {
-                        await showSelectedImage(miscMessage.GALLERY, props.bottomSheetRef, props.addPost, props.setAddPost);
+                        await showSelectedImage(miscMessage.GALLERY, props.bottomSheetRef, props.userPosts, props.setUserPosts);
                         props.postDetailsCallback(miscMessage.GALLERY);
                     }}>
                     <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.CHOOSE_FROM_LIBRARY}</Text>

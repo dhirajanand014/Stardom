@@ -1,12 +1,12 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import {
     fieldControllerName, formRequiredRules, stringConstants, keyBoardTypeConst,
     placeHolderText, actionButtonTextConstants, miscMessage, numericConstants,
-    modalTextConstants, jsonConstants, defaultProfilesValue, alertTextMessages, screens
+    modalTextConstants, defaultProfilesValue, alertTextMessages, screens
 } from '../../constants/Constants';
 import { SDGenericStyles, userAuthStyles, colors, glancePostStyles } from '../../styles/Styles';
 import { SDDatePickerView } from '../../views/datePickerView/SDDatePickerView';
@@ -17,29 +17,20 @@ import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
 import Animated from 'react-native-reanimated';
 import { SDDropDownView } from '../../views/dropDownView/SDDropDownView';
 import {
-    getAllProfiles, showSnackBar,
+    showSnackBar,
     redirectUserToGlance, handleUserRegistration, saveRegistrationStatus
 } from '../../helper/Helper';
-import { useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
+import { CategoryContext } from '../../App';
 
 export const RegistrationDetails = () => {
 
     const { control, formState, handleSubmit, watch } = useForm();
-    const [profiles, setProfiles] = useState(jsonConstants.EMPTY);
+    const { signUpDetails, profiles } = useContext(CategoryContext);
 
     const navigation = useNavigation();
 
-    const route = useRoute();
-    const signUpDetails = route?.params?.signUpDetails;
-
     const genderValue = watch(fieldControllerName.GENDER);
-
-    useEffect(() => {
-        (async () => {
-            const allProfiles = await getAllProfiles();
-            allProfiles && setProfiles(allProfiles);
-        })();
-    }, []);
 
     const onSubmit = async (data) => {
         const registrationUpdated = await handleUserRegistration(signUpDetails.phoneNumber, data,

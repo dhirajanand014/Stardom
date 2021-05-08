@@ -17,7 +17,7 @@ import { CategoryContext } from '../../App';
 
 export const Posts = props => {
 
-    const { userPosts, addPost, setAddPost, setUserPosts } = useContext(CategoryContext);
+    const { userPosts, setUserPosts } = useContext(CategoryContext);
 
     const navigation = useNavigation();
 
@@ -38,9 +38,9 @@ export const Posts = props => {
     const postCallback = useCallback((action, item) => {
         if (action == miscMessage.CREATE) {
             bottomSheetRef?.current?.snapTo(numericConstants.ZERO);
-            setAddPostStateValues(miscMessage.CREATE, addPost, setAddPost, stringConstants.EMPTY);
+            setAddPostStateValues(miscMessage.CREATE, userPosts, setUserPosts, stringConstants.EMPTY);
         } else if (action == miscMessage.UPDATE) {
-            setAddPostStateValues(miscMessage.UPDATE, addPost, setAddPost, item);
+            setAddPostStateValues(miscMessage.UPDATE, userPosts, setUserPosts, item);
             navigation.navigate(screens.ADD_POST_DETAILS, { toAction: miscMessage.UPDATE, selectedItem: item });
         }
     })
@@ -55,8 +55,8 @@ export const Posts = props => {
             <FlatList data={userPosts.posts} numColumns={numericConstants.THREE} keyExtractor={(item) => item.id}
                 renderItem={({ item, index }) => PostRenderer(item, postCallback)} />
             {
-                addPost.showBottomOptions && <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef}
-                    snapPoints={snapPoints} fall={fallValue} addPost={addPost} setAddPost={setAddPost} postDetailsCallback={postDetailsCallback} />
+                userPosts.details.showBottomOptions && <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef}
+                    snapPoints={snapPoints} fall={fallValue} userPosts={userPosts} setUserPosts={setUserPosts} postDetailsCallback={postDetailsCallback} />
             }
         </View>
     )

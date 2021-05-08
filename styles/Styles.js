@@ -80,6 +80,9 @@ export const SDGenericStyles = StyleSheet.create({
     width130: {
         width: 130
     },
+    ft9: {
+        fontSize: 9
+    },
     ft12: {
         fontSize: 12
     },
@@ -197,6 +200,9 @@ export const SDGenericStyles = StyleSheet.create({
     marginTop8: {
         marginTop: 8
     },
+    borderRadius5: {
+        borderRadius: 5
+    },
     padding5: {
         padding: 5
     },
@@ -245,7 +251,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingHorizontal30: {
         paddingHorizontal: 30
     },
-
+    bottom8: {
+        bottom: 8
+    },
     paddingBottom5: {
         paddingBottom: 5
     },
@@ -326,6 +334,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingHorizontal12: {
         paddingHorizontal: 12
+    },
+    paddingLeft5: {
+        paddingLeft: 5
     },
     alignItemsStart: {
         alignItems: 'flex-start'
@@ -415,18 +426,14 @@ export const glancePostStyles = StyleSheet.create({
     },
     postProfileName: {
         marginRight: 4,
-        justifyContent: 'center',
-        fontSize: 9,
-        fontFamily: 'wallpiper_bold_font',
         display: 'flex',
-        color: 'white',
+    },
+    postUserName: {
+        marginRight: 4,
+        display: 'flex',
     },
     postCategoriesIn: {
-        fontSize: 9,
-        justifyContent: 'center',
-        fontFamily: 'wallpiper_roman_font',
         display: 'flex',
-        color: 'white',
     },
     descriptionText: {
         fontSize: 14,
@@ -556,7 +563,7 @@ export const glancePostStyles = StyleSheet.create({
     postTitleAndProfileStyle: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-        marginBottom: 8
+
     },
     searchIconContainer: {
         flex: 1,
@@ -858,6 +865,23 @@ export const glancePostStyles = StyleSheet.create({
         borderRadius: 58,
         alignItems: 'flex-start',
         marginLeft: 1
+    },
+    profileNameTextStyle: {
+        position: 'absolute',
+        marginLeft: 8,
+        bottom: 20,
+        justifyContent: 'flex-end'
+    },
+    profileViewActionsStyle: {
+        position: 'absolute',
+        bottom: 15,
+        right: 0,
+        padding: 20,
+        justifyContent: 'flex-end'
+    },
+    profileBioTextStyle: {
+        borderWidth: 1,
+        borderRadius: 20
     }
 });
 
@@ -1275,7 +1299,7 @@ export const colors = {
     BLUE: '#3543bf',
     ORANGE: '#fe7d32',
     GREEN: '#30a960',
-    RED: '#f06159',
+    RED: '#ff4e4e',
     BLACK: '#0b0b0b',
     SILVER: '#efefef',
     WHITE: '#fff',

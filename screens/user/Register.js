@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
@@ -12,15 +12,10 @@ import { useNavigation } from '@react-navigation/core';
 import { handleUserSignUpOtp } from '../../helper/Helper';
 import { PhoneIcon } from '../../components/icons/PhoneIcon';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
+import { CategoryContext } from '../../App';
 export const Register = () => {
 
-    const [signUpDetails, setSignUpDetails] = useState({
-        phoneNumber: stringConstants.EMPTY,
-        userId: stringConstants.EMPTY,
-        secret: stringConstants.EMPTY,
-        registrationSuccessful: false,
-        tokenValidation: false
-    });
+    const { signUpDetails, setSignUpDetails } = useContext(CategoryContext);
 
     const { control, formState, handleSubmit } = useForm();
     const navigation = useNavigation();
@@ -37,7 +32,7 @@ export const Register = () => {
             <Text style={[userAuthStyles.registerDescription, SDGenericStyles.fontFamilyBold]}>{placeHolderText.REGISTER_DESCRIPTION}</Text>
             <View style={userAuthStyles.registerButtonView}>
                 <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
-                    onPress={handleSubmit(() => handleUserSignUpOtp(signUpDetails, miscMessage.SIGN_UP, navigation, false, setSignUpDetails))}>
+                    onPress={handleSubmit(() => handleUserSignUpOtp(miscMessage.SIGN_UP, navigation, false))}>
                     <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman]}>{actionButtonTextConstants.PROCEED}</Text>
                 </TouchableOpacity>
             </View>

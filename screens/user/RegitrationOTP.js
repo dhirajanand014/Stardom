@@ -31,7 +31,7 @@ export const RegistrationOTP = props => {
     const { attempts } = props;
     let [attemptsRemaining, setAttemptsRemaining] = useState(attempts);
 
-    const { setLoader } = useContext(CategoryContext);
+    const { setLoader, signUpDetails, setSignUpDetails } = useContext(CategoryContext);
 
     const navigation = useNavigation();
     const [otpArray, setOtpArray] = useState(otpInputs);
@@ -39,9 +39,6 @@ export const RegistrationOTP = props => {
 
     const route = useRoute();
     const isFrom = route?.params?.isFrom;
-
-    const signUpDetails = route?.params?.signUpDetails;
-    const setSignUpDetails = route?.params?.setSignUpDetails;
 
     const phoneNumber = signUpDetails.phoneNumber || stringConstants.EMPTY;
 
@@ -125,9 +122,7 @@ export const RegistrationOTP = props => {
             const navigationResponse = await verifyOtpRequest(otpString, randomNumber);
             if (miscMessage.CONFIRM_SECRET == navigationResponse) {
                 clearInterval(resendOtpTimerInterval);
-                navigation.navigate(screens.REGISTRATION_CONFIRMATION, {
-                    isFrom: isFrom, signUpDetails: signUpDetails, setSignUpDetails: setSignUpDetails
-                });
+                navigation.navigate(screens.REGISTRATION_CONFIRMATION, { isFrom: isFrom });
             }
         } else {
 

@@ -12,7 +12,7 @@ import {
     miscMessage, width, height, numericConstants,
     screens, headerStrings, fieldControllerName, isAndroid,
     isIOS, OTP_INPUTS, errorMessages, requestConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions, tokenMessageConstants,
+    jsonConstants, defaultProfilesValue, SDMenuOptions
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -42,8 +42,8 @@ export const fetchAndUpdateCategoryState = async (category, setCategory) => {
         const responseCategoryData = await fetchCategoryData();
         if (responseCategoryData) {
             const selectedCategories = await getSelectedCategoryIdsFromStorage();
-            const parsedSelectedCategoryIds = selectedCategories.password.length &&
-                JSON.parse(selectedCategories.password) || [];
+            const parsedSelectedCategoryIds = selectedCategories && JSON.parse(selectedCategories.password)
+                || jsonConstants.EMPTY;
             responseCategoryData.sort((cat1, cat2) => cat1.categoryTitle.localeCompare(cat2.categoryTitle))
                 .map((category) => category.isSelected = parsedSelectedCategoryIds.some(selectedCategory =>
                     category.categoryId == selectedCategory.selectedCategoryId))
@@ -73,7 +73,7 @@ export const fetchPostsAndSaveToState = async (sdomDatastate, setSdomDatastate, 
 
 export const getSelectedCategoryIdsFromStorage = async () => {
     try {
-        return await getKeyChainDetails(keyChainConstansts.SAVE_CATEGORY_ID) || stringConstants.EMPTY
+        return await getKeyChainDetails(keyChainConstansts.SAVE_CATEGORY_ID) || stringConstants.EMPTY;
     } catch (error) {
         console.log('Cannot fetch the categoryIds from the storage', error);
     }
@@ -255,13 +255,14 @@ export const accessAndGrantPermssionsToWallPiper = async (permissionTitie, permi
 }
 
 export const fetchAndDisplayNamesAndCategoryTitles = (post) => {
-    let names = [];
+    let names = jsonConstants.EMPTY;
     if (post.categoryTitles) {
         const categoryTitlesArray = post.categoryTitles.split(stringConstants.COMMA);
-        const displayTitles = categoryTitlesArray && categoryTitlesArray.slice(0, 2) || stringConstants.EMPTY;
+        const displayTitles = categoryTitlesArray && categoryTitlesArray.slice(numericConstants.ZERO, numericConstants.TWO)
+            || stringConstants.EMPTY;
         const concatinatedDisplayName = displayTitles.map(title => title.toUpperCase()).
             join(stringConstants.PIPELINE_JOIN);
-        if (categoryTitlesArray.length > 2) {
+        if (categoryTitlesArray.length > numericConstants.TWO) {
             names.push(concatinatedDisplayName.
                 concat(stringConstants.PLUS.concat(categoryTitlesArray.length - displayTitles.length)));
         } else {
@@ -539,25 +540,26 @@ export const setImageLoadError = async (optionsState, setOptionsState, bool) => 
  * @param {*} categoryIdFromNotification 
  */
 const retrievePostData = async (categoryIdFromNotification) => {
-    let categoryPostsData = [];
-    const responseData = await axios.get(urlConstants.fetchPosts);
+    let categoryPostsData = jsonConstants.EMPTY;
+    const responseData = await axiosGetWithHeaders(urlConstants.fetchAllPosts);
     if (responseData) {
         const responsePostsData = responseData.data.posts;
         let selectedCategories = await getSelectedCategoryIdsFromStorage();
-
         selectedCategories = await checkAndAddCategoriesFromFCMNotification(selectedCategories.password,
             categoryIdFromNotification);
 
         const fetchedPostCounts = await getPostCounts();
-        const postCounts = fetchedPostCounts && JSON.parse(fetchedPostCounts) || [];
+        const postCounts = fetchedPostCounts && JSON.parse(fetchedPostCounts) || jsonConstants.EMPTY;
 
         const parsedCategoryIds = selectedCategories && JSON.parse(selectedCategories) || categoryPostsData;
         categoryPostsData = parsedCategoryIds && parsedCategoryIds.length &&
-            responsePostsData.filter(post => parsedCategoryIds.some((selectedCategory) => post.categoryIds[0].split(',').includes(selectedCategory.selectedCategoryId))).sort((datePost1, datePost2) => {
-                return Date.parse(datePost2.addedOn) - Date.parse(datePost1.addedOn);
-            }) || responsePostsData.sort((datePost1, datePost2) => {
-                return Date.parse(datePost2.addedOn) - Date.parse(datePost1.addedOn);
-            });
+            responsePostsData.filter(post => parsedCategoryIds.some((selectedCategory) =>
+                post.categoryIds[numericConstants.ZERO].split(stringConstants.COMMA).
+                    includes(selectedCategory.selectedCategoryId))).sort((datePost1, datePost2) => {
+                        return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+                    }) || responsePostsData.sort((datePost1, datePost2) => {
+                        return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+                    });
 
         categoryPostsData.map(postItem => {
             const postHasLikes = postCounts && postCounts[savePostCountKeys.SELECTED_POST_LIKES] &&
@@ -607,7 +609,7 @@ const datePickerConvert = (event, date) => {
     return false;
 }
 
-export const showSelectedImage = async (type, bottomSheetRef, addPost, setAddPost) => {
+export const showSelectedImage = async (type, bottomSheetRef, userPosts, setUserPosts) => {
     try {
         let imageValue;
         switch (type) {
@@ -620,9 +622,9 @@ export const showSelectedImage = async (type, bottomSheetRef, addPost, setAddPos
             default:
                 break;
         }
-        addPost.capturedImage = imageValue.path;
-        addPost.showBottomOptions = false;
-        setAddPost({ ...addPost });
+        userPosts.details.capturedImage = imageValue.path;
+        userPosts.details.showBottomOptions = false;
+        setUserPosts({ ...userPosts });
         bottomSheetRef?.current?.snapTo(numericConstants.ONE);
     } catch (error) {
         console.log(error);
@@ -795,7 +797,7 @@ export const verifyOtpRequest = async (otpString, randomNumber) => {
     }
 }
 
-export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, _isResendOtp, setSignUpDetails) => {
+export const handleUserSignUpOtp = async (isFrom, navigation, _isResendOtp) => {
     try {
 
         // Math.random() returns float between 0 and 1, 
@@ -805,7 +807,7 @@ export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, _is
         // const response = await axios.post(urlConstants.TRIGGER_SMS_OTP, otpRequestDataJSON);
 
         // if (response && response.data && !isResendOtp) {
-        const params = getSignUpParams(signUpDetails, random6Digit, isFrom, setSignUpDetails);
+        const params = getSignUpParams(random6Digit, isFrom);
 
         navigation.navigate(screens.OTP_VERIFICATION, params);
         // setLoader(false);
@@ -818,14 +820,12 @@ export const handleUserSignUpOtp = async (signUpDetails, isFrom, navigation, _is
     return false;
 }
 
-export const getSignUpParams = (signUpDetails, random6Digit, isFrom, setSignUpDetails) => {
+export const getSignUpParams = (random6Digit, isFrom) => {
     let returnValue = {};
     if (isFrom) {
         returnValue.isFrom = isFrom;
     }
-    returnValue.signUpDetails = signUpDetails;
     returnValue.rand_number = random6Digit;
-    returnValue.setSignUpDetails = setSignUpDetails;
     return returnValue;
 }
 
@@ -951,12 +951,17 @@ export const processResponseData = (response, errorText) => {
     }
 }
 
-export const showSnackBar = (message, success, isLong) => {
+export const showSnackBar = (message, success, isLong, actionText, actionTextColor, actionCallback) => {
     Snackbar.show({
         text: message,
         textColor: colors.SDOM_WHITE,
         duration: isLong && Snackbar.LENGTH_LONG || Snackbar.LENGTH_SHORT,
-        backgroundColor: success && colors.GREEN || colors.RED
+        backgroundColor: success && colors.GREEN || colors.RED,
+        action: {
+            text: actionText,
+            textColor: actionTextColor,
+            onPress: () => actionCallback()
+        },
     })
 }
 
@@ -977,7 +982,7 @@ export const saveRegistrationStatus = async (phoneNumber, status) => {
 export const getAllProfiles = async () => {
     try {
         let profiles = [{
-            label: stringConstants.EMPTY, value: -1, untouchable: true
+            label: stringConstants.EMPTY, value: numericConstants.MINUS_ONE, untouchable: true
         }, defaultProfilesValue];
         let response = await axiosGetWithHeaders(urlConstants.fetchAllProfiles);
         response.data && response.data.map(profile => profile.textStyle = {
@@ -1007,10 +1012,20 @@ const getKeyChainDetails = async (key) => {
     return false;
 }
 
+export const axiosPostWithHeadersAndToken = async (url, data, token) => {
+    return await axios.post(url, data, {
+        headers: {
+            [miscMessage.CONTENT_TYPE]: miscMessage.APPLICATION_JSON,
+            [miscMessage.AUTHORIZATION]: `${miscMessage.BEARER}${stringConstants.SPACE}${token}`
+        }
+    });
+}
+
 export const axiosPostUploadImageWithHeaders = async (url, data, token) => {
     return await axios.post(url, data, {
         headers: {
-            [miscMessage.CONTENT_TYPE]: miscMessage.MULTIPART_FORM, [miscMessage.AUTHORIZATION]: `${miscMessage.BEARER}${stringConstants.SPACE}${token}`
+            [miscMessage.CONTENT_TYPE]: miscMessage.MULTIPART_FORM,
+            [miscMessage.AUTHORIZATION]: `${miscMessage.BEARER}${stringConstants.SPACE}${token}`
         }
     });
 }
@@ -1091,7 +1106,7 @@ export const fetchUserPosts = async (userPosts, setUserPosts) => {
             const url = `${urlConstants.fetchPostsByUserId}${stringConstants.SLASH}${userDetails.id}`;
             const response = await axiosGetWithAuthorization(url, user.token);
             const responseData = processResponseData(response);
-            if (responseData == tokenMessageConstants.TOKEN_INVALID || responseData == tokenMessageConstants.TOKEN_EXPIRED) {
+            if (responseData == responseStringData.TOKEN_INVALID || responseData == responseStringData.TOKEN_EXPIRED) {
                 console.error('login redirect')
             } else {
                 userPosts.posts = [AddPostConstant, ...responseData.posts];
@@ -1105,32 +1120,30 @@ export const fetchUserPosts = async (userPosts, setUserPosts) => {
 
 const tokenStatusDetails = (response) => {
     switch (response.data.status) {
-        case tokenMessageConstants.TOKEN_INVALID:
-            return tokenMessageConstants.TOKEN_INVALID;
-        case tokenMessageConstants.TOKEN_EXPIRED:
-            return tokenMessageConstants.TOKEN_EXPIRED;
+        case responseStringData.TOKEN_INVALID:
+            return responseStringData.TOKEN_INVALID;
+        case responseStringData.TOKEN_EXPIRED:
+            return responseStringData.TOKEN_EXPIRED;
         default:
             return response.data;
     }
 }
 
-export const setAddPostStateValues = (action, addPost, setAddPost, item) => {
-    addPost.postTitle = action == miscMessage.UPDATE && item.postTitle || stringConstants.EMPTY;
-    addPost.postDescription = action == miscMessage.UPDATE && item.postDescription || stringConstants.EMPTY;
-    addPost.postProfile = action == miscMessage.UPDATE && item.profile.id;
-    addPost.postCategories = action == miscMessage.UPDATE && item.categoryIds.split(stringConstants.COMMA) ||
+export const setAddPostStateValues = (action, userPosts, setUserPosts, item) => {
+    userPosts.details.postTitle = action == miscMessage.UPDATE && item.postTitle || stringConstants.EMPTY;
+    userPosts.details.postDescription = action == miscMessage.UPDATE && item.postDescription || stringConstants.EMPTY;
+    userPosts.details.postProfile = action == miscMessage.UPDATE && item.profile.id;
+    userPosts.details.postCategories = action == miscMessage.UPDATE && item.categoryIds.split(stringConstants.COMMA) ||
         jsonConstants.EMPTY;
-    addPost.postType = action == miscMessage.UPDATE && item.postType || stringConstants.EMPTY;
-    addPost.capturedImage = action == miscMessage.UPDATE && item.postImage || stringConstants.EMPTY;
-    setAddPost({ ...addPost });
+    userPosts.details.postType = action == miscMessage.UPDATE && item.postType || stringConstants.EMPTY;
+    userPosts.details.capturedImage = action == miscMessage.UPDATE && item.postImage || stringConstants.EMPTY;
+    setUserPosts({ ...userPosts });
 }
 
 export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem) => {
     try {
         const formData = new FormData();
-        const categories = data.postCategories.
-            reduce((result, item) => { return `${result}${item}` },
-                data.postCategories.length > numericConstants.ONE && stringConstants.COMMA || stringConstants.EMPTY);
+        const categories = data.postCategories && data.postCategories.join() || stringConstants.EMPTY;
         const user = await getLoggedInUserDetails();
         if (user) {
             const userDetails = JSON.parse(user.details);
@@ -1170,5 +1183,72 @@ export const handlePostDelete = async (postId) => {
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
         showSnackBar(errorMessages.COULD_NOT_DELETE_POST, false);
+    }
+}
+
+export const handleUserFollowUnfollowAction = async (action, profileId) => {
+    try {
+        debugger
+        const user = await getLoggedInUserDetails();
+        if (user) {
+            let url;
+            if (action == actionButtonTextConstants.FOLLOW) {
+                url = urlConstants.userFollow;
+            } else if (action == actionButtonTextConstants.UNFOLLOW) {
+                url = urlConstants.userUnFollow;
+            }
+            const requestData = { [requestConstants.FOLLOWING_ID]: profileId }
+            const response = await axiosPostWithHeadersAndToken(url, JSON.stringify(requestData), user.token);
+            return processResponseData(response);
+        }
+        return responseStringData.REDIRECT_USER_LOGIN;
+    } catch (error) {
+        const errorResponseData = processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(errorResponseData.message == errorMessages.ALREADY_FOLLOWING_USER &&
+            alertTextMessages.YOU_ARE_ALREADY_FOLLOWING_THIS_USER || alertTextMessages.YOU_ARE_ALREADY_UNFOLLOWING_THIS_USER, false);
+    }
+}
+
+export const checkTokenStatus = (responseData) => {
+    return responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID;
+}
+export const updateProfileActionValueToState = (action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
+    profileDetail, setProfileDetail) => {
+    debugger
+    try {
+        switch (action) {
+            case actionButtonTextConstants.FOLLOW:
+                break;
+            case actionButtonTextConstants.UNFOLLOW:
+                break
+            default:
+                break;
+        }
+        const user = JSON.parse(loggedInUser.loginDetails.details);
+
+        const addFollower = { [fieldControllerName.FOLLOWER_ID]: user.id };
+        const addFollowing = { [fieldControllerName.FOLLOWING_ID]: profile.id };
+        sdomDatastate.posts.map(selectedPost => {
+            if (selectedPost.user.id == profile.id) {
+                selectedPost.user.followers.push(addFollower);
+            } else if (selectedPost.user.id == user.id) {
+                selectedPost.user.following.push(addFollowing);
+            }
+        });
+        profileDetail.isFollowing = profile.followers.some(follower =>
+            follower.follower_id == user.id);
+        setProfileDetail({ ...profileDetail });
+        setSdomDatastate({ ...sdomDatastate });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const checkLoggedInUserMappedWithUserProfile = (profile, loggedInUser, profileDetail, setProfileDetail) => {
+    if (loggedInUser.loginDetails) {
+        const loggedInUserDetails = JSON.parse(loggedInUser.loginDetails.details);
+        profileDetail.isFollowing = profile.followers.some(follower =>
+            follower.follower_id == loggedInUserDetails.id);
+        setProfileDetail({ ...profileDetail });
     }
 }

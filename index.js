@@ -54,7 +54,9 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.POSTS} component={Posts} options={authorizationHeader} />
                 <Stack.Screen name={screens.REGISTER} component={Register} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.PROFILE} component={Profile} options={{
-                    cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+                    animationEnabled: true,
+                    headerShown: false,
+                    cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
                 }} />
             </Stack.Navigator>
         </NavigationContainer>

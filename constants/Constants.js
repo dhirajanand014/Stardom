@@ -24,6 +24,7 @@ export const tabBarOptions = {
 }
 
 export const headerLessStackOptions = {
+    animation: true,
     headerShown: false
 }
 
@@ -49,14 +50,16 @@ export const headerStrings = {
 }
 
 export const urlConstants = {
-    fetchCategories: `https://www.wallpiper.app/4RhvfbEGwnsmxcat.php`,
-    fetchPosts: `https://www.wallpiper.app/4RhvfbEGwnsmxcpst.php`,
+    fetchCategories: `${BASE_URI}/category`,
+    fetchAllPosts: `${BASE_URI}/post`,
     setPostCounts: `https://www.wallpiper.app/4RhvfbEGwnsmxliks.php`,
     fetchReportAbuses: `https://www.wallpiper.app/4RhvfbEGwnsmxrpts.php`,
     setReportAbuseIdWithPostId: `https://www.wallpiper.app/4RhvfbEGwnsmxrptlist.php`,
     login: `${BASE_URI}/auth/login`,
     fetchPostsByUserId: `${BASE_URI}/post/userid`,
     registerUser: `${BASE_URI}/auth/register`,
+    userFollow: `${BASE_URI}/post/follow`,
+    userUnFollow: `${BASE_URI}/post/unfollow`,
     fetchAllProfiles: `${BASE_URI}/profile`,
     addPost: `${BASE_URI}/post/details/add`,
     updatePost: `${BASE_URI}/post/details/update`,
@@ -86,7 +89,9 @@ export const fieldControllerName = {
     INTERESTS: `interests`,
     CATEGORIES: `categories`,
     POST_TITLE: `postTitle`,
-    POST_DESCRIPTION: `postDescription`
+    POST_DESCRIPTION: `postDescription`,
+    FOLLOWER_ID: `follower_id`,
+    FOLLOWING_ID: `following_id`
 }
 
 export const keyBoardTypeConst = {
@@ -131,7 +136,10 @@ export const actionButtonTextConstants = {
     REQUEST_DONERS: `Request Doners`,
     SKIP_BUTTON: `skipButton`,
     SAVE_BUTTON: `saveButton`,
-    SKIP_BUTTON_TEXT: `Skip >>`
+    SKIP_BUTTON_TEXT: `Skip >>`,
+    ADD_BIO: `Add bio`,
+    FOLLOW: `Follow`,
+    UNFOLLOW: `Unfollow`
 }
 
 export const formRequiredRules = {
@@ -412,7 +420,10 @@ export const alertTextMessages = {
     MAX_THREE_CATEGORIES: `(Select maximum 3)`,
     POST_ADDED_SUCCESSFULLY: `Added Successfully`,
     POST_UPDATED_SUCCESSFULLY: `Updated Successfully`,
-    POST_DELETED_SUCCESSFULLY: `Deleted successfully`
+    POST_DELETED_SUCCESSFULLY: `Deleted successfully`,
+    SUCCESS_FOLLOW: `You are now following`,
+    YOU_ARE_ALREADY_FOLLOWING_THIS_USER: `You are already following this user`,
+    YOU_ARE_ALREADY_UNFOLLOWING_THIS_USER: `You are already unfollowing this user`,
 }
 
 export const errorMessages = {
@@ -428,6 +439,8 @@ export const errorMessages = {
     COULD_NOT_UPLOAD_POST: `Could not upload post`,
     COULD_NOT_UPDATE_POST: `Could not update post`,
     COULD_NOT_DELETE_POST: `Could not delete post`,
+    COULD_NOT_FOllOW_USER: `Could not follow user`,
+    COULD_NOT_UNFOllOW_USER: `Could not unfollow user`,
     COULD_NOT_PARSE_RESPONSE: `Could not parse response`,
     CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`,
     COULD_NOT_FETCH_CATEGORIES: `Could not fetch categories`,
@@ -439,7 +452,9 @@ export const errorMessages = {
     COULD_NOT_FETCH_LOGIN_DETAILS_FROM_KEYCHAIN: `Could not fetch login details from keychain`,
     COULD_NOT_PARSE_LOGIN_TOKEN: `Could not parse login token`,
     COULD_NOT_LOGIN_USER: `Error logging in user`,
-    COULD_NOT_REDIRECT_TO_GLANCE: `Could not redirect to glance`
+    COULD_NOT_REDIRECT_TO_GLANCE: `Could not redirect to glance`,
+    PLEASE_LOGIN_TO_CONTINUE: `Please login to continue`,
+    ALREADY_FOLLOWING_USER: `User already following `
 }
 
 export const reportAbuseRequestPayloadKeys = {
@@ -450,8 +465,11 @@ export const reportAbuseRequestPayloadKeys = {
 
 export const responseStringData = {
     SUCCESS: `Success`,
-    RESPONSE_MESSAGE: `Response Message : `,
-    USER_SUCCESSFULLY_REGISTER: `Registration Successful`
+    RESPONSE_MESSAGE: `Response Message: `,
+    USER_SUCCESSFULLY_REGISTER: `Registration Successful`,
+    TOKEN_INVALID: `Token is Invalid`,
+    TOKEN_EXPIRED: `Token is Expired`,
+    REDIRECT_USER_LOGIN: `Redirect user login`,
 }
 
 export const postitionStringConstants = {
@@ -475,14 +493,14 @@ export const backHandlerConstants = {
 }
 
 export const countryCodesConstants = {
-    INDIA: `+91`
+    INDIA: `+ 91`
 }
 
 export const miscMessage = {
     NONE: `none`,
-    DONT_HAVE_ACCOUNT: `Dont have an account?`,
+    DONT_HAVE_ACCOUNT: `Dont have an account ? `,
     CLICK_TO_ADD_IMAGE: `Click + to add or select image`,
-    DOB_DATE_FORMAT: `DD/MM/YYYY`,
+    DOB_DATE_FORMAT: `DD / MM / YYYY`,
     DATE: `date`,
     RESET: `Reset`,
     SUCCESSFUL: `Successful`,
@@ -502,7 +520,7 @@ export const miscMessage = {
     MESSAGE: `message`,
     DUPLICATE: `Duplicate`,
     FORGOT_PASSWORD: `Forgot Password`,
-    DATE_PICKER_FORMAT: `DD/MM/YYYY`,
+    DATE_PICKER_FORMAT: `DD / MM / YYYY`,
     RIGHT: `right`,
     UP: `up`,
     STRETCH: `stretch`,
@@ -554,6 +572,7 @@ export const requestConstants = {
     POST_CATEGORIES: `post_categories`,
     POST_TYPE: `post_type`,
     POST_IMAGE: `post_image`,
+    FOLLOWING_ID: `following_id`,
     POST_ID: `id`
 };
 
@@ -604,8 +623,3 @@ export const SDMenuOptions = [
         key: screens.CATEGORY
     }
 ];
-
-export const tokenMessageConstants = {
-    TOKEN_INVALID: `Token is Invalid`,
-    TOKEN_EXPIRED: `Token is Expired`
-}

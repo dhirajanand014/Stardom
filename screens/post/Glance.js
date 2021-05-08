@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, Image, TouchableOpacity, StatusBar, Dimensions, Text } from 'react-native';
+import React, { useEffect, useRef, useContext } from 'react';
+import { View, Image, TouchableOpacity, StatusBar, Dimensions } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
-    width, jsonConstants, miscMessage, numericConstants,
-    stringConstants,
-    screens
+    width, miscMessage, numericConstants
 } from '../../constants/Constants';
 import {
     onSwiperScrollEnd, fetchPostsAndSaveToState,
@@ -27,18 +25,8 @@ const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
 
 export const Glance = ({ navigation }) => {
 
-    const [sdomDatastate, setSdomDatastate] = useState([]);
-    const [optionsState, setOptionsState] = useState({
-        descriptionModal: false,
-        reportAbuseModal: false,
-        showSearch: false,
-        selectedPost: stringConstants.EMPTY,
-        selectedReportAbuse: {},
-        reportAbuses: jsonConstants.EMPTY,
-        reportAbuseSubmitDisabled: false,
-        isImageLoadError: false
-    });
-    const { postIdFromNotification, categoryIdFromNotification } = useContext(CategoryContext);
+    const { postIdFromNotification, categoryIdFromNotification, sdomDatastate, setSdomDatastate,
+        optionsState, setOptionsState } = useContext(CategoryContext);
     const viewPagerRef = useRef(null);
     const postDetailsRef = useRef(null);
 
@@ -106,7 +94,7 @@ export const Glance = ({ navigation }) => {
                             })}
                     </Swiper>
                     <PostDetails ref={postDetailsRef} posts={sdomDatastate.posts} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x}
-                        width={width} height={height} optionsState={optionsState} setOptionsState={setOptionsState}
+                        width={width} height={height} optionsState={optionsState} setOptionsState={setOptionsState} navigation={navigation}
                         sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} optionsState={optionsState}
                         setOptionsState={setOptionsState} viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
                 </View> || sdomDatastate.posts && !sdomDatastate.posts.length &&
@@ -124,9 +112,6 @@ export const Glance = ({ navigation }) => {
             }
             <TouchableOpacity style={glancePostStyles.category_selection}>
                 <Image source={category_selection} style={glancePostStyles.category_selection_image} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate(screens.PROFILE)}>
-                <Text>Profile</Text>
             </TouchableOpacity>
             <PostDescriptionModal optionsState={optionsState} setOptionsState={setOptionsState}
                 reportAbuseIcon={post_report_abuse} />

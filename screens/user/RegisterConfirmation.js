@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
@@ -12,22 +12,21 @@ import {
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
-import { useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import {
     focusOnInputIfFormInvalid, handleUserRegistration,
     resetTokens, showSnackBar, saveRegistrationStatus
 } from '../../helper/Helper';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
+import { CategoryContext } from '../../App';
 
 export const RegistrationConfirmation = () => {
 
     const { control, formState, setError, handleSubmit } = useForm();
 
-    let confirmSecretRef = useRef(null);
-    const route = useRoute();
+    const { signUpDetails, setSignUpDetails } = useContext(CategoryContext);
 
-    const signUpDetails = route?.params?.signUpDetails;
-    const setSignUpDetails = route?.params?.setSignUpDetails;
+    let confirmSecretRef = useRef(null);
 
     const phoneNumber = signUpDetails.phoneNumber || stringConstants.EMPTY;
 
@@ -51,9 +50,7 @@ export const RegistrationConfirmation = () => {
             });
         } else {
             showSnackBar(alertTextMessages.SUCCESSFULLY_REGISTERED, true);
-            navigation.reset({
-                index: numericConstants.ZERO, routes: [{ name: routeConsts.HOME }]
-            });
+            navigation.reset({ index: numericConstants.ZERO, routes: [{ name: routeConsts.HOME }] });
         }
     }
 
