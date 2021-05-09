@@ -39,6 +39,7 @@ export const screens = {
     GLANCE: `Glance`,
     NON_MODAL: `NonModal`,
     PROFILE: `Profile`,
+    PROFILE_POSTS: `Profile Posts`,
     CAMERA: `Camera`,
     POSTS: `Posts`,
     MENU: `Menu`,
@@ -56,6 +57,7 @@ export const urlConstants = {
     fetchReportAbuses: `https://www.wallpiper.app/4RhvfbEGwnsmxrpts.php`,
     setReportAbuseIdWithPostId: `https://www.wallpiper.app/4RhvfbEGwnsmxrptlist.php`,
     login: `${BASE_URI}/auth/login`,
+    getUserProfile: `${BASE_URI}/auth/userprofile`,
     fetchPostsByUserId: `${BASE_URI}/post/userid`,
     registerUser: `${BASE_URI}/auth/register`,
     userFollow: `${BASE_URI}/post/follow`,
@@ -139,7 +141,9 @@ export const actionButtonTextConstants = {
     SKIP_BUTTON_TEXT: `Skip >>`,
     ADD_BIO: `Add bio`,
     FOLLOW: `Follow`,
-    UNFOLLOW: `Unfollow`
+    UNFOLLOW: `Unfollow`,
+    PRIVATE_ACCESS: `AccessPrivate`,
+    PUBLIC_ACCESS: `AccessPublic`
 }
 
 export const formRequiredRules = {
@@ -449,12 +453,15 @@ export const errorMessages = {
     INCORRECT_OTP_ENTERED: `Incorrect OTP entered`,
     COULD_NOT_SAVE_TO_KEYCHAIN: `Could not save data to Keychain`,
     COULD_NOT_FETCH_DETAILS_FROM_KEYCHAIN: `Could not fetch details from keychain`,
+    COULD_NOT_FETCH_UPDATED_USER_PROFILE: `Could not fetch updated user profile`,
+    COULD_NOT_FETCH_LOGIN_DETAILS_FROM_API: `Could not fetch login details from API`,
     COULD_NOT_FETCH_LOGIN_DETAILS_FROM_KEYCHAIN: `Could not fetch login details from keychain`,
     COULD_NOT_PARSE_LOGIN_TOKEN: `Could not parse login token`,
     COULD_NOT_LOGIN_USER: `Error logging in user`,
     COULD_NOT_REDIRECT_TO_GLANCE: `Could not redirect to glance`,
     PLEASE_LOGIN_TO_CONTINUE: `Please login to continue`,
-    ALREADY_FOLLOWING_USER: `User already following `
+    ALREADY_FOLLOWING_USER: `User already following `,
+    COULD_NOT_FETCH_USER_PROFILE_POST: `Could not fetch user profile posts`
 }
 
 export const reportAbuseRequestPayloadKeys = {

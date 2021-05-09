@@ -21,6 +21,7 @@ import { RegistrationOTP } from './screens/user/RegitrationOTP';
 import { Posts } from './views/imagePost/Posts';
 import { SDCameraView } from './views/cameraView/SDCameraView';
 import { Glance } from './screens/post/Glance';
+import { ProfilePosts } from './screens/user/ProfilePosts';
 
 LogBox.ignoreAllLogs(true);
 
@@ -57,6 +58,11 @@ export const ScreenNavigator = () => {
                     animationEnabled: true,
                     headerShown: false,
                     cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
+                }} />
+                <Stack.Screen name={screens.PROFILE_POSTS} component={ProfilePosts} options={{
+                    animationEnabled: true,
+                    headerShown: false,
+                    cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
                 }} />
             </Stack.Navigator>
         </NavigationContainer>

@@ -1098,6 +1098,27 @@ export const getLoggedInUserDetails = async () => {
     return false;
 }
 
+export const fetchUpdateLoggedInUserProfile = async (loggedInUser, setLoggedInUser, fetchUpdated) => {
+    try {
+        const user = await getLoggedInUserDetails();
+        if (user && fetchUpdated) {
+            const updatedDetails = await axiosGetWithAuthorization(urlConstants.getUserProfile, user.token);
+            if (updatedDetails.status == 200) {
+                const responseData = processResponseData(updatedDetails);
+                const JSONDetails = JSON.stringify(responseData);
+                await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER, `${user.phoneNumber}_${user.token}`,
+                    JSONDetails);
+                fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, false);
+            } else {
+                console.error(errorMessages.COULD_NOT_FETCH_UPDATED_USER_PROFILE, error);
+            }
+        }
+        user && setLoggedInUser({ ...loggedInUser, loginDetails: user, isLoggedIn: user && true || false });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_LOGIN_DETAILS_FROM_API, error);
+    }
+}
+
 export const fetchUserPosts = async (userPosts, setUserPosts) => {
     try {
         const user = await getLoggedInUserDetails();
@@ -1188,7 +1209,6 @@ export const handlePostDelete = async (postId) => {
 
 export const handleUserFollowUnfollowAction = async (action, profileId) => {
     try {
-        debugger
         const user = await getLoggedInUserDetails();
         if (user) {
             let url;
@@ -1212,33 +1232,43 @@ export const handleUserFollowUnfollowAction = async (action, profileId) => {
 export const checkTokenStatus = (responseData) => {
     return responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID;
 }
-export const updateProfileActionValueToState = (action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
+export const updateProfileActionValueToState = async (action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
     profileDetail, setProfileDetail) => {
-    debugger
     try {
-        switch (action) {
-            case actionButtonTextConstants.FOLLOW:
-                break;
-            case actionButtonTextConstants.UNFOLLOW:
-                break
-            default:
-                break;
-        }
         const user = JSON.parse(loggedInUser.loginDetails.details);
+        if (user) {
+            const followerId = { [fieldControllerName.FOLLOWER_ID]: user.id };
+            const followingId = { [fieldControllerName.FOLLOWING_ID]: profile.id };
 
-        const addFollower = { [fieldControllerName.FOLLOWER_ID]: user.id };
-        const addFollowing = { [fieldControllerName.FOLLOWING_ID]: profile.id };
-        sdomDatastate.posts.map(selectedPost => {
-            if (selectedPost.user.id == profile.id) {
-                selectedPost.user.followers.push(addFollower);
-            } else if (selectedPost.user.id == user.id) {
-                selectedPost.user.following.push(addFollowing);
+            switch (action) {
+                case actionButtonTextConstants.FOLLOW:
+                    sdomDatastate.posts.map(selectedPost => {
+                        if (selectedPost.user.id == profile.id) {
+                            selectedPost.user.followers.push(followerId);
+                        } else if (selectedPost.user.id == user.id) {
+                            selectedPost.user.following.push(followingId);
+                        }
+                    });
+                    break;
+                case actionButtonTextConstants.UNFOLLOW:
+                    sdomDatastate.posts.map(selectedPost => {
+                        if (selectedPost.user.id == profile.id) {
+                            selectedPost.user.followers.pop(followerId);
+                        } else if (selectedPost.user.id == user.id) {
+                            selectedPost.user.following.pop(followingId);
+                        }
+                    });
+                    break;
+                case actionButtonTextConstants.PRIVATE_ACCESS:
+
+                default:
+                    break;
             }
-        });
-        profileDetail.isFollowing = profile.followers.some(follower =>
-            follower.follower_id == user.id);
-        setProfileDetail({ ...profileDetail });
-        setSdomDatastate({ ...sdomDatastate });
+            profileDetail.isFollowing = profile.followers.some(follower =>
+                follower.follower_id == user.id);
+            setProfileDetail({ ...profileDetail });
+            setSdomDatastate({ ...sdomDatastate });
+        }
     } catch (error) {
         console.error(error);
     }
@@ -1250,5 +1280,14 @@ export const checkLoggedInUserMappedWithUserProfile = (profile, loggedInUser, pr
         profileDetail.isFollowing = profile.followers.some(follower =>
             follower.follower_id == loggedInUserDetails.id);
         setProfileDetail({ ...profileDetail });
+    }
+}
+
+export const fetchPostsOfUserProfile = async (profile, profileDetail, setProfileDetail, sdomDatastate) => {
+    try {//call API later
+        const userPosts = sdomDatastate && sdomDatastate.posts.filter(post => post.user.id == profile.id) || jsonConstants.EMPTY;
+        setProfileDetail({ ...profileDetail, userPosts: userPosts });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_USER_PROFILE_POST, error);
     }
 }

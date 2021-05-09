@@ -335,6 +335,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingHorizontal12: {
         paddingHorizontal: 12
     },
+    padding4: {
+        padding: 4
+    },
     paddingLeft5: {
         paddingLeft: 5
     },
@@ -343,6 +346,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     justifyItemsStart: {
         justifyContent: 'flex-start'
+    },
+    justifyItemsEnd: {
+        justifyContent: 'flex-end'
     },
     colorGreen: {
         color: 'green'
@@ -389,6 +395,18 @@ export const SDGenericStyles = StyleSheet.create({
     },
     height63: {
         height: 63
+    },
+    bottom160: {
+        bottom: 160
+    },
+    bottom180: {
+        bottom: 180
+    },
+    bottom200: {
+        bottom: 200
+    },
+    paddingRight5: {
+        paddingRight: 5
     }
 });
 
@@ -869,12 +887,12 @@ export const glancePostStyles = StyleSheet.create({
     profileNameTextStyle: {
         position: 'absolute',
         marginLeft: 8,
-        bottom: 20,
-        justifyContent: 'flex-end'
+        bottom: 150,
+        justifyContent: 'flex-start'
     },
     profileViewActionsStyle: {
         position: 'absolute',
-        bottom: 15,
+        bottom: 150,
         right: 0,
         padding: 20,
         justifyContent: 'flex-end'
@@ -942,6 +960,17 @@ export const flatListItemStyles = StyleSheet.create({
     cardSurface: {
         height: 122,
         width: 122,
+        overflow: 'hidden',
+        alignItems: 'center',
+        justifyContent: 'center',
+        left: 5,
+        right: 100,
+        marginVertical: 5,
+        borderRadius: 8,
+    },
+    userProfileCardSurface: {
+        height: 150,
+        width: 120,
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
