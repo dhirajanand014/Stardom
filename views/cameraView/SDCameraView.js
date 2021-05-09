@@ -12,8 +12,7 @@ export const SDCameraView = props => {
     // const device = useMemo(() => devices && devices.find((d) => d.position === 'back'), [devices]);
     const [permissons, setPermissons] = useState(false)
     const getPermissons = async () => {
-
-        const cameraPermission = await Camera.getCameraPermissionStatus()
+        const cameraPermission = await Camera.getCameraPermissionStatus();
         const microphonePermission = await Camera.getMicrophonePermissionStatus()
 
         if (microphonePermission === 'authorized' && cameraPermission === 'authorized') {

@@ -1270,16 +1270,17 @@ export const updateProfileActionValueToState = async (action, profile, sdomDatas
             setSdomDatastate({ ...sdomDatastate });
         }
     } catch (error) {
-        console.error(error);
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
     }
 }
 
-export const checkLoggedInUserMappedWithUserProfile = (profile, loggedInUser, profileDetail, setProfileDetail) => {
+export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUser, profileDetail, setProfileDetail) => {
     if (loggedInUser.loginDetails) {
         const loggedInUserDetails = JSON.parse(loggedInUser.loginDetails.details);
         profileDetail.isFollowing = profile.followers.some(follower =>
             follower.follower_id == loggedInUserDetails.id);
-        setProfileDetail({ ...profileDetail });
+        const counts = await fetchProfilePostsCounts(loggedInUser);
+        setProfileDetail({ ...profileDetail, count: counts });
     }
 }
 
@@ -1290,4 +1291,35 @@ export const fetchPostsOfUserProfile = async (profile, profileDetail, setProfile
     } catch (error) {
         console.error(errorMessages.COULD_NOT_FETCH_USER_PROFILE_POST, error);
     }
+}
+
+export const fetchProfilePostsCounts = async (loggedInUser) => {
+    try {
+        const token = loggedInUser.loginDetails.token;
+        const response = await axiosGetWithAuthorization(urlConstants.fetchProfilePostsCounts, token);
+        return processResponseData(response);
+    } catch (error) {
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+    }
+}
+
+const navigateUserFromPostAcion = (action, responseData, profile, sdomDatastate, setSdomDatastate, loggedInUser,
+    profileDetail, setProfileDetail, navigation) => {
+    if (responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID
+        || responseData == responseStringData.REDIRECT_USER_LOGIN) {
+        showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false);
+        navigation.navigate(screens.LOGIN);
+    } else if (responseData && responseData.message == responseStringData.SUCCESS) {
+        updateProfileActionValueToState(action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
+            profileDetail, setProfileDetail);
+        showSnackBar(action == actionButtonTextConstants.FOLLOW && alertTextMessages.SUCCESS_FOLLOW ||
+            alertTextMessages.SUCCESS_UNFOLLOW, true);
+    }
+}
+
+export const handleUserPostAction = async (action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
+    profileDetail, setProfileDetail, navigation) => {
+    const responseData = await handleUserFollowUnfollowAction(action, profile.id);
+    navigateUserFromPostAcion(action, responseData, profile, sdomDatastate, setSdomDatastate, loggedInUser,
+        profileDetail, setProfileDetail, navigation);
 }

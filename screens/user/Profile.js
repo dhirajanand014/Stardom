@@ -6,15 +6,12 @@ import Animated from 'react-native-reanimated';
 import { useEffect } from 'react/cjs/react.development';
 import { CategoryContext } from '../../App';
 import { LockIcon } from '../../components/icons/LockIcon';
+import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
-    actionButtonTextConstants, alertTextMessages, errorMessages, height,
-    jsonConstants,
-    numericConstants, responseStringData, screens, width
+    actionButtonTextConstants, height,
+    jsonConstants, miscMessage, numericConstants, screens, width
 } from '../../constants/Constants';
-import {
-    checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile, handleUserFollowUnfollowAction,
-    showSnackBar, updateProfileActionValueToState
-} from '../../helper/Helper';
+import { checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile, handleUserPostAction } from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles } from "../../styles/Styles"
 
 export const Profile = () => {
@@ -29,25 +26,9 @@ export const Profile = () => {
     useEffect(() => {
         (async () => {
             await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
-            checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
+            await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
         })();
     }, jsonConstants.EMPTY);
-
-    const navigateUser = (action, responseData) => {
-        if (responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID
-            || responseData == responseStringData.REDIRECT_USER_LOGIN) {
-            showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false);
-            navigation.navigate(screens.LOGIN);
-        } else if (responseData && responseData.message == responseStringData.SUCCESS) {
-            updateProfileActionValueToState(action, profile, sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser);
-            showSnackBar(alertTextMessages.SUCCESS_FOLLOW, true);
-        }
-    }
-
-    const handleUserAction = async (action) => {
-        const responseData = await handleUserFollowUnfollowAction(action, profile.id);
-        navigateUser(action, responseData);
-    }
 
     return (
         <View style={[SDGenericStyles.fill]}>
@@ -56,27 +37,31 @@ export const Profile = () => {
                     style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.center} />
             </View>
             <View>
-                <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft5, SDGenericStyles.bottom200]}>
+                <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft5, SDGenericStyles.bottom220]}>
                     <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.bottom8]}>
-                        <Text style={[SDGenericStyles.ft25, SDGenericStyles.fontFamilyRoman,
-                        SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,]}>{profile.name}</Text>
+                        <Text style={[SDGenericStyles.ft25, SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter,
+                        SDGenericStyles.textCenterAlign]}>{profile.name}</Text>
+                        <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter,
+                        SDGenericStyles.textCenterAlign, SDGenericStyles.mt12]}>{`@`}{profile.user_id}</Text>
                     </Animated.View>
                     <Animated.View style={SDGenericStyles.alignItemsStart}>
                         {
-                            profile.bio && <Text style={[SDGenericStyles.ft25, SDGenericStyles.fontFamilyRoman]}>{profile.bio}</Text> ||
+                            profile.bio && <Text style={[SDGenericStyles.textLeftAlign, SDGenericStyles.justifyContentCenter,
+                            SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, { width: width / numericConstants.ONE_PT_NINE }]}>{profile.bio}</Text> ||
                             <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.paddingVertical2,
                             SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle]}>
                                 <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
-                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft14]}>{actionButtonTextConstants.ADD_BIO}</Text>
+                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft12]}>{actionButtonTextConstants.ADD_BIO}</Text>
                             </TouchableOpacity>
                         }
                     </Animated.View>
                 </View>
-                <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom180, SDGenericStyles.paddingRight5]}>
+                <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom200, SDGenericStyles.paddingRight5]}>
                     <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
                         <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.paddingVertical2,
                         SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle, SDGenericStyles.backgroundColorYellow]} onPress={async () =>
-                            await handleUserAction(profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW)}>
+                            await handleUserPostAction(profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW,
+                                profile, sdomDatastate, setSdomDatastate, loggedInUser, profileDetail, setProfileDetail, navigation)}>
                             <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
                             SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16]}>
                                 {profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW}
@@ -89,24 +74,19 @@ export const Profile = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={[SDGenericStyles.backgroundColorWhite, {
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 2
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 10
-                }, SDGenericStyles.height100, SDGenericStyles.bottom160]}>
-                    <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.padding12} onPress={async () =>
-                        navigation.navigate(screens.PROFILE_POSTS, { profile: profile })}>
-                        <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
-                        SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16]}>
-                            {profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+            </View>
+            <View style={[SDGenericStyles.backgroundColorWhite, glancePostStyles.profilePostBottomView,
+            SDGenericStyles.height100, SDGenericStyles.bottom180]}>
+                <TouchableOpacity activeOpacity={.3} style={[SDGenericStyles.height100], { width: width }} onPress={async () =>
+                    navigation.navigate(screens.PROFILE_POSTS, { profile: profile })}>
+                    <View style={[SDGenericStyles.rowFlexDirection]}>
+                        <SDProfileBottomTextView label={miscMessage.FOLLOWERS} count={profileDetail.count.followersCount} />
+                        <SDProfileBottomTextView label={miscMessage.FOLLOWING} count={profileDetail.count.followingCount} />
+                        <SDProfileBottomTextView label={miscMessage.WALLS} count={profileDetail.count.wallsCount} />
+                        <SDProfileBottomTextView label={miscMessage.UPLOADS} count={profileDetail.count.uploadCount} />
+                        <SDProfileBottomTextView label={miscMessage.DOWNLOADS} count={profileDetail.count.downloadCount} />
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>
     )

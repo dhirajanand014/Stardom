@@ -152,14 +152,14 @@ export const SDGenericStyles = StyleSheet.create({
     borderRightWidth1: {
         borderRightWidth: 1
     },
-    borderRightColor: {
-        borderRightColor: `#f4f4f4`
+    borderColorBlack: {
+        borderColor: `#fff`
     },
     placeHolderTextColor: {
         color: `#969696`
     },
-    borderBottomWidth1: {
-        borderBottomWidth: 1
+    borderWidth3: {
+        borderWidth: 3
     },
     borderBottomWidthpt5: {
         borderBottomWidth: 0.5
@@ -205,6 +205,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     padding5: {
         padding: 5
+    },
+    padding20: {
+        padding: 20
     },
     padding12: {
         padding: 12
@@ -259,6 +262,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingBottom20: {
         paddingBottom: 20
+    },
+    paddingBottom30: {
+        paddingBottom: 30
     },
     paddingBottom50: {
         paddingBottom: 50
@@ -396,14 +402,14 @@ export const SDGenericStyles = StyleSheet.create({
     height63: {
         height: 63
     },
-    bottom160: {
-        bottom: 160
-    },
     bottom180: {
         bottom: 180
     },
     bottom200: {
         bottom: 200
+    },
+    bottom220: {
+        bottom: 220
     },
     paddingRight5: {
         paddingRight: 5
@@ -884,18 +890,15 @@ export const glancePostStyles = StyleSheet.create({
         alignItems: 'flex-start',
         marginLeft: 1
     },
-    profileNameTextStyle: {
-        position: 'absolute',
-        marginLeft: 8,
-        bottom: 150,
-        justifyContent: 'flex-start'
-    },
-    profileViewActionsStyle: {
-        position: 'absolute',
-        bottom: 150,
-        right: 0,
-        padding: 20,
-        justifyContent: 'flex-end'
+    profilePostBottomView: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 10
     },
     profileBioTextStyle: {
         borderWidth: 1,
@@ -969,13 +972,13 @@ export const flatListItemStyles = StyleSheet.create({
         borderRadius: 8,
     },
     userProfileCardSurface: {
-        height: 150,
-        width: 120,
+        height: 180,
+        width: 140,
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
-        left: 5,
-        right: 100,
+        left: -5,
+        right: 150,
         marginVertical: 5,
         borderRadius: 8,
     },

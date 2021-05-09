@@ -1,6 +1,9 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
-import { defaultProfilesValue, jsonConstants, screens, stringConstants } from './constants/Constants';
+import {
+  defaultProfilesValue, jsonConstants, numericConstants,
+  screens, stringConstants, requestConstants
+} from './constants/Constants';
 import { fetchAndUpdateCategoryState, fetchUpdateLoggedInUserProfile, getAllProfiles } from './helper/Helper.js';
 import { TourGuideProvider } from 'rn-tourguide';
 import AddPostConstant from './constants/AddPostConstant.json';
@@ -52,6 +55,13 @@ export default function App({ navigationRef }) {
 
   const [profileDetail, setProfileDetail] = useState({
     userPosts: jsonConstants.EMPTY,
+    count: {
+      [requestConstants.FOLLOWERS_COUNT]: numericConstants.ZERO,
+      [requestConstants.FOLLOWING_COUNT]: numericConstants.ZERO,
+      [requestConstants.WALLPAPERS_COUNT]: numericConstants.ZERO,
+      [requestConstants.UPLOAD_COUNT]: numericConstants.ZERO,
+      [requestConstants.DOWNLOAD_COUNT]: numericConstants.ZERO,
+    },
     isFollowing: false,
     hasPublicAccess: false
   })

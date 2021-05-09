@@ -56,6 +56,7 @@ export const urlConstants = {
     setPostCounts: `https://www.wallpiper.app/4RhvfbEGwnsmxliks.php`,
     fetchReportAbuses: `https://www.wallpiper.app/4RhvfbEGwnsmxrpts.php`,
     setReportAbuseIdWithPostId: `https://www.wallpiper.app/4RhvfbEGwnsmxrptlist.php`,
+    fetchProfilePostsCounts: `${BASE_URI}/profile/count`,
     login: `${BASE_URI}/auth/login`,
     getUserProfile: `${BASE_URI}/auth/userprofile`,
     fetchPostsByUserId: `${BASE_URI}/post/userid`,
@@ -370,6 +371,7 @@ export const numericConstants = {
     MINUS_ONE: -1,
     ZERO: 0,
     ONE: 1,
+    ONE_PT_NINE: 1.9,
     TWO: 2,
     THREE: 3,
     FOUR: 4,
@@ -426,6 +428,7 @@ export const alertTextMessages = {
     POST_UPDATED_SUCCESSFULLY: `Updated Successfully`,
     POST_DELETED_SUCCESSFULLY: `Deleted successfully`,
     SUCCESS_FOLLOW: `You are now following`,
+    SUCCESS_UNFOLLOW: `You have unfollowing this user`,
     YOU_ARE_ALREADY_FOLLOWING_THIS_USER: `You are already following this user`,
     YOU_ARE_ALREADY_UNFOLLOWING_THIS_USER: `You are already unfollowing this user`,
 }
@@ -560,6 +563,12 @@ export const miscMessage = {
     APPLICATION_JSON: `application/json`,
     MULTIPART_FORM: `multipart/form-data`,
     ADD_POST: `Add Post`,
+    FOLLOWERS: `FOLLOWERS`,
+    FOLLOWING: `FOLLOWING`,
+    WALLS: `WALLS`,
+    UPLOADS: `UPLOADS`,
+    DOWNLOADS: `DOWNLOADS`,
+    REQUEST_FOR_PRIVATE_ACCESS: `Request to access private wallpaper`
 }
 
 export const requestConstants = {
@@ -580,6 +589,11 @@ export const requestConstants = {
     POST_TYPE: `post_type`,
     POST_IMAGE: `post_image`,
     FOLLOWING_ID: `following_id`,
+    FOLLOWERS_COUNT: `followersCount`,
+    FOLLOWING_COUNT: `followingCount`,
+    WALLPAPERS_COUNT: `wallsCount`,
+    UPLOAD_COUNT: `uploadCount`,
+    DOWNLOAD_COUNT: `downloadCount`,
     POST_ID: `id`
 };
 
