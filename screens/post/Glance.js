@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useContext } from 'react';
 import { View, Image, TouchableOpacity, StatusBar, Dimensions } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
-    width, miscMessage, numericConstants
+    width, miscMessage, numericConstants, jsonConstants
 } from '../../constants/Constants';
 import {
     onSwiperScrollEnd, fetchPostsAndSaveToState,
@@ -33,7 +33,7 @@ export const Glance = ({ navigation }) => {
     useEffect(() => {
         fetchPostsAndSaveToState(sdomDatastate, setSdomDatastate, optionsState, setOptionsState,
             categoryIdFromNotification);
-    }, []);
+    }, jsonConstants.EMPTY);
 
     let { height } = Dimensions.get(miscMessage.WINDOW);
     height += StatusBar.currentHeight;

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Svg, { Circle, Path } from "react-native-svg";
-import { colorConstants, miscMessage, numericConstants } from '../../constants/Constants';
+import { miscMessage, numericConstants } from '../../constants/Constants';
 export const RegisterUserIcon = props => {
     return (<Svg width={props.width} height={props.height} viewBox="0 0 24 24" fill={miscMessage.NONE} stroke={props.stroke} strokeWidth={numericConstants.TWO}
         strokeLinecap="round" strokeLinejoin="round" className="prefix__feather prefix__feather-user" >

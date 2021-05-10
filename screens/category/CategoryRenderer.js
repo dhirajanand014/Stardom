@@ -25,7 +25,7 @@ export const CategoryRenderer = (item, index, category, setCategory) => {
                     style={glancePostStyles.tourGuideStyle} text={placeHolderText.SELECT_A_CATEGORY}>
                     <View style={flatListItemStyles.cardSurface}>
                         <FastImage source={{
-                            uri: categoryCover,
+                            uri: categoryCover || `https://reactnative.dev/img/tiny_logo.png`,
                             priority: FastImage.priority.normal,
                             cache: FastImage.cacheControl.immutable
                         }}
@@ -43,7 +43,7 @@ export const CategoryRenderer = (item, index, category, setCategory) => {
                     </View>
                 </TourGuideZone> || <View style={flatListItemStyles.cardSurface}>
                     <FastImage source={{
-                        uri: categoryCover,
+                        uri: categoryCover || `https://reactnative.dev/img/tiny_logo.png`,
                         priority: FastImage.priority.normal,
                         cache: FastImage.cacheControl.immutable,
                     }}

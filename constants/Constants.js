@@ -28,6 +28,18 @@ export const headerLessStackOptions = {
     headerShown: false
 }
 
+export const profilePostsScreenOptions = {
+    animationEnabled: true,
+    headerShown: false,
+    cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
+}
+
+export const profileScreenOptions = {
+    animationEnabled: true,
+    headerShown: false,
+    cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
+}
+
 export const screens = {
     INTRO: `Intro`,
     CATEGORY: `Category`,
@@ -43,7 +55,8 @@ export const screens = {
     CAMERA: `Camera`,
     POSTS: `Posts`,
     MENU: `Menu`,
-    OTP_VERIFICATION: `OTP Verification`
+    OTP_VERIFICATION: `OTP Verification`,
+    USER_FOLLOWERS_FOLLOWING: `User Follow Following`
 }
 
 export const headerStrings = {
@@ -67,6 +80,8 @@ export const urlConstants = {
     addPost: `${BASE_URI}/post/details/add`,
     updatePost: `${BASE_URI}/post/details/update`,
     deletePost: `${BASE_URI}/post/delete`,
+    fetchUsersFollowers: `${BASE_URI}/user/followers/fetch`,
+    fetchUsersFollowings: `${BASE_URI}/user/following/fetch`,
 }
 
 export const fieldControllerName = {
@@ -394,6 +409,7 @@ export const numericConstants = {
     TWENTY_FOUR: 24,
     TWENTY_EIGHT: 28,
     THIRTY: 30,
+    FORTY_TWO: 42,
     FORTY_FIVE: 45,
     FIFTY: 50,
     EIGHTY: 80,
@@ -464,7 +480,9 @@ export const errorMessages = {
     COULD_NOT_REDIRECT_TO_GLANCE: `Could not redirect to glance`,
     PLEASE_LOGIN_TO_CONTINUE: `Please login to continue`,
     ALREADY_FOLLOWING_USER: `User already following `,
-    COULD_NOT_FETCH_USER_PROFILE_POST: `Could not fetch user profile posts`
+    COULD_NOT_FETCH_USER_PROFILE_POST: `Could not fetch user profile posts`,
+    FAILED_TO_LIST_FOLLOWERS: `Failed to show followers`,
+    FAILED_TO_LIST_FOLLOWING: `Failed to show followings`,
 }
 
 export const reportAbuseRequestPayloadKeys = {
@@ -555,6 +573,7 @@ export const miscMessage = {
     GALLERY: `gallery`,
     SET: `set`,
     IMAGE_TYPE: `image/*`,
+    DETAILS: `details`,
     CONFIRM_SECRET: `OTP Confirmed`,
     CATEGORY_BACK: `Go back to posts Anytime !!`,
     CONTENT_TYPE: 'Content-Type',
@@ -563,6 +582,8 @@ export const miscMessage = {
     APPLICATION_JSON: `application/json`,
     MULTIPART_FORM: `multipart/form-data`,
     ADD_POST: `Add Post`,
+    FOLLOWERS_TEXT: `Followers`,
+    FOLLOWING_TEXT: `Following`,
     FOLLOWERS: `FOLLOWERS`,
     FOLLOWING: `FOLLOWING`,
     WALLS: `WALLS`,
@@ -600,7 +621,6 @@ export const requestConstants = {
 export const keyChainConstansts = {
     LOGGED_IN_USER: `loggedInUser`,
     ACCOUNT_STATUS: `accountStatus`,
-    INITIAL_CATEGORY_SELECTIONS: `initialCategories`,
     SAVE_CATEGORY_ID: `save_category_id`,
     SAVE_CATEGORY_BUTTON_TYPE: `save_category_button_type`,
     SAVE_POST_COUNTS: `save_post_counts`,
@@ -630,15 +650,20 @@ export const defaultProfilesValue = {
 export const SDMenuOptions = [
     {
         label: `Following`,
-        key: `following`,
-        value: 20
+        key: screens.USER_FOLLOWERS_FOLLOWING,
+        loggedIn: true
     }, {
         label: `Followers`,
-        key: `followers`,
-        value: 10
+        key: screens.USER_FOLLOWERS_FOLLOWING,
+        loggedIn: true
     }, {
         label: `Posts`,
-        key: screens.POSTS
+        key: screens.POSTS,
+        loggedIn: true
+    }, {
+        label: `Get verified`,
+        key: screens.POSTS,
+        loggedIn: true
     }, {
         label: `Category`,
         key: screens.CATEGORY

@@ -12,7 +12,7 @@ import {
     miscMessage, alertTextMessages, screens, keyChainConstansts
 } from '../../constants/Constants';
 
-export const Category = props => {
+export const Category = () => {
 
     const { fetchCategories, initialCategorySelection } = useContext(CategoryContext);
 
@@ -60,7 +60,7 @@ export const Category = props => {
                         <TouchableOpacity activeOpacity={.7} onPress={async () => {
                             await saveCategoryDetailsToKeyChain(keyChainConstansts.SAVE_CATEGORY_BUTTON_TYPE,
                                 actionButtonTextConstants.SAVE_BUTTON);
-                            navigation.reset({ index: numericConstants, routes: [{ name: screens.GLANCE }], });
+                            navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
                             stop();
                         }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
                         SDGenericStyles.backgroundColorYellow]}>

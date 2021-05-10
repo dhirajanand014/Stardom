@@ -12,7 +12,7 @@ import {
     modalTextConstants, numericConstants,
     width, placeHolderText, keyBoardTypeConst,
     actionButtonTextConstants, miscMessage,
-    jsonConstants, alertTextMessages, screens, errorMessages, colorConstants
+    jsonConstants, alertTextMessages, screens, errorMessages
 } from '../../constants/Constants'
 import { checkTokenStatus, fetchCategoryData, handleAddPostDetails, handlePostDelete, showSnackBar } from '../../helper/Helper'
 import { colors, glancePostStyles, SDGenericStyles, userAuthStyles } from '../../styles/Styles'
@@ -47,7 +47,7 @@ export const AddPostDetails = () => {
     }, []);
 
     const navigateUser = (responseData) => {
-        navigation.navigate(screens.GLANCE);
+        navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
         showSnackBar(responseData.message, true);
     }
 

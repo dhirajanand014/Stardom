@@ -841,8 +841,9 @@ export const handleUserLogin = async (data) => {
         if (responseData) {
             const userName = `${data.phoneNumber}_${responseData.access_token}`;
             const userDetailsJSON = JSON.stringify(responseData.user);
-            return await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER, userName,
+            await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER, userName,
                 userDetailsJSON);
+            return responseData;
         }
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
@@ -1040,8 +1041,7 @@ export const prepareSDOMMenu = () => {
 
 export const redirectUserToGlance = async () => {
     try {
-        const categoryData = await getKeyChainDetails(keyChainConstansts.INITIAL_CATEGORY_SELECTIONS);
-        return categoryData;
+        return await getKeyChainDetails(keyChainConstansts.SAVE_CATEGORY_ID);
     } catch (error) {
         console.error(errorMessages.COULD_NOT_REDIRECT_TO_GLANCE, error);
     }
@@ -1322,4 +1322,19 @@ export const handleUserPostAction = async (action, profile, sdomDatastate, setSd
     const responseData = await handleUserFollowUnfollowAction(action, profile.id);
     navigateUserFromPostAcion(action, responseData, profile, sdomDatastate, setSdomDatastate, loggedInUser,
         profileDetail, setProfileDetail, navigation);
+}
+
+
+export const fetchUserFollowersFollowing = async (listFor, loggedInUser) => {
+    try {
+        const token = loggedInUser.loginDetails.token;
+        const url = listFor == miscMessage.FOLLOWERS_TEXT && urlConstants.fetchUsersFollowers ||
+            urlConstants.fetchUsersFollowings;
+        const response = await axiosGetWithAuthorization(url, token);
+        return processResponseData(response);
+    } catch (error) {
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(listFor == miscMessage.FOLLOWERS_TEXT && errorMessages.FAILED_TO_LIST_FOLLOWERS ||
+            errorMessages.FAILED_TO_LIST_FOLLOWING, true);
+    }
 }

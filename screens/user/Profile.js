@@ -33,7 +33,7 @@ export const Profile = () => {
     return (
         <View style={[SDGenericStyles.fill]}>
             <View>
-                <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.normal }}
+                <FastImage source={{ uri: profile.profile_image || `https://reactnative.dev/img/tiny_logo.png`, priority: FastImage.priority.normal }}
                     style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.center} />
             </View>
             <View>

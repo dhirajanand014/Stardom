@@ -122,6 +122,9 @@ export const SDGenericStyles = StyleSheet.create({
     marginRight4: {
         marginRight: 4
     },
+    marginRight15: {
+        marginRight: 15
+    },
     marginBottom10: {
         marginBottom: 10
     },
@@ -920,6 +923,15 @@ export const categoryViewStyles = StyleSheet.create({
         color: "#000000",
         fontSize: 18,
         fontFamily: 'wallpiper_bold_font',
+    },
+    userFollowerFollowingList: {
+        shadowColor: '#fff',
+        shadowOffset: {
+            width: 0,
+            height: 10
+        },
+        shadowOpacity: .3,
+        shadowRadius: 20
     }
 })
 
@@ -1363,5 +1375,10 @@ export const userMenuStyles = {
         borderRadius: 58,
         borderWidth: 3,
         borderColor: `#f4f4f4`
+    },
+    followerFollowingImageStyle: {
+        width: 70,
+        height: 70,
+        borderRadius: 58
     }
 }

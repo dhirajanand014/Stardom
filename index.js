@@ -2,11 +2,14 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { AppRegistry, LogBox } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
-import { headerLessStackOptions, screenOptions, screens, tabBarOptions } from './constants/Constants';
+import {
+    headerLessStackOptions, profilePostsScreenOptions,
+    profileScreenOptions, screenOptions, screens, tabBarOptions
+} from './constants/Constants';
 import { authorizationHeader, categoryHeader } from './helper/Helper';
 import { Category } from './screens/category/Category';
 import { Intro } from './screens/Intro';
@@ -22,11 +25,11 @@ import { Posts } from './views/imagePost/Posts';
 import { SDCameraView } from './views/cameraView/SDCameraView';
 import { Glance } from './screens/post/Glance';
 import { ProfilePosts } from './screens/user/ProfilePosts';
+import { UserFollowFollowing } from './screens/user/UserFollowFollowing';
 
 LogBox.ignoreAllLogs(true);
 
 const Stack = createStackNavigator();
-const RootStack = createStackNavigator();
 const TabNavigator = createMaterialTopTabNavigator();
 
 
@@ -54,16 +57,9 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.ADD_POST_DETAILS} component={AddPostDetails} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.POSTS} component={Posts} options={authorizationHeader} />
                 <Stack.Screen name={screens.REGISTER} component={Register} options={headerLessStackOptions} />
-                <Stack.Screen name={screens.PROFILE} component={Profile} options={{
-                    animationEnabled: true,
-                    headerShown: false,
-                    cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
-                }} />
-                <Stack.Screen name={screens.PROFILE_POSTS} component={ProfilePosts} options={{
-                    animationEnabled: true,
-                    headerShown: false,
-                    cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-                }} />
+                <Stack.Screen name={screens.PROFILE} component={Profile} options={profileScreenOptions} />
+                <Stack.Screen name={screens.PROFILE_POSTS} component={ProfilePosts} options={profilePostsScreenOptions} />
+                <Stack.Screen name={screens.USER_FOLLOWERS_FOLLOWING} component={UserFollowFollowing} options={headerLessStackOptions} />
             </Stack.Navigator>
         </NavigationContainer>
     )

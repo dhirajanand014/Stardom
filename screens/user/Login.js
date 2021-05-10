@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { PhoneIcon } from '../../components/icons/PhoneIcon';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
-import { useNavigation } from '@react-navigation/native';
+import { TabActions, useNavigation } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import {
     fieldControllerName, formRequiredRules,
@@ -13,13 +13,15 @@ import {
     screens, alertTextMessages, errorMessages, modalTextConstants
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
-import { LoginIcon } from '../../components/icons/LogInIcon';
 import { focusOnInputIfFormInvalid, handleUserLogin, redirectUserToGlance, showSnackBar } from '../../helper/Helper';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
+import { CategoryContext } from '../../App';
 export const Login = props => {
 
     const { handleSubmit, control, formState } = useForm();
+
+    const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
 
     const navigation = useNavigation();
 
@@ -32,13 +34,18 @@ export const Login = props => {
     const onSubmit = async data => {
         const responseData = await handleUserLogin(data, messaging);
         if (responseData) {
-            const initialCategories = await redirectUserToGlance();
             showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
-            navigation.navigate(initialCategories && screens.GLANCE || screens.CATEGORY);
-            return true;
+            const details = { [miscMessage.DETAILS]: responseData };
+            loggedInUser.loginDetails = details;
+            loggedInUser.isLoggedIn = true;
+            setLoggedInUser({ ...loggedInUser });
+
+            const categoriesViewed = await redirectUserToGlance();
+            categoriesViewed && navigation.dispatch(TabActions.jumpTo(screens.GLANCE))
+                || navigation.navigate(screens.CATEGORY);
+        } else {
+            showSnackBar(errorMessages.COULD_NOT_LOGIN_USER, false);
         }
-        showSnackBar(errorMessages.COULD_NOT_LOGIN_USER, false);
-        return false;
     }
 
     return (

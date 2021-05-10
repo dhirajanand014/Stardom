@@ -1,12 +1,13 @@
 import React from 'react';
 import { Text, View, TouchableNativeFeedback } from "react-native";
+import { miscMessage, screens } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 
-export const MenuRenderer = (item, index, navigation) => {
+export const MenuRenderer = (item, index, profileMenu, navigation) => {
     return (
         <View key={index}>
             <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(colors.SDOM_PLACEHOLDER, false)} useForeground={true}
-                onPress={() => navigation.navigate(item.key)}>
+                onPress={() => navigation.navigate(item.key, item.key == screens.USER_FOLLOWERS_FOLLOWING && { listFor: item.label })}>
                 <View style={SDGenericStyles.rowFlexDirection}>
                     <View style={[SDGenericStyles.paddingHorizontal20, SDGenericStyles.paddingVertical10, SDGenericStyles.alignItemsStart]}>
                         <Text style={[SDGenericStyles.placeHolderTextColor, SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft18]}>
@@ -14,10 +15,10 @@ export const MenuRenderer = (item, index, navigation) => {
                         </Text>
                     </View>
                     {
-                        item.value &&
+                        item.key == screens.USER_FOLLOWERS_FOLLOWING &&
                         <View style={[userAuthStyles.menuRightCountView, SDGenericStyles.textBoxGray, SDGenericStyles.alignItemsEnd]}>
                             <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16]}>
-                                {item.value}
+                                {item.label == miscMessage.FOLLOWERS_TEXT && profileMenu.followersCount || profileMenu.followingCount}
                             </Text>
                         </View>
                     }

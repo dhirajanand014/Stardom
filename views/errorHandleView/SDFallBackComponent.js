@@ -27,7 +27,7 @@ export const SDFallBackComponent = (props) => {
                 {
                     componentErrorConsts.CATEGORY_WITHOUT_POST == componentErrorConst &&
                     <TouchableOpacity activeOpacity={.7} style={errorBoundaryStyles.resetToCategorySelectionButton}
-                        onPress={() => navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.CATEGORY }], })}>
+                        onPress={() => navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.CATEGORY }] })}>
                         <Text style={errorBoundaryStyles.redirectButtonText}>{miscMessage.SELECT_CATEGORIES}</Text>
                     </TouchableOpacity>
                 }
