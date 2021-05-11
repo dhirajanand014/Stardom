@@ -3,11 +3,11 @@ import { Text, View, TouchableNativeFeedback } from "react-native";
 import { miscMessage, screens } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 
-export const MenuRenderer = (item, index, profileMenu, navigation) => {
+export const MenuRenderer = (item, index, profileMenu, handleMenuClickAction) => {
     return (
         <View key={index}>
             <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(colors.SDOM_PLACEHOLDER, false)} useForeground={true}
-                onPress={() => navigation.navigate(item.key, item.key == screens.USER_FOLLOWERS_FOLLOWING && { listFor: item.label })}>
+                onPress={async () => await handleMenuClickAction(item)}>
                 <View style={SDGenericStyles.rowFlexDirection}>
                     <View style={[SDGenericStyles.paddingHorizontal20, SDGenericStyles.paddingVertical10, SDGenericStyles.alignItemsStart]}>
                         <Text style={[SDGenericStyles.placeHolderTextColor, SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft18]}>

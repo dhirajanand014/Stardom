@@ -1335,6 +1335,53 @@ export const fetchUserFollowersFollowing = async (listFor, loggedInUser) => {
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
         showSnackBar(listFor == miscMessage.FOLLOWERS_TEXT && errorMessages.FAILED_TO_LIST_FOLLOWERS ||
-            errorMessages.FAILED_TO_LIST_FOLLOWING, true);
+            errorMessages.FAILED_TO_LIST_FOLLOWING, false);
+    }
+}
+
+export const logoutUser = async (token, loggedInUser, setLoggedInUser) => {
+    try {
+        const response = await axiosPostWithHeadersAndToken(urlConstants.logout, stringConstants.EMPTY, token);
+        const responseData = processResponseData(response);
+        responseData.message == responseStringData.SUCCESS_LOGOUT &&
+            showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
+        loggedInUser.loginDetails = stringConstants.EMPTY;
+        loggedInUser.isLoggedIn = false;
+        setLoggedInUser({ ...loggedInUser });
+    } catch (error) {
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(errorMessages.COULD_NOT_LOGOUT, false);
+    }
+}
+
+export const checkUserIdAvailability = async (value) => {
+    try {
+        const url = `${urlConstants.checkAvailability}${stringConstants.SLASH}${value}`;
+        const response = await axiosGetWithHeaders(url);
+        return processResponseData(response);
+    } catch (error) {
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+    }
+}
+
+export const userPostAction = async (request, data, token) => {
+    try {
+        let requestJSON, url;
+        switch (request) {
+            case requestConstants.USER_VERIFY:
+                url = `${urlConstants.userSaveAction}${stringConstants.SLASH}${requestConstants.USER_VERIFY}`
+                requestJSON = JSON.stringify({ details: data.verifyUserDetails });
+                break;
+            case requestConstants.USER_BIO:
+                url = `${urlConstants.userSaveAction}${stringConstants.SLASH}${requestConstants.USER_BIO}`
+                requestJSON = JSON.stringify({ bio: data.userBio });
+                break;
+            default:
+                break;
+        }
+        const response = await axiosPostWithHeadersAndToken(url, requestJSON, token);
+        return processResponseData(response);
+    } catch (error) {
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
     }
 }

@@ -6,6 +6,7 @@ import Animated from 'react-native-reanimated';
 import { useEffect } from 'react/cjs/react.development';
 import { CategoryContext } from '../../App';
 import { LockIcon } from '../../components/icons/LockIcon';
+import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
     actionButtonTextConstants, height,
@@ -32,26 +33,36 @@ export const Profile = () => {
 
     return (
         <View style={[SDGenericStyles.fill]}>
+            <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.normal }}
+                style={{ width: width, height: height }} />
             <View>
-                <FastImage source={{ uri: profile.profile_image || `https://reactnative.dev/img/tiny_logo.png`, priority: FastImage.priority.normal }}
-                    style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.center} />
-            </View>
-            <View>
-                <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft5, SDGenericStyles.bottom220]}>
+                <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10, SDGenericStyles.bottom220]}>
                     <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.bottom8]}>
-                        <Text style={[SDGenericStyles.ft25, SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter,
-                        SDGenericStyles.textCenterAlign]}>{profile.name}</Text>
+                        <View style={SDGenericStyles.rowFlexDirection}>
+                            <Text style={[SDGenericStyles.ft25, SDGenericStyles.fontFamilyBold,
+                            SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite]}>
+                                {profile.name}
+                            </Text>
+                            {
+                                profile.user_type == miscMessage.VERIFIED_AUTHOR &&
+                                <View>
+                                    <VerifiedAuthorBadgeIcon width={numericConstants.TWENTY_FOUR} height={numericConstants.TWENTY_FOUR}
+                                        stroke={colors.GREEN} />
+                                </View>
+                            }
+                        </View>
                         <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter,
-                        SDGenericStyles.textCenterAlign, SDGenericStyles.mt12]}>{`@`}{profile.user_id}</Text>
+                        SDGenericStyles.textCenterAlign, SDGenericStyles.mt12, SDGenericStyles.textColorWhite]}>{`@`}{profile.user_id}</Text>
                     </Animated.View>
                     <Animated.View style={SDGenericStyles.alignItemsStart}>
                         {
                             profile.bio && <Text style={[SDGenericStyles.textLeftAlign, SDGenericStyles.justifyContentCenter,
-                            SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, { width: width / numericConstants.ONE_PT_NINE }]}>{profile.bio}</Text> ||
+                            SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, { width: width / numericConstants.ONE_PT_NINE },
+                            SDGenericStyles.textColorWhite]}>{profile.bio}</Text> ||
                             <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.paddingVertical2,
                             SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle]}>
                                 <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
-                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft12]}>{actionButtonTextConstants.ADD_BIO}</Text>
+                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft12, SDGenericStyles.textColorWhite]}>{actionButtonTextConstants.ADD_BIO}</Text>
                             </TouchableOpacity>
                         }
                     </Animated.View>

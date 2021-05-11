@@ -66,11 +66,14 @@ export const headerStrings = {
 export const urlConstants = {
     fetchCategories: `${BASE_URI}/category`,
     fetchAllPosts: `${BASE_URI}/post`,
+    userSaveAction: `${BASE_URI}/user`,
     setPostCounts: `https://www.wallpiper.app/4RhvfbEGwnsmxliks.php`,
     fetchReportAbuses: `https://www.wallpiper.app/4RhvfbEGwnsmxrpts.php`,
     setReportAbuseIdWithPostId: `https://www.wallpiper.app/4RhvfbEGwnsmxrptlist.php`,
+    checkAvailability: `${BASE_URI}/user/validate`,
     fetchProfilePostsCounts: `${BASE_URI}/profile/count`,
     login: `${BASE_URI}/auth/login`,
+    logout: `${BASE_URI}/auth/logout`,
     getUserProfile: `${BASE_URI}/auth/userprofile`,
     fetchPostsByUserId: `${BASE_URI}/post/userid`,
     registerUser: `${BASE_URI}/auth/register`,
@@ -109,7 +112,8 @@ export const fieldControllerName = {
     POST_TITLE: `postTitle`,
     POST_DESCRIPTION: `postDescription`,
     FOLLOWER_ID: `follower_id`,
-    FOLLOWING_ID: `following_id`
+    FOLLOWING_ID: `following_id`,
+    VERIFY_USER: `verifyUserDetails`
 }
 
 export const keyBoardTypeConst = {
@@ -132,6 +136,7 @@ export const textContentType = {
 
 export const actionButtonTextConstants = {
     LOGIN: `Login`,
+    LOGOUT: `Logout`,
     REGISTER: `Register`,
     SUBMIT: `Submit`,
     SURE: `Sure`,
@@ -156,6 +161,7 @@ export const actionButtonTextConstants = {
     SAVE_BUTTON: `saveButton`,
     SKIP_BUTTON_TEXT: `Skip >>`,
     ADD_BIO: `Add bio`,
+    VERIFY_USER: `Verify User`,
     FOLLOW: `Follow`,
     UNFOLLOW: `Unfollow`,
     PRIVATE_ACCESS: `AccessPrivate`,
@@ -283,6 +289,16 @@ export const formRequiredRules = {
         },
         validate: value => !value.length && `Please select atlease one category` ||
             true
+    },
+    userIdAvailability: {
+        type: `mismatch`,
+        message: `User ID already in use! Please try another ID`
+    },
+    verifyUserInputRule: {
+        required: {
+            value: true,
+            message: `Please enter details`
+        }
     }
 };
 
@@ -378,6 +394,7 @@ export const placeHolderText = {
     SELECT_CATEGORIES: 'Select Categories',
     ADD_POST_TITLE: `Enter Title`,
     ADD_POST_DESCRIPTION: `Enter Description`,
+    VERIFY_USER_DETAILS: `Enter details`,
     SELECT_GENDER: `Select a gender`,
     SELECT_POST_TYPE: `Select Post type`
 }
@@ -447,6 +464,7 @@ export const alertTextMessages = {
     SUCCESS_UNFOLLOW: `You have unfollowing this user`,
     YOU_ARE_ALREADY_FOLLOWING_THIS_USER: `You are already following this user`,
     YOU_ARE_ALREADY_UNFOLLOWING_THIS_USER: `You are already unfollowing this user`,
+    SUBMITTED_FOR_VERIFICATION: `You have successfully submitted the details for verification`,
 }
 
 export const errorMessages = {
@@ -483,6 +501,8 @@ export const errorMessages = {
     COULD_NOT_FETCH_USER_PROFILE_POST: `Could not fetch user profile posts`,
     FAILED_TO_LIST_FOLLOWERS: `Failed to show followers`,
     FAILED_TO_LIST_FOLLOWING: `Failed to show followings`,
+    COULD_NOT_LOGOUT: `Could not logout`,
+    COULD_NOT_SUBMIT_VERIFICATION: `Could not submit your request for verification.`
 }
 
 export const reportAbuseRequestPayloadKeys = {
@@ -493,11 +513,15 @@ export const reportAbuseRequestPayloadKeys = {
 
 export const responseStringData = {
     SUCCESS: `Success`,
+    UNSUCCESSFUL: `Unsuccessful`,
+    ERROR: `Error`,
+    BAD_REQUEST: `Bad Request`,
     RESPONSE_MESSAGE: `Response Message: `,
     USER_SUCCESSFULLY_REGISTER: `Registration Successful`,
     TOKEN_INVALID: `Token is Invalid`,
     TOKEN_EXPIRED: `Token is Expired`,
     REDIRECT_USER_LOGIN: `Redirect user login`,
+    SUCCESS_LOGOUT: `User successfully signed out`
 }
 
 export const postitionStringConstants = {
@@ -550,6 +574,7 @@ export const miscMessage = {
     FORGOT_PASSWORD: `Forgot Password`,
     DATE_PICKER_FORMAT: `DD / MM / YYYY`,
     RIGHT: `right`,
+    TRANSPARENT: `transparent`,
     UP: `up`,
     STRETCH: `stretch`,
     BACKSPACE: `Backspace`,
@@ -584,6 +609,8 @@ export const miscMessage = {
     ADD_POST: `Add Post`,
     FOLLOWERS_TEXT: `Followers`,
     FOLLOWING_TEXT: `Following`,
+    AUTHOR: `Author`,
+    VERIFIED_AUTHOR: `Verified Author`,
     FOLLOWERS: `FOLLOWERS`,
     FOLLOWING: `FOLLOWING`,
     WALLS: `WALLS`,
@@ -614,6 +641,8 @@ export const requestConstants = {
     FOLLOWING_COUNT: `followingCount`,
     WALLPAPERS_COUNT: `wallsCount`,
     UPLOAD_COUNT: `uploadCount`,
+    USER_VERIFY: `verify`,
+    USER_BIO: `addBio`,
     DOWNLOAD_COUNT: `downloadCount`,
     POST_ID: `id`
 };
@@ -662,7 +691,7 @@ export const SDMenuOptions = [
         loggedIn: true
     }, {
         label: `Get verified`,
-        key: screens.POSTS,
+        key: actionButtonTextConstants.VERIFY_USER,
         loggedIn: true
     }, {
         label: `Category`,

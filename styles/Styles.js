@@ -161,6 +161,9 @@ export const SDGenericStyles = StyleSheet.create({
     placeHolderTextColor: {
         color: `#969696`
     },
+    borderWidth2: {
+        borderWidth: 2
+    },
     borderWidth3: {
         borderWidth: 3
     },
@@ -205,6 +208,12 @@ export const SDGenericStyles = StyleSheet.create({
     },
     borderRadius5: {
         borderRadius: 5
+    },
+    paddingStart10: {
+        paddingStart: 10
+    },
+    paddingEnd10: {
+        paddingEnd: 10
     },
     padding5: {
         padding: 5
@@ -327,7 +336,7 @@ export const SDGenericStyles = StyleSheet.create({
         backgroundColor: `#1b1f2b`
     },
     backGroundColorGray: {
-        backgroundColor: `#969696`
+        backgroundColor: `#484a55`
     },
     colorYellow: {
         color: '#eabe05'
@@ -349,6 +358,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingLeft5: {
         paddingLeft: 5
+    },
+    paddingLeft10: {
+        paddingLeft: 10
     },
     alignItemsStart: {
         alignItems: 'flex-start'
@@ -399,11 +411,15 @@ export const SDGenericStyles = StyleSheet.create({
     borderRadius20: {
         borderRadius: 20
     },
+
+    height63: {
+        height: 63
+    },
     height100: {
         height: 100
     },
-    height63: {
-        height: 63
+    height150: {
+        height: 150
     },
     bottom180: {
         bottom: 180
@@ -1166,10 +1182,7 @@ export const userAuthStyles = StyleSheet.create({
     userInput: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingStart: 10,
-        paddingEnd: 15,
         backgroundColor: `#343642`,
-        marginVertical: 8,
         borderRadius: 8,
         width: width / 1.15,
     },
@@ -1380,5 +1393,41 @@ export const userMenuStyles = {
         width: 70,
         height: 70,
         borderRadius: 58
-    }
+    },
+    userVerifyModalView: {
+        margin: 250,
+        borderRadius: 20,
+        paddingTop: 45,
+        paddingRight: 45,
+        paddingBottom: 15,
+        paddingLeft: 45,
+        width: width / 1.1,
+        height: 285,
+        shadowColor: "#fff",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    verifyUserTextHeight: {
+        justifyContent: 'center',
+        maxHeight: 50
+    },
+    verifyUserTextInput: {
+        height: 150,
+        fontSize: 16,
+        color: '#05375a'
+    },
+    verifyUserCancelText: {
+        textAlign: 'center',
+        textDecorationLine: 'underline',
+    },
+    verifyUserSubmitButton: {
+        borderRadius: 25,
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        width: 120,
+        elevation: 3,
+        backgroundColor: '#eabe05'
+    },
 }
