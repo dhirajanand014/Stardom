@@ -1366,10 +1366,18 @@ export const checkUserIdAvailability = async (value) => {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
     }
 }
+export const isValidURL = (str) => {
+    var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+    return !!pattern.test(str);
+}
 
 export const userPostAction = async (request, data, token) => {
     try {
-        debugger
         let requestJSON, url, response;
         switch (request) {
             case requestConstants.USER_VERIFY:
@@ -1380,14 +1388,15 @@ export const userPostAction = async (request, data, token) => {
             case requestConstants.EDIT:
                 url = `${urlConstants.userSaveAction}${stringConstants.SLASH}${requestConstants.EDIT}`
                 const formData = new FormData();
-                const imageName = data.imagePath.substring(data.imagePath.lastIndexOf(stringConstants.SLASH) +
-                    numericConstants.ONE, data.imagePath.length);
-                formData.append(requestConstants.ID, data.id)
                 formData.append(requestConstants.NAME, data.name);
                 formData.append(requestConstants.EMAIL_ID, data.email);
                 formData.append(requestConstants.SECRET, data.secret);
                 formData.append(requestConstants.USER_BIO, data.bio);
-                formData.append(requestConstants.PROFILE_PICTURE, { uri: data.imagePath, name: imageName, type: miscMessage.IMAGE_TYPE });
+                if (!isValidURL(data.imagePath)) {
+                    const imageName = data.imagePath.substring(data.imagePath.lastIndexOf(stringConstants.SLASH) +
+                        numericConstants.ONE, data.imagePath.length);
+                    formData.append(requestConstants.PROFILE_PICTURE, { uri: data.imagePath, name: imageName, type: miscMessage.IMAGE_TYPE });
+                }
                 response = await axiosPostUploadImageWithHeaders(url, formData, token);
                 break;
             default:

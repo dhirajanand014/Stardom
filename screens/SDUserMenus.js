@@ -90,8 +90,8 @@ export const SDUserMenus = () => {
                 <TouchableOpacity activeOpacity={.7}>
                     <View style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
                         {
-                            !profileMenu.profileImage &&
-                            <FastImage resizeMode={FastImage.resizeMode.contain} source={{
+                            profileMenu.profileImage &&
+                            <FastImage source={{
                                 uri: profileMenu.profileImage, priority: FastImage.priority.normal,
                             }} style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]} />
                         }

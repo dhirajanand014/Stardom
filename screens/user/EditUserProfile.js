@@ -14,7 +14,7 @@ import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
 import Animated, { useSharedValue } from 'react-native-reanimated';
 import {
     showSnackBar,
-    redirectUserToGlance, handleUserRegistration, saveRegistrationStatus, userPostAction
+    redirectUserToGlance, handleUserRegistration, saveRegistrationStatus, userPostAction, isValidURL
 } from '../../helper/Helper';
 import { useNavigation } from '@react-navigation/core';
 import { CategoryContext } from '../../App';
@@ -49,8 +49,6 @@ export const EditUserProfile = () => {
 
     const onSubmit = async (data) => {
         data.imagePath = profileDetails.profile_picture;
-        data.id = profileDetails.id;
-        debugger
         const registrationUpdated = await userPostAction(requestConstants.EDIT, data, loggedInUser.loginDetails.token);
         if (registrationUpdated) {
             const initialCategories = await redirectUserToGlance();
@@ -75,7 +73,7 @@ export const EditUserProfile = () => {
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.alignItemsCenter]}>
             <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingTop20]}>
-                <FastImage resizeMode={FastImage.resizeMode.contain} source={{
+                <FastImage source={{
                     uri: profileDetails.profile_picture, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
                 }} style={[userMenuStyles.editProfileImageStyle, SDGenericStyles.paddingHorizontal25]} />
                 <TouchableOpacity activeOpacity={.7} onPress={() => bottomSheetRef?.current?.snapTo(numericConstants.ZERO)}>
