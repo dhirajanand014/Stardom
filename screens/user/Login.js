@@ -5,7 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { PhoneIcon } from '../../components/icons/PhoneIcon';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
 import { TabActions, useNavigation } from '@react-navigation/native';
-//import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 import {
     fieldControllerName, formRequiredRules,
     stringConstants, numericConstants, keyBoardTypeConst,
@@ -32,7 +32,7 @@ export const Login = props => {
     };
 
     const onSubmit = async data => {
-        const responseData = await handleUserLogin(data, "");
+        const responseData = await handleUserLogin(data, messaging);
         if (responseData) {
             showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
             const details = { [miscMessage.DETAILS]: responseData };

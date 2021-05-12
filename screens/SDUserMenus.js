@@ -7,7 +7,8 @@ import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
 import { ErrorModal } from '../components/modals/ErrorModal';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
-    actionButtonTextConstants, jsonConstants, miscMessage, modalTextConstants, numericConstants, screens, stringConstants
+    actionButtonTextConstants, jsonConstants, miscMessage, modalTextConstants,
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, screens, stringConstants
 } from '../constants/Constants';
 import { prepareSDOMMenu, fetchProfilePostsCounts, logoutUser, fetchUpdateLoggedInUserProfile } from '../helper/Helper';
 import { colors, SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';
@@ -26,6 +27,7 @@ export const SDUserMenus = () => {
         profileUserId: stringConstants.EMPTY,
         followersCount: numericConstants.ZERO,
         followingCount: numericConstants.ZERO,
+        privateRequestCount: numericConstants.ZERO,
         showSubmitVerifyModal: false
     })
 
@@ -56,6 +58,18 @@ export const SDUserMenus = () => {
                 if ((details.user_type == miscMessage.AUTHOR && details.verification && details.verification.user == details.id) ||
                     (details.user_type == miscMessage.VERIFIED_AUTHOR)) {
                     return false;
+                }
+                return true;
+            case screens.USER_FOLLOWERS_FOLLOWING:
+                if (menu.label == miscMessage.FOLLOWERS_TEXT) {
+
+                } else if (menu.label == miscMessage.FOLLOWING_TEXT) {
+
+                }
+                else if (menu.label == miscMessage.PRIVATE_REQUEST_ACCESS) {
+                    const followers = details.followers;
+                    profileMenu.privateRequestCount = followers.filter(follower => follower.pvtaccess == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED).length;
+                    return profileMenu.privateRequestCount > numericConstants.ZERO;
                 }
                 return true;
             default:

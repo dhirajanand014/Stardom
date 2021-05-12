@@ -73,21 +73,21 @@ export const Profile = () => {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.paddingLeft5} onPress={async () =>
-                            await handleUserPostAction(profileDetail.hasPrivateAccess && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW,
-                                profile, sdomDatastate, setSdomDatastate, loggedInUser, profileDetail, setProfileDetail, navigation,
-                                profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED)}>
+                            await handleUserPostAction(profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED &&
+                                actionButtonTextConstants.FOLLOW || actionButtonTextConstants.UNFOLLOW, profile, sdomDatastate, setSdomDatastate,
+                                loggedInUser, profileDetail, setProfileDetail, navigation, true)}>
                             {
                                 profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED &&
                                 (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
-                                    <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} stroke={colors.WHITE} />
+                                    <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} fill={colors.WHITE} />
                                 </View>) ||
                                 profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED &&
                                 (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
-                                    <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} stroke={colors.SDOM_YELLOW} />
+                                    <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} fill={colors.SDOM_YELLOW} />
                                 </View>) ||
-                                profileDetail.isFollowing && profileDetail.hasPrivateAccess &&
+                                profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.APPROVED &&
                                 (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
-                                    <UnlockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} stroke={colors.SDOM_YELLOW} />
+                                    <UnlockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} fill={colors.SDOM_YELLOW} />
                                 </View>)
                             }
                         </TouchableOpacity>

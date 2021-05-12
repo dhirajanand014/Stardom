@@ -168,6 +168,8 @@ export const actionButtonTextConstants = {
     FOLLOW: `Follow`,
     UNFOLLOW: `Unfollow`,
     PRIVATE_FOLLOW: `Private Follow`,
+    APPROVE: `Approve`,
+    REJECT: `Reject`,
     PUBLIC_FOLLOW: `Public Follow`
 }
 
@@ -471,6 +473,8 @@ export const alertTextMessages = {
     YOU_ARE_ALREADY_UNFOLLOWING_THIS_USER: `You are already unfollowing this user`,
     SUCCESSFUL_BIO_UPDATE: `Details successfully updated`,
     SUBMITTED_FOR_VERIFICATION: `You have successfully submitted the details for verification`,
+    YOU_HAVE_SUCCESSFULLY_APPROVED: `You have successfuly approved private access to this user`,
+    YOU_HAVE_SUCCESSFULLY_REJECTED: `You have successfuly rejected private access to this user`,
 }
 
 export const errorMessages = {
@@ -528,7 +532,8 @@ export const responseStringData = {
     TOKEN_INVALID: `Token is Invalid`,
     TOKEN_EXPIRED: `Token is Expired`,
     REDIRECT_USER_LOGIN: `Redirect user login`,
-    SUCCESS_LOGOUT: `User successfully signed out`
+    SUCCESS_LOGOUT: `User successfully signed out`,
+    SUCCESSFULLY_UPDATED: `Successfully Updated`
 }
 
 export const postitionStringConstants = {
@@ -627,11 +632,14 @@ export const miscMessage = {
     SUCCESSFULLY_ADDED_FOLLOWER: `Successfully Added Follower`,
     SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER: `Successfully Requested Private Access`,
     SUCCESSFULLY_UNFOLLOWED: `Successfully unfollowed`,
-    SUCCESSFULLY_UNFOLLOWED_PRIVATE_ACCESS: `Successfully unfollowed private access`
+    SUCCESSFULLY_UNFOLLOWED_PRIVATE_ACCESS: `Successfully unfollowed private access`,
+    GET_VERIFIED: `Get verified`,
+    PRIVATE_REQUEST_ACCESS: `Private request access`
 }
 
 export const requestConstants = {
     ID: `id`,
+    APPROVAL_ACTION: `approval`,
     PHONE_NUMBER: `phone_number`,
     SECRET: `password`,
     NAME: `name`,
@@ -648,6 +656,7 @@ export const requestConstants = {
     POST_CATEGORIES: `post_categories`,
     POST_TYPE: `post_type`,
     POST_IMAGE: `post_image`,
+    FOLLOWER_ID: `follower_id`,
     FOLLOWING_ID: `following_id`,
     PVT_ACCESS_TEXT: `pvtaccess`,
     FOLLOWERS_COUNT: `followersCount`,
@@ -660,7 +669,9 @@ export const requestConstants = {
     TYPE: `type`,
     DOWNLOAD_COUNT: `downloadCount`,
     POST_ID: `id`,
-    EDIT: `edit`
+    EDIT: `edit`,
+    PRIVATE_ACCESS_ACTION: `privateaccess`
+
 };
 
 export const keyChainConstansts = {
@@ -701,23 +712,27 @@ export const PRIVATE_FOLLOW_UNFOLLOW = {
 
 export const SDMenuOptions = [
     {
-        label: `Following`,
+        label: miscMessage.FOLLOWING_TEXT,
         key: screens.USER_FOLLOWERS_FOLLOWING,
         loggedIn: true
     }, {
-        label: `Followers`,
+        label: miscMessage.FOLLOWERS_TEXT,
         key: screens.USER_FOLLOWERS_FOLLOWING,
         loggedIn: true
     }, {
-        label: `Posts`,
+        label: miscMessage.PRIVATE_REQUEST_ACCESS,
+        key: screens.USER_FOLLOWERS_FOLLOWING,
+        loggedIn: true
+    }, {
+        label: screens.POSTS,
         key: screens.POSTS,
         loggedIn: true
     }, {
-        label: `Get verified`,
+        label: miscMessage.GET_VERIFIED,
         key: actionButtonTextConstants.VERIFY_USER,
         loggedIn: true
     }, {
-        label: `Category`,
+        label: screens.CATEGORY,
         key: screens.CATEGORY
     }
 ];

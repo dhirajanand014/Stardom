@@ -278,6 +278,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingBottom5: {
         paddingBottom: 5
     },
+    paddingBottom10: {
+        paddingBottom: 10
+    },
     paddingBottom20: {
         paddingBottom: 20
     },
