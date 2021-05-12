@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
 import {
   defaultProfilesValue, jsonConstants, numericConstants,
-  screens, stringConstants, requestConstants
+  screens, stringConstants, requestConstants, PRIVATE_FOLLOW_UNFOLLOW
 } from './constants/Constants';
 import { fetchAndUpdateCategoryState, fetchUpdateLoggedInUserProfile, getAllProfiles } from './helper/Helper.js';
 import { TourGuideProvider } from 'rn-tourguide';
@@ -63,7 +63,7 @@ export default function App({ navigationRef }) {
       [requestConstants.DOWNLOAD_COUNT]: numericConstants.ZERO,
     },
     isFollowing: false,
-    hasPublicAccess: false
+    privateRequestAccessStatus: PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED
   })
 
   const [profiles, setProfiles] = useState(jsonConstants.EMPTY);

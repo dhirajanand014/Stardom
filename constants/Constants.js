@@ -167,8 +167,8 @@ export const actionButtonTextConstants = {
     VERIFY_USER: `Verify User`,
     FOLLOW: `Follow`,
     UNFOLLOW: `Unfollow`,
-    PRIVATE_ACCESS: `AccessPrivate`,
-    PUBLIC_ACCESS: `AccessPublic`
+    PRIVATE_FOLLOW: `Private Follow`,
+    PUBLIC_FOLLOW: `Public Follow`
 }
 
 export const formRequiredRules = {
@@ -623,7 +623,11 @@ export const miscMessage = {
     WALLS: `WALLS`,
     UPLOADS: `UPLOADS`,
     DOWNLOADS: `DOWNLOADS`,
-    REQUEST_FOR_PRIVATE_ACCESS: `Request to access private wallpaper`
+    REQUEST_FOR_PRIVATE_ACCESS: `Request to access private wallpaper`,
+    SUCCESSFULLY_ADDED_FOLLOWER: `Successfully Added Follower`,
+    SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER: `Successfully Requested Private Access`,
+    SUCCESSFULLY_UNFOLLOWED: `Successfully unfollowed`,
+    SUCCESSFULLY_UNFOLLOWED_PRIVATE_ACCESS: `Successfully unfollowed private access`
 }
 
 export const requestConstants = {
@@ -645,6 +649,7 @@ export const requestConstants = {
     POST_TYPE: `post_type`,
     POST_IMAGE: `post_image`,
     FOLLOWING_ID: `following_id`,
+    PVT_ACCESS_TEXT: `pvtaccess`,
     FOLLOWERS_COUNT: `followersCount`,
     FOLLOWING_COUNT: `followingCount`,
     WALLPAPERS_COUNT: `wallsCount`,
@@ -652,6 +657,7 @@ export const requestConstants = {
     USER_VERIFY: `verify`,
     PROFILE_PICTURE: `profile_picture`,
     USER_BIO: `bio`,
+    TYPE: `type`,
     DOWNLOAD_COUNT: `downloadCount`,
     POST_ID: `id`,
     EDIT: `edit`
@@ -684,6 +690,13 @@ export const defaultProfilesValue = {
         color: `#fafafa`,
         fontFamily: `wallpiper_roman_font`,
     }
+}
+
+export const PRIVATE_FOLLOW_UNFOLLOW = {
+    NOT_REQUESTED: numericConstants.ZERO,
+    REQUESTED: numericConstants.ONE,
+    APPROVED: numericConstants.TWO,
+    REJECTED: numericConstants.THREE
 }
 
 export const SDMenuOptions = [

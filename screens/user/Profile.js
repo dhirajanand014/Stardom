@@ -1,16 +1,17 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Text, TouchableOpacity, View } from "react-native"
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
 import { useEffect } from 'react/cjs/react.development';
 import { CategoryContext } from '../../App';
 import { LockIcon } from '../../components/icons/LockIcon';
+import { UnlockIcon } from '../../components/icons/UnlockIcon';
 import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
     actionButtonTextConstants, height, jsonConstants,
-    miscMessage, numericConstants, screens, width
+    miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW, screens, width
 } from '../../constants/Constants';
 import { checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile, handleUserPostAction } from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles } from "../../styles/Styles"
@@ -65,16 +66,30 @@ export const Profile = () => {
                         <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.paddingVertical2,
                         SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle, SDGenericStyles.backgroundColorYellow]} onPress={async () =>
                             await handleUserPostAction(profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW,
-                                profile, sdomDatastate, setSdomDatastate, loggedInUser, profileDetail, setProfileDetail, navigation)}>
+                                profile, sdomDatastate, setSdomDatastate, loggedInUser, profileDetail, setProfileDetail, navigation, false)}>
                             <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
                             SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16]}>
                                 {profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW}
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.paddingLeft5}>
-                            <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
-                                <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} stroke={colors.WHITE} />
-                            </View>
+                        <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.paddingLeft5} onPress={async () =>
+                            await handleUserPostAction(profileDetail.hasPrivateAccess && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW,
+                                profile, sdomDatastate, setSdomDatastate, loggedInUser, profileDetail, setProfileDetail, navigation,
+                                profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED)}>
+                            {
+                                profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED &&
+                                (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
+                                    <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} stroke={colors.WHITE} />
+                                </View>) ||
+                                profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED &&
+                                (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
+                                    <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} stroke={colors.SDOM_YELLOW} />
+                                </View>) ||
+                                profileDetail.isFollowing && profileDetail.hasPrivateAccess &&
+                                (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
+                                    <UnlockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} stroke={colors.SDOM_YELLOW} />
+                                </View>)
+                            }
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -92,6 +107,6 @@ export const Profile = () => {
                     </View>
                 </TouchableOpacity>
             </View>
-        </View>
+        </View >
     )
 }

@@ -12,7 +12,7 @@ import {
     miscMessage, width, height, numericConstants,
     screens, headerStrings, fieldControllerName, isAndroid,
     isIOS, OTP_INPUTS, errorMessages, requestConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions
+    jsonConstants, defaultProfilesValue, SDMenuOptions, PRIVATE_FOLLOW_UNFOLLOW
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -1210,9 +1210,10 @@ export const handlePostDelete = async (postId) => {
     }
 }
 
-export const handleUserFollowUnfollowAction = async (action, profileId) => {
+export const handleUserFollowUnfollowAction = async (action, profileId, isPrivate) => {
     try {
         const user = await getLoggedInUserDetails();
+        debugger
         if (user) {
             let url;
             if (action == actionButtonTextConstants.FOLLOW) {
@@ -1220,7 +1221,13 @@ export const handleUserFollowUnfollowAction = async (action, profileId) => {
             } else if (action == actionButtonTextConstants.UNFOLLOW) {
                 url = urlConstants.userUnFollow;
             }
-            const requestData = { [requestConstants.FOLLOWING_ID]: profileId }
+
+            const requestData = {
+                [requestConstants.FOLLOWING_ID]: profileId,
+                [requestConstants.TYPE]: isPrivate && miscMessage.POST_TYPE_PRIVATE_TEXT.toLowerCase() ||
+                    miscMessage.POST_TYPE_PUBLIC_TEXT.toLowerCase()
+            }
+
             const response = await axiosPostWithHeadersAndToken(url, JSON.stringify(requestData), user.token);
             return processResponseData(response);
         }
@@ -1235,21 +1242,37 @@ export const handleUserFollowUnfollowAction = async (action, profileId) => {
 export const checkTokenStatus = (responseData) => {
     return responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID;
 }
-export const updateProfileActionValueToState = async (action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
+export const updateProfileActionValueToState = async (responseData, action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
     profileDetail, setProfileDetail) => {
     try {
+        debugger
         const user = JSON.parse(loggedInUser.loginDetails.details);
         if (user) {
             const followerId = { [fieldControllerName.FOLLOWER_ID]: user.id };
             const followingId = { [fieldControllerName.FOLLOWING_ID]: profile.id };
+            const responseDataMessage = responseData.message;
 
             switch (action) {
                 case actionButtonTextConstants.FOLLOW:
                     sdomDatastate.posts.map(selectedPost => {
                         if (selectedPost.user.id == profile.id) {
-                            selectedPost.user.followers.push(followerId);
+                            debugger
+                            if (responseDataMessage == miscMessage.SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER) {
+                                selectedPost.user.followers.filter(following => following.follower_id == followerId)
+                                    .map(follower => follower.pvtaccess = PRIVATE_FOLLOW_UNFOLLOW.REQUESTED);
+                                profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.REQUESTED;
+                            } else if (!selectedPost.user.followers.some(followerId => followerId.follower_id == followerId)) {
+                                selectedPost.user.followers.push(followerId);
+                            }
                         } else if (selectedPost.user.id == user.id) {
-                            selectedPost.user.following.push(followingId);
+                            debugger
+                            if (responseDataMessage == miscMessage.SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER) {
+                                selectedPost.user.following.filter(following => following.following_id == followingId)
+                                    .map(following => following.pvtaccess = PRIVATE_FOLLOW_UNFOLLOW.REQUESTED);
+                                profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.REQUESTED;
+                            } else if (!selectedPost.user.following.some(followingId => followingId.following_id == followingId)) {
+                                selectedPost.user.following.push(followingId);
+                            }
                         }
                     });
                     break;
@@ -1262,11 +1285,8 @@ export const updateProfileActionValueToState = async (action, profile, sdomDatas
                         }
                     });
                     break;
-                case actionButtonTextConstants.PRIVATE_ACCESS:
-
-                default:
-                    break;
             }
+            debugger
             profileDetail.isFollowing = profile.followers.some(follower =>
                 follower.follower_id == user.id);
             setProfileDetail({ ...profileDetail });
@@ -1279,9 +1299,12 @@ export const updateProfileActionValueToState = async (action, profile, sdomDatas
 
 export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUser, profileDetail, setProfileDetail) => {
     if (loggedInUser.loginDetails) {
+        debugger
         const loggedInUserDetails = JSON.parse(loggedInUser.loginDetails.details);
         profileDetail.isFollowing = profile.followers.some(follower =>
             follower.follower_id == loggedInUserDetails.id);
+        profileDetail.privateRequestAccessStatus = profile.followers && profile.followers.find(following =>
+            following.follower_id == loggedInUserDetails.id).pvtaccess || PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
         const counts = await fetchProfilePostsCounts(loggedInUser);
         setProfileDetail({ ...profileDetail, count: counts });
     }
@@ -1306,14 +1329,14 @@ export const fetchProfilePostsCounts = async (loggedInUser) => {
     }
 }
 
-const navigateUserFromPostAcion = (action, responseData, profile, sdomDatastate, setSdomDatastate, loggedInUser,
+const navigateUserFromPostAction = (action, responseData, profile, sdomDatastate, setSdomDatastate, loggedInUser,
     profileDetail, setProfileDetail, navigation) => {
     if (responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID
         || responseData == responseStringData.REDIRECT_USER_LOGIN) {
         showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false);
         navigation.navigate(screens.LOGIN);
-    } else if (responseData && responseData.message == responseStringData.SUCCESS) {
-        updateProfileActionValueToState(action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
+    } else if (responseData && responseData.message.includes(responseStringData.SUCCESS)) {
+        updateProfileActionValueToState(responseData, action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
             profileDetail, setProfileDetail);
         showSnackBar(action == actionButtonTextConstants.FOLLOW && alertTextMessages.SUCCESS_FOLLOW ||
             alertTextMessages.SUCCESS_UNFOLLOW, true);
@@ -1321,12 +1344,11 @@ const navigateUserFromPostAcion = (action, responseData, profile, sdomDatastate,
 }
 
 export const handleUserPostAction = async (action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
-    profileDetail, setProfileDetail, navigation) => {
-    const responseData = await handleUserFollowUnfollowAction(action, profile.id);
-    navigateUserFromPostAcion(action, responseData, profile, sdomDatastate, setSdomDatastate, loggedInUser,
+    profileDetail, setProfileDetail, navigation, privateAccessRequest) => {
+    const responseData = await handleUserFollowUnfollowAction(action, profile.id, privateAccessRequest);
+    navigateUserFromPostAction(action, responseData, profile, sdomDatastate, setSdomDatastate, loggedInUser,
         profileDetail, setProfileDetail, navigation);
 }
-
 
 export const fetchUserFollowersFollowing = async (listFor, loggedInUser) => {
     try {

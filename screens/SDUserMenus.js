@@ -93,7 +93,8 @@ export const SDUserMenus = () => {
                             profileMenu.profileImage &&
                             <FastImage source={{
                                 uri: profileMenu.profileImage, priority: FastImage.priority.normal,
-                            }} style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]} />
+                            }} style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]} /> ||
+                            <RegisterUserIcon width={numericConstants.EIGHTY} height={numericConstants.EIGHTY} stroke={colors.SDOM_PLACEHOLDER} />
                         }
                     </View>
                 </TouchableOpacity>
