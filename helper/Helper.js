@@ -609,7 +609,7 @@ const datePickerConvert = (event, date) => {
     return false;
 }
 
-export const showSelectedImage = async (type, bottomSheetRef, userPosts, setUserPosts) => {
+export const showSelectedImage = async (type, bottomSheetRef, state, setState, isFrom) => {
     try {
         let imageValue;
         switch (type) {
@@ -622,9 +622,12 @@ export const showSelectedImage = async (type, bottomSheetRef, userPosts, setUser
             default:
                 break;
         }
-        userPosts.details.capturedImage = imageValue.path;
-        userPosts.details.showBottomOptions = false;
-        setUserPosts({ ...userPosts });
+        if (isFrom == screens.EDIT_USER_PROFILE) {
+            state.profile_picture = imageValue.path;
+        } else {
+            state.details.capturedImage = imageValue.path;
+        }
+        setState({ ...state });
         bottomSheetRef?.current?.snapTo(numericConstants.ONE);
     } catch (error) {
         console.log(error);
@@ -1366,20 +1369,30 @@ export const checkUserIdAvailability = async (value) => {
 
 export const userPostAction = async (request, data, token) => {
     try {
-        let requestJSON, url;
+        debugger
+        let requestJSON, url, response;
         switch (request) {
             case requestConstants.USER_VERIFY:
                 url = `${urlConstants.userSaveAction}${stringConstants.SLASH}${requestConstants.USER_VERIFY}`
                 requestJSON = JSON.stringify({ details: data.verifyUserDetails });
+                response = await axiosPostWithHeadersAndToken(url, requestJSON, token);
                 break;
-            case requestConstants.USER_BIO:
-                url = `${urlConstants.userSaveAction}${stringConstants.SLASH}${requestConstants.USER_BIO}`
-                requestJSON = JSON.stringify({ bio: data.userBio });
+            case requestConstants.EDIT:
+                url = `${urlConstants.userSaveAction}${stringConstants.SLASH}${requestConstants.EDIT}`
+                const formData = new FormData();
+                const imageName = data.imagePath.substring(data.imagePath.lastIndexOf(stringConstants.SLASH) +
+                    numericConstants.ONE, data.imagePath.length);
+                formData.append(requestConstants.ID, data.id)
+                formData.append(requestConstants.NAME, data.name);
+                formData.append(requestConstants.EMAIL_ID, data.email);
+                formData.append(requestConstants.SECRET, data.secret);
+                formData.append(requestConstants.USER_BIO, data.bio);
+                formData.append(requestConstants.PROFILE_PICTURE, { uri: data.imagePath, name: imageName, type: miscMessage.IMAGE_TYPE });
+                response = await axiosPostUploadImageWithHeaders(url, formData, token);
                 break;
             default:
                 break;
         }
-        const response = await axiosPostWithHeadersAndToken(url, requestJSON, token);
         return processResponseData(response);
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);

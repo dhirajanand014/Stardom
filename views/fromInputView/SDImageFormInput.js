@@ -7,7 +7,7 @@ export const SDImageFormInput = props => {
 
     return (
         <KeyboardAvoidingView messagestyle={userAuthStyles.signInUserInputView}>
-            <View style={[userAuthStyles.userInput, !props.isFeedbackInput && SDGenericStyles.mv8, !props.isFeedbackInput && SDGenericStyles.paddingStart10,
+            <View style={[userAuthStyles.userInput, !props.isFeedbackInput && SDGenericStyles.marginVertical2, !props.isFeedbackInput && SDGenericStyles.paddingStart10,
             !props.isFeedbackInput && SDGenericStyles.paddingEnd10, props.formState.errors[props.inputName]?.message && userAuthStyles.errorInputBorder ||
             userAuthStyles.normalInputBorder]}>
                 <SDFormInput {...props} />

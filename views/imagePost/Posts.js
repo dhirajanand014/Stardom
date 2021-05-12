@@ -56,7 +56,8 @@ export const Posts = props => {
                 renderItem={({ item, index }) => PostRenderer(item, postCallback)} />
             {
                 userPosts.details.showBottomOptions && <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef}
-                    snapPoints={snapPoints} fall={fallValue} userPosts={userPosts} setUserPosts={setUserPosts} postDetailsCallback={postDetailsCallback} />
+                    snapPoints={snapPoints} fall={fallValue} state={userPosts} setState={setUserPosts} detailsCallback={postDetailsCallback}
+                    isFrom={screens.POSTS} />
             }
         </View>
     )

@@ -1,8 +1,5 @@
-import React, { useContext, useMemo, useRef, useState } from 'react';
-import { useEffect } from 'react';
-import { Text, TouchableOpacity, View } from "react-native"
-import { sortDevices, useCameraDevices } from "react-native-vision-camera"
-import { Camera } from 'react-native-vision-camera';
+import React, { useContext, useRef, useState } from 'react';
+import { TouchableOpacity, View } from "react-native"
 import { RNCamera } from 'react-native-camera';
 import { SDGenericStyles } from '../../styles/Styles';
 import { CameraIcon } from '../../components/icons/CameraIcon';
@@ -15,36 +12,7 @@ export const SDCameraView = props => {
     const { userPosts, setUserPosts } = useContext(CategoryContext);
 
     const navigation = useNavigation();
-
-    const [devices, setDevices] = useState();
-    // const device = useMemo(() => devices && devices.find((d) => d.position === 'back'), [devices]);
     const [permissons, setPermissons] = useState(false)
-    const getPermissons = async () => {
-        const cameraPermission = await Camera.getCameraPermissionStatus();
-        const microphonePermission = await Camera.getMicrophonePermissionStatus()
-
-        if (microphonePermission === 'authorized' && cameraPermission === 'authorized') {
-            setPermissons(true)
-        }
-    }
-    useEffect(() => {
-        const loadDevices = async () => {
-            try {
-                const availableCameraDevices = await Camera.getAvailableCameraDevices();
-                const sortedDevices = availableCameraDevices.sort(sortDevices)
-                setDevices(sortedDevices)
-            } catch (e) {
-                console.error('Failed to get available devices!', e)
-            }
-        }
-        loadDevices()
-        getPermissons()
-    }, [])
-
-    // if (!device || !device.id) {
-    //     console.log(JSON.stringify(device))
-    //     return <></>
-    // }
 
     let camera = useRef(null);
 

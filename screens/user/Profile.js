@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Text, TouchableOpacity, View } from "react-native"
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
@@ -9,20 +9,20 @@ import { LockIcon } from '../../components/icons/LockIcon';
 import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
-    actionButtonTextConstants, height,
-    jsonConstants, miscMessage, numericConstants, screens, width
+    actionButtonTextConstants, height, jsonConstants,
+    miscMessage, numericConstants, screens, width
 } from '../../constants/Constants';
 import { checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile, handleUserPostAction } from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles } from "../../styles/Styles"
 
 export const Profile = () => {
+
     const navigation = useNavigation();
 
     const route = useRoute();
     const profile = route.params?.profile;
 
-    const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser,
-        profileDetail, setProfileDetail } = useContext(CategoryContext);
+    const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail } = useContext(CategoryContext);
 
     useEffect(() => {
         (async () => {
@@ -55,16 +55,9 @@ export const Profile = () => {
                         SDGenericStyles.textCenterAlign, SDGenericStyles.mt12, SDGenericStyles.textColorWhite]}>{`@`}{profile.user_id}</Text>
                     </Animated.View>
                     <Animated.View style={SDGenericStyles.alignItemsStart}>
-                        {
-                            profile.bio && <Text style={[SDGenericStyles.textLeftAlign, SDGenericStyles.justifyContentCenter,
-                            SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, { width: width / numericConstants.ONE_PT_NINE },
-                            SDGenericStyles.textColorWhite]}>{profile.bio}</Text> ||
-                            <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.paddingVertical2,
-                            SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle]}>
-                                <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
-                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft12, SDGenericStyles.textColorWhite]}>{actionButtonTextConstants.ADD_BIO}</Text>
-                            </TouchableOpacity>
-                        }
+                        <Text style={[SDGenericStyles.textLeftAlign, SDGenericStyles.justifyContentCenter,
+                        SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, { width: width / numericConstants.ONE_PT_NINE },
+                        SDGenericStyles.textColorWhite]}>{profile.bio}</Text>
                     </Animated.View>
                 </View>
                 <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom200, SDGenericStyles.paddingRight5]}>

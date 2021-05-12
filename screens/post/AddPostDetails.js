@@ -44,7 +44,7 @@ export const AddPostDetails = () => {
             setValue(fieldControllerName.POST_CATEGORIES, userPosts.details.postCategories);
         })();
         register(fieldControllerName.POST_CATEGORIES, formRequiredRules.postCategoryRule);
-    }, []);
+    }, jsonConstants.EMPTY);
 
     const navigateUser = (responseData) => {
         navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });

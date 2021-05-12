@@ -52,6 +52,7 @@ export const screens = {
     NON_MODAL: `NonModal`,
     PROFILE: `Profile`,
     PROFILE_POSTS: `Profile Posts`,
+    EDIT_USER_PROFILE: `Edit user profile`,
     CAMERA: `Camera`,
     POSTS: `Posts`,
     MENU: `Menu`,
@@ -113,7 +114,8 @@ export const fieldControllerName = {
     POST_DESCRIPTION: `postDescription`,
     FOLLOWER_ID: `follower_id`,
     FOLLOWING_ID: `following_id`,
-    VERIFY_USER: `verifyUserDetails`
+    VERIFY_USER: `verifyUserDetails`,
+    ADD_USER_BIO: `bio`
 }
 
 export const keyBoardTypeConst = {
@@ -143,6 +145,7 @@ export const actionButtonTextConstants = {
     SAVE: `Save`,
     CANCEL: `Cancel`,
     ADD_POST: `Add Post`,
+    UPDATE: `Update`,
     UPDATE_POST: `Update Post`,
     DELETE_POST: `Delete Post`,
     CANCEL_POST: `<<Cancel`,
@@ -370,6 +373,7 @@ export const modalTextConstants = {
     CONFIRM_REGISTRATION: `Confirm Registration`,
     OTP_VERIFICATION: `OTP Verification`,
     ACCOUNT_DETAILS: `Account Details`,
+    EDIT_PROFILE: `Edit Profile`,
     LOGIN_TO_CONTINUE: `Login to continue`,
     SUBMIT_BUTTON: `Submit`,
     UPLOAD_PHOTO: `Upload Photo`,
@@ -394,7 +398,7 @@ export const placeHolderText = {
     SELECT_CATEGORIES: 'Select Categories',
     ADD_POST_TITLE: `Enter Title`,
     ADD_POST_DESCRIPTION: `Enter Description`,
-    VERIFY_USER_DETAILS: `Enter details`,
+    VERIFY_USER_DETAILS: `Enter your social media contact details`,
     SELECT_GENDER: `Select a gender`,
     SELECT_POST_TYPE: `Select Post type`
 }
@@ -429,6 +433,7 @@ export const numericConstants = {
     FORTY_TWO: 42,
     FORTY_FIVE: 45,
     FIFTY: 50,
+    SIXTY: 60,
     EIGHTY: 80,
     ONE_HUNDRED: 100,
     ONE_HUNDRED_TWENTY: 120,
@@ -464,6 +469,7 @@ export const alertTextMessages = {
     SUCCESS_UNFOLLOW: `You have unfollowing this user`,
     YOU_ARE_ALREADY_FOLLOWING_THIS_USER: `You are already following this user`,
     YOU_ARE_ALREADY_UNFOLLOWING_THIS_USER: `You are already unfollowing this user`,
+    SUCCESSFUL_BIO_UPDATE: `Details successfully updated`,
     SUBMITTED_FOR_VERIFICATION: `You have successfully submitted the details for verification`,
 }
 
@@ -502,6 +508,7 @@ export const errorMessages = {
     FAILED_TO_LIST_FOLLOWERS: `Failed to show followers`,
     FAILED_TO_LIST_FOLLOWING: `Failed to show followings`,
     COULD_NOT_LOGOUT: `Could not logout`,
+    COULD_NOT_UPDATE_USER_BIO: `Could not update user bio`,
     COULD_NOT_SUBMIT_VERIFICATION: `Could not submit your request for verification.`
 }
 
@@ -620,6 +627,7 @@ export const miscMessage = {
 }
 
 export const requestConstants = {
+    ID: `id`,
     PHONE_NUMBER: `phone_number`,
     SECRET: `password`,
     NAME: `name`,
@@ -642,9 +650,11 @@ export const requestConstants = {
     WALLPAPERS_COUNT: `wallsCount`,
     UPLOAD_COUNT: `uploadCount`,
     USER_VERIFY: `verify`,
-    USER_BIO: `addBio`,
+    PROFILE_PICTURE: `profile_picture`,
+    USER_BIO: `bio`,
     DOWNLOAD_COUNT: `downloadCount`,
-    POST_ID: `id`
+    POST_ID: `id`,
+    EDIT: `edit`
 };
 
 export const keyChainConstansts = {

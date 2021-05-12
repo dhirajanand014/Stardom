@@ -44,6 +44,9 @@ export const SDGenericStyles = StyleSheet.create({
     mt24: {
         marginTop: 24,
     },
+    textALignVerticalTop: {
+        textAlignVertical: `top`
+    },
     mt36: {
         marginTop: 36,
     },
@@ -236,6 +239,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingTop20: {
         paddingTop: 20
     },
+    paddingTop30: {
+        paddingTop: 30
+    },
     paddingTop40: {
         paddingTop: 40
     },
@@ -286,6 +292,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingVertical2: {
         paddingVertical: 2
+    },
+    paddingVertical3: {
+        paddingVertical: 3
     },
     paddingVertical5: {
         paddingVertical: 5
@@ -921,7 +930,8 @@ export const glancePostStyles = StyleSheet.create({
     },
     profileBioTextStyle: {
         borderWidth: 1,
-        borderRadius: 20
+        borderRadius: 20,
+        borderColor: `#fafafa`
     }
 });
 
@@ -1129,10 +1139,10 @@ export const userAuthStyles = StyleSheet.create({
     },
     menuLoginButton: {
         alignSelf: 'center',
-        paddingVertical: 15,
+        paddingVertical: 10,
         width: width / 1.8,
         elevation: 3,
-        paddingBottom: 20
+        paddingBottom: 15
     },
     menuRegisterButton: {
         alignSelf: 'center',
@@ -1155,9 +1165,9 @@ export const userAuthStyles = StyleSheet.create({
     },
     registerationDetailsView: {
         alignSelf: 'center',
-        paddingVertical: 20,
+        paddingVertical: 8,
         width: width / 2,
-        paddingBottom: 20
+        paddingBottom: 8
     },
     primaryActionButtonButtonText: {
         fontSize: 18,
@@ -1383,11 +1393,18 @@ export const userMenuStyles = {
         paddingLeft: 20
     },
     profileImageStyle: {
+        width: 80,
+        height: 80,
+        borderRadius: 58,
+        borderWidth: 3,
+        borderColor: `#969696`
+    },
+    editProfileImageStyle: {
         width: 100,
         height: 100,
         borderRadius: 58,
         borderWidth: 3,
-        borderColor: `#f4f4f4`
+        borderColor: `#969696`
     },
     followerFollowingImageStyle: {
         width: 70,
@@ -1411,7 +1428,7 @@ export const userMenuStyles = {
     },
     verifyUserTextHeight: {
         justifyContent: 'center',
-        maxHeight: 50
+        maxHeight: 150
     },
     verifyUserTextInput: {
         height: 150,

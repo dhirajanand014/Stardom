@@ -7,6 +7,7 @@ import {
 } from '../../constants/Constants';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import { showSelectedImage } from '../../helper/Helper';
+
 export const BottomSheetView = props => {
     const renderHeader = () => {
         return (
@@ -33,16 +34,16 @@ export const BottomSheetView = props => {
                 <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.bottomSheetPanelButton, SDGenericStyles.alignItemsCenter,
                 SDGenericStyles.backgroundColorYellow]}
                     onPress={async () => {
-                        await showSelectedImage(miscMessage.CAMERA, props.bottomSheetRef, props.userPosts, props.setUserPosts);
-                        props.postDetailsCallback(miscMessage.CAMERA);
+                        await showSelectedImage(miscMessage.CAMERA, props.bottomSheetRef, props.state, props.setState, props.isFrom);
+                        props.detailsCallback();
                     }}>
                     <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.TAKE_PHOTO}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.bottomSheetPanelButton, SDGenericStyles.alignItemsCenter,
                 SDGenericStyles.backgroundColorYellow]}
                     onPress={async () => {
-                        await showSelectedImage(miscMessage.GALLERY, props.bottomSheetRef, props.userPosts, props.setUserPosts);
-                        props.postDetailsCallback(miscMessage.GALLERY);
+                        await showSelectedImage(miscMessage.GALLERY, props.bottomSheetRef, props.state, props.setState, props.isFrom);
+                        props.detailsCallback();
                     }}>
                     <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.CHOOSE_FROM_LIBRARY}</Text>
                 </TouchableOpacity>
@@ -56,6 +57,6 @@ export const BottomSheetView = props => {
     }
     return (
         <SDBottomSheet refCallback={props.refCallback} snapPoints={props.snapPoints} initialSnap={numericConstants.ONE}
-            callbackMode={props.fall} renderHeader={renderHeader} renderContent={renderContent} />
+            callbackMode={props.fall} renderHeader={renderHeader} renderContent={renderContent} onCloseEnd={props.onCloseEnd} />
     );
 }

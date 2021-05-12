@@ -7,7 +7,7 @@ import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
 import { ErrorModal } from '../components/modals/ErrorModal';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
-    actionButtonTextConstants, jsonConstants, miscMessage, numericConstants, screens, stringConstants
+    actionButtonTextConstants, jsonConstants, miscMessage, modalTextConstants, numericConstants, screens, stringConstants
 } from '../constants/Constants';
 import { prepareSDOMMenu, fetchProfilePostsCounts, logoutUser, fetchUpdateLoggedInUserProfile } from '../helper/Helper';
 import { colors, SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';
@@ -23,6 +23,7 @@ export const SDUserMenus = () => {
         userMenus: jsonConstants.EMPTY,
         profileImage: stringConstants.EMPTY,
         profileName: stringConstants.EMPTY,
+        profileUserId: stringConstants.EMPTY,
         followersCount: numericConstants.ZERO,
         followingCount: numericConstants.ZERO,
         showSubmitVerifyModal: false
@@ -34,11 +35,13 @@ export const SDUserMenus = () => {
         showModal: false
     });
 
-
     const handleMenuClickAction = useCallback(async (item) => {
         switch (item.key) {
             case screens.USER_FOLLOWERS_FOLLOWING:
                 navigation.navigate(screens.USER_FOLLOWERS_FOLLOWING, { listFor: item.label });
+                break;
+            case screens.POSTS:
+                navigation.navigate(screens.POSTS);
                 break;
             case actionButtonTextConstants.VERIFY_USER:
                 setProfileMenu({ ...profileMenu, showSubmitVerifyModal: true });
@@ -69,6 +72,7 @@ export const SDUserMenus = () => {
                 profileMenu.userMenus = profileMenu.userMenus.filter(menu => filterOutLoginMenus(menu, details));
                 profileMenu.profileImage = details.profile_picture;
                 profileMenu.profileName = details.name;
+                profileMenu.profileUserId = details.user_id;
                 profileMenu.followersCount = counts.followersCount;
                 profileMenu.followingCount = counts.followingCount;
             } else {
@@ -82,22 +86,33 @@ export const SDUserMenus = () => {
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
-            <View style={[userMenuStyles.profileImageView, SDGenericStyles.mb40]}>
+            <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]}>
                 <TouchableOpacity activeOpacity={.7}>
-                    {
-                        !profileMenu.profileImage &&
-                        <FastImage resizeMode={FastImage.resizeMode.contain} source={{
-                            uri: profileMenu.profileImage, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
-                        }} style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]} /> ||
-                        <View style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
-                            <RegisterUserIcon width={numericConstants.EIGHTY} height={numericConstants.EIGHTY} stroke={colors.SDOM_PLACEHOLDER} />
-                        </View>
-                    }
+                    <View style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
+                        {
+                            !profileMenu.profileImage &&
+                            <FastImage resizeMode={FastImage.resizeMode.contain} source={{
+                                uri: profileMenu.profileImage, priority: FastImage.priority.normal,
+                            }} style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]} />
+                        }
+                    </View>
                 </TouchableOpacity>
-                <Text style={[SDGenericStyles.paddingVertical5, SDGenericStyles.paddingHorizontal10, SDGenericStyles.placeHolderTextColor,
-                SDGenericStyles.fontFamilyNormal]}>
-                    {profileMenu.profileName}
-                </Text>
+                <View style={SDGenericStyles.fill}>
+                    <Text style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15, SDGenericStyles.ft16,
+                    SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
+                        {profileMenu.profileName}
+                    </Text>
+                    <Text style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15, SDGenericStyles.fontFamilyBold,
+                    SDGenericStyles.ft14, SDGenericStyles.placeHolderTextColor]}>
+                        @{profileMenu.profileUserId}
+                    </Text>
+                    <TouchableOpacity style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15]} onPress={() =>
+                        navigation.navigate(screens.EDIT_USER_PROFILE, { loggedInUser: loggedInUser })}>
+                        <Text style={[SDGenericStyles.fontFamilyBold, SDGenericStyles.ft14, SDGenericStyles.colorYellow]}>
+                            {modalTextConstants.EDIT_PROFILE}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
             <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => `1_${item.label}`}
                 renderItem={({ item, index }) => MenuRenderer(item, index, profileMenu, handleMenuClickAction)}
