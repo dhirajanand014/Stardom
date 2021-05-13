@@ -1,5 +1,5 @@
 
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { FlatList, View } from "react-native";
 import {
@@ -47,7 +47,6 @@ export const Posts = props => {
 
     const postDetailsCallback = useCallback((action) => {
         bottomSheetRef?.current?.snapTo(numericConstants.ONE);
-        navigation.navigate(screens.ADD_POST_DETAILS);
     })
 
     return (
@@ -56,8 +55,7 @@ export const Posts = props => {
                 renderItem={({ item, index }) => PostRenderer(item, postCallback)} />
             {
                 userPosts.details.showBottomOptions && <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef}
-                    snapPoints={snapPoints} fall={fallValue} state={userPosts} setState={setUserPosts} detailsCallback={postDetailsCallback}
-                    isFrom={screens.POSTS} />
+                    snapPoints={snapPoints} fall={fallValue} detailsCallback={postDetailsCallback} isFrom={screens.POSTS} navigation={navigation} />
             }
         </View>
     )

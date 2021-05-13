@@ -1,8 +1,12 @@
-import { useRoute } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FlatList, StatusBar, View } from "react-native"
 import { CategoryContext } from '../../App';
-import { alertTextMessages, jsonConstants, numericConstants, requestConstants, responseStringData, stringConstants } from '../../constants/Constants';
+import {
+    actionButtonTextConstants, alertTextMessages, jsonConstants,
+    miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW,
+    requestConstants, responseStringData, stringConstants
+} from '../../constants/Constants';
 import { fetchUserFollowersFollowing, showSnackBar, userPostAction } from '../../helper/Helper';
 import { SDGenericStyles } from '../../styles/Styles';
 import { UserFollowFollowingRenderer } from '../../views/menus/UserFollowFollowingRenderer';
@@ -13,13 +17,25 @@ export const UserFollowFollowing = () => {
         users: jsonConstants.EMPTY
     });
 
-    const { loggedInUser } = useContext(CategoryContext);
+    const navigation = useNavigation();
+
+    const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
 
     const route = useRoute();
     const listFor = route.params?.listFor || stringConstants.EMPTY;
 
+    const filterPrivateAccessUsers = (responseData) => {
+        const user = JSON.parse(loggedInUser.loginDetails.details);
+        const followerIds = user.followers.filter(follower => follower.pvtaccess == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED)
+            .map(follower => follower.follower_id);
+        responseData.users && responseData.users.filter(user => followerIds.some(followerId => followerId == user.id));
+    }
+
     useEffect(async () => {
         const responseData = await fetchUserFollowersFollowing(listFor, loggedInUser);
+        if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS) {
+            filterPrivateAccessUsers(responseData);
+        }
         setUserFollowerFollowing(responseData);
     }, jsonConstants.EMPTY);
 
@@ -30,9 +46,16 @@ export const UserFollowFollowing = () => {
             loggedInUser.loginDetails.token);
 
         if (responseData.message == responseStringData.SUCCESSFULLY_UPDATED) {
+            const userDetails = JSON.parse(loggedInUser.loginDetails.details);
+            userDetails.followers.filter(follower => follower.follower_id == id)
+                .map(follower => follower.pvtaccess = action == actionButtonTextConstants.APPROVE && PRIVATE_FOLLOW_UNFOLLOW.APPROVED ||
+                    PRIVATE_FOLLOW_UNFOLLOW.REJECTED);
+            loggedInUser.loginDetails.details = JSON.stringify(userDetails);
             showSnackBar(action == actionButtonTextConstants.APPROVE && alertTextMessages.YOU_HAVE_SUCCESSFULLY_APPROVED ||
-                alertTextMessages.YOU_HAVE_SUCCESSFULLY_REJECT)
+                alertTextMessages.YOU_HAVE_SUCCESSFULLY_REJECTED, true);
+            setLoggedInUser({ ...loggedInUser });
         }
+        navigation.goBack();
     })
 
     return (

@@ -14,6 +14,15 @@ export const SDGenericStyles = StyleSheet.create({
     elevation3: {
         elevation: 3
     },
+    right8: {
+        right: 8
+    },
+    bottom0: {
+        bottom: 0
+    },
+    positionAbsolute: {
+        position: 'absolute'
+    },
     bold: {
         fontWeight: 'bold'
     },
@@ -137,6 +146,9 @@ export const SDGenericStyles = StyleSheet.create({
     marginVertical2: {
         marginVertical: 2
     },
+    marginVertical10: {
+        marginVertical: 10
+    },
     zIndex10: {
         zIndex: 10
     },
@@ -235,6 +247,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     padding10: {
         padding: 10
+    },
+    paddingTop5: {
+        paddingTop: 5
     },
     paddingTop20: {
         paddingTop: 20
@@ -940,18 +955,12 @@ export const glancePostStyles = StyleSheet.create({
 
 export const categoryViewStyles = StyleSheet.create({
     saveButtonContainer: {
-        marginVertical: 8,
-        paddingVertical: 8,
+        paddingVertical: 12,
         borderRadius: 20,
         width: width / 2.2,
     },
     bottomButtonLayout: {
         height: 63
-    },
-    textSave: {
-        color: "#000000",
-        fontSize: 18,
-        fontFamily: 'wallpiper_bold_font',
     },
     userFollowerFollowingList: {
         shadowColor: '#fff',
@@ -1423,10 +1432,6 @@ export const userMenuStyles = {
         paddingLeft: 45,
         width: width / 1.1,
         height: 285,
-        shadowColor: "#fff",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
         elevation: 5
     },
     verifyUserTextHeight: {
@@ -1451,3 +1456,14 @@ export const userMenuStyles = {
         backgroundColor: '#eabe05'
     },
 }
+
+export const cameraStyles = StyleSheet.create({
+    imageStyles: {
+        width: width,
+        height: height / 1.531,
+    },
+    filterSelector: {
+        width: 120,
+        height: 120
+    }
+});

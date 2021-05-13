@@ -12,11 +12,8 @@ import { SDGenericStyles, userAuthStyles, colors, glancePostStyles, userMenuStyl
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
 import Animated, { useSharedValue } from 'react-native-reanimated';
-import {
-    showSnackBar,
-    redirectUserToGlance, handleUserRegistration, saveRegistrationStatus, userPostAction, isValidURL
-} from '../../helper/Helper';
-import { useNavigation } from '@react-navigation/core';
+import { showSnackBar, redirectUserToGlance, saveRegistrationStatus, userPostAction } from '../../helper/Helper';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import { CategoryContext } from '../../App';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
 import FastImage from 'react-native-fast-image';
@@ -25,10 +22,13 @@ import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView';
 export const EditUserProfile = () => {
     const { control, formState, handleSubmit, reset } = useForm();
 
-    const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
+    const { loggedInUser } = useContext(CategoryContext);
+
+    const route = useRoute();
+    const imageValue = route.params?.imageValue;
 
     const [profileDetails, setProfileDetails] = useState({
-        profile_picture: stringConstants.EMPTY,
+        profile_picture: imageValue || stringConstants.EMPTY,
         name: stringConstants.EMPTY,
         email: stringConstants.EMPTY,
         secret: stringConstants.EMPTY,
@@ -61,9 +61,12 @@ export const EditUserProfile = () => {
 
     useEffect(() => {
         const details = JSON.parse(loggedInUser.loginDetails.details);
+        if (imageValue) {
+            details.profile_picture = imageValue;
+        }
         setProfileDetails(details);
         reset({ ...details })
-    }, jsonConstants.EMPTY);
+    }, imageValue || jsonConstants.EMPTY);
 
 
     const detailsCallback = useCallback(() => {
@@ -78,7 +81,7 @@ export const EditUserProfile = () => {
                 }} style={[userMenuStyles.editProfileImageStyle, SDGenericStyles.paddingHorizontal25]} />
                 <TouchableOpacity activeOpacity={.7} onPress={() => bottomSheetRef?.current?.snapTo(numericConstants.ZERO)}>
                     <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.colorYellow,
-                    SDGenericStyles.textCenterAlign, SDGenericStyles.paddingVertical14]}>
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.paddingVertical10]}>
                         Edit profile image
                     </Text>
                 </TouchableOpacity>
@@ -120,7 +123,7 @@ export const EditUserProfile = () => {
                 </TouchableOpacity>
             </View>
             <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef} detailsCallback={detailsCallback}
-                snapPoints={snapPoints} fall={fallValue} state={profileDetails} setState={setProfileDetails} isFrom={screens.EDIT_USER_PROFILE} />
+                snapPoints={snapPoints} fall={fallValue} navigation={navigation} isFrom={screens.EDIT_USER_PROFILE} />
         </View>
     )
 }

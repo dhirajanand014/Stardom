@@ -1,10 +1,8 @@
 import { useNavigation, useRoute } from '@react-navigation/core'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import {
-    ImageBackground, KeyboardAvoidingView,
-    Text, TouchableOpacity, View
-} from 'react-native'
+import { KeyboardAvoidingView, Text, TouchableOpacity, View } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import Animated from 'react-native-reanimated'
 import { CategoryContext } from '../../App'
 import {
@@ -52,14 +50,13 @@ export const AddPostDetails = () => {
     }
 
     const loginCallback = useCallback(() => {
-        navigation.navigate(screens.LOGIN);
+        navigation.navigate(screens.LOGIN, { isIntermediateLogin: true });
     })
 
     const onSubmit = async (data) => {
         const responseData = await handleAddPostDetails(data, userPosts.details.capturedImage, toAction, selectedItem);
         if (responseData) {
-            if (responseData.message == alertTextMessages.POST_ADDED_SUCCESSFULLY ||
-                responseData.message == alertTextMessages.POST_UPDATED_SUCCESSFULLY) {
+            if (responseData.message == alertTextMessages.POST_ADDED_SUCCESSFULLY || responseData.message == alertTextMessages.POST_UPDATED_SUCCESSFULLY) {
                 navigateUser(responseData);
             } else if (checkTokenStatus(responseData)) {
                 showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false, true, actionButtonTextConstants.LOGIN,
@@ -82,16 +79,16 @@ export const AddPostDetails = () => {
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
-            <View style={[glancePostStyles.addPostDetailsStyle, SDGenericStyles.alignItemsCenter]}>
-                <ImageBackground source={{ uri: userPosts.details.capturedImage }}
-                    style={{ width: width, height: height / numericConstants.THREE }} resizeMode={miscMessage.COVER} />
+            <View style={[glancePostStyles.addPostDetailsStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingTop5]}>
+                <FastImage source={{ uri: userPosts.details.capturedImage }} resizeMode={FastImage.resizeMode.contain}
+                    style={{ width: width, height: height / numericConstants.THREE }} />
                 <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical20]}>
                     <Text style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.fontFamilyBold, SDGenericStyles.textColorWhite, SDGenericStyles.ft20,
                     SDGenericStyles.paddingBottom5]}>
                         {modalTextConstants.ADD_POST_DETAILS}</Text>
                     <View style={[glancePostStyles.addPostDetailsTitleDivider, SDGenericStyles.backgroundColorWhite]} />
                 </View>
-                <KeyboardAvoidingView style={[SDGenericStyles.mt20, SDGenericStyles.mb40]}>
+                <KeyboardAvoidingView style={SDGenericStyles.mv15}>
                     <Animated.ScrollView contentContainerStyle={[SDGenericStyles.alignItemsCenter]}
                         style={{ maxHeight: height / 2.15 }}>
                         <SDImageFormInput inputName={fieldControllerName.POST_TITLE} control={control} rules={formRequiredRules.addPostTitleRule}
@@ -104,13 +101,13 @@ export const AddPostDetails = () => {
                             defaultValue={userPosts.details.postDescription} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.ADD_POST_DESCRIPTION}
                             keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} isMultiline={true} numberOfLines={numericConstants.TWO}
                             extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.height100,
-                            SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite, SDGenericStyles.ft16]} />
+                            SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite, SDGenericStyles.ft16, SDGenericStyles.textALignVerticalTop]} />
 
                         <SDDropDownView inputName={fieldControllerName.POST_PROFILE} control={control} rules={formRequiredRules.profileRule} selectedLabelStyle={SDGenericStyles.textColorWhite}
                             containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle}
                             defaultValue={userPosts.details.postProfile} formState={formState} list={profiles.length && profiles.filter(role => role.value != numericConstants.MINUS_ONE) || jsonConstants.EMPTY}
                             dropDownDefaultValue={profiles.length && profiles.find(role => role.value == numericConstants.ZERO).value || userPosts.details.postProfile} placeHolderText={placeHolderText.SELECT_A_PROFILE}
-                            extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical10]} globalTextStyle={[SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />
+                            extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical5]} globalTextStyle={[SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />
 
                         <SDPostCategorySelector inputName={fieldControllerName.POST_CATEGORIES} formState={formState} maxLength={numericConstants.THREE} setError={setError}
                             categories={categories} setCategories={setCategories} postCategories={postCategories} setValue={setValue} />

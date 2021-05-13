@@ -609,26 +609,17 @@ const datePickerConvert = (event, date) => {
     return false;
 }
 
-export const showSelectedImage = async (type, bottomSheetRef, state, setState, isFrom) => {
+export const showSelectedImage = async (type, isFrom, navigation) => {
     try {
-        let imageValue;
-        switch (type) {
-            case miscMessage.CAMERA:
-                imageValue = await ImagePicker.openCamera({ width: width, height: height, mediaType: `photo` })
-                break;
-            case miscMessage.GALLERY:
-                imageValue = await ImagePicker.openPicker({ width: width, height: height });
-                break;
-            default:
-                break;
+        if (type == miscMessage.CAMERA) {
+            navigation.navigate(screens.CAMERA, { isFrom: isFrom });
+        } else if (type == miscMessage.GALLERY) {
+            const imageValue = await ImagePicker.openPicker({ width: width, height: height });
+            imageValue && navigation.navigate(screens.IMAGE_PREVIEW_FILTERS, {
+                isFrom: isFrom,
+                imageValue: imageValue.path
+            });
         }
-        if (isFrom == screens.EDIT_USER_PROFILE) {
-            state.profile_picture = imageValue.path;
-        } else {
-            state.details.capturedImage = imageValue.path;
-        }
-        setState({ ...state });
-        bottomSheetRef?.current?.snapTo(numericConstants.ONE);
     } catch (error) {
         console.log(error);
     }
@@ -844,6 +835,7 @@ export const handleUserLogin = async (data) => {
         if (responseData) {
             const userName = `${data.phoneNumber}_${responseData.access_token}`;
             const userDetailsJSON = JSON.stringify(responseData.user);
+            await resetTokens();
             await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER, userName,
                 userDetailsJSON);
             return responseData;
@@ -1187,7 +1179,7 @@ export const handleAddPostDetails = async (data, postImagePath, toAction, select
                 urlConstants.addPost, formData, user.token);
             return processResponseData(response);
         }
-        //handle login here
+        return responseStringData.NOT_LOGGED_IN;
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
         showSnackBar(toAction == miscMessage.UPDATE && errorMessages.COULD_NOT_UPDATE_POST ||
@@ -1234,7 +1226,8 @@ export const handleUserFollowUnfollowAction = async (action, profileId, isPrivat
 }
 
 export const checkTokenStatus = (responseData) => {
-    return responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID;
+    return responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID ||
+        responseStringData.NOT_LOGGED_IN;
 }
 export const updateProfileActionValueToState = async (responseData, action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
     profileDetail, setProfileDetail) => {
@@ -1354,6 +1347,7 @@ export const handleUserPostAction = async (action, profile, sdomDatastate, setSd
 export const fetchUserFollowersFollowing = async (listFor, loggedInUser) => {
     try {
         const token = loggedInUser.loginDetails.token;
+
         const url = listFor == (miscMessage.PRIVATE_REQUEST_ACCESS || miscMessage.FOLLOWERS_TEXT) &&
             urlConstants.fetchUsersFollowers || urlConstants.fetchUsersFollowings;
         const response = await axiosGetWithAuthorization(url, token);

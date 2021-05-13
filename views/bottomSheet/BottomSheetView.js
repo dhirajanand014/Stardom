@@ -34,7 +34,7 @@ export const BottomSheetView = props => {
                 <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.bottomSheetPanelButton, SDGenericStyles.alignItemsCenter,
                 SDGenericStyles.backgroundColorYellow]}
                     onPress={async () => {
-                        await showSelectedImage(miscMessage.CAMERA, props.bottomSheetRef, props.state, props.setState, props.isFrom);
+                        await showSelectedImage(miscMessage.CAMERA, props.isFrom, props.navigation);
                         props.detailsCallback();
                     }}>
                     <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.TAKE_PHOTO}</Text>
@@ -42,7 +42,7 @@ export const BottomSheetView = props => {
                 <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.bottomSheetPanelButton, SDGenericStyles.alignItemsCenter,
                 SDGenericStyles.backgroundColorYellow]}
                     onPress={async () => {
-                        await showSelectedImage(miscMessage.GALLERY, props.bottomSheetRef, props.state, props.setState, props.isFrom);
+                        await showSelectedImage(miscMessage.GALLERY, props.isFrom, props.navigation);
                         props.detailsCallback();
                     }}>
                     <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>{modalTextConstants.CHOOSE_FROM_LIBRARY}</Text>

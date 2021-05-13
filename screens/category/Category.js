@@ -54,7 +54,7 @@ export const Category = () => {
                 keyExtractor={(item) => item.categoryId} />
             {
                 category.initialCategory == actionButtonTextConstants.SKIP_BUTTON &&
-                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack]}>
+                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingVertical10]}>
                     <TourGuideZone zone={numericConstants.THREE} borderRadius={numericConstants.TWENTY}
                         text={alertTextMessages.SKIP_SAVE_CATEGORIES} shape={miscMessage.RECTANGLE}>
                         <TouchableOpacity activeOpacity={.7} onPress={async () => {
@@ -64,7 +64,8 @@ export const Category = () => {
                             stop();
                         }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
                         SDGenericStyles.backgroundColorYellow]}>
-                            <Text style={[categoryViewStyles.textSave, SDGenericStyles.textCenterAlign]}>
+                            <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyBold,
+                            SDGenericStyles.textCenterAlign]}>
                                 {actionButtonTextConstants.SKIP_BUTTON_TEXT}
                             </Text>
                         </TouchableOpacity>
@@ -73,7 +74,7 @@ export const Category = () => {
             }
             {
                 category.initialCategory == actionButtonTextConstants.SAVE_BUTTON &&
-                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack]}>
+                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingVertical10]}>
                     <TouchableOpacity activeOpacity={.7} onPress={async () => {
                         const categoryIds = category.categories.filter(item => item.isSelected).map(selectedCategory => {
                             return {
@@ -89,7 +90,8 @@ export const Category = () => {
                         stop();
                     }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
                     SDGenericStyles.backgroundColorYellow]}>
-                        <Text style={[categoryViewStyles.textSave, SDGenericStyles.textCenterAlign]}>
+                        <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyBold,
+                        SDGenericStyles.textCenterAlign]}>
                             {actionButtonTextConstants.SAVE}
                         </Text>
                     </TouchableOpacity>

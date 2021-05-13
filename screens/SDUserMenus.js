@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/core';
+import { useIsFocused, useNavigation } from '@react-navigation/core';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -17,6 +17,7 @@ import { MenuRenderer } from '../views/menus/MenuRenderer';
 export const SDUserMenus = () => {
 
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
 
     const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
 
@@ -41,6 +42,9 @@ export const SDUserMenus = () => {
         switch (item.key) {
             case screens.USER_FOLLOWERS_FOLLOWING:
                 navigation.navigate(screens.USER_FOLLOWERS_FOLLOWING, { listFor: item.label });
+                break;
+            case screens.CATEGORY:
+                navigation.navigate(screens.CATEGORY);
                 break;
             case screens.POSTS:
                 navigation.navigate(screens.POSTS);
@@ -96,42 +100,46 @@ export const SDUserMenus = () => {
             }
             setProfileMenu({ ...profileMenu });
         })();
-    }, [loggedInUser.loginDetails]);
+    }, [isFocused || loggedInUser.loginDetails]);
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
-            <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]}>
-                <TouchableOpacity activeOpacity={.7}>
-                    <View style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
-                        {
-                            profileMenu.profileImage &&
-                            <FastImage source={{
-                                uri: profileMenu.profileImage, priority: FastImage.priority.normal,
-                            }} style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]} /> ||
-                            <RegisterUserIcon width={numericConstants.EIGHTY} height={numericConstants.EIGHTY} stroke={colors.SDOM_PLACEHOLDER} />
-                        }
-                    </View>
-                </TouchableOpacity>
-                <View style={SDGenericStyles.fill}>
-                    <Text style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15, SDGenericStyles.ft16,
-                    SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
-                        {profileMenu.profileName}
-                    </Text>
-                    <Text style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15, SDGenericStyles.fontFamilyBold,
-                    SDGenericStyles.ft14, SDGenericStyles.placeHolderTextColor]}>
-                        @{profileMenu.profileUserId}
-                    </Text>
-                    <TouchableOpacity style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15]} onPress={() =>
-                        navigation.navigate(screens.EDIT_USER_PROFILE, { loggedInUser: loggedInUser })}>
-                        <Text style={[SDGenericStyles.fontFamilyBold, SDGenericStyles.ft14, SDGenericStyles.colorYellow]}>
-                            {modalTextConstants.EDIT_PROFILE}
-                        </Text>
+            {
+                loggedInUser.isLoggedIn &&
+                <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]}>
+                    <TouchableOpacity activeOpacity={.7}>
+                        <View style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
+                            {
+                                profileMenu.profileImage &&
+                                <FastImage source={{
+                                    uri: profileMenu.profileImage, priority: FastImage.priority.normal,
+                                }} style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]} /> ||
+                                <RegisterUserIcon width={numericConstants.EIGHTY} height={numericConstants.EIGHTY} stroke={colors.SDOM_PLACEHOLDER} />
+                            }
+                        </View>
                     </TouchableOpacity>
-                </View>
-            </View>
+                    <View style={SDGenericStyles.fill}>
+                        <Text style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15, SDGenericStyles.ft16,
+                        SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
+                            {profileMenu.profileName}
+                        </Text>
+                        <Text style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15, SDGenericStyles.fontFamilyBold,
+                        SDGenericStyles.ft14, SDGenericStyles.placeHolderTextColor]}>
+                            @{profileMenu.profileUserId}
+                        </Text>
+                        <TouchableOpacity style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15]} onPress={() =>
+                            navigation.navigate(screens.EDIT_USER_PROFILE, { loggedInUser: loggedInUser })}>
+                            <Text style={[SDGenericStyles.fontFamilyBold, SDGenericStyles.ft14, SDGenericStyles.colorYellow]}>
+                                {modalTextConstants.EDIT_PROFILE}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View> || <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]} />
+            }
             <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => `1_${item.label}`}
                 renderItem={({ item, index }) => MenuRenderer(item, index, profileMenu, handleMenuClickAction)}
                 ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />) }} />
+
             {
                 !loggedInUser.isLoggedIn &&
                 <View>

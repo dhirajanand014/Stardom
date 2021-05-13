@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { PhoneIcon } from '../../components/icons/PhoneIcon';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
-import { TabActions, useNavigation } from '@react-navigation/native';
+import { TabActions, useNavigation, useRoute } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import {
     fieldControllerName, formRequiredRules,
@@ -23,6 +23,9 @@ export const Login = props => {
 
     const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
 
+    const route = useRoute();
+    const isIntermediateLogin = route.params?.isIntermediateLogin || false;
+
     const navigation = useNavigation();
 
     let secretRef = useRef(null);
@@ -40,9 +43,13 @@ export const Login = props => {
             loggedInUser.isLoggedIn = true;
             setLoggedInUser({ ...loggedInUser });
 
-            const categoriesViewed = await redirectUserToGlance();
-            categoriesViewed && navigation.dispatch(TabActions.jumpTo(screens.GLANCE))
-                || navigation.navigate(screens.CATEGORY);
+            if (isIntermediateLogin) {
+                navigation.goBack();
+            } else {
+                const categoriesViewed = await redirectUserToGlance();
+                categoriesViewed && navigation.dispatch(TabActions.jumpTo(screens.GLANCE))
+                    || navigation.navigate(screens.CATEGORY);
+            }
         } else {
             showSnackBar(errorMessages.COULD_NOT_LOGIN_USER, false);
         }

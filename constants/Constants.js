@@ -1,6 +1,12 @@
 
 import { CardStyleInterpolators } from "@react-navigation/stack";
 import { Dimensions } from "react-native";
+import {
+    AdenCompat, _1977Compat, BrannanCompat, BrooklynCompat, ClarendonCompat, EarlybirdCompat, GinghamCompat,
+    HudsonCompat, InkwellCompat, KelvinCompat, LarkCompat, LofiCompat, MavenCompat, MayfairCompat, MoonCompat,
+    NashvilleCompat, PerpetuaCompat, ReyesCompat, RiseCompat, SlumberCompat, StinsonCompat, ToasterCompat, ValenciaCompat,
+    WaldenCompat, WillowCompat, Xpro2Compat
+} from 'react-native-image-filter-kit';
 
 export const isIOS = Platform.OS === `ios`;
 export const isAndroid = Platform.OS === `android`;
@@ -11,6 +17,7 @@ export const RESEND_OTP_TIME_LIMIT = 20; // 30 secs
 export const AUTO_SUBMIT_OTP_TIME_LIMIT = 1;
 export const OTP_INPUTS = 6;
 const BASE_URI = `https://stardom.wallpiper.app/api`;
+
 
 export const screenOptions = {
     gestureEnabled: true, gestureDirection: 'horizontal',
@@ -57,7 +64,8 @@ export const screens = {
     POSTS: `Posts`,
     MENU: `Menu`,
     OTP_VERIFICATION: `OTP Verification`,
-    USER_FOLLOWERS_FOLLOWING: `User Follow Following`
+    USER_FOLLOWERS_FOLLOWING: `User Follow Following`,
+    IMAGE_PREVIEW_FILTERS: `Image Preview Filters`
 }
 
 export const headerStrings = {
@@ -533,7 +541,8 @@ export const responseStringData = {
     TOKEN_EXPIRED: `Token is Expired`,
     REDIRECT_USER_LOGIN: `Redirect user login`,
     SUCCESS_LOGOUT: `User successfully signed out`,
-    SUCCESSFULLY_UPDATED: `Successfully Updated`
+    SUCCESSFULLY_UPDATED: `Successfully Updated`,
+    NOT_LOGGED_IN: `Not logged in`
 }
 
 export const postitionStringConstants = {
@@ -634,7 +643,9 @@ export const miscMessage = {
     SUCCESSFULLY_UNFOLLOWED: `Successfully unfollowed`,
     SUCCESSFULLY_UNFOLLOWED_PRIVATE_ACCESS: `Successfully unfollowed private access`,
     GET_VERIFIED: `Get verified`,
-    PRIVATE_REQUEST_ACCESS: `Private request access`
+    PRIVATE_REQUEST_ACCESS: `Private request access`,
+    TYPE: `type`,
+    FLASH_MODE: `flashMode`
 }
 
 export const requestConstants = {
@@ -671,7 +682,6 @@ export const requestConstants = {
     POST_ID: `id`,
     EDIT: `edit`,
     PRIVATE_ACCESS_ACTION: `privateaccess`
-
 };
 
 export const keyChainConstansts = {
@@ -734,5 +744,105 @@ export const SDMenuOptions = [
     }, {
         label: screens.CATEGORY,
         key: screens.CATEGORY
+    }
+];
+
+export const cameraConstants = {
+    AUDIO_PERMISSIONS: {
+        title: 'Permission to use audio recording',
+        message: 'We need your permission to use your audio',
+        buttonPositive: 'Ok',
+        buttonNegative: 'Cancel',
+    },
+    CAMERA_PERMISSIONS: {
+        title: 'Permission to use camera',
+        message: 'We need your permission to use your camera',
+        buttonPositive: 'Ok',
+        buttonNegative: 'Cancel',
+    }
+}
+
+export const CAMERA_IMAGE_FILTERS = [
+    {
+        title: 'Normal',
+        filterComponent: AdenCompat,
+    }, {
+        title: 'Maven',
+        filterComponent: MavenCompat,
+    }, {
+        title: 'Mayfair',
+        filterComponent: MayfairCompat,
+    }, {
+        title: 'Moon',
+        filterComponent: MoonCompat,
+    }, {
+        title: 'Nashville',
+        filterComponent: NashvilleCompat,
+    }, {
+        title: 'Perpetua',
+        filterComponent: PerpetuaCompat,
+    }, {
+        title: 'Reyes',
+        filterComponent: ReyesCompat,
+    }, {
+        title: 'Rise',
+        filterComponent: RiseCompat,
+    }, {
+        title: 'Slumber',
+        filterComponent: SlumberCompat,
+    }, {
+        title: 'Stinson',
+        filterComponent: StinsonCompat,
+    }, {
+        title: 'Brooklyn',
+        filterComponent: BrooklynCompat,
+    }, {
+        title: 'Earlybird',
+        filterComponent: EarlybirdCompat,
+    }, {
+        title: 'Clarendon',
+        filterComponent: ClarendonCompat,
+    }, {
+        title: 'Gingham',
+        filterComponent: GinghamCompat,
+    }, {
+        title: 'Hudson',
+        filterComponent: HudsonCompat,
+    }, {
+        title: 'Inkwell',
+        filterComponent: InkwellCompat,
+    }, {
+        title: 'Kelvin',
+        filterComponent: KelvinCompat,
+    }, {
+        title: 'Lark',
+        filterComponent: LarkCompat,
+    }, {
+        title: 'Lofi',
+        filterComponent: LofiCompat,
+    }, {
+        title: 'Toaster',
+        filterComponent: ToasterCompat,
+    }, {
+        title: 'Valencia',
+        filterComponent: ValenciaCompat,
+    }, {
+        title: 'Walden',
+        filterComponent: WaldenCompat,
+    }, {
+        title: 'Willow',
+        filterComponent: WillowCompat,
+    }, {
+        title: 'Xpro2',
+        filterComponent: Xpro2Compat,
+    }, {
+        title: 'Aden',
+        filterComponent: AdenCompat,
+    }, {
+        title: '_1977',
+        filterComponent: _1977Compat,
+    }, {
+        title: 'Brannan',
+        filterComponent: BrannanCompat,
     }
 ];

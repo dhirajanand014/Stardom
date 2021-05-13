@@ -1,4 +1,5 @@
 PODS:
+  - Bolts/Tasks (1.9.0)
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
     - React
@@ -330,6 +331,9 @@ PODS:
     - React-Core
   - react-native-camera/RN (3.43.8):
     - React-Core
+  - react-native-image-filter-kit (0.8.0):
+    - Bolts/Tasks (= 1.9.0)
+    - React
   - react-native-restart (0.0.20):
     - React-Core
   - react-native-safe-area-context (3.2.0):
@@ -409,10 +413,10 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.8)
     - SDWebImageWebPCoder (~> 0.6.1)
-  - RNFBApp (11.4.1):
+  - RNFBApp (11.5.0):
     - Firebase/CoreOnly (= 7.11.0)
     - React-Core
-  - RNFBMessaging (11.4.1):
+  - RNFBMessaging (11.5.0):
     - Firebase/Messaging (= 7.11.0)
     - React-Core
     - RNFBApp
@@ -515,6 +519,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-image-filter-kit (from `../node_modules/react-native-image-filter-kit`)
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-shimmer (from `../node_modules/react-native-shimmer`)
@@ -546,6 +551,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Bolts
     - boost-for-react-native
     - CocoaAsyncSocket
     - Firebase
@@ -609,6 +615,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-image-filter-kit:
+    :path: "../node_modules/react-native-image-filter-kit"
   react-native-restart:
     :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
@@ -667,6 +675,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -706,6 +715,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 124e8f99992490d0d13e0649d950d3e1aae06fe9
   React-jsinspector: 500a59626037be5b3b3d89c5151bc3baa9abf1a9
   react-native-camera: 894cdcb9e5bfe41719513ad95e0cd1d108b79ee6
+  react-native-image-filter-kit: b9eca5dfedde622e3801c4657bcdead62896cf00
   react-native-restart: 6cc683e208c080581c147d0875609e64572a9443
   react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a
@@ -724,8 +734,8 @@ SPEC CHECKSUMS:
   RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
   RNDateTimePicker: 624e46df09f3f8bb38aea717cd364dc6d2605737
   RNFastImage: d4870d58f5936111c56218dbd7fcfc18e65b58ff
-  RNFBApp: 996860ad6832996faba79ef3f6ec2d3ea5870dd9
-  RNFBMessaging: 8d84ceadc705ca6b6047c37376d2e2aaabcb8e3d
+  RNFBApp: 9c90f9d576861947ba75fe0830567c570bcbcf6d
+  RNFBMessaging: c873e6c37f69d22de22cab134413030a9c6330a9
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 35a3ceb837446fa11547704709bb22b5fac6d584
   RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
