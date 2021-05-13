@@ -32,6 +32,9 @@ export const Profile = () => {
         })();
     }, jsonConstants.EMPTY);
 
+    const isDisabled = profileDetail.isFollowing && (profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED ||
+        profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.APPROVED);
+
     return (
         <View style={[SDGenericStyles.fill]}>
             <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.normal }}
@@ -64,9 +67,11 @@ export const Profile = () => {
                 <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom200, SDGenericStyles.paddingRight5]}>
                     <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
                         <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.paddingVertical2,
-                        SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle, SDGenericStyles.backgroundColorYellow]} onPress={async () =>
+                        SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle, !isDisabled && SDGenericStyles.backgroundColorYellow ||
+                        SDGenericStyles.backGroundColorLightGrey]} onPress={async () =>
                             await handleUserPostAction(profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW,
-                                profile, sdomDatastate, setSdomDatastate, loggedInUser, profileDetail, setProfileDetail, navigation, false)}>
+                                profile, sdomDatastate, setSdomDatastate, loggedInUser, profileDetail, setProfileDetail, navigation, false)}
+                            disabled={isDisabled}>
                             <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
                             SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16]}>
                                 {profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW}

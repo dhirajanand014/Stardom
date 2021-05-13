@@ -12,7 +12,8 @@ import {
     miscMessage, width, height, numericConstants,
     screens, headerStrings, fieldControllerName, isAndroid,
     isIOS, OTP_INPUTS, errorMessages, requestConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions, PRIVATE_FOLLOW_UNFOLLOW
+    jsonConstants, defaultProfilesValue, SDMenuOptions,
+    PRIVATE_FOLLOW_UNFOLLOW
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -1229,6 +1230,18 @@ export const checkTokenStatus = (responseData) => {
     return responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID ||
         responseStringData.NOT_LOGGED_IN;
 }
+
+/**Signature function to follow and unfollow publically and privetly.
+ * 
+ * @param {*} responseData 
+ * @param {*} action 
+ * @param {*} profile 
+ * @param {*} sdomDatastate 
+ * @param {*} setSdomDatastate 
+ * @param {*} loggedInUser 
+ * @param {*} profileDetail 
+ * @param {*} setProfileDetail 
+ */
 export const updateProfileActionValueToState = async (responseData, action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
     profileDetail, setProfileDetail) => {
     try {
@@ -1243,19 +1256,31 @@ export const updateProfileActionValueToState = async (responseData, action, prof
                     sdomDatastate.posts.map(selectedPost => {
                         if (selectedPost.user.id == profile.id) {
                             if (responseDataMessage == miscMessage.SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER) {
-                                selectedPost.user.followers.filter(follower => follower.follower_id == followerId)
+                                selectedPost.user.followers.filter(follower => follower.follower_id == followerId.follower_id)
                                     .map(follower => follower.pvtaccess = PRIVATE_FOLLOW_UNFOLLOW.REQUESTED);
                                 profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.REQUESTED;
-                            } else if (!selectedPost.user.followers.some(followerId => followerId.follower_id == followerId)) {
-                                selectedPost.user.followers.push(followerId);
+                            }
+                            if (responseDataMessage == miscMessage.SUCCESSFULLY_ADDED_FOLLOWER &&
+                                !selectedPost.user.followers.some(follower => follower.follower_id == followerId.follower_id)) {
+                                const followerPush = {
+                                    [fieldControllerName.FOLLOWER_ID]: followerId.follower_id,
+                                    [requestConstants.PVT_ACCESS_TEXT]: numericConstants.ZERO
+                                }
+                                selectedPost.user.followers.push(followerPush);
                             }
                         } else if (selectedPost.user.id == user.id) {
                             if (responseDataMessage == miscMessage.SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER) {
-                                selectedPost.user.following.filter(following => following.following_id == followingId)
+                                selectedPost.user.following.filter(following => following.following_id == followingId.following_id)
                                     .map(following => following.pvtaccess = PRIVATE_FOLLOW_UNFOLLOW.REQUESTED);
                                 profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.REQUESTED;
-                            } else if (!selectedPost.user.following.some(followingId => followingId.following_id == followingId)) {
-                                selectedPost.user.following.push(followingId);
+                            }
+                            if (responseDataMessage == miscMessage.SUCCESSFULLY_ADDED_FOLLOWER &&
+                                !selectedPost.user.following.some(following => following.following_id == followingId.following_id)) {
+                                const followingPush = {
+                                    [fieldControllerName.FOLLOWING_ID]: followingId.following_id,
+                                    [requestConstants.PVT_ACCESS_TEXT]: numericConstants.ZERO
+                                }
+                                selectedPost.user.following.push(followingPush);
                             }
                         }
                     });
@@ -1264,26 +1289,31 @@ export const updateProfileActionValueToState = async (responseData, action, prof
                     sdomDatastate.posts.map(selectedPost => {
                         if (selectedPost.user.id == profile.id) {
                             if (responseDataMessage == miscMessage.SUCCESSFULLY_UNFOLLOWED_PRIVATE_ACCESS) {
-                                selectedPost.user.followers.filter(follower => follower.follower_id == followerId)
+                                selectedPost.user.followers.filter(follower => follower.follower_id == followerId.follower_id)
                                     .map(follower => follower.pvtaccess = PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED);
                                 profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
-                            } else if (selectedPost.user.followers.some(followerId => followerId.follower_id == followerId)) {
+                            }
+                            if (responseDataMessage == miscMessage.SUCCESSFULLY_UNFOLLOWED &&
+                                selectedPost.user.followers.some(follower => follower.follower_id == followerId.follower_id)) {
                                 selectedPost.user.followers.pop(followerId);
                             }
                         } else if (selectedPost.user.id == user.id) {
-                            if (responseDataMessage == miscMessage.SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER) {
-                                selectedPost.user.following.filter(following => following.following_id == followingId)
+                            if (responseDataMessage == miscMessage.SUCCESSFULLY_UNFOLLOWED_PRIVATE_ACCESS) {
+                                selectedPost.user.following.filter(following => following.following_id == followingId.following_id)
                                     .map(following => following.pvtaccess = PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED);
                                 profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
-                            } else if (!selectedPost.user.following.some(followingId => followingId.following_id == followingId)) {
+                            }
+                            if (responseDataMessage == miscMessage.SUCCESSFULLY_UNFOLLOWED &&
+                                selectedPost.user.following.some(following => following.following_id == followingId.following_id)) {
                                 selectedPost.user.following.pop(followingId);
                             }
                         }
                     });
                     break;
+                default:
+                    break;
             }
-            profileDetail.isFollowing = profile.followers.some(follower =>
-                follower.follower_id == user.id);
+            profileDetail.isFollowing = profile.followers.some(follower => follower.follower_id == user.id);
             setProfileDetail({ ...profileDetail });
             setSdomDatastate({ ...sdomDatastate });
         }
@@ -1297,8 +1327,10 @@ export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUs
         const loggedInUserDetails = JSON.parse(loggedInUser.loginDetails.details);
         profileDetail.isFollowing = profile.followers.some(follower =>
             follower.follower_id == loggedInUserDetails.id);
-        profileDetail.privateRequestAccessStatus = profile.followers && profile.followers.find(following =>
-            following.follower_id == loggedInUserDetails.id).pvtaccess || PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
+        if (profileDetail.isFollowing) {
+            profileDetail.privateRequestAccessStatus = profile.followers && profile.followers.find(following =>
+                following.follower_id == loggedInUserDetails.id).pvtaccess || PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
+        }
         const counts = await fetchProfilePostsCounts(loggedInUser);
         setProfileDetail({ ...profileDetail, count: counts });
     }
@@ -1332,8 +1364,26 @@ const navigateUserFromPostAction = (action, responseData, profile, sdomDatastate
     } else if (responseData && responseData.message.includes(responseStringData.SUCCESS)) {
         updateProfileActionValueToState(responseData, action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
             profileDetail, setProfileDetail);
-        showSnackBar(action == actionButtonTextConstants.FOLLOW && alertTextMessages.SUCCESS_FOLLOW ||
-            alertTextMessages.SUCCESS_UNFOLLOW, true);
+        displaySnackBarBasedOnResponseData(responseData, action);
+    }
+}
+
+const displaySnackBarBasedOnResponseData = (responseData, action) => {
+    if (action == actionButtonTextConstants.FOLLOW) {
+        if (responseData == miscMessage.SUCCESSFULLY_ADDED_FOLLOWER) {
+            showSnackBar(alertTextMessages.SUCCESS_FOLLOW, true);
+        }
+        if (responseData == miscMessage.SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER) {
+            showSnackBar(alertTextMessages.SUCCESS_PRIVATE_FOLLOW, true);
+        }
+    }
+    if (action == alertTextMessages.SUCCESS_FOLLOW) {
+        if (responseData == miscMessage.SUCCESSFULLY_UNFOLLOWED) {
+            showSnackBar(alertTextMessages.SUCCESS_UNFOLLOW, true);
+        }
+        if (responseData == miscMessage.SUCCESSFULLY_UNFOLLOWED_PRIVATE_ACCESS) {
+            showSnackBar(alertTextMessages.SUCCESS_PRIVATE_UNFOLLOW, true);
+        }
     }
 }
 

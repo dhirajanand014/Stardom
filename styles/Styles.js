@@ -242,6 +242,9 @@ export const SDGenericStyles = StyleSheet.create({
     width38: {
         width: 38
     },
+    opacitypt9: {
+        opacity: 0.9
+    },
     marginHorizontal10: {
         marginHorizontal: 10
     },
@@ -364,6 +367,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     backGroundColorGray: {
         backgroundColor: `#484a55`
+    },
+    backGroundColorLightGrey: {
+        backgroundColor: `lightgrey`
     },
     colorYellow: {
         color: '#eabe05'

@@ -479,6 +479,8 @@ export const alertTextMessages = {
     SUCCESS_UNFOLLOW: `You have unfollowing this user`,
     YOU_ARE_ALREADY_FOLLOWING_THIS_USER: `You are already following this user`,
     YOU_ARE_ALREADY_UNFOLLOWING_THIS_USER: `You are already unfollowing this user`,
+    SUCCESS_PRIVATE_FOLLOW: `You have successfully requested for private access for this user`,
+    SUCCESS_PRIVATE_UNFOLLOW: `You have successfully unfollowed for private access from this user`,
     SUCCESSFUL_BIO_UPDATE: `Details successfully updated`,
     SUBMITTED_FOR_VERIFICATION: `You have successfully submitted the details for verification`,
     YOU_HAVE_SUCCESSFULLY_APPROVED: `You have successfuly approved private access to this user`,
