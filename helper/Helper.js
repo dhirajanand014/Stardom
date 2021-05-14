@@ -3,8 +3,7 @@ import axios from 'axios';
 import AddPostConstant from '../constants/AddPostConstant.json';
 import {
     urlConstants, keyChainConstansts,
-    postCountTypes, postCountRequestKeys,
-    savePostCountKeys, setPostImages,
+    postCountTypes, savePostCountKeys, setPostImages,
     permissionsButtons, permissionMessages,
     stringConstants, alertTextMessages,
     reportAbuseRequestPayloadKeys, responseStringData,
@@ -60,65 +59,65 @@ export const fetchAndUpdateCategoryState = async (category, setCategory) => {
 }
 
 export const fetchPostsAndSaveToState = async (sdomDatastate, setSdomDatastate, optionsState,
-    setOptionsState, categoryIdFromNotification) => {
+    setOptionsState, categoryIdFromNotification, loggedInUser) => {
     try {
-        const categoryPostsData = await retrievePostData(categoryIdFromNotification);
+        const categoryPostsData = await retrievePostData(categoryIdFromNotification, loggedInUser);
         setSdomDatastate({ ...sdomDatastate, posts: categoryPostsData, });
         setOptionsState({ ...optionsState, showSearch: true });
     } catch (error) {
         console.log(error);
-        setSdomDatastate({ ...sdomDatastate, posts: [] });
+        setSdomDatastate({ ...sdomDatastate, posts: jsonConstants.EMPTY });
     }
 }
 
 
 export const getSelectedCategoryIdsFromStorage = async () => {
     try {
-        return await getKeyChainDetails(keyChainConstansts.SAVE_CATEGORY_ID) || stringConstants.EMPTY;
+        return await getKeyChainDetails(keyChainConstansts.SAVE_CATEGORY_ID);
     } catch (error) {
-        console.log('Cannot fetch the categoryIds from the storage', error);
+        console.error(errorMessages.CANNOT_FETCH_CATEGORIES_FROM_STORAGE, error);
     }
 }
 
 export const increaseAndSetPostCounts = async (post, sdomDatastate, setSdomDatastate, postCountType) => {
     try {
         if (postCountType == postCountTypes.POST_LIKES) {
-            sdomDatastate.posts.find(item => item.postId == post.postId).postLikes = ++post.postLikes;
+            sdomDatastate.posts.find(item => item.id == post.id).postLikes = ++post.postLikes;
         } else if (postCountType == postCountTypes.POST_DOWNLOADS) {
-            sdomDatastate.posts.find(item => item.postId == post.postId).postDownloads = ++post.postDownloads;
+            sdomDatastate.posts.find(item => item.id == post.id).postDownloads = ++post.postDownloads;
         } else if (postCountType == postCountTypes.POST_WALLPAPERS) {
-            sdomDatastate.posts.find(item => item.postId == post.postId).postWallPapers = ++post.postWallPapers;
+            sdomDatastate.posts.find(item => item.id == post.id).postWallpapers = ++post.postWallpapers;
         }
 
         const postCountRequest = {
-            [postCountRequestKeys.POST_ID_KEY]: parseInt(post.postId),
-            [postCountRequestKeys.POST_COUNT_TYPE_KEY]: postCountType
+            [requestConstants.POST_ID_KEY]: parseInt(post.id),
+            [requestConstants.REACH_TYPE]: postCountType
         }
 
         setSdomDatastate({ ...sdomDatastate });
-
         if (postCountRequest) {
-            const response = await axios.post(urlConstants.setPostCounts, postCountRequest);
-            if (response && response.data == responseStringData.SUCCESS) {
+            const response = await axiosPostWithHeaders(urlConstants.setPostReach, JSON.stringify(postCountRequest));
+            const responseData = processResponseData(response);
+            if (responseData.message == responseStringData.SUCCESS) {
                 if (postCountType == postCountTypes.POST_LIKES) {
-                    ToastAndroid.show(`You have liked the post : ${post.postTitle}`, ToastAndroid.SHORT);
-                    await savePostCounts(post.postId, savePostCountKeys.SELECTED_POST_LIKES, sdomDatastate, setSdomDatastate);
+                    showSnackBar(`You have liked the post : ${post.postTitle}`, true, true);
+                    await savePostCounts(post.id, savePostCountKeys.SELECTED_POST_LIKES, sdomDatastate, setSdomDatastate);
                 }
                 postCountType == postCountTypes.POST_DOWNLOADS &&
-                    ToastAndroid.show(`You have downloaded the post : ${post.postTitle}`, ToastAndroid.SHORT);
+                    showSnackBar(`You have downloaded the post : ${post.postTitle}`, true, true);
             }
         }
     } catch (error) {
-        console.log("Cannot set the increased count to the database", error);
+        console.error(errorMessages.CANNOT_SET_INCREASED_COUNT_TO_DATABASE, error);
     }
 }
 
 export const savePostCounts = async (postId, postIdForSelectedCountType, sdomDatastate, setSdomDatastate) => {
     try {
         const getPostIdOfPostForCount = await getPostCounts(keyChainConstansts.SAVE_POST_COUNTS);
-        let postCounts, postIds = [], postIdsJson;
-        if (getPostIdOfPostForCount) {
-            postCounts = JSON.parse(getPostIdOfPostForCount) || stringConstants.EMPTY;
+        let postCounts, postIds = jsonConstants.EMPTY, postIdsJson;
+        if (getPostIdOfPostForCount && getPostIdOfPostForCount.password) {
+            postCounts = JSON.parse(getPostIdOfPostForCount.password) || stringConstants.EMPTY;
         }
         if (postIdForSelectedCountType == savePostCountKeys.SELECTED_POST_LIKES) {
             if (postCounts) {
@@ -131,7 +130,7 @@ export const savePostCounts = async (postId, postIdForSelectedCountType, sdomDat
                     [savePostCountKeys.SELECTED_POST_LIKES]: postIds
                 }
             }
-            sdomDatastate.posts.filter(post => post.postId == postId).map(item => item.likeDisabled = true);
+            sdomDatastate.posts.filter(post => post.id == postId).map(item => item.likeDisabled = true);
             setSdomDatastate({ ...sdomDatastate });
             postIdsJson = JSON.stringify(postCounts);
             await saveDetailsToKeyChain(keyChainConstansts.SAVE_POST_COUNTS, keyChainConstansts.SAVE_POST_COUNTS,
@@ -234,7 +233,7 @@ export const downloadImageFromURL = async (item, sdomDatastate, setSdomDatastate
         await downloadCurrentImage(item.postImage, item.postTitle, setPostImages.SET_POST_DOWNLOAD);
         await increaseAndSetPostCounts(item, sdomDatastate, setSdomDatastate, postCountTypes.POST_DOWNLOADS);
     } else {
-        ToastAndroid.show(`External Storage Permission Denited`, ToastAndroid.SHORT);
+        showSnackBar(errorMessages.EXTERNAL_STORAGE_DENIED, false);
     }
 }
 
@@ -256,7 +255,7 @@ export const accessAndGrantPermssionsToWallPiper = async (permissionTitie, permi
 }
 
 export const fetchAndDisplayNamesAndCategoryTitles = (post) => {
-    let names = jsonConstants.EMPTY;
+    let names = [];
     if (post.categoryTitles) {
         const categoryTitlesArray = post.categoryTitles.split(stringConstants.COMMA);
         const displayTitles = categoryTitlesArray && categoryTitlesArray.slice(numericConstants.ZERO, numericConstants.TWO)
@@ -283,7 +282,7 @@ export const setReportAbuseSelectedOption = (optionsState, setOptionsState, sele
     setOptionsState({
         ...optionsState,
         selectedReportAbuse: {
-            [reportAbuseRequestPayloadKeys.POST_ID]: optionsState.selectedPost.postId,
+            [reportAbuseRequestPayloadKeys.POST_ID]: optionsState.selectedPost.id,
             [reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_ID]: selectedReportAbuseId,
             [reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_SUBMITTED]: false
         }
@@ -307,11 +306,11 @@ export const resetOptionsState = (optionsState, setOptionsState) => {
 
 export const setReportIdForPost = async (optionsState, setOptionsState) => {
     const { selectedPost, selectedReportAbuse } = optionsState;
-    const { postId, postTitle } = selectedPost;
+    const { id, postTitle } = selectedPost;
     try {
         optionsState.reportAbuseSubmitDisabled = true;
         const requestReportAbusePayload = {
-            [reportAbuseRequestPayloadKeys.POST_ID]: parseInt(postId),
+            [reportAbuseRequestPayloadKeys.POST_ID]: parseInt(id),
             [reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_ID]: parseInt(selectedReportAbuse.postReportAbuseId)
         }
         const responseReportAbuseSet = await axios.post(urlConstants.setReportAbuseIdWithPostId,
@@ -347,7 +346,7 @@ export const saveReportAbuseOptions = async (optionsState) => {
         const savedReportAbuses = await fetchSavedReportAbuseOptions();
         if (savedReportAbuses) {
             saveReportsArray = JSON.parse(savedReportAbuses);
-            isReportAbuseAlreadySet = saveReportsArray && saveReportsArray.some((item) => item.postId == optionsState.selectedReportAbuse.postId &&
+            isReportAbuseAlreadySet = saveReportsArray && saveReportsArray.some((item) => item.id == optionsState.selectedReportAbuse.id &&
                 optionsState.selectedReportAbuse[reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_SUBMITTED]);
         }
         if (!isReportAbuseAlreadySet) {
@@ -395,7 +394,7 @@ export const togglePostSearchBox = (searchValues, setSearchValues, post,
                     inputTextRef.current.focus();
                     setSearchValues({
                         ...searchValues,
-                        searchForPostId: post.postId
+                        searchForPostId: post.id
                     });
                 }, numericConstants.TWO_HUNDRED);
             }
@@ -412,7 +411,7 @@ export const fetchReportAbuseValues = async (optionsState, setOptionsState) => {
 
         let reportAbusesData = savedReportAbusesJSON && JSON.parse(savedReportAbusesJSON) || stringConstants.EMPTY;
 
-        const reportAbuseForPostPresent = reportAbusesData && reportAbusesData.find((item) => item.postId == optionsState.selectedPost.postId &&
+        const reportAbuseForPostPresent = reportAbusesData && reportAbusesData.find((item) => item.id == optionsState.selectedPost.id &&
             item.reportAbuseSubmitted) || {};
 
         if (!Object.keys(reportAbuseForPostPresent).length) {
@@ -495,7 +494,7 @@ export const scrollWhenPostIdFromNotification = (sdomDatastate, postIdFromNotifi
     postDetailsRef) => {
     try {
         if (!postDetailsRef?.current?.newPostViewed && postIdFromNotification && viewPagerRef?.current) {
-            const index = sdomDatastate.posts.findIndex(post => post.postId == postIdFromNotification)
+            const index = sdomDatastate.posts.findIndex(post => post.id == postIdFromNotification)
             viewPagerRef.current.scrollBy(index);
             postDetailsRef?.current?.setPostIndex(index);
             postDetailsRef?.current?.setNewPostViewed(true);
@@ -546,13 +545,15 @@ const retrievePostData = async (categoryIdFromNotification) => {
     if (responseData) {
         const responsePostsData = responseData.data.posts;
         let selectedCategories = await getSelectedCategoryIdsFromStorage();
+        //May not be required
         selectedCategories = await checkAndAddCategoriesFromFCMNotification(selectedCategories.password,
             categoryIdFromNotification);
 
         const fetchedPostCounts = await getPostCounts();
-        const postCounts = fetchedPostCounts && JSON.parse(fetchedPostCounts) || jsonConstants.EMPTY;
+        const postCounts = fetchedPostCounts && JSON.parse(fetchedPostCounts.password);
 
         const parsedCategoryIds = selectedCategories && JSON.parse(selectedCategories) || categoryPostsData;
+
         categoryPostsData = parsedCategoryIds && parsedCategoryIds.length &&
             responsePostsData.filter(post => parsedCategoryIds.some((selectedCategory) =>
                 post.categoryIds[numericConstants.ZERO].split(stringConstants.COMMA).
@@ -564,14 +565,36 @@ const retrievePostData = async (categoryIdFromNotification) => {
 
         categoryPostsData.map(postItem => {
             const postHasLikes = postCounts && postCounts[savePostCountKeys.SELECTED_POST_LIKES] &&
-                postCounts[savePostCountKeys.SELECTED_POST_LIKES].some(postId => postItem.postId == postId);
+                postCounts[savePostCountKeys.SELECTED_POST_LIKES].some(postId => postItem.id == postId);
             if (postHasLikes) {
                 postItem.likeDisabled = postHasLikes;
             }
             postItem.postCategoriesIn = fetchAndDisplayNamesAndCategoryTitles(postItem);
         });
+        categoryPostsData = await filterLoggedInUsersPosts(categoryPostsData);
     }
     return categoryPostsData;
+}
+
+const filterLoggedInUsersPosts = async (allPosts) => {
+    try {
+        const loggedInUser = await getLoggedInUserDetails();
+        if (loggedInUser && loggedInUser.details) {
+            const user = JSON.parse(loggedInUser.details);
+            allPosts = allPosts.filter(post => {
+                const postFollowers = post.user.followers.filter(follower => follower.follower_id == user.id);
+                if (postFollowers && postFollowers.length && post.postType == fieldControllerName.POST_TYPE_PRIVATE) {
+                    const privateAccess = postFollowers.find(follower => follower.follower_id == user.id).pvtaccess ||
+                        PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
+                    return privateAccess == PRIVATE_FOLLOW_UNFOLLOW.APPROVED;
+                }
+                return true;
+            });
+        }
+        return allPosts;
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FILTER_OUT_PRIVATE_POST_FOR_LOGGED_IN_USER, error);
+    }
 }
 
 export const focusOnInputIfFormInvalid = (formState, inputRef) => {
@@ -1188,15 +1211,11 @@ export const handleAddPostDetails = async (data, postImagePath, toAction, select
     }
 }
 
-export const handlePostDelete = async (postId) => {
+export const handlePostDelete = async (postId, token) => {
     try {
-        const user = await getLoggedInUserDetails();
-        if (user) {
-            let response = await deleteWithAuthorization(urlConstants.deletePost, postId, user.token);
-            response.data = { [miscMessage.MESSAGE]: alertTextMessages.POST_DELETED_SUCCESSFULLY }
-            return processResponseData(response);
-        }
-        //handle login here
+        const response = await deleteWithAuthorization(urlConstants.deletePost, postId, token);
+        response.data = { [miscMessage.MESSAGE]: alertTextMessages.POST_DELETED_SUCCESSFULLY }
+        return processResponseData(response);
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
         showSnackBar(errorMessages.COULD_NOT_DELETE_POST, false);
@@ -1370,18 +1389,18 @@ const navigateUserFromPostAction = (action, responseData, profile, sdomDatastate
 
 const displaySnackBarBasedOnResponseData = (responseData, action) => {
     if (action == actionButtonTextConstants.FOLLOW) {
-        if (responseData == miscMessage.SUCCESSFULLY_ADDED_FOLLOWER) {
+        if (responseData.message == miscMessage.SUCCESSFULLY_ADDED_FOLLOWER) {
             showSnackBar(alertTextMessages.SUCCESS_FOLLOW, true);
         }
-        if (responseData == miscMessage.SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER) {
+        if (responseData.message == miscMessage.SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER) {
             showSnackBar(alertTextMessages.SUCCESS_PRIVATE_FOLLOW, true);
         }
     }
     if (action == alertTextMessages.SUCCESS_FOLLOW) {
-        if (responseData == miscMessage.SUCCESSFULLY_UNFOLLOWED) {
+        if (responseData.message == miscMessage.SUCCESSFULLY_UNFOLLOWED) {
             showSnackBar(alertTextMessages.SUCCESS_UNFOLLOW, true);
         }
-        if (responseData == miscMessage.SUCCESSFULLY_UNFOLLOWED_PRIVATE_ACCESS) {
+        if (responseData.message == miscMessage.SUCCESSFULLY_UNFOLLOWED_PRIVATE_ACCESS) {
             showSnackBar(alertTextMessages.SUCCESS_PRIVATE_UNFOLLOW, true);
         }
     }
@@ -1394,11 +1413,9 @@ export const handleUserPostAction = async (action, profile, sdomDatastate, setSd
         profileDetail, setProfileDetail, navigation);
 }
 
-export const fetchUserFollowersFollowing = async (listFor, loggedInUser) => {
+export const fetchUserFollowersFollowing = async (listFor, token) => {
     try {
-        const token = loggedInUser.loginDetails.token;
-
-        const url = listFor == (miscMessage.PRIVATE_REQUEST_ACCESS || miscMessage.FOLLOWERS_TEXT) &&
+        const url = (listFor == miscMessage.PRIVATE_REQUEST_ACCESS || listFor == miscMessage.FOLLOWERS_TEXT) &&
             urlConstants.fetchUsersFollowers || urlConstants.fetchUsersFollowings;
         const response = await axiosGetWithAuthorization(url, token);
         return processResponseData(response);
@@ -1414,7 +1431,7 @@ export const logoutUser = async (token, loggedInUser, setLoggedInUser) => {
         const response = await axiosPostWithHeadersAndToken(urlConstants.logout, stringConstants.EMPTY, token);
         const responseData = processResponseData(response);
         responseData.message == responseStringData.SUCCESS_LOGOUT &&
-            showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
+            showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_OUT, true);
         loggedInUser.loginDetails = stringConstants.EMPTY;
         loggedInUser.isLoggedIn = false;
         setLoggedInUser({ ...loggedInUser });

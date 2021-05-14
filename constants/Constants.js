@@ -5,7 +5,7 @@ import {
     AdenCompat, _1977Compat, BrannanCompat, BrooklynCompat, ClarendonCompat, EarlybirdCompat, GinghamCompat,
     HudsonCompat, InkwellCompat, KelvinCompat, LarkCompat, LofiCompat, MavenCompat, MayfairCompat, MoonCompat,
     NashvilleCompat, PerpetuaCompat, ReyesCompat, RiseCompat, SlumberCompat, StinsonCompat, ToasterCompat, ValenciaCompat,
-    WaldenCompat, WillowCompat, Xpro2Compat
+    WaldenCompat, WillowCompat, Xpro2Compat, Colo, Normal, Browni
 } from 'react-native-image-filter-kit';
 
 export const isIOS = Platform.OS === `ios`;
@@ -48,10 +48,12 @@ export const profileScreenOptions = {
 }
 
 export const screens = {
+    SPLASH_SCREEN: `Splash Screen`,
     INTRO: `Intro`,
     CATEGORY: `Category`,
     LOGIN: `Login`,
     ADD_POST_DETAILS: `Add Post Details`,
+    EDIT_POST_DETAILS: `Edit Post Details`,
     REGISTER: `Register`,
     REGISTRATION_DETAILS: `Registration Details`,
     REGISTRATION_CONFIRMATION: `Confirm Registration`,
@@ -76,7 +78,7 @@ export const urlConstants = {
     fetchCategories: `${BASE_URI}/category`,
     fetchAllPosts: `${BASE_URI}/post`,
     userSaveAction: `${BASE_URI}/user`,
-    setPostCounts: `https://www.wallpiper.app/4RhvfbEGwnsmxliks.php`,
+    setPostReach: `${BASE_URI}/post/reach/count`,
     fetchReportAbuses: `https://www.wallpiper.app/4RhvfbEGwnsmxrpts.php`,
     setReportAbuseIdWithPostId: `https://www.wallpiper.app/4RhvfbEGwnsmxrptlist.php`,
     checkAvailability: `${BASE_URI}/user/validate`,
@@ -336,14 +338,9 @@ export const jsonConstants = {
 }
 
 export const postCountTypes = {
-    POST_LIKES: `postLikes`,
-    POST_DOWNLOADS: `postDownloads`,
-    POST_WALLPAPERS: `postWallPapers`
-}
-
-export const postCountRequestKeys = {
-    POST_ID_KEY: `post_id`,
-    POST_COUNT_TYPE_KEY: `post_count_type`
+    POST_LIKES: `likes`,
+    POST_DOWNLOADS: `downloads`,
+    POST_WALLPAPERS: `wallpapers`
 }
 
 export const permissionsButtons = {
@@ -471,6 +468,7 @@ export const alertTextMessages = {
     SUCCESSFULLY_REGISTERED: `Successfully Registered!`,
     ONLY_THREE_CATEGORIES: `Select only upto 3 categories`,
     SUCCESSFULLY_LOGGED_IN: `Login successful`,
+    SUCCESSFULLY_LOGGED_OUT: `Logout successful`,
     MAX_THREE_CATEGORIES: `(Select maximum 3)`,
     POST_ADDED_SUCCESSFULLY: `Added Successfully`,
     POST_UPDATED_SUCCESSFULLY: `Updated Successfully`,
@@ -485,6 +483,8 @@ export const alertTextMessages = {
     SUBMITTED_FOR_VERIFICATION: `You have successfully submitted the details for verification`,
     YOU_HAVE_SUCCESSFULLY_APPROVED: `You have successfuly approved private access to this user`,
     YOU_HAVE_SUCCESSFULLY_REJECTED: `You have successfuly rejected private access to this user`,
+    YOU_HAVE_NO_FOLLOWERS: `You have no followers.`,
+    NO_ONE_FOLLOWING: `Loosk like no one is following you. Please post images to increase reach.`
 }
 
 export const errorMessages = {
@@ -521,9 +521,14 @@ export const errorMessages = {
     COULD_NOT_FETCH_USER_PROFILE_POST: `Could not fetch user profile posts`,
     FAILED_TO_LIST_FOLLOWERS: `Failed to show followers`,
     FAILED_TO_LIST_FOLLOWING: `Failed to show followings`,
+    EXTERNAL_STORAGE_DENIED: `External Storage Permission Denited`,
     COULD_NOT_LOGOUT: `Could not logout`,
+    YOUR_SESSION_IS_EXPIRED_PLEASE_LOGIN: `Your session has been expired. Please login to continue`,
     COULD_NOT_UPDATE_USER_BIO: `Could not update user bio`,
-    COULD_NOT_SUBMIT_VERIFICATION: `Could not submit your request for verification.`
+    COULD_NOT_SUBMIT_VERIFICATION: `Could not submit your request for verification.`,
+    CANNOT_FETCH_CATEGORIES_FROM_STORAGE: 'Cannot fetch the categoryIds from the storage',
+    CANNOT_SET_INCREASED_COUNT_TO_DATABASE: `Cannot set the increased count to the database`,
+    COULD_NOT_FILTER_OUT_PRIVATE_POST_FOR_LOGGED_IN_USER: `Could not filter posts for logged in user in Glance screen`
 }
 
 export const reportAbuseRequestPayloadKeys = {
@@ -608,6 +613,7 @@ export const miscMessage = {
     LARGE: `large`,
     COVER: `cover`,
     VERIFIED: `Verified`,
+    LOADING: `Loading`,
     REGISTERED: `Registered`,
     INCORRECT_OTP: `Incorrect OTP`,
     MALE_TEXT: `Male`,
@@ -647,7 +653,8 @@ export const miscMessage = {
     GET_VERIFIED: `Get verified`,
     PRIVATE_REQUEST_ACCESS: `Private request access`,
     TYPE: `type`,
-    FLASH_MODE: `flashMode`
+    FLASH_MODE: `flashMode`,
+    EDIT_PROFILE_IMAGE: `Edit profile image`,
 }
 
 export const requestConstants = {
@@ -683,7 +690,12 @@ export const requestConstants = {
     DOWNLOAD_COUNT: `downloadCount`,
     POST_ID: `id`,
     EDIT: `edit`,
-    PRIVATE_ACCESS_ACTION: `privateaccess`
+    PRIVATE_ACCESS_ACTION: `privateaccess`,
+    POST: `post`,
+    SDOM_DATA_STATE: `sdomDatastate`,
+    SET_SDOM_DATA_STATE: `setSdomDatastate`,
+    POST_ID_KEY: `postId`,
+    REACH_TYPE: `reachType`
 };
 
 export const keyChainConstansts = {
@@ -767,7 +779,7 @@ export const cameraConstants = {
 export const CAMERA_IMAGE_FILTERS = [
     {
         title: 'Normal',
-        filterComponent: AdenCompat,
+        filterComponent: Normal,
     }, {
         title: 'Maven',
         filterComponent: MavenCompat,

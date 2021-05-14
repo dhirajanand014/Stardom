@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { FlatList, StatusBar, View } from "react-native"
+import { FlatList, StatusBar, View, Text } from "react-native"
 import { CategoryContext } from '../../App';
 import {
     actionButtonTextConstants, alertTextMessages, jsonConstants,
@@ -32,7 +32,7 @@ export const UserFollowFollowing = () => {
     }
 
     useEffect(async () => {
-        const responseData = await fetchUserFollowersFollowing(listFor, loggedInUser);
+        const responseData = await fetchUserFollowersFollowing(listFor, loggedInUser.loginDetails.token);
         if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS) {
             filterPrivateAccessUsers(responseData);
         }
@@ -58,11 +58,24 @@ export const UserFollowFollowing = () => {
         navigation.goBack();
     })
 
+    const emptyListMessage = () => {
+        return (
+            <View style={[SDGenericStyles.fill_half, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
+                <Text style={[SDGenericStyles.ft18, SDGenericStyles.fontFamilyRoman, SDGenericStyles.placeHolderTextColor,
+                SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop40]}>
+                    {listFor == miscMessage.FOLLOWERS_TEXT && alertTextMessages.YOU_HAVE_NO_FOLLOWERS
+                        || alertTextMessages.NO_ONE_FOLLOWING}
+                </Text>
+            </View>
+        )
+    }
+
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
             <FlatList data={userFollowerFollowing.users} keyExtractor={(item) => item.key} key={`1_${numericConstants.ONE}`}
-                renderItem={({ item, index }) => UserFollowFollowingRenderer(item, index, actionCallBack)}
-                contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]} />
+                renderItem={({ item, index }) => UserFollowFollowingRenderer(item, index, listFor, actionCallBack)}
+                contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
+                ListEmptyComponent={emptyListMessage} />
         </View>
     )
 }

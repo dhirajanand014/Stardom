@@ -131,6 +131,9 @@ export const SDGenericStyles = StyleSheet.create({
     marginBottom4: {
         marginBottom: 4
     },
+    marginBottom8: {
+        marginBottom: 8
+    },
     marginRight4: {
         marginRight: 4
     },
@@ -223,6 +226,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     borderRadius5: {
         borderRadius: 5
+    },
+    borderRadius10: {
+        borderRadius: 10
     },
     paddingStart10: {
         paddingStart: 10
@@ -380,11 +386,11 @@ export const SDGenericStyles = StyleSheet.create({
     textColorWhite: {
         color: `#f4f4f4`
     },
-    colorRed: {
-        color: `red`
-    },
     paddingHorizontal12: {
         paddingHorizontal: 12
+    },
+    paddingVertical16: {
+        paddingVertical: 16
     },
     padding4: {
         padding: 4
@@ -503,6 +509,11 @@ export const glancePostStyles = StyleSheet.create({
     postProfileName: {
         marginRight: 4,
         display: 'flex',
+        textShadowOffset: {
+            width: 2,
+            height: 2
+        },
+        textShadowColor: `#fafafa`
     },
     postUserName: {
         marginRight: 4,
@@ -639,7 +650,6 @@ export const glancePostStyles = StyleSheet.create({
     postTitleAndProfileStyle: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-
     },
     searchIconContainer: {
         flex: 1,
@@ -956,6 +966,10 @@ export const glancePostStyles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 20,
         borderColor: `#fafafa`
+    },
+    addPostEditIconsStyle: {
+        top: height / 4.4,
+        right: 18
     }
 });
 
@@ -1166,7 +1180,11 @@ export const userAuthStyles = StyleSheet.create({
         alignSelf: 'center',
         width: width / 1.8,
         elevation: 3,
-        paddingBottom: 40
+        paddingBottom: 18
+    },
+    splashScreenAnimatedImage: {
+        width: 200,
+        height: 200
     },
     menuRightCountView: {
         padding: 10,

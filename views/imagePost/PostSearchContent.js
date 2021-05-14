@@ -28,12 +28,12 @@ export function PostSearchContent(props) {
                     <ScrollView keyboardShouldPersistTaps={miscMessage.ALWAYS} bounces={true} decelerationRate="fast" scrollEnabled={true}
                         alwaysBounceVertical={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                         {
-                            searchValues !== undefined && searchValues.searchForPostId == postItem.postId && posts && posts
+                            searchValues !== undefined && searchValues.searchForPostId == postItem.id && posts && posts
                                 .filter((postFilter) => postFilter.postTitle.toLowerCase().includes(searchValues.searchText.toLowerCase()))
                                 .map((post) => {
                                     const postIndex = posts.indexOf(post);
                                     return (
-                                        <TouchableOpacity key={`0_${post.postId}`} style={glancePostStyles.search_content_post_selection}
+                                        <TouchableOpacity key={`0_${post.id}`} style={glancePostStyles.search_content_post_selection}
                                             onPress={() => {
                                                 viewPagerRef.current.scrollBy(postIndex - postDetailsRef?.current?.postIndex);
                                                 togglePostSearchBox(searchValues, setSearchValues, postItem, inputBoxTranslateX,

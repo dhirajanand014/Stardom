@@ -66,9 +66,7 @@ export const SDUserMenus = () => {
                 return true;
             case screens.USER_FOLLOWERS_FOLLOWING:
                 if (menu.label == miscMessage.FOLLOWERS_TEXT) {
-
                 } else if (menu.label == miscMessage.FOLLOWING_TEXT) {
-
                 }
                 else if (menu.label == miscMessage.PRIVATE_REQUEST_ACCESS) {
                     const followers = details.followers;
@@ -127,7 +125,7 @@ export const SDUserMenus = () => {
                         SDGenericStyles.ft14, SDGenericStyles.placeHolderTextColor]}>
                             @{profileMenu.profileUserId}
                         </Text>
-                        <TouchableOpacity style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15]} onPress={() =>
+                        <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15]} onPress={() =>
                             navigation.navigate(screens.EDIT_USER_PROFILE, { loggedInUser: loggedInUser })}>
                             <Text style={[SDGenericStyles.fontFamilyBold, SDGenericStyles.ft14, SDGenericStyles.colorYellow]}>
                                 {modalTextConstants.EDIT_PROFILE}
@@ -136,6 +134,7 @@ export const SDUserMenus = () => {
                     </View>
                 </View> || <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]} />
             }
+
             <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => `1_${item.label}`}
                 renderItem={({ item, index }) => MenuRenderer(item, index, profileMenu, handleMenuClickAction)}
                 ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />) }} />
@@ -151,8 +150,10 @@ export const SDUserMenus = () => {
                     </View>
                     <View style={userAuthStyles.menuRegisterButton}>
                         <TouchableOpacity activeOpacity={.7} onPress={() => navigation.navigate(screens.REGISTER)}>
-                            <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRoman,
-                            SDGenericStyles.colorYellow]}>{actionButtonTextConstants.REGISTER}</Text>
+                            <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRoman, SDGenericStyles.elevation3,
+                            SDGenericStyles.colorYellow, SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical16, SDGenericStyles.borderRadius10]}>
+                                {actionButtonTextConstants.REGISTER}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View> || <View style={userAuthStyles.menuLoginButton}>

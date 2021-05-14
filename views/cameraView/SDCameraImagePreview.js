@@ -3,7 +3,10 @@ import React, { useContext, useRef, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, Image, SafeAreaView, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
-import { actionButtonTextConstants, CAMERA_IMAGE_FILTERS, numericConstants, screens, stringConstants, width } from '../../constants/Constants';
+import {
+    actionButtonTextConstants, CAMERA_IMAGE_FILTERS,
+    miscMessage, numericConstants, screens, stringConstants, width
+} from '../../constants/Constants';
 import { SDGenericStyles, cameraStyles, userAuthStyles } from '../../styles/Styles';
 export const SDCameraImagePreview = props => {
 
@@ -21,12 +24,14 @@ export const SDCameraImagePreview = props => {
                 navigation.navigate(isFrom, { imageValue: extractedUri.current });
                 break;
             case stringConstants.EMPTY:
+            case screens.EDIT_POST_DETAILS:
             case screens.POSTS:
             default:
                 userPosts.details.capturedImage = extractedUri.current;
                 userPosts.details.showBottomOptions = false;
                 setUserPosts({ ...userPosts });
-                navigation.navigate(screens.ADD_POST_DETAILS);
+                navigation.navigate(screens.ADD_POST_DETAILS,
+                    isFrom == screens.EDIT_POST_DETAILS && { toAction: miscMessage.UPDATE });
                 break;
         }
     }

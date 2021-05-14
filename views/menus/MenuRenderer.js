@@ -17,13 +17,22 @@ export const MenuRenderer = (item, index, profileMenu, handleMenuClickAction) =>
                     {
                         item.key == screens.USER_FOLLOWERS_FOLLOWING &&
                         <View style={[userAuthStyles.menuRightCountView, SDGenericStyles.textBoxGray, SDGenericStyles.alignItemsEnd]}>
-                            <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16]}>
-                                {item.label == miscMessage.FOLLOWERS_TEXT && profileMenu.followersCount || profileMenu.followingCount}
-                            </Text>
+                            {
+                                item.label == miscMessage.FOLLOWERS_TEXT &&
+                                <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16]}>
+                                    {profileMenu.followingCount}
+                                </Text> || item.label == miscMessage.FOLLOWING_TEXT &&
+                                <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16]}>
+                                    {profileMenu.followersCount}
+                                </Text> || item.label == miscMessage.PRIVATE_REQUEST_ACCESS &&
+                                <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16]}>
+                                    {profileMenu.privateRequestCount}
+                                </Text>
+                            }
                         </View>
                     }
                 </View>
             </TouchableNativeFeedback>
-        </View>
+        </View >
     )
 }

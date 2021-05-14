@@ -1,10 +1,12 @@
 import { useNavigation, useRoute } from '@react-navigation/core'
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { KeyboardAvoidingView, Text, TouchableOpacity, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
-import Animated from 'react-native-reanimated'
+import Animated, { useSharedValue } from 'react-native-reanimated'
 import { CategoryContext } from '../../App'
+import { DeleteIcon } from '../../components/icons/DeleteIcon'
+import { EditIcon } from '../../components/icons/EditIcon'
 import {
     fieldControllerName, formRequiredRules, height,
     modalTextConstants, numericConstants,
@@ -14,6 +16,7 @@ import {
 } from '../../constants/Constants'
 import { checkTokenStatus, fetchCategoryData, handleAddPostDetails, handlePostDelete, showSnackBar } from '../../helper/Helper'
 import { colors, glancePostStyles, SDGenericStyles, userAuthStyles } from '../../styles/Styles'
+import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView'
 import { SDDropDownView } from '../../views/dropDownView/SDDropDownView'
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput'
 import { SDPostTypeOptionsView } from '../../views/fromInputView/SDPostTypeOptionView'
@@ -21,10 +24,19 @@ import { SDPostCategorySelector } from '../../views/imagePost/SDPostCategorySele
 
 export const AddPostDetails = () => {
 
-    const { userPosts, profiles } = useContext(CategoryContext);
+    const { userPosts, profiles, loggedInUser } = useContext(CategoryContext);
+
+    const bottomSheetRef = useRef(null);
+    const bottomSheetRefCallback = node => {
+        bottomSheetRef.current = node;
+    };
+
+    const snapPoints = useMemo(() => [numericConstants.THREE_HUNDRED_THIRTY, numericConstants.ZERO],
+        jsonConstants.EMPTY);
+
+    const fallValue = useSharedValue(numericConstants.ONE);
 
     const [categories, setCategories] = useState(jsonConstants.EMPTY);
-
     const route = useRoute();
     const toAction = route.params?.toAction;
     const selectedItem = route.params?.selectedItem;
@@ -56,7 +68,8 @@ export const AddPostDetails = () => {
     const onSubmit = async (data) => {
         const responseData = await handleAddPostDetails(data, userPosts.details.capturedImage, toAction, selectedItem);
         if (responseData) {
-            if (responseData.message == alertTextMessages.POST_ADDED_SUCCESSFULLY || responseData.message == alertTextMessages.POST_UPDATED_SUCCESSFULLY) {
+            if (responseData.message == alertTextMessages.POST_ADDED_SUCCESSFULLY ||
+                responseData.message == alertTextMessages.POST_UPDATED_SUCCESSFULLY) {
                 navigateUser(responseData);
             } else if (checkTokenStatus(responseData)) {
                 showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false, true, actionButtonTextConstants.LOGIN,
@@ -66,22 +79,42 @@ export const AddPostDetails = () => {
     }
 
     const handleDelete = async () => {
-        const responseData = await handlePostDelete(selectedItem.id);
+        const responseData = await handlePostDelete(selectedItem.id, loggedInUser.loginDetails.token);
         if (responseData && responseData.message == alertTextMessages.POST_DELETED_SUCCESSFULLY) {
             navigateUser(responseData);
         } else if (checkTokenStatus(responseData)) {
-
+            loginCallback();
+            showSnackBar(errorMessages.YOUR_SESSION_IS_EXPIRED_PLEASE_LOGIN, true, true);
         }
     }
 
     const postValueType = watch(fieldControllerName.POST_TYPE);
     const postCategories = watch(fieldControllerName.POST_CATEGORIES);
 
+    const detailsCallback = useCallback(() => {
+        bottomSheetRef?.current?.snapTo(numericConstants.ONE)
+    });
+
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
             <View style={[glancePostStyles.addPostDetailsStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingTop5]}>
                 <FastImage source={{ uri: userPosts.details.capturedImage }} resizeMode={FastImage.resizeMode.contain}
                     style={{ width: width, height: height / numericConstants.THREE }} />
+                {
+                    toAction == miscMessage.UPDATE &&
+                    <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right8, glancePostStyles.addPostEditIconsStyle]}>
+                        <View style={[SDGenericStyles.alignItemsEnd, SDGenericStyles.marginVertical10]}>
+                            <TouchableOpacity activeOpacity={.7} onPress={() => handleDelete()}>
+                                <DeleteIcon width={numericConstants.TWENTY_EIGHT} height={numericConstants.TWENTY_EIGHT} stroke={colors.RED} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[SDGenericStyles.alignItemsEnd, SDGenericStyles.marginVertical10]}>
+                            <TouchableOpacity activeOpacity={.7} onPress={() => bottomSheetRef?.current?.snapTo(numericConstants.ZERO)}>
+                                <EditIcon width={numericConstants.TWENTY_EIGHT} height={numericConstants.TWENTY_EIGHT} stroke={colors.WHITE} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                }
                 <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical20]}>
                     <Text style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.fontFamilyBold, SDGenericStyles.textColorWhite, SDGenericStyles.ft20,
                     SDGenericStyles.paddingBottom5]}>
@@ -123,13 +156,6 @@ export const AddPostDetails = () => {
                                 {actionButtonTextConstants.CANCEL_POST}
                             </Text>
                         </TouchableOpacity>
-                        {
-                            toAction == miscMessage.UPDATE &&
-                            <TouchableOpacity activeOpacity={.7} style={glancePostStyles.addPostButton} onPress={handleDelete}>
-                                <Text style={[SDGenericStyles.fontFamilyRoman, glancePostStyles.addPostButtonText]}>
-                                    {actionButtonTextConstants.DELETE_POST}</Text>
-                            </TouchableOpacity>
-                        }
                         <TouchableOpacity activeOpacity={.7} style={glancePostStyles.addPostButton} onPress={handleSubmit(onSubmit)}>
                             <Text style={[SDGenericStyles.fontFamilyRoman, glancePostStyles.addPostButtonText]}>
                                 {toAction == miscMessage.UPDATE && actionButtonTextConstants.UPDATE_POST || actionButtonTextConstants.ADD_POST}</Text>
@@ -137,6 +163,8 @@ export const AddPostDetails = () => {
                     </View>
                 </KeyboardAvoidingView>
             </View>
+            <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef} detailsCallback={detailsCallback}
+                snapPoints={snapPoints} fall={fallValue} navigation={navigation} isFrom={screens.EDIT_POST_DETAILS} />
         </View>
     )
 }

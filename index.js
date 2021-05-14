@@ -28,6 +28,7 @@ import { ProfilePosts } from './screens/user/ProfilePosts';
 import { UserFollowFollowing } from './screens/user/UserFollowFollowing';
 import { EditUserProfile } from './screens/user/EditUserProfile';
 import { SDCameraImagePreview } from './views/cameraView/SDCameraImagePreview';
+import { SDSplashScreen } from './screens/SDSplashScreen';
 
 LogBox.ignoreAllLogs(true);
 
@@ -47,8 +48,9 @@ export const TabNavigation = () => {
 export const ScreenNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName={screens.GLANCE/*navigationRef.navigationRoute*/} screenOptions={screenOptions}
+            <Stack.Navigator initialRouteName={screens.SPLASH_SCREEN} screenOptions={screenOptions}
                 headerMode={`float`} animation={`fade`}>
+                <Stack.Screen name={screens.SPLASH_SCREEN} component={SDSplashScreen} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.INTRO} component={Intro} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.GLANCE} component={TabNavigation} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.OTP_VERIFICATION} component={RegistrationOTP} options={headerLessStackOptions} />

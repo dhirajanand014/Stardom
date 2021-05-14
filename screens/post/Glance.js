@@ -26,13 +26,13 @@ const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
 export const Glance = ({ navigation }) => {
 
     const { postIdFromNotification, categoryIdFromNotification, sdomDatastate, setSdomDatastate,
-        optionsState, setOptionsState } = useContext(CategoryContext);
+        optionsState, setOptionsState, loggedInUser } = useContext(CategoryContext);
     const viewPagerRef = useRef(null);
     const postDetailsRef = useRef(null);
 
     useEffect(() => {
         fetchPostsAndSaveToState(sdomDatastate, setSdomDatastate, optionsState, setOptionsState,
-            categoryIdFromNotification);
+            categoryIdFromNotification, loggedInUser);
     }, jsonConstants.EMPTY);
 
     let { height } = Dimensions.get(miscMessage.WINDOW);

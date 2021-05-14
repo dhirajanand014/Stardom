@@ -82,7 +82,7 @@ export const EditUserProfile = () => {
                 <TouchableOpacity activeOpacity={.7} onPress={() => bottomSheetRef?.current?.snapTo(numericConstants.ZERO)}>
                     <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.colorYellow,
                     SDGenericStyles.textCenterAlign, SDGenericStyles.paddingVertical10]}>
-                        Edit profile image
+                        {miscMessage.EDIT_PROFILE_IMAGE}
                     </Text>
                 </TouchableOpacity>
             </View>
