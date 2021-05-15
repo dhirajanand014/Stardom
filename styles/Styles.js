@@ -1236,12 +1236,21 @@ export const userAuthStyles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#ff4e4e',
     },
+    noErrorInputBorder: {
+        borderWidth: 2,
+        borderColor: '#7FFF00',
+    },
     normalInputBorder: {
         borderWidth: 2,
         borderColor: `#343642`
     },
     formInputError: {
         color: '#ff4e4e',
+        marginBottom: 6,
+        marginHorizontal: 15
+    },
+    formInputNoError: {
+        color: '#7FFF00',
         marginBottom: 6,
         marginHorizontal: 15
     },
@@ -1402,6 +1411,7 @@ export const colors = {
     BLUE: '#3543bf',
     ORANGE: '#fe7d32',
     GREEN: '#30a960',
+    LIGHT_GREEN: '#7FFF00',
     RED: '#ff4e4e',
     BLACK: '#0b0b0b',
     SILVER: '#efefef',

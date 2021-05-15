@@ -207,9 +207,9 @@ export const formRequiredRules = {
             value: true,
             message: `Please enter the password`
         },
-        minLength: {
-            value: 4,
-            message: `Please enter only 4 digit password`
+        maxLength: {
+            value: 10,
+            message: `Please enter only 10 characters`
         }
     },
     otpFormRule: {
@@ -390,8 +390,8 @@ export const placeHolderText = {
     EMAIL: `Enter Email Address`,
     NAME: `Enter Name`,
     DOB: `Enter date of birth`,
-    SECRET: `Enter 4 digit Password`,
-    CONFIRM_PASSWORD: `Confirm 4 digit Password`,
+    SECRET: `Enter 10 Character Password`,
+    CONFIRM_PASSWORD: `Confirm 10 Character Password`,
     REGISTER_DESCRIPTION: `We will send you a verification code to your phone`,
     SEARCH_POSTS: `Search Posts`,
     SELECT_A_CATEGORY: `Select a category`,

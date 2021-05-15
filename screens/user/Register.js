@@ -5,7 +5,7 @@ import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import {
     fieldControllerName, formRequiredRules,
     stringConstants, numericConstants, keyBoardTypeConst,
-    placeHolderText, isAndroid, actionButtonTextConstants, miscMessage, modalTextConstants
+    placeHolderText, isAndroid, actionButtonTextConstants, miscMessage, modalTextConstants, screens
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { useNavigation } from '@react-navigation/core';
@@ -22,7 +22,7 @@ export const Register = () => {
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}>
-            <AuthHeaderText titleTextHeader={modalTextConstants.REGISTER_TITLE_HEADER} titleText={modalTextConstants.REGISTER_TITLE_TEXT} />
+            <AuthHeaderText titleTextHeader={modalTextConstants.REGISTER_TITLE_HEADER} titleText={modalTextConstants.REGISTER_TITLE_TEXT} isFrom={screens.REGISTER} />
             <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
                 defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
                 keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} textContentType={keyBoardTypeConst.TELPHONETYPE}

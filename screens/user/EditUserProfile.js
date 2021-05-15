@@ -6,7 +6,7 @@ import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import {
     fieldControllerName, formRequiredRules, stringConstants, keyBoardTypeConst,
     placeHolderText, actionButtonTextConstants, miscMessage, numericConstants,
-    modalTextConstants, alertTextMessages, screens, isAndroid, jsonConstants, requestConstants
+    modalTextConstants, alertTextMessages, screens, jsonConstants, requestConstants
 } from '../../constants/Constants';
 import { SDGenericStyles, userAuthStyles, colors, glancePostStyles, userMenuStyles } from '../../styles/Styles';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
@@ -103,9 +103,9 @@ export const EditUserProfile = () => {
                         stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
                 <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule}
-                    defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.NEW_PASSWORD} maxLength={numericConstants.FOUR}
-                    keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
-                        colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState}
+                    defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.NEW_PASSWORD}
+                    keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
+                        colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} maxLength={numericConstants.TEN}
                     isSecureTextEntry={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} />
 
                 <SDImageFormInput inputName={fieldControllerName.ADD_USER_BIO} control={control} rules={formRequiredRules.verifyUserInputRule}

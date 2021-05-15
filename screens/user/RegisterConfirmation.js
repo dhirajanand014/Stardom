@@ -73,6 +73,7 @@ export const RegistrationConfirmation = () => {
         } else if (data.confirmSecret === data.secret) {
             const responseData = await checkUserIdAvailability(data.userId);
             if (responseData.availability) {
+                isUserIdAvailable.current = true;
                 clearErrors(fieldControllerName.USER_ID);
                 const registrationResponse = await handleUserRegistration(phoneNumber, data, miscMessage.CREATE);
                 if (registrationResponse) {
@@ -86,6 +87,7 @@ export const RegistrationConfirmation = () => {
                     await navigateUser(data, isFromForgotPassword);
                 }
             } else {
+                isUserIdAvailable.current = false;
                 setError(fieldControllerName.USER_ID, formRequiredRules.userIdAvailability);
             }
         };
@@ -97,9 +99,10 @@ export const RegistrationConfirmation = () => {
             <ScrollView>
                 <SDImageFormInput inputName={fieldControllerName.USER_ID} control={control} rules={formRequiredRules.usedIdFormRule}
                     defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.USER_ID} autofocus={true} icon={<RegisterUserIcon width={numericConstants.EIGHTEEN}
-                        stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} userIdValue={userIdValue}
-                    formState={formState} keyboardType={keyBoardTypeConst.DEFAULT} validateUserId={validateUserId} isUserIdAvailable={isUserIdAvailable}
-                    isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]} clearErrors={clearError} />
+                        height={numericConstants.EIGHTEEN} stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || isUserIdAvailable?.current && colors.LIGHT_GREEN ||
+                            colors.SDOM_PLACEHOLDER} />} userIdValue={userIdValue} formState={formState} keyboardType={keyBoardTypeConst.DEFAULT} validateUserId={validateUserId}
+                    isUserIdAvailable={isUserIdAvailable} isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
+                    clearErrors={clearError} />
 
                 <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule}
                     defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.PASSWORD} maxLength={numericConstants.TEN}

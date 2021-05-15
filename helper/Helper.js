@@ -628,6 +628,8 @@ export const onChangeByValueType = async (inputProps, value, props) => {
             inputProps.onChange(phoneValue);
             props.isSignUp && props.setSignUpDetails({ ...props.signUpDetails, phoneNumber: phoneValue });
             break;
+        case fieldControllerName.USER_ID:
+            props.clearErrors();
         default:
             inputProps.onChange(value);
             break;

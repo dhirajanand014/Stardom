@@ -17,7 +17,7 @@ import { focusOnInputIfFormInvalid, handleUserLogin, redirectUserToGlance, showS
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { CategoryContext } from '../../App';
-export const Login = props => {
+export const Login = () => {
 
     const { handleSubmit, control, formState } = useForm();
 
@@ -65,8 +65,8 @@ export const Login = props => {
                 SDGenericStyles.textColorWhite]} onSubmitEditing={() => focusOnInputIfFormInvalid(formState, secretRef)} />
 
             <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule}
-                defaultValue={stringConstants.EMPTY} maxLength={numericConstants.FOUR} placeHolderText={placeHolderText.SECRET} refCallback={refCallback}
-                keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} isSecureTextEntry={true} icon={<LoginSecretIcon stroke={colors.SDOM_WHITE} />}
+                defaultValue={stringConstants.EMPTY} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.SECRET} refCallback={refCallback}
+                keyboardType={keyBoardTypeConst.DEFAULT} isSecureTextEntry={true} icon={<LoginSecretIcon stroke={colors.SDOM_WHITE} />}
                 textContentType={keyBoardTypeConst.PASSWORD} formState={formState} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} />
 
             <View activeOpacity={.7} style={userAuthStyles.signInCreateAccount}>
