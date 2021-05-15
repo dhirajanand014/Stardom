@@ -11,7 +11,7 @@ export const SDPostDetailsInput = props => {
             render={inputProps => {
                 return (
                     <TextInput {...inputProps} maxLength={props.maxLength} value={inputProps.value} textContentType={props.textContentType}
-                        autoCapitalize={miscMessage.WORDS} placeholder={props.placeHolderText} secureTextEntry={props.isSecureTextEntry}
+                        autoCapitalize={miscMessage.WORDS} placeholder={props.placeHolderText} secureTextEntry={props.isSecureTextEntry} selectionColor={colors.SDOM_YELLOW}
                         keyboardType={props.keyboardType} style={[glancePostStyles.addPostDetailUnderlineTextInput, props.formState.errors[props.inputName]?.message &&
                             glancePostStyles.errorInputBorder, props.extraStyles]} placeholderTextColor={colors.DARK_GREY} placeHolderText={props.placeHolderText}
                         onChangeText={value => onChangeByValueType(inputProps, value, props)} autoFocus={props.autofocus} underlineColorAndroid={props.underlineColorAndroid}

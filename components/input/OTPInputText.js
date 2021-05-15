@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ViewPropTypes, TextInput } from 'react-native';
 import PropTypes from 'prop-types';
-import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
+import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 
 export const OTPInputText = props => {
     const { containerStyle, LeftComponent, RightComponent, control, refCallback, ...remainingProps } = props;
@@ -9,7 +9,7 @@ export const OTPInputText = props => {
         <View style={[userAuthStyles.otpContainerStyle, containerStyle, SDGenericStyles.textBoxGray]}>
             {LeftComponent}
             <TextInput {...remainingProps} style={[userAuthStyles.otpInputStyle, SDGenericStyles.fill, SDGenericStyles.fontFamilyBold,
-            SDGenericStyles.centerAlignedText, SDGenericStyles.textColorWhite]} ref={refCallback} />
+            SDGenericStyles.centerAlignedText, SDGenericStyles.textColorWhite]} ref={refCallback} selectionColor={colors.SDOM_YELLOW} />
             {RightComponent}
         </View>
     );

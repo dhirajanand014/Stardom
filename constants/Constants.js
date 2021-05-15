@@ -359,6 +359,7 @@ export const stringConstants = {
     UNDERSCORE: `_`,
     PLUS: `+`,
     SPACE: ` `,
+    SEMI_COLON: `:`,
     PIPELINE_JOIN: ` | `,
     SLASH: `/`
 }
@@ -494,6 +495,7 @@ export const errorMessages = {
     CANNOT_REGISITER_USER: `Could not register user`,
     COULD_NOT_REGISTER_USER: `Could not register user`,
     COULD_NOT_SHARE_IMAGE: `Cannot share image`,
+    COULD_NOT_RESET_KEYCHAIN_VALUES: `Could not reset keychain values`,
     COULD_NOT_FETCH_ALL_POSTS: `Could not fetch all posts`,
     CANNOT_FETCH_SAVE_BUTTON_TYPE: `Cannot fetch the save button type from the storage`,
     COULD_NOT_UPLOAD_POST: `Could not upload post`,

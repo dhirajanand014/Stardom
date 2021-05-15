@@ -24,7 +24,7 @@ export const SDFormInput = props => {
                             keyboardType={props.keyboardType} placeholderTextColor={colors.SDOM_PLACEHOLDER} autoFocus={props.autofocus}
                             style={[userAuthStyles.textInputStyle, props.extraStyles]} onSubmitEditing={props.onSubmitEditing}
                             onChangeText={value => onChangeByValueType(inputProps, value, props)} ref={props.refCallback} multiline={props.isMultiline}
-                            numberOfLines={props.numberOfLines} />
+                            numberOfLines={props.numberOfLines} selectionColor={colors.SDOM_YELLOW} />
                     </React.Fragment>
                 )
             }} />

@@ -4,7 +4,7 @@ import { SDGenericStyles } from "../../styles/Styles"
 
 export const AuthHeaderText = props => {
     return (
-        <View style={[SDGenericStyles.justifyContentCenter, props.isFrom && SDGenericStyles.paddingTop40 || SDGenericStyles.paddingTop40,
+        <View style={[SDGenericStyles.justifyContentCenter, props.isFrom && SDGenericStyles.paddingTop80 || SDGenericStyles.paddingTop80,
         SDGenericStyles.paddingBottom30, SDGenericStyles.alignItemsCenter]}>
             <Text style={[SDGenericStyles.ft24, SDGenericStyles.placeHolderTextColor, SDGenericStyles.fontFamilyRoman,
             SDGenericStyles.paddingBottom5]}>

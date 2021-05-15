@@ -81,7 +81,7 @@ export const SDUserMenus = () => {
 
     useEffect(() => {
         (async () => {
-            if (loggedInUser.loginDetails.details) {
+            if (loggedInUser.loginDetails.details && loggedInUser.isLoggedIn) {
                 profileMenu.userMenus = prepareSDOMMenu();
                 const counts = await fetchProfilePostsCounts(loggedInUser);
                 const details = JSON.parse(loggedInUser.loginDetails.details);
@@ -98,7 +98,7 @@ export const SDUserMenus = () => {
             }
             setProfileMenu({ ...profileMenu });
         })();
-    }, [isFocused || loggedInUser.loginDetails]);
+    }, [loggedInUser.loginDetails, isFocused]);
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>

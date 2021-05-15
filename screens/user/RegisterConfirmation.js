@@ -60,7 +60,7 @@ export const RegistrationConfirmation = () => {
             setSignUpDetails({ ...signUpDetails, secret: data.password, registrationSuccessful: true });
             showSnackBar(alertTextMessages.SUCCESSFULLY_REGISTERED, true);
             await saveRegistrationStatus(phoneNumber, miscMessage.VERIFIED);
-            navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.REGISTRATION_DETAILS, }] });
+            navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.REGISTRATION_DETAILS }] });
         } else {
             showSnackBar(alertTextMessages.SUCCESSFULLY_REGISTERED, true);
             navigation.reset({ index: numericConstants.ZERO, routes: [{ name: routeConsts.HOME }] });
@@ -77,6 +77,7 @@ export const RegistrationConfirmation = () => {
                 clearErrors(fieldControllerName.USER_ID);
                 const registrationResponse = await handleUserRegistration(phoneNumber, data, miscMessage.CREATE);
                 if (registrationResponse) {
+                    isUserIdAvailable.current = false;
                     let isFromForgotPassword = false;
                     if (registrationResponse == `${miscMessage.RESET}_${miscMessage.SUCCESSFUL}`) {
                         await resetTokens();

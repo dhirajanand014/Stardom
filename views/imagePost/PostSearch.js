@@ -3,7 +3,7 @@ import { TextInput, Image, TouchableOpacity, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { togglePostSearchBox } from '../../helper/Helper'
 import { colorConstants, miscMessage, numericConstants, placeHolderText, stringConstants } from '../../constants/Constants';
-import { glancePostStyles } from '../../styles/Styles'
+import { colors, glancePostStyles } from '../../styles/Styles'
 import { PostSearchContent } from './PostSearchContent';
 
 const post_search_input_close = require('../../assets/post_search_input_close_icon.png');
@@ -42,7 +42,7 @@ export function PostSearch(props) {
             </View>
             <React.Fragment>
                 <Animated.View style={[glancePostStyles.searchInputBox, translateSearchInputBox]}>
-                    <TextInput ref={inputTextRef} placeholder={placeHolderText.SEARCH_POSTS} clearButtonMode={miscMessage.ALWAYS}
+                    <TextInput ref={inputTextRef} placeholder={placeHolderText.SEARCH_POSTS} clearButtonMode={miscMessage.ALWAYS} selectionColor={colors.SDOM_YELLOW}
                         placeholderTextColor={colorConstants.BLACK} textAlignVertical={miscMessage.CENTER} value={searchValues.searchText}
                         onChangeText={(value) => setSearchValues({ ...searchValues, searchText: value })} style={glancePostStyles.search_input_text}>
                     </TextInput>

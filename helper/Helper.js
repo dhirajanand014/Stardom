@@ -868,7 +868,7 @@ export const getSignUpParams = (random6Digit, isFrom) => {
     return returnValue;
 }
 
-export const handleUserLogin = async (data) => {
+export const handleUserLogin = async (data, loggedInUser, setLoggedInUser, messaging) => {
     try {
         const loginRequest = {
             [requestConstants.PHONE_NUMBER]: data.phoneNumber,
@@ -878,9 +878,16 @@ export const handleUserLogin = async (data) => {
         const response = await axiosPostWithHeaders(urlConstants.login, loginJson);
         const responseData = processResponseData(response);
         if (responseData) {
-            const userName = `${data.phoneNumber}_${responseData.access_token}`;
+            const userName = `${data.phoneNumber}${stringConstants.SEMI_COLON}${responseData.access_token}`;
             const userDetailsJSON = JSON.stringify(responseData.user);
-            await resetTokens();
+
+            const details = {
+                [miscMessage.PHONE_NUMBER]: data.phoneNumber,
+                [miscMessage.TOKEN]: responseData.access_token,
+                [miscMessage.USER_DETAILS]: userDetailsJSON
+            }
+            setLoggedInUser({ ...loggedInUser, loginDetails: details, isLoggedIn: true });
+
             await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER, userName,
                 userDetailsJSON);
             return responseData;
@@ -894,7 +901,6 @@ export const handleUserLogin = async (data) => {
 export const saveDetailsToKeyChain = async (key, username, password) => {
     try {
         await Keychain.setGenericPassword(username, password, { service: key });
-        console.log(username);
         return true;
     } catch (error) {
         console.error(errorMessages.COULD_NOT_SAVE_TO_KEYCHAIN, error);
@@ -942,7 +948,7 @@ export const resetTokens = async () => {
         await Keychain.resetGenericPassword({ service: keyChainConstansts.LOGGED_IN_USER });
         return true;
     } catch (error_response) {
-        console.error(error_response);
+        console.error(errorMessages.COULD_NOT_RESET_KEYCHAIN_VALUES, error_response);
         setErrorModal(error, setError, errorModalMessageConstants.UNEXPECTED_ERROR,
             errorModalMessageConstants.SOMETHING_WENT_WRONG, true);
     }
@@ -1128,8 +1134,8 @@ export const getLoggedInUserDetails = async () => {
     try {
         const loggedInUser = await getLoggedInUser();
         return loggedInUser && {
-            [miscMessage.PHONE_NUMBER]: loggedInUser.username.split(stringConstants.UNDERSCORE)[numericConstants.ZERO],
-            [miscMessage.TOKEN]: loggedInUser.username.split(stringConstants.UNDERSCORE)[numericConstants.ONE],
+            [miscMessage.PHONE_NUMBER]: loggedInUser.username.split(stringConstants.SEMI_COLON)[numericConstants.ZERO],
+            [miscMessage.TOKEN]: loggedInUser.username.split(stringConstants.SEMI_COLON)[numericConstants.ONE],
             [miscMessage.USER_DETAILS]: loggedInUser.password
         }
     } catch (error) {
@@ -1146,8 +1152,8 @@ export const fetchUpdateLoggedInUserProfile = async (loggedInUser, setLoggedInUs
             if (updatedDetails.status == 200) {
                 const responseData = processResponseData(updatedDetails);
                 const JSONDetails = JSON.stringify(responseData);
-                await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER, `${user.phoneNumber}_${user.token}`,
-                    JSONDetails);
+                await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER,
+                    `${user.phoneNumber}${stringConstants.SEMI_COLON}${user.token}`, JSONDetails);
                 fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, false);
             } else {
                 console.error(errorMessages.COULD_NOT_FETCH_UPDATED_USER_PROFILE, error);
@@ -1400,7 +1406,7 @@ const navigateUserFromPostAction = (action, responseData, profile, sdomDatastate
     if (responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID
         || responseData == responseStringData.REDIRECT_USER_LOGIN) {
         showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false);
-        navigation.navigate(screens.LOGIN);
+        navigation.navigate(screens.LOGIN, { isIntermediateLogin: true });
     } else if (responseData && responseData.message.includes(responseStringData.SUCCESS)) {
         updateProfileActionValueToState(responseData, action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
             profileDetail, setProfileDetail);
@@ -1456,6 +1462,7 @@ export const logoutUser = async (token, loggedInUser, setLoggedInUser) => {
         loggedInUser.loginDetails = stringConstants.EMPTY;
         loggedInUser.isLoggedIn = false;
         setLoggedInUser({ ...loggedInUser });
+        await resetTokens();
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
         showSnackBar(errorMessages.COULD_NOT_LOGOUT, false);
@@ -1515,27 +1522,3 @@ export const userPostAction = async (request, data, token) => {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
     }
 }
-
-// export const sharePostImage = async (selectedPost) => {
-//     try {
-//         const result = await Share.share({
-//             title: selectedPost.postTitle,
-//             message: `${successFulMessages.SHARE_MESSAGE}${stringConstants.SPACE}${urlConstants.SHARE_APP_LINK}`
-//         }, {
-//             dialogTitle: successFulMessages.SHARE_DIALOG_TITLE,
-//             tintColor: colors.BLUE,
-//             subject: successFulMessages.SHARE_TITLE,
-//             excludedActivityTypes: [miscMessage.EXCLUDE_TYPE]
-//         });
-//         if (result.action === Share.sharedAction) {
-//             if (result.activityType) {
-//                 showSnackBar(successFulMessages.SHARED_DETAILS_SUCCESSFULLY, true);
-//             }
-//         } else if (result.action === Share.dismissedAction) {
-//             showSnackBar(errorModalMessageConstants.CANCELLED_SHARING, false);
-//         }
-//     } catch (error) {
-//         console.error(error);
-//         showSnackBar(errorModalMessageConstants.CANNOT_SHARE, false);
-//     }
-// }

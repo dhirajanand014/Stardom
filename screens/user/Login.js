@@ -35,14 +35,9 @@ export const Login = () => {
     };
 
     const onSubmit = async data => {
-        const responseData = await handleUserLogin(data, messaging);
+        const responseData = await handleUserLogin(data, loggedInUser, setLoggedInUser, messaging);
         if (responseData) {
             showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
-            const details = { [miscMessage.DETAILS]: responseData };
-            loggedInUser.loginDetails = details;
-            loggedInUser.isLoggedIn = true;
-            setLoggedInUser({ ...loggedInUser });
-
             if (isIntermediateLogin) {
                 navigation.goBack();
             } else {

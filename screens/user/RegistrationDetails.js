@@ -68,7 +68,7 @@ export const RegistrationDetails = () => {
                         height={numericConstants.EIGHTEEN} stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
                 <SDGenderRadioOptionView inputName={fieldControllerName.GENDER} control={control} rules={formRequiredRules.genderRule} formState={formState}
-                    defaultValue={stringConstants.EMPTY} genderValue={genderValue} />
+                    defaultValue={stringConstants.EMPTY} checkValue={genderValue} />
 
                 <SDDropDownView inputName={fieldControllerName.PROFILE} control={control} rules={formRequiredRules.profileRule} selectedLabelStyle={SDGenericStyles.textColorWhite}
                     containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle} placeHolderText={placeHolderText.SELECT_A_PROFILE}
