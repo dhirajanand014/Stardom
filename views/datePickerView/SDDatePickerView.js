@@ -5,7 +5,7 @@ import { SDDatePicker } from '../../components/picker/SDDatePicker';
 export const SDDatePickerView = props => {
     return (
         <KeyboardAvoidingView messagestyle={userAuthStyles.signInUserInputView}>
-            <View style={[userAuthStyles.userInput, SDGenericStyles.paddingVertical14, SDGenericStyles.backGroundColorSDOMGray,
+            <View style={[userAuthStyles.userInput, SDGenericStyles.paddingVertical14, SDGenericStyles.paddingHorizontal10, SDGenericStyles.backGroundColorSDOMGray,
             props.formState.errors[props.inputName]?.message && userAuthStyles.errorInputBorder || userAuthStyles.normalInputBorder]}>
                 <SDDatePicker {...props} />
                 {props.icon && props.icon}
