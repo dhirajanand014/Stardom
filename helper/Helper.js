@@ -2,8 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import AddPostConstant from '../constants/AddPostConstant.json';
 import {
-    urlConstants, keyChainConstansts,
-    postCountTypes, savePostCountKeys, permissionsButtons, permissionMessages,
+    urlConstants, keyChainConstansts, permissionsButtons,
+    postCountTypes, savePostCountKeys, permissionMessages,
     stringConstants, alertTextMessages,
     responseStringData, PRIVATE_FOLLOW_UNFOLLOW,
     actionButtonTextConstants, colorConstants,
