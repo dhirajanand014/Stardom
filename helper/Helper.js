@@ -3,16 +3,14 @@ import axios from 'axios';
 import AddPostConstant from '../constants/AddPostConstant.json';
 import {
     urlConstants, keyChainConstansts,
-    postCountTypes, savePostCountKeys, setPostImages,
-    permissionsButtons, permissionMessages,
+    postCountTypes, savePostCountKeys, permissionsButtons, permissionMessages,
     stringConstants, alertTextMessages,
-    reportAbuseRequestPayloadKeys, responseStringData,
+    responseStringData, PRIVATE_FOLLOW_UNFOLLOW,
     actionButtonTextConstants, colorConstants,
     miscMessage, width, height, numericConstants,
     screens, headerStrings, fieldControllerName, isAndroid,
     isIOS, OTP_INPUTS, errorMessages, requestConstants,
     jsonConstants, defaultProfilesValue, SDMenuOptions,
-    PRIVATE_FOLLOW_UNFOLLOW
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -24,8 +22,10 @@ import { colors, headerStyles, SDGenericStyles } from '../styles/Styles';
 import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
 import { HeaderBackButton } from '@react-navigation/stack';
+import Share from 'react-native-share';
 import Snackbar from 'react-native-snackbar';
 import moment from 'moment';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export const fetchCategoryData = async () => {
     try {
@@ -53,7 +53,7 @@ export const fetchAndUpdateCategoryState = async (category, setCategory) => {
 
         setCategory({ ...category, categories: responseCategoryData, initialCategory: initialCategory });
     } catch (error) {
-        console.log(error);
+        console.error(errorMessages.COULD_NOT_FETCH_CATEGORIES, error);
         setCategory({ ...category, categories: [], initialCategory: actionButtonTextConstants.SKIP_BUTTON });
     }
 }
@@ -65,7 +65,7 @@ export const fetchPostsAndSaveToState = async (sdomDatastate, setSdomDatastate, 
         setSdomDatastate({ ...sdomDatastate, posts: categoryPostsData, });
         setOptionsState({ ...optionsState, showSearch: true });
     } catch (error) {
-        console.log(error);
+        console.error(errorMessages.COULD_NOT_FETCH_ALL_POSTS, error);
         setSdomDatastate({ ...sdomDatastate, posts: jsonConstants.EMPTY });
     }
 }
@@ -137,7 +137,7 @@ export const savePostCounts = async (postId, postIdForSelectedCountType, sdomDat
                 postIdsJson);
         }
     } catch (error) {
-        console.log(`Cannot save the post counts for the post id ${postId}`, error);
+        console.error(`Cannot save the post counts for the post id ${postId}`, error);
     }
 }
 
@@ -145,33 +145,47 @@ export const getPostCounts = async () => {
     try {
         return await getKeyChainDetails(keyChainConstansts.SAVE_POST_COUNTS);
     } catch (error) {
-        console.log(`Cannot fetch the post ids from the selected post counts for type: ${postIdForSelectedCountType}`,
+        console.error(`Cannot fetch the post ids from the selected post counts for type: ${postIdForSelectedCountType}`,
             error);
     }
 }
 
-export const setCurrentImageAsWallPaper = async (postUrl, postTitle, postType) => {
+export const setCurrentImageAsWallPaper = async (postUrl, postTitle) => {
     try {
-        NativeModules.WallPiperApi.setPostAsWallPaper(postUrl, postTitle, postType);
+        NativeModules.StartomApi.setPostAsWallPaper(postTitle, postUrl);
     } catch (error) {
-        console.log("Cannot set current image as wallpaper", error);
+        console.error(errorMessages.COULD_NOT_SET_WALLPAPER, error);
     }
 }
 
-export const downloadCurrentImage = async (postUrl, postTitle, postType) => {
+export const downloadCurrentImage = async (postUrl, postTitle, isDownload) => {
     try {
-        NativeModules.WallPiperApi.downloadPostImage(postUrl, postTitle, postType);
+        let config = { fileCache: true };
+        if (isDownload) {
+            config.path = `${RNFetchBlob.fs.dirs.DownloadDir}${responseStringData.STARDOM_PATH}${stringConstants.SLASH}${postTitle}${responseStringData.DOWNLOAD_IMAGE_EXTENTION}`
+        }
+        const response = await RNFetchBlob.config(config).fetch(requestConstants.GET, postUrl);
+        return isDownload && processResponseData(response) || response;
     } catch (error) {
-        console.log("Cannot download the current image", error);
+        console.error(errorMessages.COULD_NOT_DOWNLOAD_IMAGE, error);
     }
 }
 
 export const shareImage = async (post) => {
     const { postImage, postTitle } = post
     try {
-        NativeModules.WallPiperApi.shareImage(postImage, postTitle);
+        const response = await downloadCurrentImage(postImage, postTitle, false);
+        if (response) {
+            const base64Image = await response.readFile(miscMessage.BASE64);
+            const base64Data = `${miscMessage.BASE64_BLOB}${base64Image}`;
+            await Share.open({ url: base64Data, filename: postTitle, excludedActivityTypes: [miscMessage.EXCLUDE_TYPE] });
+        } else {
+            showSnackBar(errorMessages.COULD_NOT_SHARE_IMAGE, false);
+        }
     } catch (error) {
-        console.log("Cannot share image", error);
+        error.message && error.message == errorMessages.USER_DID_NOT_SHARE &&
+            showSnackBar(errorMessages.USER_CANCELLED_SHARE, false);
+        console.error(errorMessages.COULD_NOT_SHARE_IMAGE, error);
     }
 }
 
@@ -179,7 +193,7 @@ export const getCategoryButtonType = async () => {
     try {
         return await getKeyChainDetails(keyChainConstansts.SAVE_CATEGORY_BUTTON_TYPE);
     } catch (error) {
-        console.log('Cannot fetch the save button type from the storage', error);
+        console.error(errorMessages.CANNOT_FETCH_SAVE_BUTTON_TYPE, error);
     }
 }
 
@@ -195,7 +209,7 @@ export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate) 
                     },
                     {
                         text: permissionsButtons.OK, onPress: async () => {
-                            await setCurrentImageAsWallPaper(item.postImage, item.postTitle, setPostImages.SET_POST_WALLPAPER);
+                            await setCurrentImageAsWallPaper(item.postImage, item.postTitle);
                             await increaseAndSetPostCounts(item, sdomDatastate, setSdomDatastate, postCountTypes.POST_WALLPAPERS);
                             displaySuccessAlert();
                         }
@@ -204,7 +218,7 @@ export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate) 
                 { cancelable: false }
             ));
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -230,7 +244,7 @@ export const downloadImageFromURL = async (item, sdomDatastate, setSdomDatastate
         permissionMessages.READ_WRITE_EXTERNAL_STORAGE_MESSAGE, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
     if (PermissionsAndroid.RESULTS.GRANTED == write_granted && PermissionsAndroid.RESULTS.GRANTED === read_granted) {
-        await downloadCurrentImage(item.postImage, item.postTitle, setPostImages.SET_POST_DOWNLOAD);
+        await downloadCurrentImage(item.postImage, item.postTitle, true);
         await increaseAndSetPostCounts(item, sdomDatastate, setSdomDatastate, postCountTypes.POST_DOWNLOADS);
     } else {
         showSnackBar(errorMessages.EXTERNAL_STORAGE_DENIED, false);
@@ -250,7 +264,7 @@ export const accessAndGrantPermssionsToWallPiper = async (permissionTitie, permi
             }
         );
     } catch (error) {
-        console.log(`Error accessing permissions for ${permissionType}`, error);
+        console.error(`Error accessing permissions for ${permissionType}`, error);
     }
 }
 
@@ -282,9 +296,9 @@ export const setReportAbuseSelectedOption = (optionsState, setOptionsState, sele
     setOptionsState({
         ...optionsState,
         selectedReportAbuse: {
-            [reportAbuseRequestPayloadKeys.POST_ID]: optionsState.selectedPost.id,
-            [reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_ID]: selectedReportAbuseId,
-            [reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_SUBMITTED]: false
+            [requestConstants.POST_ID]: optionsState.selectedPost.id,
+            [requestConstants.POST_REPORT_ABUSE_ID]: selectedReportAbuseId,
+            [requestConstants.POST_REPORT_ABUSE_SUBMITTED]: false
         }
     });
 }
@@ -310,14 +324,16 @@ export const setReportIdForPost = async (optionsState, setOptionsState) => {
     try {
         optionsState.reportAbuseSubmitDisabled = true;
         const requestReportAbusePayload = {
-            [reportAbuseRequestPayloadKeys.POST_ID]: parseInt(id),
-            [reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_ID]: parseInt(selectedReportAbuse.postReportAbuseId)
+            [requestConstants.POST_ID_KEY]: id,
+            [requestConstants.POST_REPORT_ABUSE_ID]: selectedReportAbuse.postReportAbuseId
         }
-        const responseReportAbuseSet = await axios.post(urlConstants.setReportAbuseIdWithPostId,
+        const responseReportAbuseSet = await axiosPostWithHeaders(urlConstants.setReportAbuseIdWithPostId,
             requestReportAbusePayload);
 
-        if (responseReportAbuseSet && responseReportAbuseSet.data == responseStringData.SUCCESS) {
-            requestReportAbusePayload[reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_SUBMITTED] = true;
+        const responseData = processResponseData(responseReportAbuseSet);
+
+        if (responseData && responseData.message == responseStringData.SUCCESS) {
+            requestReportAbusePayload[requestConstants.POST_REPORT_ABUSE_SUBMITTED] = true;
             optionsState.selectedReportAbuse = requestReportAbusePayload;
         }
 
@@ -326,7 +342,7 @@ export const setReportIdForPost = async (optionsState, setOptionsState) => {
         saveReportAbuseOptions(optionsState);
         closeReportAbuseModal(optionsState, setOptionsState);
     } catch (error) {
-        console.log(`Cannot set report abuse id for ${postTitle}`, error);
+        console.error(`Cannot set report abuse id for ${postTitle}`, error);
     }
 }
 
@@ -345,9 +361,9 @@ export const saveReportAbuseOptions = async (optionsState) => {
         var saveReportsArray = [], isReportAbuseAlreadySet = false;
         const savedReportAbuses = await fetchSavedReportAbuseOptions();
         if (savedReportAbuses) {
-            saveReportsArray = JSON.parse(savedReportAbuses);
-            isReportAbuseAlreadySet = saveReportsArray && saveReportsArray.some((item) => item.id == optionsState.selectedReportAbuse.id &&
-                optionsState.selectedReportAbuse[reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_SUBMITTED]);
+            saveReportsArray = JSON.parse(savedReportAbuses.password);
+            isReportAbuseAlreadySet = saveReportsArray && saveReportsArray.some((item) => item.postId == optionsState.selectedReportAbuse.id &&
+                optionsState.selectedReportAbuse[requestConstants.POST_REPORT_ABUSE_SUBMITTED]);
         }
         if (!isReportAbuseAlreadySet) {
             saveReportsArray.push(optionsState.selectedReportAbuse);
@@ -356,7 +372,7 @@ export const saveReportAbuseOptions = async (optionsState) => {
             setReportAbuseOptions(saveReportsJSON);
         }
     } catch (error) {
-        console.log('Cannot save selected report abuse ', error);
+        console.error(errorMessages.CANNOT_SAVE_REPORT_ABUSE, error);
     }
 }
 
@@ -401,7 +417,7 @@ export const togglePostSearchBox = (searchValues, setSearchValues, post,
         });
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -409,30 +425,33 @@ export const fetchReportAbuseValues = async (optionsState, setOptionsState) => {
     try {
         const savedReportAbusesJSON = await fetchSavedReportAbuseOptions();
 
-        let reportAbusesData = savedReportAbusesJSON && JSON.parse(savedReportAbusesJSON) || stringConstants.EMPTY;
+        let reportAbusesData = savedReportAbusesJSON && JSON.parse(savedReportAbusesJSON.password);
 
-        const reportAbuseForPostPresent = reportAbusesData && reportAbusesData.find((item) => item.id == optionsState.selectedPost.id &&
-            item.reportAbuseSubmitted) || {};
+        const reportAbuseForPostPresent = reportAbusesData && reportAbusesData.find((item) =>
+            item.postId == optionsState.selectedPost.id && item.reportAbuseSubmitted) || {};
 
         if (!Object.keys(reportAbuseForPostPresent).length) {
 
-            const responseReportAbuses = await axios.get(urlConstants.fetchReportAbuses);
+            const responseReportAbuses = await axiosGetWithHeaders(urlConstants.fetchReportAbuses);
+            const responseData = processResponseData(responseReportAbuses);
 
-            if (responseReportAbuses && responseReportAbuses.data.reports) {
-                reportAbusesData = responseReportAbuses.data.reports;
-                reportAbusesData.map((item) => {
-                    item[reportAbuseRequestPayloadKeys.POST_REPORT_ABUSE_SUBMITTED] = false;
-                    item.reportId = parseInt(item.reportId);
-                });
+            if (responseData) {
+                if (reportAbusesData) {
+                    reportAbusesData.map((item) => {
+                        item[requestConstants.POST_REPORT_ABUSE_SUBMITTED] = false;
+                        item[requestConstants.REPORT_ID] = parseInt(item.postReportAbuseId);
+                    });
+                }
+                reportAbusesData = responseData;
             }
         }
         setOptionsState({
             ...optionsState,
             reportAbuses: reportAbusesData || [],
             selectedReportAbuse: reportAbuseForPostPresent || {}
-        })
+        });
     } catch (error) {
-        console.log("Cannot fetch report abuses", error);
+        console.error(errorMessages.CANNOT_FETCH_REPORT_ABUSES, error);
     }
 }
 
@@ -442,7 +461,7 @@ export const setReportAbuseOptions = async (saveReportsJSON) => {
         await saveDetailsToKeyChain(keyChainConstansts.SAVE_SELECTED_REPORT,
             keyChainConstansts.SAVE_SELECTED_REPORT, saveReportsJSON);
     } catch (error) {
-        console.log('Cannot set selected report abuse to the storage', error);
+        console.error(errorMessages.CANNOT_SET_SELECTED_REPORT_ABUSES, error);
     }
 }
 
@@ -450,34 +469,34 @@ export const fetchSavedReportAbuseOptions = async () => {
     try {
         return await getKeyChainDetails(keyChainConstansts.SAVE_SELECTED_REPORT);
     } catch (error) {
-        console.log('Cannot fetch selected saved report abuses from storage', error);
+        console.error(errorMessages.CANNOT_FETCH_SELECTED_SAVED_REPORT_ABUSE, error);
     }
 }
 
 export const resetAnimatePostTextDetails = (textPostDescriptionAnimationValue, textPostTypeAnimationValue) => {
     const text_spring_config = {
-        damping: 20,
-        stiffness: 90
+        damping: numericConstants.TWENTY,
+        stiffness: numericConstants.NINETY
     };
-    textPostDescriptionAnimationValue.value = withSpring(-1000, text_spring_config);
-    textPostTypeAnimationValue.value = withSpring(-1000, text_spring_config);
+    textPostDescriptionAnimationValue.value = withSpring(-numericConstants.THOUSAND, text_spring_config);
+    textPostTypeAnimationValue.value = withSpring(-numericConstants.THOUSAND, text_spring_config);
 }
 
 export const animateFinishedPostTextDetails = (textPostDescriptionAnimationValue, textPostTypeAnimationValue) => {
     const text_spring_config = {
-        damping: 20,
-        stiffness: 90
+        damping: numericConstants.TWENTY,
+        stiffness: numericConstants.NINETY
     };
-    textPostDescriptionAnimationValue.value = withDelay(150, withSpring(0, text_spring_config));
-    textPostTypeAnimationValue.value = withDelay(50, withSpring(0, text_spring_config));
+    textPostDescriptionAnimationValue.value = withDelay(numericConstants.ONE_HUNDRED_FIFTY, withSpring(numericConstants.ZERO, text_spring_config));
+    textPostTypeAnimationValue.value = withDelay(numericConstants.FIFTY, withSpring(numericConstants.ZERO, text_spring_config));
 }
 
 export const onSwiperScrollEnd = (event, postDetailsRef, textPostDescriptionAnimationValue, textPostTypeAnimationValue) => {
-    let index = 0;
+    let index = numericConstants.ZERO;
     if (event.position || event.nativeEvent.position) {
-        index = event.position - 1 || event.nativeEvent.position - 1;
+        index = event.position - numericConstants.ONE || event.nativeEvent.position - numericConstants.ONE;
     } else if (event.nativeEvent.layoutMeasurement) {
-        index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - 1;
+        index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
     }
     postDetailsRef?.current?.setPostIndex(index);
     animateFinishedPostTextDetails(textPostDescriptionAnimationValue, textPostTypeAnimationValue);
@@ -500,7 +519,7 @@ export const scrollWhenPostIdFromNotification = (sdomDatastate, postIdFromNotifi
             postDetailsRef?.current?.setNewPostViewed(true);
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -527,7 +546,7 @@ export const checkAndAddCategoriesFromFCMNotification = async (selectedCategorie
         }
         return selectedCategories;
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -645,7 +664,7 @@ export const showSelectedImage = async (type, isFrom, navigation) => {
             });
         }
     } catch (error) {
-        console.log(error);
+        console.error(errorMessages.COULD_NOT_SHOW_SELECTED_IMAGE, error);
     }
 }
 
@@ -1010,7 +1029,7 @@ export const getAllProfiles = async () => {
         });
         return profiles.concat(response.data);
     } catch (error) {
-        console.log(errorMessages.COULD_NOT_FETCH_PROFILES, error);
+        console.error(errorMessages.COULD_NOT_FETCH_PROFILES, error);
     }
     return false;
 }
@@ -1054,7 +1073,7 @@ export const prepareSDOMMenu = () => {
     try {
         return SDMenuOptions;
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -1494,3 +1513,27 @@ export const userPostAction = async (request, data, token) => {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
     }
 }
+
+// export const sharePostImage = async (selectedPost) => {
+//     try {
+//         const result = await Share.share({
+//             title: selectedPost.postTitle,
+//             message: `${successFulMessages.SHARE_MESSAGE}${stringConstants.SPACE}${urlConstants.SHARE_APP_LINK}`
+//         }, {
+//             dialogTitle: successFulMessages.SHARE_DIALOG_TITLE,
+//             tintColor: colors.BLUE,
+//             subject: successFulMessages.SHARE_TITLE,
+//             excludedActivityTypes: [miscMessage.EXCLUDE_TYPE]
+//         });
+//         if (result.action === Share.sharedAction) {
+//             if (result.activityType) {
+//                 showSnackBar(successFulMessages.SHARED_DETAILS_SUCCESSFULLY, true);
+//             }
+//         } else if (result.action === Share.dismissedAction) {
+//             showSnackBar(errorModalMessageConstants.CANCELLED_SHARING, false);
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         showSnackBar(errorModalMessageConstants.CANNOT_SHARE, false);
+//     }
+// }

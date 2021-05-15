@@ -161,7 +161,7 @@ export const PostDetails = forwardRef((props, ref) => {
                     <Text style={glancePostStyles.icon_count_text}>{posts[postDetailsState.currentPostIndex].postDownloads}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
-                    onPress={async () => shareImage(posts[postDetailsState.currentPostIndex])}>
+                    onPress={async () => await shareImage(posts[postDetailsState.currentPostIndex])}>
                     <View style={glancePostStyles.backgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_share} source={post_share} />
                     </View>

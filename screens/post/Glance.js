@@ -77,7 +77,7 @@ export const Glance = ({ navigation }) => {
                         onMomentumScrollEnd={(event) => onSwiperScrollEnd(event, postDetailsRef, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x)}
                         onScroll={(event) => {
                             const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
-                            if (!(index == 0 || index == sdomDatastate.posts.length - numericConstants.ONE)) {
+                            if (!(index == numericConstants.ZERO || index == sdomDatastate.posts.length - numericConstants.ONE)) {
                                 resetAnimatePostTextDetails(textPostDescriptionAnimationValue_translate_x,
                                     textPostTypeAnimationValue_translate_x);
                             }

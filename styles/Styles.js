@@ -805,7 +805,7 @@ export const glancePostStyles = StyleSheet.create({
         elevation: 3,
     },
     reportAbuseModalContainer: {
-        marginBottom: 30,
+        paddingBottom: 25,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',

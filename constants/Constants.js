@@ -79,8 +79,8 @@ export const urlConstants = {
     fetchAllPosts: `${BASE_URI}/post`,
     userSaveAction: `${BASE_URI}/user`,
     setPostReach: `${BASE_URI}/post/reach/count`,
-    fetchReportAbuses: `https://www.wallpiper.app/4RhvfbEGwnsmxrpts.php`,
-    setReportAbuseIdWithPostId: `https://www.wallpiper.app/4RhvfbEGwnsmxrptlist.php`,
+    fetchReportAbuses: `${BASE_URI}/reportabuses`,
+    setReportAbuseIdWithPostId: `${BASE_URI}/post/reach/reportabuse`,
     checkAvailability: `${BASE_URI}/user/validate`,
     fetchProfilePostsCounts: `${BASE_URI}/profile/count`,
     login: `${BASE_URI}/auth/login`,
@@ -328,11 +328,6 @@ export const componentErrorConsts = {
     POST_IMAGE_LOAD_ERROR: 3
 }
 
-export const setPostImages = {
-    SET_POST_WALLPAPER: `postWallPaper`,
-    SET_POST_DOWNLOAD: `postDownload`
-}
-
 export const jsonConstants = {
     EMPTY: []
 }
@@ -442,6 +437,7 @@ export const numericConstants = {
     FIFTY: 50,
     SIXTY: 60,
     EIGHTY: 80,
+    NINETY: 90,
     ONE_HUNDRED: 100,
     ONE_HUNDRED_TWENTY: 120,
     ONE_HUNDRED_THIRTY: 130,
@@ -497,13 +493,20 @@ export const errorMessages = {
     FAILED_TO_UPDATE_REGISTRATION_DETAILS: `Failed to update Registration Details`,
     CANNOT_REGISITER_USER: `Could not register user`,
     COULD_NOT_REGISTER_USER: `Could not register user`,
+    COULD_NOT_SHARE_IMAGE: `Cannot share image`,
+    COULD_NOT_FETCH_ALL_POSTS: `Could not fetch all posts`,
+    CANNOT_FETCH_SAVE_BUTTON_TYPE: `Cannot fetch the save button type from the storage`,
     COULD_NOT_UPLOAD_POST: `Could not upload post`,
     COULD_NOT_UPDATE_POST: `Could not update post`,
+    CANNOT_SAVE_REPORT_ABUSE: 'Cannot save selected report abuse',
     COULD_NOT_DELETE_POST: `Could not delete post`,
     COULD_NOT_FOllOW_USER: `Could not follow user`,
+    COULD_NOT_SET_WALLPAPER: "Cannot set current image as wallpaper",
     COULD_NOT_UNFOllOW_USER: `Could not unfollow user`,
+    COULD_NOT_DOWNLOAD_IMAGE: "Cannot download the current image",
     COULD_NOT_PARSE_RESPONSE: `Could not parse response`,
     CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`,
+    COULD_NOT_SHOW_SELECTED_IMAGE: `Could not show selected image`,
     COULD_NOT_FETCH_CATEGORIES: `Could not fetch categories`,
     COULD_NOT_SAVE_CATEGORY_DETAILS_TO_KEYCHAIN: `Could not save category details to Key Chain`,
     COULD_NOT_FETCH_PROFILES: `Could not fetch all profiles`,
@@ -528,13 +531,12 @@ export const errorMessages = {
     COULD_NOT_SUBMIT_VERIFICATION: `Could not submit your request for verification.`,
     CANNOT_FETCH_CATEGORIES_FROM_STORAGE: 'Cannot fetch the categoryIds from the storage',
     CANNOT_SET_INCREASED_COUNT_TO_DATABASE: `Cannot set the increased count to the database`,
-    COULD_NOT_FILTER_OUT_PRIVATE_POST_FOR_LOGGED_IN_USER: `Could not filter posts for logged in user in Glance screen`
-}
-
-export const reportAbuseRequestPayloadKeys = {
-    POST_ID: `postId`,
-    POST_REPORT_ABUSE_ID: `postReportAbuseId`,
-    POST_REPORT_ABUSE_SUBMITTED: `reportAbuseSubmitted`
+    COULD_NOT_FILTER_OUT_PRIVATE_POST_FOR_LOGGED_IN_USER: `Could not filter posts for logged in user in Glance screen`,
+    CANNOT_FETCH_REPORT_ABUSES: `Cannot fetch report abuses`,
+    CANNOT_SET_SELECTED_REPORT_ABUSES: 'Cannot set selected report abuse to the storage',
+    CANNOT_FETCH_SELECTED_SAVED_REPORT_ABUSE: 'Cannot fetch selected saved report abuses from storage',
+    USER_DID_NOT_SHARE: `User did not share`,
+    USER_CANCELLED_SHARE: `You cancelled sharing the image`
 }
 
 export const responseStringData = {
@@ -549,7 +551,9 @@ export const responseStringData = {
     REDIRECT_USER_LOGIN: `Redirect user login`,
     SUCCESS_LOGOUT: `User successfully signed out`,
     SUCCESSFULLY_UPDATED: `Successfully Updated`,
-    NOT_LOGGED_IN: `Not logged in`
+    NOT_LOGGED_IN: `Not logged in`,
+    STARDOM_PATH: `/Stardom`,
+    DOWNLOAD_IMAGE_EXTENTION: `.png`
 }
 
 export const postitionStringConstants = {
@@ -606,10 +610,13 @@ export const miscMessage = {
     UP: `up`,
     STRETCH: `stretch`,
     BACKSPACE: `Backspace`,
+    BASE64: `base64`,
+    BASE64_BLOB: `data:image/png;base64,`,
     PHONE_NUMBER: `phoneNumber`,
     TOKEN: `token`,
     USER_DETAILS: `details`,
     WINDOW: `window`,
+    EXCLUDE_TYPE: `com.apple.reminders.sharingextension`,
     LARGE: `large`,
     COVER: `cover`,
     VERIFIED: `Verified`,
@@ -690,12 +697,16 @@ export const requestConstants = {
     DOWNLOAD_COUNT: `downloadCount`,
     POST_ID: `id`,
     EDIT: `edit`,
+    GET: `GET`,
     PRIVATE_ACCESS_ACTION: `privateaccess`,
     POST: `post`,
     SDOM_DATA_STATE: `sdomDatastate`,
     SET_SDOM_DATA_STATE: `setSdomDatastate`,
     POST_ID_KEY: `postId`,
-    REACH_TYPE: `reachType`
+    REACH_TYPE: `reachType`,
+    REPORT_ID: `report_id`,
+    POST_REPORT_ABUSE_ID: `postReportAbuseId`,
+    POST_REPORT_ABUSE_SUBMITTED: `reportAbuseSubmitted`
 };
 
 export const keyChainConstansts = {

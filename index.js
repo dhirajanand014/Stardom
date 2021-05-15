@@ -30,6 +30,7 @@ import { EditUserProfile } from './screens/user/EditUserProfile';
 import { SDCameraImagePreview } from './views/cameraView/SDCameraImagePreview';
 import { SDSplashScreen } from './screens/SDSplashScreen';
 
+LogBox.ignoreLogs(['Warning: ...']);
 LogBox.ignoreAllLogs(true);
 
 const Stack = createStackNavigator();
