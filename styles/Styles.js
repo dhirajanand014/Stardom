@@ -1173,10 +1173,6 @@ export const userAuthStyles = StyleSheet.create({
         elevation: 3,
         paddingBottom: 18
     },
-    splashScreenAnimatedImage: {
-        width: 200,
-        height: 200
-    },
     menuRightCountView: {
         padding: 10,
         position: 'absolute',

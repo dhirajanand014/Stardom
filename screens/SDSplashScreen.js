@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react'
-import { ActivityIndicator, SafeAreaView, Text, Image } from 'react-native';
-import { colors, SDGenericStyles, userAuthStyles } from '../styles/Styles';
+import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
+import { colors, SDGenericStyles } from '../styles/Styles';
 import { CategoryContext } from '../App';
 import { getCategoryButtonType, getSelectedCategoryIdsFromStorage } from '../helper/Helper';
 import { jsonConstants, miscMessage, numericConstants, screens } from '../constants/Constants';
 import { useNavigation } from '@react-navigation/native';
+import { StardomIcon } from '../components/icons/StardomIcon';
 //import messaging from '@react-native-firebase/messaging';
 
 export const SDSplashScreen = () => {
@@ -43,8 +44,8 @@ export const SDSplashScreen = () => {
     return (
         <SafeAreaView style={[SDGenericStyles.fill, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter,
         SDGenericStyles.backGroundColorBlack]}>
-            <Image source={require('../assets/stardom_icon.png')} autoPlay loop
-                hardwareAccelerationAndroid style={userAuthStyles.splashScreenAnimatedImage} />
+            <StardomIcon height={numericConstants.ONE_HUNDRED_FIFTY} width={numericConstants.ONE_HUNDRED_FIFTY}
+                stroke={colors.SEMI_TRANSPARENT} fill={colors.SDOM_YELLOW} />
             <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRoman,
             SDGenericStyles.placeHolderTextColor, SDGenericStyles.paddingVertical14]}>{miscMessage.LOADING}</Text>
             <ActivityIndicator color={colors.SDOM_YELLOW} shouldRasterizeIOS hidesWhenStopped style={SDGenericStyles.mt20} />

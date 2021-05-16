@@ -447,6 +447,7 @@ export const numericConstants = {
     THIRTY: 30,
     FORTY_TWO: 42,
     FORTY_FIVE: 45,
+    FORTY_EIGHT: 48,
     FIFTY: 50,
     SIXTY: 60,
     SEVENTY: 70,
