@@ -82,6 +82,7 @@ export const Category = () => {
                                 selectedCategoryTitle: selectedCategory.categoryTitle
                             }
                         });
+                        debugger
                         const jsonCategoryIds = JSON.stringify(categoryIds);
                         await saveCategoryDetailsToKeyChain(keyChainConstansts.SAVE_CATEGORY_ID, jsonCategoryIds);
                         await saveCategoryDetailsToKeyChain(keyChainConstansts.SAVE_CATEGORY_BUTTON_TYPE,

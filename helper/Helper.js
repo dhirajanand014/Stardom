@@ -563,8 +563,10 @@ const retrievePostData = async (categoryIdFromNotification) => {
     const responseData = await axiosGetWithHeaders(urlConstants.fetchAllPosts);
     if (responseData) {
         const responsePostsData = responseData.data.posts;
+        debugger
         let selectedCategories = await getSelectedCategoryIdsFromStorage();
         //May not be required
+        debugger
         selectedCategories = await checkAndAddCategoriesFromFCMNotification(selectedCategories.password,
             categoryIdFromNotification);
 
@@ -575,12 +577,12 @@ const retrievePostData = async (categoryIdFromNotification) => {
 
         categoryPostsData = parsedCategoryIds && parsedCategoryIds.length &&
             responsePostsData.filter(post => parsedCategoryIds.some((selectedCategory) =>
-                post.categoryIds[numericConstants.ZERO].split(stringConstants.COMMA).
-                    includes(selectedCategory.selectedCategoryId))).sort((datePost1, datePost2) => {
-                        return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
-                    }) || responsePostsData.sort((datePost1, datePost2) => {
-                        return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
-                    });
+                post.categoryIds.split(stringConstants.COMMA).includes(selectedCategory.selectedCategoryId.toString())))
+                .sort((datePost1, datePost2) => {
+                    return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+                }) || responsePostsData.sort((datePost1, datePost2) => {
+                    return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+                });
 
         categoryPostsData.map(postItem => {
             const postHasLikes = postCounts && postCounts[savePostCountKeys.SELECTED_POST_LIKES] &&
@@ -629,7 +631,9 @@ export const onChangeByValueType = async (inputProps, value, props) => {
             props.isSignUp && props.setSignUpDetails({ ...props.signUpDetails, phoneNumber: phoneValue });
             break;
         case fieldControllerName.USER_ID:
+            inputProps.onChange(value);
             props.clearErrors();
+            break;
         case fieldControllerName.SEARCH_USERS:
             const filteredUsers = value && props.items.filter(user => user.name.toLowerCase().includes(value.toLowerCase()) ||
                 user.user_id.toString().toLowerCase().includes(value.toString().toLowerCase())) || props.items;

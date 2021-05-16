@@ -21,6 +21,7 @@ import { SDDropDownView } from '../../views/dropDownView/SDDropDownView'
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput'
 import { SDPostTypeOptionsView } from '../../views/fromInputView/SDPostTypeOptionView'
 import { SDPostCategorySelector } from '../../views/imagePost/SDPostCategorySelector'
+import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextInputLengthText'
 
 export const AddPostDetails = () => {
 
@@ -88,6 +89,7 @@ export const AddPostDetails = () => {
         }
     }
 
+    const postDescriptionValue = watch(fieldControllerName.POST_DESCRIPTION);
     const postValueType = watch(fieldControllerName.POST_TYPE);
     const postCategories = watch(fieldControllerName.POST_CATEGORIES);
 
@@ -126,18 +128,20 @@ export const AddPostDetails = () => {
                         style={{ maxHeight: height / 2.15 }}>
                         <SDImageFormInput inputName={fieldControllerName.POST_TITLE} control={control} rules={formRequiredRules.addPostTitleRule}
                             defaultValue={userPosts.details.postTitle} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.ADD_POST_TITLE}
-                            keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} autoFocus={true}
+                            keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} autoFocus={true} textContentType={keyBoardTypeConst.TITLE}
                             extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.borderRadius20,
                             SDGenericStyles.textColorWhite, SDGenericStyles.ft16]} />
 
+                        <SDMultiTextInputLengthText value={postDescriptionValue} maxLength={numericConstants.TWO_HUNDRED} />
+
                         <SDImageFormInput inputName={fieldControllerName.POST_DESCRIPTION} control={control} rules={formRequiredRules.addPostDescription}
-                            defaultValue={userPosts.details.postDescription} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.ADD_POST_DESCRIPTION}
-                            keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} isMultiline={true} numberOfLines={numericConstants.TWO}
-                            extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.height100,
-                            SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite, SDGenericStyles.ft16, SDGenericStyles.textALignVerticalTop]} />
+                            defaultValue={userPosts.details.postDescription} maxLength={numericConstants.TWO_HUNDRED} placeHolderText={placeHolderText.ADD_POST_DESCRIPTION}
+                            keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} isMultiline={true} numberOfLines={numericConstants.FIVE} textContentType={keyBoardTypeConst.NONE}
+                            extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.height100, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite,
+                            SDGenericStyles.ft16, SDGenericStyles.textALignVerticalTop]} maxLength={numericConstants.TWO_HUNDRED} />
 
                         <SDDropDownView inputName={fieldControllerName.POST_PROFILE} control={control} rules={formRequiredRules.profileRule} selectedLabelStyle={SDGenericStyles.textColorWhite}
-                            containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle}
+                            containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle} textContentType={keyBoardTypeConst.NONE}
                             defaultValue={userPosts.details.postProfile} formState={formState} list={profiles.length && profiles.filter(role => role.value != numericConstants.MINUS_ONE) || jsonConstants.EMPTY}
                             dropDownDefaultValue={profiles.length && profiles.find(role => role.value == numericConstants.ZERO).value || userPosts.details.postProfile} placeHolderText={placeHolderText.SELECT_A_PROFILE}
                             extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical5]} globalTextStyle={[SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />

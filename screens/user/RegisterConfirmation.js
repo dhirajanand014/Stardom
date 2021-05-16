@@ -1,5 +1,5 @@
 
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
@@ -23,15 +23,12 @@ import { CategoryContext } from '../../App';
 export const RegistrationConfirmation = () => {
 
     const { control, formState, setError, handleSubmit, watch, clearErrors } = useForm();
-
     const { signUpDetails, setSignUpDetails } = useContext(CategoryContext);
 
     let confirmSecretRef = useRef(null);
-
     let isUserIdAvailable = useRef(null);
 
     const phoneNumber = signUpDetails.phoneNumber || stringConstants.EMPTY;
-
     const userIdValue = watch(fieldControllerName.USER_ID);
 
     const refCallback = node => {
@@ -40,13 +37,15 @@ export const RegistrationConfirmation = () => {
     const navigation = useNavigation();
 
     const validateUserId = useCallback(async () => {
-        const responseData = await checkUserIdAvailability(userIdValue);
-        if (responseData.availability) {
-            isUserIdAvailable.current = true;
-            clearErrors(fieldControllerName.USER_ID);
-        } else {
-            isUserIdAvailable.current = false;
-            setError(fieldControllerName.USER_ID, formRequiredRules.userIdAvailability);
+        if (userIdValue) {
+            const responseData = await checkUserIdAvailability(userIdValue);
+            if (responseData.availability) {
+                isUserIdAvailable.current = true;
+                clearErrors(fieldControllerName.USER_ID);
+            } else {
+                isUserIdAvailable.current = false;
+                setError(fieldControllerName.USER_ID, formRequiredRules.userIdAvailability);
+            }
         }
     });
 
@@ -98,24 +97,24 @@ export const RegistrationConfirmation = () => {
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}>
             <AuthHeaderText titleText={modalTextConstants.CONFIRM_REGISTRATION} />
             <ScrollView>
-                <SDImageFormInput inputName={fieldControllerName.USER_ID} control={control} rules={formRequiredRules.usedIdFormRule}
+                <SDImageFormInput inputName={fieldControllerName.USER_ID} control={control} rules={formRequiredRules.usedIdFormRule} clearErrors={clearError}
                     defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.USER_ID} autofocus={true} icon={<RegisterUserIcon width={numericConstants.EIGHTEEN}
                         height={numericConstants.EIGHTEEN} stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || isUserIdAvailable?.current && colors.LIGHT_GREEN ||
                             colors.SDOM_PLACEHOLDER} />} userIdValue={userIdValue} formState={formState} keyboardType={keyBoardTypeConst.DEFAULT} validateUserId={validateUserId}
-                    isUserIdAvailable={isUserIdAvailable} isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
-                    clearErrors={clearError} />
+                    isUserIdAvailable={isUserIdAvailable} isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]} />
 
-                <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule}
+                <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule} setIsSecureTextEntry={setIsSecureTextEntry}
                     defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.PASSWORD} maxLength={numericConstants.SIX}
                     keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
                         colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} onSubmitEditing={() => focusOnInputIfFormInvalid(formState, confirmSecretRef)}
-                    isSecureTextEntry={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} />
+                    isSecureTextEntry={isSecureTextEntry} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} isPasswordInput={true} />
 
-                <SDImageFormInput inputName={fieldControllerName.CONFIRM_SECRET} control={control} rules={formRequiredRules.passwordFormRule}
-                    defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.CONFIRM_PASSWORD} textContentType={keyBoardTypeConst.NEW_PASSWORD} isSecureTextEntry={true}
+                <SDImageFormInput inputName={fieldControllerName.CONFIRM_SECRET} control={control} rules={formRequiredRules.passwordFormRule} isPasswordInput={true}
+                    defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.CONFIRM_PASSWORD} textContentType={keyBoardTypeConst.NEW_PASSWORD}
                     keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.CONFIRM_SECRET]?.message &&
                         colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} refCallback={refCallback} maxLength={numericConstants.SIX}
-                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} />
+                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} isSecureTextEntry={isSecureTextEntry}
+                    setIsSecureTextEntry={setIsSecureTextEntry} />
             </ScrollView>
 
             <View style={userAuthStyles.registrationConfirmationView}>

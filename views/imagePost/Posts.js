@@ -1,5 +1,5 @@
 
-import { useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { FlatList, View } from "react-native";
 import {
@@ -37,6 +37,7 @@ export const Posts = props => {
 
     const postCallback = useCallback((action, item) => {
         if (action == miscMessage.CREATE) {
+            console.log(bottomSheetRef);
             bottomSheetRef?.current?.snapTo(numericConstants.ZERO);
             setAddPostStateValues(miscMessage.CREATE, userPosts, setUserPosts, stringConstants.EMPTY);
         } else if (action == miscMessage.UPDATE) {
@@ -45,7 +46,7 @@ export const Posts = props => {
         }
     })
 
-    const postDetailsCallback = useCallback((action) => {
+    const postDetailsCallback = useCallback(() => {
         bottomSheetRef?.current?.snapTo(numericConstants.ONE);
     })
 

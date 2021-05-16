@@ -1,8 +1,10 @@
 import React from 'react';
-import { KeyboardAvoidingView, Text, TouchableOpacity, View } from 'react-native';
-import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
+import { KeyboardAvoidingView, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { SDFormInput } from '../../components/input/SDFormInput';
-import { actionButtonTextConstants } from '../../constants/Constants';
+import { actionButtonTextConstants, numericConstants, stringConstants } from '../../constants/Constants';
+import { ShowSecretIcon } from '../../components/icons/ShowSecretIcon';
+import { HideSecretIcon } from '../../components/icons/HideSecretIcon';
 export const SDImageFormInput = props => {
 
     return (
@@ -11,6 +13,12 @@ export const SDImageFormInput = props => {
             !props.isFeedbackInput && SDGenericStyles.paddingEnd10, props.formState.errors[props.inputName]?.message && userAuthStyles.errorInputBorder ||
             userAuthStyles.normalInputBorder, props.isUserId && props.isUserIdAvailable?.current && userAuthStyles.noErrorInputBorder]}>
                 <SDFormInput {...props} />
+
+                {props.isPasswordInput && <Pressable onPressIn={() => props.setIsSecureTextEntry(false)} onPressOut={() => props.setIsSecureTextEntry(true)}
+                    style={SDGenericStyles.paddingRight10}>
+                    {!props.isSecureTextEntry && <ShowSecretIcon stroke={colors.SDOM_YELLOW} /> || <HideSecretIcon stroke={colors.SDOM_YELLOW} />}
+                </Pressable>}
+
                 {props.icon && props.icon}
             </View>
             {

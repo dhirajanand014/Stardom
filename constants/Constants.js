@@ -136,6 +136,7 @@ export const keyBoardTypeConst = {
     IOS_NUMERIC: `number-pad`,
     TELPHONETYPE: `telephoneNumber`,
     EMAIL: `email-address`,
+    TITLE: `jobTitle`,
     USERNAME: `username`,
     NONE: `none`,
     NEW_PASSWORD: `newPassword`,
@@ -268,6 +269,10 @@ export const formRequiredRules = {
         required: {
             value: true,
             message: `Please enter a description`
+        },
+        maxLength: {
+            value: 200,
+            message: `Maximum 200 characters only allowed`
         }
     },
     categoryRule: {
@@ -315,6 +320,10 @@ export const formRequiredRules = {
         required: {
             value: true,
             message: `Please enter details`
+        },
+        maxLength: {
+            value: 200,
+            message: `Maximum 200 characters only allowed`
         }
     }
 };

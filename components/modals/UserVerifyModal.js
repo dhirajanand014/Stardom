@@ -4,14 +4,17 @@ import { Modal, Text, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard
 import {
     stringConstants, actionButtonTextConstants, fieldControllerName, formRequiredRules,
     placeHolderText, miscMessage, numericConstants, responseStringData, alertTextMessages,
-    errorMessages, requestConstants
+    errorMessages, requestConstants, keyBoardTypeConst, width
 } from "../../constants/Constants";
 import { showSnackBar, userPostAction } from "../../helper/Helper";
 import { SDGenericStyles, userMenuStyles } from "../../styles/Styles";
 import { SDImageFormInput } from "../../views/fromInputView/SDImageFormInput";
+import { SDMultiTextInputLengthText } from "../texts/SDMultiTextInputLengthText";
 
 export const UserVerifyModal = props => {
-    const { handleSubmit, control, formState } = useForm();
+    const { handleSubmit, control, formState, watch } = useForm();
+
+    const verifyInputValue = watch(fieldControllerName.VERIFY_USER);
     const { profileMenu, setProfileMenu, loggedInUser, setLoggedInUser, fetchUpdateLoggedInUserProfile } = props
 
     return (
@@ -21,16 +24,18 @@ export const UserVerifyModal = props => {
                 <View style={SDGenericStyles.alignItemsCenter}>
                     <View style={[userMenuStyles.userVerifyModalView, SDGenericStyles.alignItemsCenter, SDGenericStyles.textBoxGray]}>
 
+                        <SDMultiTextInputLengthText value={verifyInputValue} maxLength={numericConstants.TWO_HUNDRED} />
+
                         <SDImageFormInput inputName={fieldControllerName.VERIFY_USER} control={control} rules={formRequiredRules.verifyUserInputRule}
                             defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.VERIFY_USER_DETAILS} isFeedbackInput={true}
-                            formState={formState} multiline={true} autofocus={true} underlineColorAndroid={miscMessage.TRANSPARENT} numberOfLines={numericConstants.TWO}
+                            formState={formState} isMultiline={true} autofocus={true} underlineColorAndroid={miscMessage.TRANSPARENT} numberOfLines={numericConstants.TWO}
                             extraStyles={[SDGenericStyles.height150, SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.borderRadius5,
                             SDGenericStyles.justifyContentCenter, SDGenericStyles.backGroundColorGray, SDGenericStyles.textColorWhite, userMenuStyles.verifyUserTextHeight,
-                            SDGenericStyles.textALignVerticalTop, SDGenericStyles.paddingLeft5]} />
+                            SDGenericStyles.textALignVerticalTop, SDGenericStyles.paddingLeft5]} maxLength={numericConstants.TWO_HUNDRED} keyboardType={keyBoardTypeConst.DEFAULT} />
 
                         <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
                             <View>
-                                <TouchableOpacity activeOpacity={.2} style={[SDGenericStyles.width120, SDGenericStyles.mv15]}
+                                <TouchableOpacity activeOpacity={.2} style={[{ width: width / 2 }, SDGenericStyles.mv10]}
                                     onPress={() => setProfileMenu({ ...profileMenu, showSubmitVerifyModal: false })}>
                                     <Text style={[userMenuStyles.verifyUserCancelText, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16,
                                     SDGenericStyles.placeHolderTextColor]}>

@@ -471,6 +471,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingRight5: {
         paddingRight: 5
+    },
+    paddingRight10: {
+        paddingRight: 10
     }
 });
 
@@ -1450,11 +1453,11 @@ export const userMenuStyles = {
     userVerifyModalView: {
         margin: 250,
         borderRadius: 20,
-        paddingTop: 45,
-        paddingRight: 45,
-        paddingBottom: 15,
-        paddingLeft: 45,
-        width: width / 1.1,
+        paddingTop: 20,
+        paddingEnd: 45,
+        paddingBottom: 20,
+        paddingStart: 45,
+        width: width / 1.05,
         height: 285,
         elevation: 5
     },
