@@ -563,10 +563,8 @@ const retrievePostData = async (categoryIdFromNotification) => {
     const responseData = await axiosGetWithHeaders(urlConstants.fetchAllPosts);
     if (responseData) {
         const responsePostsData = responseData.data.posts;
-        debugger
         let selectedCategories = await getSelectedCategoryIdsFromStorage();
         //May not be required
-        debugger
         selectedCategories = await checkAndAddCategoriesFromFCMNotification(selectedCategories.password,
             categoryIdFromNotification);
 
