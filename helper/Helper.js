@@ -630,6 +630,11 @@ export const onChangeByValueType = async (inputProps, value, props) => {
             break;
         case fieldControllerName.USER_ID:
             props.clearErrors();
+        case fieldControllerName.SEARCH_USERS:
+            const filteredUsers = value && props.items.filter(user => user.name.toLowerCase().includes(value.toLowerCase()) ||
+                user.user_id.toString().toLowerCase().includes(value.toString().toLowerCase())) || props.items;
+            props.setState({ ...props.state, users: filteredUsers });
+            break;
         default:
             inputProps.onChange(value);
             break;
@@ -1442,8 +1447,14 @@ export const handleUserPostAction = async (action, profile, sdomDatastate, setSd
 
 export const fetchUserFollowersFollowing = async (listFor, token) => {
     try {
-        const url = (listFor == miscMessage.PRIVATE_REQUEST_ACCESS || listFor == miscMessage.FOLLOWERS_TEXT) &&
-            urlConstants.fetchUsersFollowers || urlConstants.fetchUsersFollowings;
+        let url;
+        if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS || listFor == miscMessage.FOLLOWERS_TEXT) {
+            url = urlConstants.fetchUsersFollowers;
+        } else if (listFor == miscMessage.FOLLOWING_TEXT) {
+            url = urlConstants.fetchUsersFollowings;
+        } else if (listFor == fieldControllerName.SEARCH_USERS) {
+            url = urlConstants.fetchAllUsers;
+        }
         const response = await axiosGetWithAuthorization(url, token);
         return processResponseData(response);
     } catch (error) {

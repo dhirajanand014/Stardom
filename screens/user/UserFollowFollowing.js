@@ -3,13 +3,18 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FlatList, StatusBar, View, Text } from "react-native"
 import { CategoryContext } from '../../App';
 import {
-    actionButtonTextConstants, alertTextMessages, jsonConstants,
+    actionButtonTextConstants, alertTextMessages, fieldControllerName, jsonConstants,
     miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW,
     requestConstants, responseStringData, stringConstants
 } from '../../constants/Constants';
 import { fetchUserFollowersFollowing, showSnackBar, userPostAction } from '../../helper/Helper';
-import { SDGenericStyles } from '../../styles/Styles';
+import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
+import Animated, {
+    Extrapolate, interpolate, useAnimatedScrollHandler,
+    useAnimatedStyle, useSharedValue
+} from 'react-native-reanimated';
 import { UserFollowFollowingRenderer } from '../../views/menus/UserFollowFollowingRenderer';
+import { SDSearchInput } from '../../components/input/SDSearchInput';
 
 export const UserFollowFollowing = () => {
 
@@ -17,7 +22,18 @@ export const UserFollowFollowing = () => {
         users: jsonConstants.EMPTY
     });
 
+    const [searchList, setSearchList] = useState({
+        users: jsonConstants.EMPTY
+    });
+
     const navigation = useNavigation();
+    const scrollYValue = useSharedValue(numericConstants.ZERO);
+
+    const listViewScrollHandler = useAnimatedScrollHandler((event) => (scrollYValue.value = event.contentOffset.y));
+
+    const itemSize = numericConstants.SEVENTY + numericConstants.TWENTY * numericConstants.THREE;
+
+    const AnimatedFlatlist = Animated.createAnimatedComponent(FlatList);
 
     const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
 
@@ -35,6 +51,8 @@ export const UserFollowFollowing = () => {
         const responseData = await fetchUserFollowersFollowing(listFor, loggedInUser.loginDetails.token);
         if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS) {
             filterPrivateAccessUsers(responseData);
+        } else if (listFor == fieldControllerName.SEARCH_USERS) {
+            setSearchList(responseData);
         }
         setUserFollowerFollowing(responseData);
     }, jsonConstants.EMPTY);
@@ -70,12 +88,41 @@ export const UserFollowFollowing = () => {
         )
     }
 
+    const scaleAnimation = (scrollYValue, index) => {
+        'worklet';
+
+        return interpolate(scrollYValue.value, [numericConstants.MINUS_ONE, numericConstants.ZERO,
+        itemSize * index, itemSize * (index + numericConstants.TWO)], [numericConstants.ONE,
+        numericConstants.ONE, numericConstants.ONE, numericConstants.ZERO], Extrapolate.CLAMP);
+    };
+
+    const RenderFollowingFollower = props => {
+        const animationStyle = useAnimatedStyle(() => {
+            return {
+                transform: [{ scale: scaleAnimation(props.scrollYValue, props.index) }]
+            }
+        });
+        return <UserFollowFollowingRenderer item={props.item} index={props.index} listFor={props.listFor} actionCallBack={props.actionCallBack}
+            animationStyle={animationStyle} />
+    }
+
     return (
-        <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
-            <FlatList data={userFollowerFollowing.users} keyExtractor={(item) => item.key} key={`1_${numericConstants.ONE}`}
-                renderItem={({ item, index }) => UserFollowFollowingRenderer(item, index, listFor, actionCallBack)}
-                contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
-                ListEmptyComponent={emptyListMessage} />
-        </View>
+        <Animated.View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
+            {
+                listFor == fieldControllerName.SEARCH_USERS &&
+                <Animated.View style={SDGenericStyles.padding20}>
+                    <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.paddingStart10]}>
+                        <SDSearchInput extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
+                            state={searchList} setState={setSearchList} inputName={fieldControllerName.SEARCH_USERS} items={userFollowerFollowing.users} />
+                    </Animated.View>
+                </Animated.View>
+            }
+            <AnimatedFlatlist data={listFor == fieldControllerName.SEARCH_USERS && searchList.users || userFollowerFollowing.users}
+                keyExtractor={(item) => item.key} key={`1_${numericConstants.ONE}`} renderItem={({ item, index }) => {
+                    return <RenderFollowingFollower item={item} scrollYValue={scrollYValue} index={index}
+                        actionCallBack={actionCallBack} />
+                }} contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
+                ListEmptyComponent={emptyListMessage} onScroll={listViewScrollHandler} scrollEventThrottle={numericConstants.SIXTEEN} />
+        </Animated.View>
     )
 }

@@ -105,7 +105,7 @@ export const EditUserProfile = () => {
                 <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule}
                     defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.NEW_PASSWORD}
                     keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
-                        colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} maxLength={numericConstants.TEN}
+                        colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} maxLength={numericConstants.SIX}
                     isSecureTextEntry={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} />
 
                 <SDImageFormInput inputName={fieldControllerName.ADD_USER_BIO} control={control} rules={formRequiredRules.verifyUserInputRule}

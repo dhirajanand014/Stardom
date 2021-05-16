@@ -96,6 +96,7 @@ export const urlConstants = {
     deletePost: `${BASE_URI}/post/delete`,
     fetchUsersFollowers: `${BASE_URI}/user/followers/fetch`,
     fetchUsersFollowings: `${BASE_URI}/user/following/fetch`,
+    fetchAllUsers: `${BASE_URI}/user/allusers/fetch`,
 }
 
 export const fieldControllerName = {
@@ -125,7 +126,8 @@ export const fieldControllerName = {
     FOLLOWER_ID: `follower_id`,
     FOLLOWING_ID: `following_id`,
     VERIFY_USER: `verifyUserDetails`,
-    ADD_USER_BIO: `bio`
+    ADD_USER_BIO: `bio`,
+    SEARCH_USERS: `searchUsers`
 }
 
 export const keyBoardTypeConst = {
@@ -208,8 +210,8 @@ export const formRequiredRules = {
             message: `Please enter the password`
         },
         maxLength: {
-            value: 10,
-            message: `Please enter only 10 characters`
+            value: 6,
+            message: `Please enter only 6 characters`
         }
     },
     otpFormRule: {
@@ -391,8 +393,8 @@ export const placeHolderText = {
     EMAIL: `Enter Email Address`,
     NAME: `Enter Name`,
     DOB: `Enter date of birth`,
-    SECRET: `Enter 10 Character Password`,
-    CONFIRM_PASSWORD: `Confirm 10 Character Password`,
+    SECRET: `Enter 6 Character Password`,
+    CONFIRM_PASSWORD: `Confirm 6 Character Password`,
     REGISTER_DESCRIPTION: `We will send you a verification code to your phone`,
     SEARCH_POSTS: `Search Posts`,
     SELECT_A_CATEGORY: `Select a category`,
@@ -403,7 +405,8 @@ export const placeHolderText = {
     ADD_POST_DESCRIPTION: `Enter Description`,
     VERIFY_USER_DETAILS: `Enter your social media contact details`,
     SELECT_GENDER: `Select a gender`,
-    SELECT_POST_TYPE: `Select Post type`
+    SELECT_POST_TYPE: `Select Post type`,
+    SEARCH_USERS: `Search Users`
 }
 
 export const numericConstants = {
@@ -437,6 +440,7 @@ export const numericConstants = {
     FORTY_FIVE: 45,
     FIFTY: 50,
     SIXTY: 60,
+    SEVENTY: 70,
     EIGHTY: 80,
     NINETY: 90,
     ONE_HUNDRED: 100,
@@ -641,6 +645,7 @@ export const miscMessage = {
     CATEGORY_BACK: `Go back to posts Anytime !!`,
     CONTENT_TYPE: 'Content-Type',
     AUTHORIZATION: `Authorization`,
+    SEARCH_USERS: 'Search Users',
     BEARER: `Bearer`,
     APPLICATION_JSON: `application/json`,
     MULTIPART_FORM: `multipart/form-data`,
@@ -767,6 +772,10 @@ export const SDMenuOptions = [
     }, {
         label: miscMessage.GET_VERIFIED,
         key: actionButtonTextConstants.VERIFY_USER,
+        loggedIn: true
+    }, {
+        label: miscMessage.SEARCH_USERS,
+        key: screens.USER_FOLLOWERS_FOLLOWING,
         loggedIn: true
     }, {
         label: screens.CATEGORY,

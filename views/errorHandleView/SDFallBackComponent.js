@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, View, Text, TouchableOpacity } from "react-native";
 import { componentErrorConsts, numericConstants, errorMessages, miscMessage, screens } from '../../constants/Constants';
-import { errorBoundaryStyles } from "../../styles/Styles";
+import { errorBoundaryStyles, SDGenericStyles } from "../../styles/Styles";
 import RNRestart from 'react-native-restart';
 
 export const SDFallBackComponent = (props) => {
@@ -11,7 +11,7 @@ export const SDFallBackComponent = (props) => {
     const error_icon = require(`../../assets/error_warning_icon.png`);
 
     return (
-        <View style={errorBoundaryStyles.container}>
+        <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorYellow]}>
             <View style={[{ width: width, height: height }, errorBoundaryStyles.content]}>
                 <View>
                     <Image style={errorBoundaryStyles.infoIconStyle} source={error_icon} />

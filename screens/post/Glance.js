@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useContext } from 'react';
-import { View, Image, TouchableOpacity, StatusBar, Dimensions } from 'react-native';
+import { View, Image, StatusBar, Dimensions } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
     width, miscMessage, numericConstants, jsonConstants
@@ -20,7 +20,6 @@ import { CategoryContext } from '../../App';
 import { SwipeItem } from '../../components/swiper/SwipeItem';
 import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
 
-const category_selection = require('../../assets/category_selection_icon.png');
 const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
 
 export const Glance = ({ navigation }) => {
@@ -110,9 +109,6 @@ export const Glance = ({ navigation }) => {
                     </Shimmer>
                 </View>
             }
-            <TouchableOpacity style={glancePostStyles.category_selection}>
-                <Image source={category_selection} style={glancePostStyles.category_selection_image} />
-            </TouchableOpacity>
             <PostDescriptionModal optionsState={optionsState} setOptionsState={setOptionsState}
                 reportAbuseIcon={post_report_abuse} />
             <PostReportAbuseModal optionsState={optionsState} setOptionsState={setOptionsState} />

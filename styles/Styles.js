@@ -532,18 +532,6 @@ export const glancePostStyles = StyleSheet.create({
         textAlign: 'center',
         color: 'black',
     },
-    category_selection: {
-        alignItems: "flex-end",
-        position: "absolute",
-        zIndex: 100,
-        top: 10,
-        left: 5,
-        padding: 10
-    },
-    category_selection_image: {
-        width: 25,
-        height: 25
-    },
     icon_post_like: {
         borderColor: 'red',
         width: 22,
@@ -1232,6 +1220,12 @@ export const userAuthStyles = StyleSheet.create({
         borderRadius: 8,
         width: width / 1.15,
     },
+    searchUserInput: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: `#343642`,
+        borderRadius: 8,
+    },
     errorInputBorder: {
         borderWidth: 2,
         borderColor: '#ff4e4e',
@@ -1308,10 +1302,6 @@ export const userAuthStyles = StyleSheet.create({
 });
 
 export const errorBoundaryStyles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colorConstants.YELLOW
-    },
     content: {
         justifyContent: 'center',
         alignSelf: 'center',

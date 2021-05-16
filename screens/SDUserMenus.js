@@ -7,7 +7,7 @@ import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
 import { ErrorModal } from '../components/modals/ErrorModal';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
-    actionButtonTextConstants, jsonConstants, miscMessage, modalTextConstants,
+    actionButtonTextConstants, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, screens, stringConstants
 } from '../constants/Constants';
 import { prepareSDOMMenu, fetchProfilePostsCounts, logoutUser, fetchUpdateLoggedInUserProfile } from '../helper/Helper';
@@ -67,6 +67,7 @@ export const SDUserMenus = () => {
             case screens.USER_FOLLOWERS_FOLLOWING:
                 if (menu.label == miscMessage.FOLLOWERS_TEXT) {
                 } else if (menu.label == miscMessage.FOLLOWING_TEXT) {
+                } else if (menu.label === fieldControllerName.SEARCH_USERS) {
                 }
                 else if (menu.label == miscMessage.PRIVATE_REQUEST_ACCESS) {
                     const followers = details.followers;
