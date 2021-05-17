@@ -4,7 +4,7 @@ import { SDGenericStyles } from '../../styles/Styles';
 export const SDProfileBottomTextView = props => {
     return (
         <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingLeft5, SDGenericStyles.paddingRight5,
-        SDGenericStyles.paddingTop20]}>
+        SDGenericStyles.paddingTop10]}>
             <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
             SDGenericStyles.fontFamilyBold, SDGenericStyles.ft25]}>
                 {props.count}

@@ -60,7 +60,7 @@ export const Login = () => {
                 SDGenericStyles.textColorWhite]} onSubmitEditing={() => focusOnInputIfFormInvalid(formState, secretRef)} />
 
             <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule} setIsSecureTextEntry={setIsSecureTextEntry}
-                defaultValue={stringConstants.EMPTY} maxLength={numericConstants.SIX} placeHolderText={placeHolderText.SECRET} refCallback={refCallback} isPasswordInput={true}
+                defaultValue={stringConstants.EMPTY} minLength={numericConstants.SIX} placeHolderText={placeHolderText.SECRET} refCallback={refCallback} isPasswordInput={true}
                 keyboardType={keyBoardTypeConst.DEFAULT} isSecureTextEntry={isSecureTextEntry} icon={<LoginSecretIcon stroke={colors.SDOM_PLACEHOLDER} />}
                 textContentType={keyBoardTypeConst.PASSWORD} formState={formState} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} />
 

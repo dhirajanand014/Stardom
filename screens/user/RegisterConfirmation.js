@@ -105,7 +105,7 @@ export const RegistrationConfirmation = () => {
                     isUserIdAvailable={isUserIdAvailable} isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]} />
 
                 <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule} setIsSecureTextEntry={setIsSecureTextEntry}
-                    defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.PASSWORD} maxLength={numericConstants.SIX}
+                    defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.PASSWORD} minLength={numericConstants.SIX}
                     keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
                         colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} onSubmitEditing={() => focusOnInputIfFormInvalid(formState, confirmSecretRef)}
                     isSecureTextEntry={isSecureTextEntry} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} isPasswordInput={true} />
@@ -113,7 +113,7 @@ export const RegistrationConfirmation = () => {
                 <SDImageFormInput inputName={fieldControllerName.CONFIRM_SECRET} control={control} rules={formRequiredRules.passwordFormRule} isPasswordInput={true}
                     defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.CONFIRM_PASSWORD} textContentType={keyBoardTypeConst.NEW_PASSWORD}
                     keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.CONFIRM_SECRET]?.message &&
-                        colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} refCallback={refCallback} maxLength={numericConstants.SIX}
+                        colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} refCallback={refCallback} minLength={numericConstants.SIX}
                     extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} isSecureTextEntry={isSecureTextEntry}
                     setIsSecureTextEntry={setIsSecureTextEntry} />
             </ScrollView>

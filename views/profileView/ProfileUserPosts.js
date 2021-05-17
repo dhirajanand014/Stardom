@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Shimmer from "react-native-shimmer";
 import { LockIcon } from '../../components/icons/LockIcon';
@@ -26,28 +26,27 @@ export const ProfileUserPosts = (item, index, hasPrivateAccess) => {
                     ||
                     item.postType == fieldControllerName.POST_TYPE_PRIVATE &&
                     (
-                        <FastImage resizeMode={FastImage.resizeMode.cover} source={{
-                            uri: item.postImage, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
-                        }} style={flatListItemStyles.imageBackGround}>
+                        <ImageBackground resizeMode={FastImage.resizeMode.cover} source={{ uri: item.postImage }}
+                            style={flatListItemStyles.imageBackGround} blurRadius={numericConstants.TEN}>
                             {
                                 !hasPrivateAccess &&
-                                <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorGray, SDGenericStyles.paddingTop5, SDGenericStyles.opacitypt9]}>
+                                <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorGray, SDGenericStyles.paddingTop10, SDGenericStyles.opacitypt6]}>
                                     <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
                                         <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
-                                            <LockIcon width={numericConstants.FIFTY} height={numericConstants.FIFTY} stroke={colors.WHITE} />
+                                            <LockIcon width={numericConstants.THIRTY} height={numericConstants.THIRTY} stroke={colors.WHITE} />
                                         </Shimmer>
                                     </View>
                                     <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingHorizontal10]}>
                                         <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
-                                            <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold,
-                                            SDGenericStyles.textCenterAlign]}>
+                                            <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
+                                            SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop10]}>
                                                 {miscMessage.REQUEST_FOR_PRIVATE_ACCESS}
                                             </Text>
                                         </Shimmer>
                                     </View>
                                 </View>
                             }
-                        </FastImage>
+                        </ImageBackground>
                     )
                 }
             </View>

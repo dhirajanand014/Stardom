@@ -99,14 +99,11 @@ export const Glance = ({ navigation }) => {
                 </View> || sdomDatastate.posts && !sdomDatastate.posts.length &&
                 <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.CATEGORY_WITHOUT_POST}
                     descriptionText={errorMessages.SELECT_OTHER_CATEGORIES} navigation={navigation} /> || <View>
-                    <Shimmer style={{ width: width, height: height }} duration={numericConstants.FIVE_HUNDRED} direction={miscMessage.UP} tilt={numericConstants.FORTY_FIVE}>
-                        <View style={glancePostStyles.shimmerViewInit}>
-                            <FastImage style={glancePostStyles.preloaderStyle} source={{
-                                uri: Image.resolveAssetSource(require(`../../assets/wallpiper-preloader.gif`)).uri,
-                                priority: FastImage.priority.normal
-                            }} />
-                        </View>
-                    </Shimmer>
+                    <View style={glancePostStyles.shimmerViewInit}>
+                        <FastImage style={glancePostStyles.preloaderStyle} source={{
+                            uri: Image.resolveAssetSource(require(`../../assets/stardom_loader.gif`)).uri, priority: FastImage.priority.normal
+                        }} />
+                    </View>
                 </View>
             }
             <PostDescriptionModal optionsState={optionsState} setOptionsState={setOptionsState}

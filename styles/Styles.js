@@ -248,8 +248,11 @@ export const SDGenericStyles = StyleSheet.create({
     width38: {
         width: 38
     },
-    opacitypt9: {
-        opacity: 0.9
+    opacitypt6: {
+        opacity: 0.6
+    },
+    opacitypt7: {
+        opacity: 0.7
     },
     marginHorizontal10: {
         marginHorizontal: 10
@@ -259,6 +262,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingTop5: {
         paddingTop: 5
+    },
+    paddingTop10: {
+        paddingTop: 10
     },
     paddingTop20: {
         paddingTop: 20
@@ -428,9 +434,6 @@ export const SDGenericStyles = StyleSheet.create({
     },
     marginHorizontal4: {
         marginHorizontal: 4
-    },
-    opacitypt7: {
-        opacity: .7
     },
     opacitypt2: {
         opacity: .2
@@ -853,8 +856,8 @@ export const glancePostStyles = StyleSheet.create({
         height: 130
     },
     preloaderStyle: {
-        width: 30,
-        height: 30
+        width: 50,
+        height: 50
     },
     addPostSelectText: {
         textAlign: 'center',
@@ -872,7 +875,7 @@ export const glancePostStyles = StyleSheet.create({
         shadowOffset: { width: - 1, height: -3 },
         shadowRadius: 2,
         shadowOpacity: 0.4,
-        paddingTop: 20,
+        paddingTop: 10,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20
     },
@@ -942,16 +945,6 @@ export const glancePostStyles = StyleSheet.create({
         borderRadius: 58,
         alignItems: 'flex-start',
         marginLeft: 1
-    },
-    profilePostBottomView: {
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 10
     },
     profileBioTextStyle: {
         borderWidth: 1,
