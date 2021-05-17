@@ -84,7 +84,7 @@ export const SDUserMenus = () => {
         (async () => {
             if (loggedInUser.loginDetails.details && loggedInUser.isLoggedIn) {
                 profileMenu.userMenus = prepareSDOMMenu();
-                const counts = await fetchProfilePostsCounts(loggedInUser);
+                const counts = await fetchProfilePostsCounts(loggedInUser.id);
                 const details = JSON.parse(loggedInUser.loginDetails.details);
                 profileMenu.userMenus = profileMenu.userMenus.filter(menu => filterOutLoginMenus(menu, details));
                 profileMenu.profileImage = details.profile_picture;

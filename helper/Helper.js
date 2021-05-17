@@ -1376,7 +1376,7 @@ export const updateProfileActionValueToState = async (responseData, action, prof
 }
 
 export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUser, profileDetail, setProfileDetail) => {
-    if (loggedInUser.loginDetails) {
+    if (loggedInUser.loginDetails && loggedInUser.loginDetails.details) {
         const loggedInUserDetails = JSON.parse(loggedInUser.loginDetails.details);
         profileDetail.isFollowing = profile.followers.some(follower =>
             follower.follower_id == loggedInUserDetails.id);
@@ -1384,9 +1384,9 @@ export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUs
             profileDetail.privateRequestAccessStatus = profile.followers && profile.followers.find(following =>
                 following.follower_id == loggedInUserDetails.id).pvtaccess || PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
         }
-        const counts = await fetchProfilePostsCounts(loggedInUser);
-        setProfileDetail({ ...profileDetail, count: counts });
     }
+    const counts = await fetchProfilePostsCounts(profile.id);
+    setProfileDetail({ ...profileDetail, count: counts });
 }
 
 export const fetchPostsOfUserProfile = async (profile, profileDetail, setProfileDetail, sdomDatastate) => {
@@ -1398,10 +1398,10 @@ export const fetchPostsOfUserProfile = async (profile, profileDetail, setProfile
     }
 }
 
-export const fetchProfilePostsCounts = async (loggedInUser) => {
+export const fetchProfilePostsCounts = async (userProfileId) => {
     try {
-        const token = loggedInUser.loginDetails.token;
-        const response = await axiosGetWithAuthorization(urlConstants.fetchProfilePostsCounts, token);
+        const url = `${urlConstants.fetchProfilePostsCounts}${stringConstants.SLASH}${userProfileId}`
+        const response = await axiosGetWithHeaders(url);
         return processResponseData(response);
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);

@@ -1,9 +1,8 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Text, TouchableOpacity, View } from "react-native"
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
-import { useEffect } from 'react/cjs/react.development';
 import { CategoryContext } from '../../App';
 import { LockIcon } from '../../components/icons/LockIcon';
 import { UnlockIcon } from '../../components/icons/UnlockIcon';

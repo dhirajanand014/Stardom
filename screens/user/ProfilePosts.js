@@ -1,6 +1,5 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext, useEffect } from 'react';
 import { useNavigation, useRoute } from "@react-navigation/core";
-import { useContext, useEffect } from "react";
 import { CategoryContext } from "../../App";
 import { actionButtonTextConstants, jsonConstants, numericConstants, PRIVATE_FOLLOW_UNFOLLOW } from "../../constants/Constants";
 import { fetchPostsOfUserProfile, handleUserPostAction } from "../../helper/Helper";
@@ -26,7 +25,6 @@ export const ProfilePosts = props => {
                 && following.pvtaccess == PRIVATE_FOLLOW_UNFOLLOW.APPROVED);
         }
     }
-
 
     useEffect(() => {
         (async () => {

@@ -24,6 +24,7 @@ export const RegistrationConfirmation = () => {
 
     const { control, formState, setError, handleSubmit, watch, clearErrors } = useForm();
     const { signUpDetails, setSignUpDetails } = useContext(CategoryContext);
+    const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
 
     let confirmSecretRef = useRef(null);
     let isUserIdAvailable = useRef(null);
