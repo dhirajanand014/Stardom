@@ -37,7 +37,6 @@ export const Profile = () => {
     const isDisabled = profileDetail.isFollowing && (profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED ||
         profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.APPROVED);
 
-
     return (
         <View style={[SDGenericStyles.fill]}>
             <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.normal }}

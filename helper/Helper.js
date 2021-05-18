@@ -1156,7 +1156,7 @@ export const fetchUpdateLoggedInUserProfile = async (loggedInUser, setLoggedInUs
         const user = await getLoggedInUserDetails();
         if (user && fetchUpdated) {
             const updatedDetails = await axiosGetWithAuthorization(urlConstants.getUserProfile, user.token);
-            if (updatedDetails.status == 200) {
+            if (updatedDetails.status == numericConstants.TWO_HUNDRED) {
                 const responseData = processResponseData(updatedDetails);
                 const JSONDetails = JSON.stringify(responseData);
                 await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER,

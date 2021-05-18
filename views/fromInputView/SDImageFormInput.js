@@ -2,7 +2,7 @@ import React from 'react';
 import { KeyboardAvoidingView, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { SDFormInput } from '../../components/input/SDFormInput';
-import { actionButtonTextConstants, numericConstants, stringConstants } from '../../constants/Constants';
+import { actionButtonTextConstants } from '../../constants/Constants';
 import { ShowSecretIcon } from '../../components/icons/ShowSecretIcon';
 import { HideSecretIcon } from '../../components/icons/HideSecretIcon';
 export const SDImageFormInput = props => {

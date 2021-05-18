@@ -13,7 +13,6 @@ import { ScreenNavigator } from '.';
 export const CategoryContext = React.createContext();
 
 export default function App({ navigationRef }) {
-
   const [loggedInUser, setLoggedInUser] = useState({
     loginDetails: stringConstants.EMPTY,
     isLoggedIn: false
@@ -72,7 +71,7 @@ export default function App({ navigationRef }) {
     (async () => {
       await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
     })();
-  }, []);
+  }, jsonConstants.EMPTY);
 
 
   useEffect(() => {
@@ -80,7 +79,7 @@ export default function App({ navigationRef }) {
       const allProfiles = await getAllProfiles();
       allProfiles && setProfiles(allProfiles);
     })();
-  }, []);
+  }, jsonConstants.EMPTY);
 
 
   const fetchCategories = (category, setCategory, categoryIdFromNotification) => {

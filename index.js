@@ -6,10 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AppRegistry, LogBox } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
-import {
-    headerLessStackOptions, profilePostsScreenOptions,
-    profileScreenOptions, screenOptions, screens, tabBarOptions
-} from './constants/Constants';
+import { headerLessStackOptions, profileScreenOptions, screenOptions, screens, tabBarOptions } from './constants/Constants';
 import { authorizationHeader, categoryHeader } from './helper/Helper';
 import { Category } from './screens/category/Category';
 import { Intro } from './screens/Intro';
@@ -24,13 +21,14 @@ import { RegistrationOTP } from './screens/user/RegitrationOTP';
 import { Posts } from './views/imagePost/Posts';
 import { SDCameraView } from './views/cameraView/SDCameraView';
 import { Glance } from './screens/post/Glance';
-import { ProfilePosts } from './screens/user/ProfilePosts';
 import { UserFollowFollowing } from './screens/user/UserFollowFollowing';
 import { EditUserProfile } from './screens/user/EditUserProfile';
 import { SDCameraImagePreview } from './views/cameraView/SDCameraImagePreview';
 import { SDSplashScreen } from './screens/SDSplashScreen';
 
-LogBox.ignoreLogs(['Warning: ...']);
+LogBox.ignoreLogs(['Remote debugger is in a background tab which may cause apps to perform slowly',
+    'Require cycle: node_modules/rn-fetch-blob/index.js',
+    'Require cycle: node_modules/react-native/Libraries/Network/fetch.js']);
 LogBox.ignoreAllLogs(true);
 
 const Stack = createStackNavigator();

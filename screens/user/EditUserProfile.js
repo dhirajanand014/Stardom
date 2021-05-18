@@ -6,13 +6,13 @@ import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import {
     fieldControllerName, stringConstants, keyBoardTypeConst,
     placeHolderText, actionButtonTextConstants, miscMessage, numericConstants,
-    modalTextConstants, alertTextMessages, screens, jsonConstants, requestConstants
+    modalTextConstants, alertTextMessages, screens, jsonConstants, requestConstants, formRequiredRules
 } from '../../constants/Constants';
 import { SDGenericStyles, userAuthStyles, colors, glancePostStyles, userMenuStyles } from '../../styles/Styles';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
 import Animated, { useSharedValue } from 'react-native-reanimated';
-import { showSnackBar, redirectUserToGlance, saveRegistrationStatus, userPostAction } from '../../helper/Helper';
+import { showSnackBar, redirectUserToGlance, saveRegistrationStatus, userPostAction, fetchUpdateLoggedInUserProfile } from '../../helper/Helper';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { CategoryContext } from '../../App';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
@@ -23,9 +23,8 @@ import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextIn
 export const EditUserProfile = () => {
     const { control, formState, handleSubmit, reset, watch } = useForm();
 
-    const { loggedInUser } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
-
     const route = useRoute();
     const imageValue = route.params?.imageValue;
 
@@ -53,6 +52,7 @@ export const EditUserProfile = () => {
         data.imagePath = profileDetails.profile_picture;
         const registrationUpdated = await userPostAction(requestConstants.EDIT, data, loggedInUser.loginDetails.token);
         if (registrationUpdated) {
+            await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
             const initialCategories = await redirectUserToGlance();
             showSnackBar(alertTextMessages.USER_DETAILS_ADDED_SUCCESSFULLY, true);
             navigation.navigate(initialCategories && screens.GLANCE || screens.CATEGORY);
@@ -68,7 +68,7 @@ export const EditUserProfile = () => {
         }
         setProfileDetails(details);
         reset({ ...details })
-    }, imageValue || jsonConstants.EMPTY);
+    }, [jsonConstants.EMPTY, imageValue]);
 
     const bioInput = watch(fieldControllerName.ADD_USER_BIO);
     const detailsCallback = useCallback(() => { bottomSheetRef?.current?.snapTo(numericConstants.ONE) });
@@ -103,7 +103,7 @@ export const EditUserProfile = () => {
                         icon={<RegisterUserIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN}
                             stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
-                    <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} isPasswordInput={true}
+                    <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} isPasswordInput={true} rules={formRequiredRules.passwordFormRule}
                         defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.NEW_PASSWORD}
                         keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
                             colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} minLength={numericConstants.SIX} setIsSecureTextEntry={setIsSecureTextEntry}

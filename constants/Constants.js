@@ -35,12 +35,6 @@ export const headerLessStackOptions = {
     headerShown: false
 }
 
-export const profilePostsScreenOptions = {
-    animationEnabled: true,
-    headerShown: false,
-    cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
-}
-
 export const profileScreenOptions = {
     animationEnabled: true,
     headerShown: false,
