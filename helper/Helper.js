@@ -1214,6 +1214,22 @@ export const setAddPostStateValues = (action, userPosts, setUserPosts, item) => 
     setUserPosts({ ...userPosts });
 }
 
+export const cropImage = async (imagePath) => {
+    try {
+        return await ImagePicker.openCropper({
+            path: imagePath, width: width, height: height, compressImageMaxWidth: width,
+            compressImageMaxHeight: height, compressImageQuality: numericConstants.ONE, hideBottomControls: false,
+            cropperStatusBarColor: colors.SDOM_TEXT_BOX, cropperActiveWidgetColor: colors.SDOM_YELLOW,
+            cropperToolbarWidgetColor: colors.SDOM_YELLOW, cropperToolbarColor: colors.SDOM_BLACK
+        });
+    } catch (error) {
+        if (error.code && !error.code == miscMessage.USER_CANCELLED_CROP_CODE) {
+            console.error(errorMessages.COULD_NOT_CROP_IMAGE, error);
+            showSnackBar(errorMessages.COULD_NOT_CROP_IMAGE, false);
+        }
+    }
+}
+
 export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem) => {
     try {
         const formData = new FormData();

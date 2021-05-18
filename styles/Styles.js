@@ -463,14 +463,11 @@ export const SDGenericStyles = StyleSheet.create({
     height150: {
         height: 150
     },
-    bottom180: {
-        bottom: 180
-    },
     bottom200: {
         bottom: 200
     },
-    bottom220: {
-        bottom: 220
+    bottom210: {
+        bottom: 210
     },
     paddingRight5: {
         paddingRight: 5
@@ -1026,15 +1023,14 @@ export const flatListItemStyles = StyleSheet.create({
         borderRadius: 8,
     },
     userProfileCardSurface: {
-        height: 180,
-        width: 140,
+        height: 200,
+        width: 130,
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
-        left: -5,
-        right: 150,
+        paddingHorizontal: 6,
+        paddingVertical: 15,
         marginVertical: 5,
-        borderRadius: 8,
     },
     textsView: {
         flex: 1,
@@ -1399,6 +1395,8 @@ export const colors = {
     SILVER: '#efefef',
     WHITE: '#fff',
     GREY: '#7e7e7e',
+    SDOM_BLACK: `#1b1f2b`,
+    SDOM_TEXT_BOX: `#343642`,
     WHITE_GREY: '#d4d4d4',
     DARK_GREY: '#555555',
     LIGHT_BLACK: '#212121',

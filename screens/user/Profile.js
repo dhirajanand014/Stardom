@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from "react-native"
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
@@ -7,13 +7,13 @@ import { CategoryContext } from '../../App';
 import { LockIcon } from '../../components/icons/LockIcon';
 import { UnlockIcon } from '../../components/icons/UnlockIcon';
 import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
-import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
     actionButtonTextConstants, height, jsonConstants,
-    miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW, screens, width
+    miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW, width
 } from '../../constants/Constants';
 import { checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile, handleUserPostAction } from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles } from "../../styles/Styles"
+import { SDProfileBottomSheet } from '../../views/bottomSheet/SDProfileBottomSheet';
 
 export const Profile = () => {
 
@@ -21,6 +21,9 @@ export const Profile = () => {
 
     const route = useRoute();
     const profile = route.params?.profile;
+
+    // variables
+    const snapPoints = useMemo(() => ['12%', '100%'], []);
 
     const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail } = useContext(CategoryContext);
 
@@ -33,6 +36,7 @@ export const Profile = () => {
 
     const isDisabled = profileDetail.isFollowing && (profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED ||
         profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.APPROVED);
+
 
     return (
         <View style={[SDGenericStyles.fill]}>
@@ -63,7 +67,7 @@ export const Profile = () => {
                         SDGenericStyles.textColorWhite]}>{profile.bio}</Text>
                     </Animated.View>
                 </View>
-                <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom200, SDGenericStyles.paddingRight5]}>
+                <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom210, SDGenericStyles.paddingRight5]}>
                     <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
                         <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.paddingVertical2,
                         SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle, !isDisabled && SDGenericStyles.backgroundColorYellow ||
@@ -98,19 +102,8 @@ export const Profile = () => {
                     </View>
                 </View>
             </View>
-            <View style={[SDGenericStyles.backgroundColorWhite, glancePostStyles.profilePostBottomView,
-            SDGenericStyles.height100, SDGenericStyles.bottom180]}>
-                <TouchableOpacity activeOpacity={.3} style={[SDGenericStyles.height100], { width: width }} onPress={async () =>
-                    navigation.navigate(screens.PROFILE_POSTS, { profile: profile })}>
-                    <View style={[SDGenericStyles.rowFlexDirection]}>
-                        <SDProfileBottomTextView label={miscMessage.FOLLOWERS} count={profileDetail.count.followersCount} />
-                        <SDProfileBottomTextView label={miscMessage.FOLLOWING} count={profileDetail.count.followingCount} />
-                        <SDProfileBottomTextView label={miscMessage.WALLS} count={profileDetail.count.wallsCount} />
-                        <SDProfileBottomTextView label={miscMessage.UPLOADS} count={profileDetail.count.uploadCount} />
-                        <SDProfileBottomTextView label={miscMessage.DOWNLOADS} count={profileDetail.count.downloadCount} />
-                    </View>
-                </TouchableOpacity>
-            </View>
-        </View >
+            <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser}
+                setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} />
+        </View>
     )
 }

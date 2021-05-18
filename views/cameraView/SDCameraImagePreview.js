@@ -7,6 +7,7 @@ import {
     actionButtonTextConstants, CAMERA_IMAGE_FILTERS,
     miscMessage, numericConstants, screens, stringConstants, width
 } from '../../constants/Constants';
+import { cropImage } from '../../helper/Helper';
 import { SDGenericStyles, cameraStyles, userAuthStyles } from '../../styles/Styles';
 export const SDCameraImagePreview = props => {
 
@@ -18,16 +19,17 @@ export const SDCameraImagePreview = props => {
     const extractedUri = useRef(imageFilterURI);
     const { userPosts, setUserPosts } = useContext(CategoryContext);
 
-    const proceedAction = () => {
+    const proceedAction = async () => {
+        const croppedImage = await cropImage(extractedUri.current);
         switch (isFrom) {
             case screens.EDIT_USER_PROFILE:
-                navigation.navigate(isFrom, { imageValue: extractedUri.current });
+                navigation.navigate(isFrom, { imageValue: croppedImage.path });
                 break;
             case stringConstants.EMPTY:
             case screens.EDIT_POST_DETAILS:
             case screens.POSTS:
             default:
-                userPosts.details.capturedImage = extractedUri.current;
+                userPosts.details.capturedImage = croppedImage.path;
                 userPosts.details.showBottomOptions = false;
                 setUserPosts({ ...userPosts });
                 navigation.navigate(screens.ADD_POST_DETAILS,

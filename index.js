@@ -64,7 +64,6 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.REGISTER} component={Register} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.PROFILE} component={Profile} options={profileScreenOptions} />
                 <Stack.Screen name={screens.EDIT_USER_PROFILE} component={EditUserProfile} options={headerLessStackOptions} />
-                <Stack.Screen name={screens.PROFILE_POSTS} component={ProfilePosts} options={profilePostsScreenOptions} />
                 <Stack.Screen name={screens.USER_FOLLOWERS_FOLLOWING} component={UserFollowFollowing} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.IMAGE_PREVIEW_FILTERS} component={SDCameraImagePreview} options={headerLessStackOptions} />
             </Stack.Navigator>
