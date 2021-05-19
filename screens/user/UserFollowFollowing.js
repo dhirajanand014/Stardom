@@ -96,10 +96,21 @@ export const UserFollowFollowing = () => {
         numericConstants.ONE, numericConstants.ONE, numericConstants.ZERO], Extrapolate.CLAMP);
     };
 
+    const opacity = (scrollYValue, index) => {
+        'worklet';
+
+        return interpolate(scrollYValue.value, [numericConstants.MINUS_ONE, numericConstants.ZERO,
+        itemSize * index, itemSize * (index + numericConstants.ZEROPTFIVE)], [numericConstants.ONE,
+        numericConstants.ONE, numericConstants.ONE, numericConstants.ZERO], Extrapolate.CLAMP);
+    }
+
     const RenderFollowingFollower = props => {
         const animationStyle = useAnimatedStyle(() => {
             return {
-                transform: [{ scale: scaleAnimation(props.scrollYValue, props.index) }]
+                transform: [{
+                    scale: scaleAnimation(props.scrollYValue, props.index)
+                }],
+                opacity: opacity(props.scrollYValue, props.index)
             }
         });
         return <UserFollowFollowingRenderer item={props.item} index={props.index} listFor={props.listFor} actionCallBack={props.actionCallBack}

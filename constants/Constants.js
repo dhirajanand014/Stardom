@@ -120,7 +120,7 @@ export const fieldControllerName = {
     FOLLOWING_ID: `following_id`,
     VERIFY_USER: `verifyUserDetails`,
     ADD_USER_BIO: `bio`,
-    SEARCH_USERS: `searchUsers`
+    SEARCH_USERS: `Search Users`
 }
 
 export const keyBoardTypeConst = {
@@ -413,6 +413,7 @@ export const placeHolderText = {
 
 export const numericConstants = {
     MINUS_ONE: -1,
+    ZEROPTFIVE: 0.5,
     ZERO: 0,
     ONE: 1,
     ONE_PT_NINE: 1.9,
@@ -650,7 +651,6 @@ export const miscMessage = {
     CATEGORY_BACK: `Go back to posts Anytime !!`,
     CONTENT_TYPE: 'Content-Type',
     AUTHORIZATION: `Authorization`,
-    SEARCH_USERS: 'Search Users',
     BEARER: `Bearer`,
     APPLICATION_JSON: `application/json`,
     MULTIPART_FORM: `multipart/form-data`,
@@ -779,7 +779,7 @@ export const SDMenuOptions = [
         key: actionButtonTextConstants.VERIFY_USER,
         loggedIn: true
     }, {
-        label: miscMessage.SEARCH_USERS,
+        label: fieldControllerName.SEARCH_USERS,
         key: screens.USER_FOLLOWERS_FOLLOWING,
         loggedIn: true
     }, {
