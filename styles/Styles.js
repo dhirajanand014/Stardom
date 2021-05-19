@@ -951,6 +951,17 @@ export const glancePostStyles = StyleSheet.create({
     addPostEditIconsStyle: {
         top: height / 4.4,
         right: 18
+    },
+    loaderModalView: {
+        margin: 100,
+        borderRadius: 20,
+        paddingTop: 20,
+        paddingEnd: 100,
+        paddingBottom: 20,
+        paddingStart: 100,
+        width: width / 3,
+        height: 100,
+        elevation: 5
     }
 });
 

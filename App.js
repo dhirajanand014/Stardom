@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
+
 import {
   defaultProfilesValue, jsonConstants, numericConstants,
   screens, stringConstants, requestConstants, PRIVATE_FOLLOW_UNFOLLOW
@@ -9,6 +10,7 @@ import { TourGuideProvider } from 'rn-tourguide';
 import AddPostConstant from './constants/AddPostConstant.json';
 import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';
 import { ScreenNavigator } from '.';
+import { SDLoaderView } from './components/modals/SDLoaderView';
 
 export const CategoryContext = React.createContext();
 
@@ -67,6 +69,8 @@ export default function App({ navigationRef }) {
 
   const [profiles, setProfiles] = useState(jsonConstants.EMPTY);
 
+  const [loader, setLoader] = useState(false);
+
   useEffect(() => {
     (async () => {
       await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
@@ -93,14 +97,17 @@ export default function App({ navigationRef }) {
     <SDErrorBoundary>
       <CategoryContext.Provider value={{
         userPosts, setUserPosts, signUpDetails, setSignUpDetails,
-        fetchCategories, initialCategorySelection, profiles,
-        postIdFromNotification, categoryIdFromNotification,
+        fetchCategories, initialCategorySelection, profiles, setLoader,
+        postIdFromNotification, categoryIdFromNotification, loader,
         loggedInUser, setLoggedInUser, sdomDatastate, setSdomDatastate,
         optionsState, setOptionsState, profileDetail, setProfileDetail
       }}>
         <TourGuideProvider androidStatusBarVisible={true}
           backdropColor={navigationRef && navigationRef.initialCategorySelection == screens.INTRO && `rgba(145, 63, 146, 0.6)`}>
           <ScreenNavigator />
+          {
+            loader && <SDLoaderView loader={loader} />
+          }
         </TourGuideProvider>
       </CategoryContext.Provider>
     </SDErrorBoundary>

@@ -74,12 +74,13 @@ export const urlConstants = {
     setPostReach: `${BASE_URI}/post/reach/count`,
     fetchReportAbuses: `${BASE_URI}/reportabuses`,
     setReportAbuseIdWithPostId: `${BASE_URI}/post/reach/reportabuse`,
-    checkAvailability: `${BASE_URI}/user/validate`,
+    validateUser: `${BASE_URI}/user/validate`,
     fetchProfilePostsCounts: `${BASE_URI}/profile/count`,
     login: `${BASE_URI}/auth/login`,
     logout: `${BASE_URI}/auth/logout`,
     getUserProfile: `${BASE_URI}/auth/userprofile`,
     fetchPostsByUserId: `${BASE_URI}/post/userid`,
+    checkUserRegistered: `${BASE_URI}/checkuser`,
     registerUser: `${BASE_URI}/auth/register`,
     userFollow: `${BASE_URI}/post/follow`,
     userUnFollow: `${BASE_URI}/post/unfollow`,
@@ -309,6 +310,10 @@ export const formRequiredRules = {
         type: `mismatch`,
         message: `User ID already in use! Please try another ID`
     },
+    phoneNumberExists: {
+        type: `mismatch`,
+        message: `Phone number is aleady registered`
+    },
     verifyUserInputRule: {
         required: {
             value: true,
@@ -412,6 +417,8 @@ export const placeHolderText = {
 }
 
 export const numericConstants = {
+    TWELVE_PCNT: `12%`,
+    HUNDRED_PCNT: `100%`,
     MINUS_ONE: -1,
     ZEROPTFIVE: 0.5,
     ZERO: 0,
@@ -514,6 +521,8 @@ export const errorMessages = {
     COULD_NOT_CROP_IMAGE: `Could not crop image`,
     COULD_NOT_SET_WALLPAPER: "Cannot set current image as wallpaper",
     COULD_NOT_UNFOllOW_USER: `Could not unfollow user`,
+    COULD_NOT_VALIDATE_PHONE_NUMBER: `Could not validate phone number`,
+    COULD_NOT_VALIDATE_USER_ID: `Could not validate user id`,
     COULD_NOT_DOWNLOAD_IMAGE: "Cannot download the current image",
     COULD_NOT_PARSE_RESPONSE: `Could not parse response`,
     CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`,
@@ -616,6 +625,7 @@ export const miscMessage = {
     DUPLICATE: `Duplicate`,
     FORGOT_PASSWORD: `Forgot Password`,
     DATE_PICKER_FORMAT: `DD / MM / YYYY`,
+    USER_ID: `userid`,
     RIGHT: `right`,
     TRANSPARENT: `transparent`,
     UP: `up`,

@@ -6,7 +6,7 @@ import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import {
     fieldControllerName, stringConstants, keyBoardTypeConst,
     placeHolderText, actionButtonTextConstants, miscMessage, numericConstants,
-    modalTextConstants, alertTextMessages, screens, jsonConstants, requestConstants, formRequiredRules
+    modalTextConstants, alertTextMessages, screens, jsonConstants, requestConstants
 } from '../../constants/Constants';
 import { SDGenericStyles, userAuthStyles, colors, glancePostStyles, userMenuStyles } from '../../styles/Styles';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
@@ -103,7 +103,7 @@ export const EditUserProfile = () => {
                         icon={<RegisterUserIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN}
                             stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
-                    <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} isPasswordInput={true} rules={formRequiredRules.passwordFormRule}
+                    <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} isPasswordInput={true}
                         defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.NEW_PASSWORD}
                         keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
                             colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} minLength={numericConstants.SIX} setIsSecureTextEntry={setIsSecureTextEntry}

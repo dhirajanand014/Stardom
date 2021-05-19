@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import {
     fieldControllerName, formRequiredRules,
     stringConstants, numericConstants, keyBoardTypeConst,
-    placeHolderText, isAndroid, actionButtonTextConstants, miscMessage, modalTextConstants, screens
+    placeHolderText, isAndroid, actionButtonTextConstants,
+    miscMessage, modalTextConstants, screens
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { useNavigation } from '@react-navigation/core';
-import { handleUserSignUpOtp } from '../../helper/Helper';
+import { handleUserSignUpOtp, validateUserAction } from '../../helper/Helper';
 import { PhoneIcon } from '../../components/icons/PhoneIcon';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { CategoryContext } from '../../App';
@@ -17,8 +18,20 @@ export const Register = () => {
 
     const { signUpDetails, setSignUpDetails } = useContext(CategoryContext);
 
-    const { control, formState, handleSubmit } = useForm();
+    const { control, formState, handleSubmit, getValues, setError, clearErrors } = useForm();
     const navigation = useNavigation();
+
+
+    const validateUserRegistered = useCallback(async () => {
+        const phoneNumber = getValues(fieldControllerName.PHONE_NUMBER);
+        const response = await validateUserAction(fieldControllerName.PHONE_NUMBER, phoneNumber);
+        if (response) {
+            setError(fieldControllerName.PHONE_NUMBER, formRequiredRules.phoneNumberExists);
+        } else {
+            clearErrors();
+            await handleUserSignUpOtp(miscMessage.SIGN_UP, navigation, false);
+        }
+    });
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}>
@@ -32,7 +45,7 @@ export const Register = () => {
             <Text style={[userAuthStyles.registerDescription, SDGenericStyles.fontFamilyBold]}>{placeHolderText.REGISTER_DESCRIPTION}</Text>
             <View style={userAuthStyles.registerButtonView}>
                 <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
-                    onPress={handleSubmit(() => handleUserSignUpOtp(miscMessage.SIGN_UP, navigation, false))}>
+                    onPress={handleSubmit(() => validateUserRegistered())}>
                     <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman]}>{actionButtonTextConstants.PROCEED}</Text>
                 </TouchableOpacity>
             </View>

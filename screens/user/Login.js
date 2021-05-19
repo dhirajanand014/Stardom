@@ -20,7 +20,8 @@ import { CategoryContext } from '../../App';
 export const Login = () => {
 
     const { handleSubmit, control, formState } = useForm();
-    const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
+
+    const { loggedInUser, setLoggedInUser, setLoader } = useContext(CategoryContext);
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
 
     const route = useRoute();
@@ -35,9 +36,11 @@ export const Login = () => {
     };
 
     const onSubmit = async data => {
+        setLoader(true);
         const responseData = await handleUserLogin(data, loggedInUser, setLoggedInUser, messaging);
         if (responseData) {
             showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
+            setLoader(false);
             if (isIntermediateLogin) {
                 navigation.goBack();
             } else {

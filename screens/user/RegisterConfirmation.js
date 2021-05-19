@@ -15,7 +15,8 @@ import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
 import { useNavigation } from '@react-navigation/core';
 import {
     focusOnInputIfFormInvalid, handleUserRegistration,
-    resetTokens, showSnackBar, saveRegistrationStatus, checkUserIdAvailability
+    resetTokens, showSnackBar, saveRegistrationStatus,
+    validateUserAction
 } from '../../helper/Helper';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { CategoryContext } from '../../App';
@@ -39,7 +40,7 @@ export const RegistrationConfirmation = () => {
 
     const validateUserId = useCallback(async () => {
         if (userIdValue) {
-            const responseData = await checkUserIdAvailability(userIdValue);
+            const responseData = await validateUserAction(fieldControllerName.USER_ID, userIdValue);
             if (responseData.availability) {
                 isUserIdAvailable.current = true;
                 clearErrors(fieldControllerName.USER_ID);
@@ -71,7 +72,7 @@ export const RegistrationConfirmation = () => {
         if (data.confirmSecret !== data.secret) {
             setError(fieldControllerName.CONFIRM_SECRET, formRequiredRules.confirmPasswordRule);
         } else if (data.confirmSecret === data.secret) {
-            const responseData = await checkUserIdAvailability(data.userId);
+            const responseData = await validateUserAction(fieldControllerName.USER_ID, data.userId);
             if (responseData.availability) {
                 isUserIdAvailable.current = true;
                 clearErrors(fieldControllerName.USER_ID);

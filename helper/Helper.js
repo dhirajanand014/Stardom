@@ -875,7 +875,7 @@ export const getSignUpParams = (random6Digit, isFrom) => {
     return returnValue;
 }
 
-export const handleUserLogin = async (data, loggedInUser, setLoggedInUser, messaging) => {
+export const handleUserLogin = async (data, loggedInUser, setLoggedInUser) => {
     try {
         const loginRequest = {
             [requestConstants.PHONE_NUMBER]: data.phoneNumber,
@@ -900,7 +900,7 @@ export const handleUserLogin = async (data, loggedInUser, setLoggedInUser, messa
             return responseData;
         }
     } catch (error) {
-        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        const responseData = processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
     }
     return false;
 }
@@ -1498,13 +1498,24 @@ export const logoutUser = async (token, loggedInUser, setLoggedInUser) => {
     }
 }
 
-export const checkUserIdAvailability = async (value) => {
+export const validateUserAction = async (action, value) => {
     try {
-        const url = `${urlConstants.checkAvailability}${stringConstants.SLASH}${value}`;
+        let actionValue;
+
+        if (action == fieldControllerName.USER_ID) {
+            actionValue = requestConstants.USER_ID;
+        } else if (action == fieldControllerName.PHONE_NUMBER) {
+            actionValue = requestConstants.PHONE_NUMBER
+        }
+
+        const url = `${urlConstants.validateUser}${stringConstants.SLASH}${actionValue}${stringConstants.SLASH}${value}`;
         const response = await axiosGetWithHeaders(url);
         return processResponseData(response);
     } catch (error) {
+        const responseMessage = fieldControllerName.PHONE_NUMBER && errorMessages.COULD_NOT_VALIDATE_PHONE_NUMBER ||
+            errorMessages.COULD_NOT_VALIDATE_USER_ID;
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(responseMessage, false);
     }
 }
 export const isValidURL = (str) => {

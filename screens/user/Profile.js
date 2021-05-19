@@ -23,7 +23,7 @@ export const Profile = () => {
     const profile = route.params?.profile;
 
     // variables
-    const snapPoints = useMemo(() => ['12%', '100%'], []);
+    const snapPoints = useMemo(() => [numericConstants.TWELVE_PCNT, numericConstants.HUNDRED_PCNT], jsonConstants.EMPTY);
 
     const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail } = useContext(CategoryContext);
 
