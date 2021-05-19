@@ -310,10 +310,6 @@ export const formRequiredRules = {
         type: `mismatch`,
         message: `User ID already in use! Please try another ID`
     },
-    phoneNumberExists: {
-        type: `mismatch`,
-        message: `Phone number is aleady registered`
-    },
     verifyUserInputRule: {
         required: {
             value: true,
@@ -509,6 +505,7 @@ export const errorMessages = {
     FAILED_TO_UPDATE_REGISTRATION_DETAILS: `Failed to update Registration Details`,
     CANNOT_REGISITER_USER: `Could not register user`,
     COULD_NOT_REGISTER_USER: `Could not register user`,
+    NUMBER_ALREADY_REGISTERED_LOGIN: `User has been aleady registered. Please login`,
     COULD_NOT_SHARE_IMAGE: `Cannot share image`,
     COULD_NOT_RESET_KEYCHAIN_VALUES: `Could not reset keychain values`,
     COULD_NOT_FETCH_ALL_POSTS: `Could not fetch all posts`,

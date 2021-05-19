@@ -6,11 +6,11 @@ import {
     fieldControllerName, formRequiredRules,
     stringConstants, numericConstants, keyBoardTypeConst,
     placeHolderText, isAndroid, actionButtonTextConstants,
-    miscMessage, modalTextConstants, screens
+    miscMessage, modalTextConstants, screens, errorMessages
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { useNavigation } from '@react-navigation/core';
-import { handleUserSignUpOtp, validateUserAction } from '../../helper/Helper';
+import { handleUserSignUpOtp, showSnackBar, validateUserAction } from '../../helper/Helper';
 import { PhoneIcon } from '../../components/icons/PhoneIcon';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { CategoryContext } from '../../App';
@@ -18,7 +18,7 @@ export const Register = () => {
 
     const { signUpDetails, setSignUpDetails } = useContext(CategoryContext);
 
-    const { control, formState, handleSubmit, getValues, setError, clearErrors } = useForm();
+    const { control, formState, handleSubmit, getValues } = useForm();
     const navigation = useNavigation();
 
 
@@ -26,9 +26,9 @@ export const Register = () => {
         const phoneNumber = getValues(fieldControllerName.PHONE_NUMBER);
         const response = await validateUserAction(fieldControllerName.PHONE_NUMBER, phoneNumber);
         if (response) {
-            setError(fieldControllerName.PHONE_NUMBER, formRequiredRules.phoneNumberExists);
+            showSnackBar(errorMessages.NUMBER_ALREADY_REGISTERED_LOGIN, false);
+            navigation.navigate(screens.LOGIN);
         } else {
-            clearErrors();
             await handleUserSignUpOtp(miscMessage.SIGN_UP, navigation, false);
         }
     });
