@@ -7,7 +7,7 @@ import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
 import { ErrorModal } from '../components/modals/ErrorModal';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
-    actionButtonTextConstants, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
+    actionButtonTextConstants, alertTextMessages, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, screens, stringConstants
 } from '../constants/Constants';
 import { prepareSDOMMenu, fetchProfilePostsCounts, logoutUser, fetchUpdateLoggedInUserProfile } from '../helper/Helper';
@@ -19,7 +19,7 @@ export const SDUserMenus = () => {
     const navigation = useNavigation();
     const isFocused = useIsFocused();
 
-    const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, loader, setLoader } = useContext(CategoryContext);
 
     const [profileMenu, setProfileMenu] = useState({
         userMenus: jsonConstants.EMPTY,
@@ -39,6 +39,7 @@ export const SDUserMenus = () => {
     });
 
     const handleMenuClickAction = useCallback(async (item) => {
+        setLoader({ ...loader, isLoading: true });
         switch (item.key) {
             case screens.USER_FOLLOWERS_FOLLOWING:
                 navigation.navigate(screens.USER_FOLLOWERS_FOLLOWING, { listFor: item.label });
@@ -54,6 +55,7 @@ export const SDUserMenus = () => {
             default:
                 break;
         }
+        setLoader({ ...loader, isLoading: false });
     });
 
     const filterOutLoginMenus = (menu, details) => {

@@ -59,8 +59,6 @@ export const Glance = ({ navigation }) => {
         onScroll: onPostScrollFunction,
     });
 
-    console.log(sdomDatastate);
-
     return (
         <View style={SDGenericStyles.fill}>
             {
@@ -102,7 +100,7 @@ export const Glance = ({ navigation }) => {
                     <Shimmer style={{ width: width, height: height }} duration={numericConstants.FIVE_HUNDRED} direction={miscMessage.UP} tilt={numericConstants.FORTY_FIVE}>
                         <View style={glancePostStyles.shimmerViewInit}>
                             <FastImage style={glancePostStyles.preloaderStyle} source={{
-                                uri: Image.resolveAssetSource(require(`../../assets/wallpiper-preloader.gif`)).uri,
+                                uri: Image.resolveAssetSource(require(`../../assets/stardom_loader.gif`)).uri,
                                 priority: FastImage.priority.normal
                             }} />
                         </View>

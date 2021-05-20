@@ -69,7 +69,11 @@ export default function App({ navigationRef }) {
 
   const [profiles, setProfiles] = useState(jsonConstants.EMPTY);
 
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState({
+    isLoading: false,
+    loadingText: stringConstants.EMPTY,
+    progressValue: numericConstants.ZERO
+  });
 
   useEffect(() => {
     (async () => {
@@ -92,7 +96,7 @@ export default function App({ navigationRef }) {
   const initialCategorySelection = navigationRef && navigationRef.initialCategorySelection || false;
   const postIdFromNotification = navigationRef && navigationRef.postIdFromNotification || false;
   const categoryIdFromNotification = navigationRef && navigationRef.categoryIdFromNotification || false;
-  console.log(signUpDetails.phoneNumber)
+
   return (
     <SDErrorBoundary>
       <CategoryContext.Provider value={{
@@ -105,10 +109,10 @@ export default function App({ navigationRef }) {
         <TourGuideProvider androidStatusBarVisible={true}
           backdropColor={navigationRef && navigationRef.initialCategorySelection == screens.INTRO && `rgba(145, 63, 146, 0.6)`}>
           <ScreenNavigator />
-          {
-            loader && <SDLoaderView loader={loader} />
-          }
         </TourGuideProvider>
+        {
+          loader && <SDLoaderView loader={loader} />
+        }
       </CategoryContext.Provider>
     </SDErrorBoundary>
   )

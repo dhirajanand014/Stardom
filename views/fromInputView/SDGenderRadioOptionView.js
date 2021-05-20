@@ -6,12 +6,12 @@ import { SDGenericStyles, userAuthStyles } from "../../styles/Styles"
 
 export const SDGenderRadioOptionView = props => {
     return (
-        <View style={SDGenericStyles.paddingTop10}>
+        <View style={SDGenericStyles.paddingTop5}>
             <Text style={[SDGenericStyles.fontFamilyBold, SDGenericStyles.placeHolderTextColor, SDGenericStyles.paddingHorizontal5, SDGenericStyles.ft18]}>
                 {placeHolderText.SELECT_GENDER}
             </Text>
             <View style={[SDGenericStyles.mv15]}>
-                <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingHorizontal5, SDGenericStyles.paddingTop10, SDGenericStyles.paddingBottom5]}>
+                <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingHorizontal5, SDGenericStyles.paddingTop5, SDGenericStyles.paddingBottom5]}>
                     <SDRadioOption {...props} value={fieldControllerName.GENDER_MALE} text={miscMessage.MALE_TEXT} />
                     <SDRadioOption {...props} value={fieldControllerName.GENDER_FEMALE} text={miscMessage.FEMALE_TEXT} />
                     <SDRadioOption {...props} value={fieldControllerName.RATHER_NOT_SAY} text={miscMessage.RATHER_NOT_SAY_TEXT} />

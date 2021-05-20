@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { FlatList, View } from "react-native";
 import {
+    alertTextMessages,
     jsonConstants, miscMessage,
     numericConstants, screens, stringConstants
 } from '../../constants/Constants';
@@ -17,12 +18,12 @@ import { CategoryContext } from '../../App';
 
 export const Posts = props => {
 
-    const { userPosts, setUserPosts } = useContext(CategoryContext);
+    const { userPosts, setUserPosts, loader, setLoader } = useContext(CategoryContext);
 
     const navigation = useNavigation();
 
     const bottomSheetRef = useRef(null);
-    const snapPoints = useMemo(() => [numericConstants.THREE_HUNDRED_THIRTY, numericConstants.ZERO],
+    const snapPoints = useMemo(() => [numericConstants.TWO_HUNDRED_NINETY, numericConstants.ZERO],
         jsonConstants.EMPTY);
 
     const bottomSheetRefCallback = node => {
@@ -32,18 +33,21 @@ export const Posts = props => {
     const fallValue = useSharedValue(numericConstants.ONE);
 
     useEffect(() => {
+        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_USERS_POSTS });
         fetchUserPosts(userPosts, setUserPosts);
+        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
     }, [!userPosts.length]);
 
     const postCallback = useCallback((action, item) => {
         if (action == miscMessage.CREATE) {
-            console.log(bottomSheetRef);
             bottomSheetRef?.current?.snapTo(numericConstants.ZERO);
             setAddPostStateValues(miscMessage.CREATE, userPosts, setUserPosts, stringConstants.EMPTY);
         } else if (action == miscMessage.UPDATE) {
+            setLoader({ ...loader, isLoading: true });
             setAddPostStateValues(miscMessage.UPDATE, userPosts, setUserPosts, item);
             navigation.navigate(screens.ADD_POST_DETAILS, { toAction: miscMessage.UPDATE, selectedItem: item });
         }
+        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
     })
 
     const postDetailsCallback = useCallback(() => {

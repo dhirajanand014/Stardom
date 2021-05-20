@@ -31,7 +31,7 @@ export const RegistrationOTP = props => {
     const { attempts } = props;
     let [attemptsRemaining, setAttemptsRemaining] = useState(attempts);
 
-    const { setLoader, signUpDetails, setSignUpDetails } = useContext(CategoryContext);
+    const { signUpDetails, setLoader, loader } = useContext(CategoryContext);
 
     const navigation = useNavigation();
     const [otpArray, setOtpArray] = useState(otpInputs);
@@ -98,11 +98,11 @@ export const RegistrationOTP = props => {
     // since useEffect use closure to cache variables data, we will not be able to get updated autoSubmitOtpTime value
     // as a solution we are using useRef by keeping its value always updated inside useEffect(componentDidUpdate)
     const autoSubmitOtpTimerIntervalCallback = async () => {
-        setLoader(true);
+        setLoader({ ...loader, isLoading: true });
         if (autoSubmitOtpTime <= numericConstants.ZERO) {
             clearInterval(autoSubmitOtpTimerInterval);
             await onSubmit();
-            setLoader(false);
+            setLoader({ ...loader, isLoading: true });
             setAutoSubmittingOtp(false);
         }
         setAutoSubmitOtpTime(autoSubmitOtpTime - numericConstants.ONE);
@@ -114,7 +114,7 @@ export const RegistrationOTP = props => {
     };
 
     const onSubmit = async () => {
-        // setLoader(true);
+        setLoader({ ...loader, isLoading: true });
         const otpString = otpArray.reduce((result, item) => { return `${result}${item}` }, stringConstants.EMPTY);
         const isValid = identifyOtpError(otpString, otpArray, setError, clearErrors);
         if (isValid) {
@@ -127,12 +127,13 @@ export const RegistrationOTP = props => {
         } else {
 
         }
-        //setLoader(false);
+        setLoader({ ...loader, isLoading: false });
     };
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
+            <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE ||
+                miscMessage.AUTO}>
                 <AuthHeaderText titleText={modalTextConstants.OTP_VERIFICATION} />
                 <View style={[userAuthStyles.otpFieldRows, SDGenericStyles.mt12]}>
                     {

@@ -1067,6 +1067,7 @@ const getKeyChainDetails = async (key) => {
 }
 
 export const axiosPostWithHeadersAndToken = async (url, data, token) => {
+
     return await axios.post(url, data, {
         headers: {
             [miscMessage.CONTENT_TYPE]: miscMessage.APPLICATION_JSON,
@@ -1075,13 +1076,15 @@ export const axiosPostWithHeadersAndToken = async (url, data, token) => {
     });
 }
 
-export const axiosPostUploadImageWithHeaders = async (url, data, token) => {
-    return await axios.post(url, data, {
+export const axiosPostUploadImageWithHeaders = async (url, data, token, uploadProgressCallback) => {
+    const config = {
+        onUploadProgress: (progressEvent) => { uploadProgressCallback(progressEvent) },
         headers: {
             [miscMessage.CONTENT_TYPE]: miscMessage.MULTIPART_FORM,
             [miscMessage.AUTHORIZATION]: `${miscMessage.BEARER}${stringConstants.SPACE}${token}`
         }
-    });
+    };
+    return await axios.post(url, data, config);
 }
 
 export const prepareSDOMMenu = () => {
@@ -1188,7 +1191,7 @@ export const fetchUserPosts = async (userPosts, setUserPosts) => {
             }
         }
     } catch (error) {
-        console.error(error);
+        console.error(errorMessages.COULD_NOT_FETCH_USERS_POSTS, error);
     }
 }
 
@@ -1214,23 +1217,26 @@ export const setAddPostStateValues = (action, userPosts, setUserPosts, item) => 
     setUserPosts({ ...userPosts });
 }
 
-export const cropImage = async (imagePath) => {
+export const cropImage = async (imagePath, loader, setLoader) => {
     try {
         return await ImagePicker.openCropper({
             path: imagePath, width: width, height: height, compressImageMaxWidth: width,
             compressImageMaxHeight: height, compressImageQuality: numericConstants.ONE, hideBottomControls: false,
             cropperStatusBarColor: colors.SDOM_TEXT_BOX, cropperActiveWidgetColor: colors.SDOM_YELLOW,
-            cropperToolbarWidgetColor: colors.SDOM_YELLOW, cropperToolbarColor: colors.SDOM_BLACK
+            cropperToolbarWidgetColor: colors.SDOM_YELLOW, cropperToolbarColor: colors.SDOM_BLACK,
+            loadingLabelText: alertTextMessages.CROPPING_IMAGE
         });
     } catch (error) {
         if (error.code && !error.code == miscMessage.USER_CANCELLED_CROP_CODE) {
             console.error(errorMessages.COULD_NOT_CROP_IMAGE, error);
             showSnackBar(errorMessages.COULD_NOT_CROP_IMAGE, false);
         }
+        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
     }
 }
 
-export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem) => {
+export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem, loader, setLoader,
+    uploadProgressCallback) => {
     try {
         const formData = new FormData();
         const categories = data.postCategories && data.postCategories.join() || stringConstants.EMPTY;
@@ -1250,14 +1256,16 @@ export const handleAddPostDetails = async (data, postImagePath, toAction, select
             formData.append(requestConstants.PROFILE_ID, data.postProfile);
             formData.append(requestConstants.POST_IMAGE, { uri: postImagePath, name: imageName, type: miscMessage.IMAGE_TYPE });
             const response = await axiosPostUploadImageWithHeaders(toAction == miscMessage.UPDATE && urlConstants.updatePost ||
-                urlConstants.addPost, formData, user.token);
+                urlConstants.addPost, formData, user.token, uploadProgressCallback);
             return processResponseData(response);
         }
         return responseStringData.NOT_LOGGED_IN;
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
-        showSnackBar(toAction == miscMessage.UPDATE && errorMessages.COULD_NOT_UPDATE_POST ||
-            errorMessages.COULD_NOT_UPLOAD_POST, false);
+        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setTimeout(() => showSnackBar(toAction == miscMessage.UPDATE && errorMessages.COULD_NOT_UPDATE_POST ||
+            errorMessages.COULD_NOT_UPLOAD_POST, false), numericConstants.THREE_HUNDRED)
+
     }
 }
 
@@ -1507,7 +1515,6 @@ export const validateUserAction = async (action, value) => {
         } else if (action == fieldControllerName.PHONE_NUMBER) {
             actionValue = requestConstants.PHONE_NUMBER
         }
-
         const url = `${urlConstants.validateUser}${stringConstants.SLASH}${actionValue}${stringConstants.SLASH}${value}`;
         const response = await axiosGetWithHeaders(url);
         return processResponseData(response);
@@ -1528,7 +1535,7 @@ export const isValidURL = (str) => {
     return !!pattern.test(str);
 }
 
-export const userPostAction = async (request, data, token) => {
+export const userPostAction = async (request, data, token, uploadProgressCallback) => {
     try {
         let requestJSON, url, response;
         switch (request) {
@@ -1549,7 +1556,7 @@ export const userPostAction = async (request, data, token) => {
                         numericConstants.ONE, data.imagePath.length);
                     formData.append(requestConstants.PROFILE_PICTURE, { uri: data.imagePath, name: imageName, type: miscMessage.IMAGE_TYPE });
                 }
-                response = await axiosPostUploadImageWithHeaders(url, formData, token);
+                response = await axiosPostUploadImageWithHeaders(url, formData, token, uploadProgressCallback);
                 break;
             case requestConstants.PRIVATE_ACCESS_ACTION:
                 url = `${urlConstants.userSaveAction}${stringConstants.SLASH}${requestConstants.PRIVATE_ACCESS_ACTION}`

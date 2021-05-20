@@ -4,12 +4,12 @@ import { FlatList, Text, TouchableOpacity, Image, SafeAreaView, View } from 'rea
 import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import {
-    actionButtonTextConstants, CAMERA_IMAGE_FILTERS,
+    actionButtonTextConstants, alertTextMessages, CAMERA_IMAGE_FILTERS,
     miscMessage, numericConstants, screens, stringConstants, width
 } from '../../constants/Constants';
 import { cropImage } from '../../helper/Helper';
 import { SDGenericStyles, cameraStyles, userAuthStyles } from '../../styles/Styles';
-export const SDCameraImagePreview = props => {
+export const SDCameraImagePreview = () => {
 
     const route = useRoute();
     const navigation = useNavigation();
@@ -17,10 +17,11 @@ export const SDCameraImagePreview = props => {
     const isFrom = route.params?.isFrom;
 
     const extractedUri = useRef(imageFilterURI);
-    const { userPosts, setUserPosts } = useContext(CategoryContext);
+    const { userPosts, setUserPosts, loader, setLoader } = useContext(CategoryContext);
 
     const proceedAction = async () => {
-        const croppedImage = await cropImage(extractedUri.current);
+        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_IMAGE });
+        const croppedImage = await cropImage(extractedUri.current, loader, setLoader);
         switch (isFrom) {
             case screens.EDIT_USER_PROFILE:
                 navigation.navigate(isFrom, { imageValue: croppedImage.path });
@@ -32,24 +33,36 @@ export const SDCameraImagePreview = props => {
                 userPosts.details.capturedImage = croppedImage.path;
                 userPosts.details.showBottomOptions = false;
                 setUserPosts({ ...userPosts });
-                navigation.navigate(screens.ADD_POST_DETAILS,
-                    isFrom == screens.EDIT_POST_DETAILS && { toAction: miscMessage.UPDATE });
+                if (isFrom == screens.EDIT_POST_DETAILS) {
+                    navigation.navigate(screens.ADD_POST_DETAILS, { toAction: miscMessage.UPDATE });
+                } else if (isFrom == screens.POSTS) {
+                    navigation.navigate(screens.ADD_POST_DETAILS, { toAction: miscMessage.CREATE });
+                } else {
+                    navigation.navigate(screens.ADD_POST_DETAILS);
+                }
                 break;
         }
+        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
     }
 
     const [selectedFilterIndex, setSelectedFilterIndex] = useState(numericConstants.ZERO);
 
     const SelectedFilterComponent = CAMERA_IMAGE_FILTERS[selectedFilterIndex].filterComponent;
 
-    const onExtractImage = ({ nativeEvent }) => { extractedUri.current = nativeEvent.uri; };
-    const onSelectFilter = selectedIndex => { setSelectedFilterIndex(selectedIndex); };
+    const onExtractImage = ({ nativeEvent }) => {
+        extractedUri.current = nativeEvent.uri;
+        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+    };
+    const onSelectFilter = selectedIndex => {
+        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_IMAGE });
+        setSelectedFilterIndex(selectedIndex);
+    };
 
     const renderFilterComponent = ({ item, index }) => {
         const FilterComponent = item.filterComponent;
         const image = (
             <Image style={[cameraStyles.filterSelector, SDGenericStyles.alignItemsEnd, SDGenericStyles.borderRadius5, SDGenericStyles.marginHorizontal10]}
-                resizeMode={FastImage.resizeMode.cover} source={{ uri: imageFilterURI }} />
+                resizeMode={FastImage.resizeMode.cover} source={{ uri: imageFilterURI }} loadingIndicatorSource={require(`../../assets/stardom_loader.gif`)} />
         );
         return (
             <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical10]}>
@@ -64,7 +77,7 @@ export const SDCameraImagePreview = props => {
         );
     };
     return (
-        <View style={SDGenericStyles.backGroundColorBlack}>
+        <View style={SDGenericStyles.backGroundColorBlack} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
             <SafeAreaView />
             <View>
                 {
@@ -88,6 +101,6 @@ export const SDCameraImagePreview = props => {
                         {actionButtonTextConstants.PROCEED}</Text>
                 </TouchableOpacity>
             </View>
-        </View >
+        </View>
     );
 };

@@ -377,6 +377,9 @@ export const SDGenericStyles = StyleSheet.create({
     backGroundColorBlack: {
         backgroundColor: `#1b1f2b`
     },
+    backGroundTextBoxGrey: {
+        backgroundColor: `#969696`
+    },
     backGroundColorGray: {
         backgroundColor: `#484a55`
     },
@@ -953,14 +956,10 @@ export const glancePostStyles = StyleSheet.create({
         right: 18
     },
     loaderModalView: {
-        margin: 100,
-        borderRadius: 20,
-        paddingTop: 20,
-        paddingEnd: 100,
-        paddingBottom: 20,
-        paddingStart: 100,
+        height: 120,
+        width: 100,
+        borderRadius: 10,
         width: width / 3,
-        height: 100,
         elevation: 5
     }
 });
@@ -1239,7 +1238,7 @@ export const userAuthStyles = StyleSheet.create({
     },
     formInputError: {
         color: '#ff4e4e',
-        marginBottom: 6,
+        marginBottom: 5,
         marginHorizontal: 15
     },
     formInputNoError: {

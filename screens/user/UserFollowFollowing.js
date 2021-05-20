@@ -35,7 +35,7 @@ export const UserFollowFollowing = () => {
 
     const AnimatedFlatlist = Animated.createAnimatedComponent(FlatList);
 
-    const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, loader, setLoader } = useContext(CategoryContext);
 
     const route = useRoute();
     const listFor = route.params?.listFor || stringConstants.EMPTY;
@@ -48,6 +48,7 @@ export const UserFollowFollowing = () => {
     }
 
     useEffect(async () => {
+        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_USER_DETAILS });
         const responseData = await fetchUserFollowersFollowing(listFor, loggedInUser.loginDetails.token);
         if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS) {
             filterPrivateAccessUsers(responseData);
@@ -55,11 +56,22 @@ export const UserFollowFollowing = () => {
             setSearchList(responseData);
         }
         setUserFollowerFollowing(responseData);
+        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
     }, jsonConstants.EMPTY);
 
+    const setLoading = (action, isLoading) => {
+        if (action == actionButtonTextConstants.APPROVE) {
+            setLoader({ ...loader, isLoading: isLoading, loadingText: alertTextMessages.APPROVING_VERIFICATION_REQUEST });
+        } else if (action == actionButtonTextConstants.REJECT) {
+            setLoader({ ...loader, isLoading: isLoading, loadingText: alertTextMessages.REJECTING_VERIFICATION_REQUEST });
+        }
+    }
+
     const actionCallBack = useCallback(async (id, action) => {
+        setLoading(action, true);
         const requestData = { [requestConstants.FOLLOWER_ID]: id, [requestConstants.APPROVAL_ACTION]: action };
         const requestJSON = JSON.stringify(requestData);
+
         const responseData = await userPostAction(requestConstants.PRIVATE_ACCESS_ACTION, requestJSON,
             loggedInUser.loginDetails.token);
 
@@ -73,6 +85,7 @@ export const UserFollowFollowing = () => {
                 alertTextMessages.YOU_HAVE_SUCCESSFULLY_REJECTED, true);
             setLoggedInUser({ ...loggedInUser });
         }
+        setLoading(action, false);
         navigation.goBack();
     })
 
@@ -81,8 +94,15 @@ export const UserFollowFollowing = () => {
             <View style={[SDGenericStyles.fill_half, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
                 <Text style={[SDGenericStyles.ft18, SDGenericStyles.fontFamilyRoman, SDGenericStyles.placeHolderTextColor,
                 SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop40]}>
-                    {listFor == miscMessage.FOLLOWERS_TEXT && alertTextMessages.YOU_HAVE_NO_FOLLOWERS
-                        || alertTextMessages.NO_ONE_FOLLOWING}
+                    {
+                        listFor == miscMessage.FOLLOWERS_TEXT && alertTextMessages.YOU_HAVE_NO_FOLLOWERS
+                    }
+                    {
+                        listFor == miscMessage.FOLLOWING_TEXT && alertTextMessages.NO_ONE_FOLLOWING
+                    }
+                    {
+                        listFor == fieldControllerName.SEARCH_USERS && alertTextMessages.NO_USERS_AVAILABLE
+                    }
                 </Text>
             </View>
         )

@@ -21,12 +21,12 @@ export const BottomSheetView = props => {
 
     const renderContent = () => {
         return (
-            <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical20, SDGenericStyles.alignItemsCenter]}>
+            <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical10, SDGenericStyles.alignItemsCenter]}>
                 <View style={SDGenericStyles.alignItemsCenter}>
-                    <Text style={[SDGenericStyles.ft24, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
+                    <Text style={[SDGenericStyles.ft20, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
                         {modalTextConstants.UPLOAD_PHOTO}
                     </Text>
-                    <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
+                    <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
                     SDGenericStyles.paddingVertical5]}>
                         {modalTextConstants.CHOOSE_BELOW_OPTIONS}
                     </Text>

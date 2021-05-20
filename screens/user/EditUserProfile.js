@@ -23,7 +23,7 @@ import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextIn
 export const EditUserProfile = () => {
     const { control, formState, handleSubmit, reset, watch } = useForm();
 
-    const { loggedInUser, setLoggedInUser } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, loader, setLoader } = useContext(CategoryContext);
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
     const route = useRoute();
     const imageValue = route.params?.imageValue;
@@ -36,7 +36,7 @@ export const EditUserProfile = () => {
         bio: stringConstants.EMPTY
     });
 
-    const snapPoints = useMemo(() => [numericConstants.THREE_HUNDRED_THIRTY, numericConstants.ZERO],
+    const snapPoints = useMemo(() => [numericConstants.TWO_HUNDRED_NINETY, numericConstants.ZERO],
         jsonConstants.EMPTY);
 
     const bottomSheetRef = useRef(null);
@@ -45,37 +45,53 @@ export const EditUserProfile = () => {
     };
 
     const fallValue = useSharedValue(numericConstants.ONE);
+    /**
+     * Notify progress upload to loader.
+     */
+    const uploadCallback = useCallback((progressEvent) => {
+        loader.isLoading = true;
+        loader.loadingText = alertTextMessages.UPDATING_DETAILS;
+        loader.progressValue = Math.round((progressEvent.loaded * numericConstants.ONE_HUNDRED) / progressEvent.total);
+        setLoader({ ...loader });
+    })
 
     const navigation = useNavigation();
 
     const onSubmit = async (data) => {
+        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.UPDATING_DETAILS });
         data.imagePath = profileDetails.profile_picture;
-        const registrationUpdated = await userPostAction(requestConstants.EDIT, data, loggedInUser.loginDetails.token);
+        const registrationUpdated = await userPostAction(requestConstants.EDIT, data, loggedInUser.loginDetails.token, uploadCallback);
         if (registrationUpdated) {
             await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
             const initialCategories = await redirectUserToGlance();
             showSnackBar(alertTextMessages.USER_DETAILS_ADDED_SUCCESSFULLY, true);
+            setLoader({ ...loader, loadingText: alertTextMessages.DETAILS_UPDATED_SUCCESSFULLY });
             navigation.navigate(initialCategories && screens.GLANCE || screens.CATEGORY);
         } else {
             await saveRegistrationStatus(phoneNumber, miscMessage.VERIFIED);
         }
+        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
     }
 
     useEffect(() => {
+        setLoader({ ...loader, isLoading: true });
         const details = JSON.parse(loggedInUser.loginDetails.details);
         if (imageValue) {
             details.profile_picture = imageValue;
         }
         setProfileDetails(details);
-        reset({ ...details })
+        reset({ ...details });
+
+        setLoader({ ...loader, isLoading: false });
     }, [jsonConstants.EMPTY, imageValue]);
 
     const bioInput = watch(fieldControllerName.ADD_USER_BIO);
-    const detailsCallback = useCallback(() => { bottomSheetRef?.current?.snapTo(numericConstants.ONE) });
+    const detailsCallback = useCallback(() => bottomSheetRef?.current?.snapTo(numericConstants.ONE));
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.alignItemsCenter]}>
+            <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.alignItemsCenter]}
+                pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
                 <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingTop20]}>
                     <FastImage source={{
                         uri: profileDetails.profile_picture, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable

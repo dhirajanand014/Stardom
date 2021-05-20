@@ -7,7 +7,6 @@ import { fieldControllerName, miscMessage, numericConstants } from "../../consta
 import { flatListItemStyles, SDGenericStyles, colors } from "../../styles/Styles";
 
 export const ProfileUserPosts = (item, index, hasPrivateAccess) => {
-    console.log(item)
     return (
         <View style={SDGenericStyles.backgroundColorWhite}>
             <TouchableOpacity activeOpacity={.7} style={flatListItemStyles.GridViewContainer}>
