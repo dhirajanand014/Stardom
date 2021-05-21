@@ -37,7 +37,7 @@
     "react-native-restart": "0.0.20",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^2.18.1",
-    "react-native-share": "^6.0.1",
+    "react-native-share": "^6.1.0",
     "react-native-shimmer": "^0.6.0",
     "react-native-snackbar": "^2.4.0",
     "react-native-svg": "^12.1.1",
