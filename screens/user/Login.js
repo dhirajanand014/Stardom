@@ -36,11 +36,10 @@ export const Login = () => {
     };
 
     const onSubmit = async data => {
-        setLoader(true);
+        setLoader({ ...loader, isLoading: true });
         const responseData = await handleUserLogin(data, loggedInUser, setLoggedInUser, messaging);
         if (responseData) {
             showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
-            setLoader(false);
             if (isIntermediateLogin) {
                 navigation.goBack();
             } else {
@@ -51,6 +50,7 @@ export const Login = () => {
         } else {
             showSnackBar(errorMessages.COULD_NOT_LOGIN_USER, false);
         }
+        setLoader({ ...loader, isLoading: false });
     }
 
     return (

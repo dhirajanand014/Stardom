@@ -79,7 +79,7 @@ export const Profile = () => {
                             </Text>
                             {
                                 profile.user_type == miscMessage.VERIFIED_AUTHOR &&
-                                <View >
+                                <View>
                                     <VerifiedAuthorBadgeIcon width={numericConstants.FIFTEEN} height={numericConstants.FIFTEEN} />
                                 </View>
                             }

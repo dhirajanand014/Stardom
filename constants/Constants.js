@@ -463,6 +463,7 @@ export const numericConstants = {
     ONE_HUNDRED_FIFTY: 150,
     ONE_HUNDER_EIGHTY: 180,
     TWO_HUNDRED: 200,
+    TWO_TWENTY_FIVE: 225,
     TWO_HUNDRED_FIFTY: 250,
     TWO_HUNDRED_NINETY: 290,
     THREE_HUNDRED: 300,
@@ -470,6 +471,8 @@ export const numericConstants = {
     FOUR_HUNDRED_ONE: 401,
     FIVE_HUNDRED: 500,
     THOUSAND: 1000,
+    THOUSAND_EIGHT_FIFTY: 1850,
+    TWO_THOUSAND: 2000,
     FIVE_THOUSAND: 5000
 }
 
@@ -567,14 +570,14 @@ export const errorMessages = {
     COULD_NOT_PARSE_LOGIN_TOKEN: `Could not parse login token`,
     COULD_NOT_LOGIN_USER: `Error logging in user`,
     COULD_NOT_REDIRECT_TO_GLANCE: `Could not redirect to glance`,
-    PLEASE_LOGIN_TO_CONTINUE: `Please login to continue`,
+    PLEASE_LOGIN_TO_CONTINUE: `Please login to continue, Click here to login`,
     ALREADY_FOLLOWING_USER: `User already following`,
     COULD_NOT_FETCH_USER_PROFILE_POST: `Could not fetch user profile posts`,
     FAILED_TO_LIST_FOLLOWERS: `Failed to show followers`,
     FAILED_TO_LIST_FOLLOWING: `Failed to show followings`,
     EXTERNAL_STORAGE_DENIED: `External Storage Permission Denited`,
     COULD_NOT_LOGOUT: `Could not logout`,
-    YOUR_SESSION_IS_EXPIRED_PLEASE_LOGIN: `Your session has been expired.Please login to continue`,
+    YOUR_SESSION_IS_EXPIRED_PLEASE_LOGIN: `Your session has been expired. Click here to login`,
     COULD_NOT_UPDATE_USER_BIO: `Could not update user bio`,
     COULD_NOT_SUBMIT_VERIFICATION: `Could not submit your request for verification.`,
     CANNOT_FETCH_CATEGORIES_FROM_STORAGE: 'Cannot fetch the categoryIds from the storage',
@@ -589,6 +592,7 @@ export const errorMessages = {
 
 export const responseStringData = {
     SUCCESS: `Success`,
+    ERROR: `Error`,
     UNSUCCESSFUL: `Unsuccessful`,
     ERROR: `Error`,
     BAD_REQUEST: `Bad Request`,
@@ -640,6 +644,7 @@ export const miscMessage = {
     CREATE: `create`,
     UPDATE: `update`,
     CREATE: `create`,
+    TOP: `top`,
     RELOAD_STARDOM: `Reload Stardom`,
     SELECT_CATEGORIES: `Select other categories`,
     SIGN_UP: `Sign Up`,
@@ -667,6 +672,8 @@ export const miscMessage = {
     WINDOW: `window`,
     EXCLUDE_TYPE: `com.apple.reminders.sharingextension`,
     LARGE: `large`,
+    SUCCESS: `success`,
+    DANGER: `danger`,
     COVER: `cover`,
     VERIFIED: `Verified`,
     LOADING: `Loading`,

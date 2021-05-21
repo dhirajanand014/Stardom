@@ -23,7 +23,7 @@ import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
 import { HeaderBackButton } from '@react-navigation/stack';
 import Share from 'react-native-share';
-import Snackbar from 'react-native-snackbar';
+import { showMessage } from "react-native-flash-message";
 import moment from 'moment';
 import RNFetchBlob from 'rn-fetch-blob';
 
@@ -1014,17 +1014,14 @@ export const processResponseData = (response, errorText) => {
     }
 }
 
-export const showSnackBar = (message, success, isLong, actionText, actionTextColor, actionCallback) => {
-    Snackbar.show({
-        text: message,
-        textColor: colors.SDOM_WHITE,
-        duration: isLong && Snackbar.LENGTH_LONG || Snackbar.LENGTH_SHORT,
-        backgroundColor: success && colors.GREEN || colors.RED,
-        action: {
-            text: actionText,
-            textColor: actionTextColor,
-            onPress: () => actionCallback()
-        },
+export const showSnackBar = (message, success, isLong, actionCallback) => {
+    showMessage({
+        message: success && responseStringData.SUCCESS || responseStringData.ERROR,
+        description: message,
+        icon: success && miscMessage.SUCCESS || miscMessage.DANGER,
+        type: success && miscMessage.SUCCESS || miscMessage.DANGER,
+        duration: isLong && numericConstants.THOUSAND_EIGHT_FIFTY || numericConstants.THOUSAND_EIGHT_FIFTY,
+        onPress: () => actionCallback()
     })
 }
 

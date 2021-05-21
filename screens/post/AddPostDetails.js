@@ -89,8 +89,8 @@ export const AddPostDetails = () => {
                 responseData.message == alertTextMessages.POST_UPDATED_SUCCESSFULLY) {
                 navigateUser(responseData);
             } else if (checkTokenStatus(responseData)) {
-                setTimeout(() => showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false, true, actionButtonTextConstants.LOGIN,
-                    colors.SDOM_YELLOW, loginCallback), numericConstants.THREE_HUNDRED);
+                setTimeout(() => showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false, true, loginCallback),
+                    numericConstants.THREE_HUNDRED);
                 setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
             }
         }
@@ -103,7 +103,7 @@ export const AddPostDetails = () => {
             navigateUser(responseData);
         } else if (checkTokenStatus(responseData)) {
             loginCallback();
-            showSnackBar(errorMessages.YOUR_SESSION_IS_EXPIRED_PLEASE_LOGIN, true, true);
+            showSnackBar(errorMessages.YOUR_SESSION_IS_EXPIRED_PLEASE_LOGIN, false, true, loginCallback);
         }
         setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
     }

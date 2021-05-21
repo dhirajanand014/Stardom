@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react';
 
 import {
   defaultProfilesValue, jsonConstants, numericConstants,
-  screens, stringConstants, requestConstants, PRIVATE_FOLLOW_UNFOLLOW
+  screens, stringConstants, requestConstants, PRIVATE_FOLLOW_UNFOLLOW, miscMessage
 } from './constants/Constants';
 import { fetchAndUpdateCategoryState, fetchUpdateLoggedInUserProfile, getAllProfiles } from './helper/Helper.js';
 import { TourGuideProvider } from 'rn-tourguide';
 import AddPostConstant from './constants/AddPostConstant.json';
 import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';
 import { ScreenNavigator } from '.';
+import FlashMessage from "react-native-flash-message";
 import { SDLoaderView } from './components/modals/SDLoaderView';
 
 export const CategoryContext = React.createContext();
@@ -113,6 +114,7 @@ export default function App({ navigationRef }) {
         {
           loader && <SDLoaderView loader={loader} />
         }
+        <FlashMessage position={miscMessage.TOP} />
       </CategoryContext.Provider>
     </SDErrorBoundary>
   )

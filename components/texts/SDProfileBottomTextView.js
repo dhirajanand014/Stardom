@@ -6,7 +6,7 @@ export const SDProfileBottomTextView = props => {
         <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingLeft5, SDGenericStyles.paddingRight5,
         SDGenericStyles.paddingTop10]}>
             <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
-            SDGenericStyles.fontFamilyBold, SDGenericStyles.ft25]}>
+            SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft20]}>
                 {props.count}
             </Text>
             <Text style={[SDGenericStyles.centerAlignedText, SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,

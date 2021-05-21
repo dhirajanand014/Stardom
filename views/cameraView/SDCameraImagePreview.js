@@ -91,7 +91,7 @@ export const SDCameraImagePreview = () => {
             </View>
             <View style={SDGenericStyles.elevation3}>
                 <FlatList data={CAMERA_IMAGE_FILTERS} keyExtractor={item => item.title} horizontal renderItem={renderFilterComponent}
-                    contentContainerStyle={[SDGenericStyles.paddingVertical10, { elevation: 8 }]} />
+                    contentContainerStyle={[SDGenericStyles.paddingVertical10, SDGenericStyles.elevation8]} />
             </View>
             <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.marginVertical2, SDGenericStyles.justifyContentCenter,
             SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingBottom10]}>

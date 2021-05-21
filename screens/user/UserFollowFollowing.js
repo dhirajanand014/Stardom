@@ -7,11 +7,7 @@ import {
     miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW,
     requestConstants, responseStringData, stringConstants
 } from '../../constants/Constants';
-import {
-    checkLoggedInUserMappedWithUserProfile, fetchUserFollowersFollowing,
-    handleUserFollowUnfollowAction,
-    handleUserPostAction, showSnackBar, userPostAction
-} from '../../helper/Helper';
+import { fetchUserFollowersFollowing, handleUserFollowUnfollowAction, showSnackBar, userPostAction } from '../../helper/Helper';
 import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import Animated, {
     Extrapolate, interpolate, useAnimatedScrollHandler,
@@ -39,7 +35,7 @@ export const UserFollowFollowing = () => {
 
     const AnimatedFlatlist = Animated.createAnimatedComponent(FlatList);
 
-    const { loggedInUser, setLoggedInUser, loader, setLoader, sdomDatastate, setSdomDatastate, profileDetail, setProfileDetail } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, loader, setLoader } = useContext(CategoryContext);
 
     const route = useRoute();
     const listFor = route.params?.listFor || stringConstants.EMPTY;
