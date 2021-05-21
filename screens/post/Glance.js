@@ -13,7 +13,7 @@ import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import Animated, { useAnimatedScrollHandler, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import Shimmer from 'react-native-shimmer';
-import Swiper from 'react-native-swiper-hooks';
+import Swiper from 'react-native-swiper';
 import { PostDetails } from './PostDetails';
 import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
@@ -64,15 +64,22 @@ export const Glance = ({ navigation }) => {
             {
                 sdomDatastate.posts && sdomDatastate.posts.length &&
                 <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorYellow]}>
-                    <Swiper ref={viewPagerRef} initIndex={postDetailsRef?.current?.postIndex} direction='column' showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
-                        width={width} height={height} boxBackgroundColor={SDGenericStyles.backgroundColorYellow} scrollToIndexWithAnimate={true} bounces={true} loop={true}
-                        autoplayDirection={false} autoplay={false} onScrollBeginDrag={() => {
+                    <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
+                        bounces={true} onMomentumScrollBegin={() => {
                             if (optionsState.isImageLoadError) {
                                 setImageLoadError(optionsState, setOptionsState, false);
                             }
                             postDetailsRef?.current?.setPostAnimationVisible(true);
                         }}
-                        onScrollEndDrag={(event) => onSwiperScrollEnd(event, postDetailsRef, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x)}>
+                        onMomentumScrollEnd={(event) => onSwiperScrollEnd(event, postDetailsRef, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x)}
+                        onScroll={(event) => {
+                            const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
+                            if (!(index == numericConstants.ZERO || index == sdomDatastate.posts.length - numericConstants.ONE)) {
+                                resetAnimatePostTextDetails(textPostDescriptionAnimationValue_translate_x,
+                                    textPostTypeAnimationValue_translate_x);
+                            }
+                            //onPostScrollFunction(event);
+                        }}>
                         {
                             sdomDatastate.posts.map((item, index) => {
                                 return <Animated.View key={index}>
