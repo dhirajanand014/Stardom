@@ -1,11 +1,15 @@
 
 import React from 'react';
-import Svg, { Circle, Path } from "react-native-svg";
-import { miscMessage, numericConstants } from '../../constants/Constants';
+import Svg, { G, Path } from "react-native-svg";
 export const VerifiedAuthorBadgeIcon = props => {
-    return (<Svg width={props.width} height={props.height} viewBox="0 0 24 24" fill={miscMessage.NONE} stroke={props.stroke}
-        strokeWidth={numericConstants.TWO} strokeLinecap="round" strokeLinejoin="round" className="prefix__feather prefix__feather-award">
-        <Circle cx={numericConstants.TWELVE} cy={numericConstants.EIGHT} r={numericConstants.SEVEN} />
-        <Path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12" />
+    return (<Svg width={props.width} height={props.height} viewBox="0 0 511.375 511.375">
+        <Path d="M511.375 255.688l-57.89-64.273 9.064-86.046-84.651-17.92-43.18-75.012-79.03 35.321-10.667 207.93 10.667 207.929 79.031 35.321 43.179-75.011 84.651-17.921-9.064-86.046z"
+            fill="#0ed678" />
+        <Path d="M176.656 12.437l-43.179 75.012-84.651 17.921 9.064 86.045L0 255.688l57.89 64.272-9.064 86.046 84.651 17.921 43.18 75.011 79.031-35.321V47.758z"
+            fill="#04eb84" />
+        <G>
+            <Path d="M362.878 199.702l-22.381-19.977-84.809 95.016-10.667 23.613 10.667 21.439z" fill="#f7f0eb" />
+            <Path d="M166.56 233.095l-21.212 21.213 89.185 89.186 21.155-23.701v-45.052l-22.393 25.088z" fill="#fffbf5" />
+        </G>
     </Svg>)
 }

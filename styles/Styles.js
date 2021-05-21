@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { colorConstants, isAndroid, isIOS, width, height } from '../constants/Constants';
+import { colorConstants, isAndroid, isIOS, width, height, numericConstants } from '../constants/Constants';
 
 export const SDGenericStyles = StyleSheet.create({
     fill: {
@@ -305,6 +305,12 @@ export const SDGenericStyles = StyleSheet.create({
     bottom8: {
         bottom: 8
     },
+    bottom18: {
+        bottom: 18
+    },
+    bottom30: {
+        bottom: 30
+    },
     paddingBottom5: {
         paddingBottom: 5
     },
@@ -466,11 +472,17 @@ export const SDGenericStyles = StyleSheet.create({
     height150: {
         height: 150
     },
+    bottom180: {
+        bottom: 180
+    },
     bottom200: {
         bottom: 200
     },
     bottom210: {
         bottom: 210
+    },
+    bottom220: {
+        bottom: 220
     },
     paddingRight5: {
         paddingRight: 5
@@ -484,6 +496,7 @@ export const glancePostStyles = StyleSheet.create({
     innerContainer: {
         flex: 1,
         position: 'absolute',
+        width: width,
         paddingLeft: 15,
         bottom: 0,
         justifyContent: 'flex-end',
@@ -1411,6 +1424,7 @@ export const colors = {
     DARK_GREY: '#555555',
     LIGHT_BLACK: '#212121',
     DARK_RED: '#c04d47',
+    TRANSPARENT: `transparent`,
     SEMI_TRANSPARENT: 'rgba(0,0,0,0.5)',
     LIGHT_RED: '#fef3ec',
     YELLOW: '#fec72e',

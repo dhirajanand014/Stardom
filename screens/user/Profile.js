@@ -2,6 +2,7 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from "react-native"
 import FastImage from 'react-native-fast-image';
+import LinearGradient from 'react-native-linear-gradient';
 import Animated from 'react-native-reanimated';
 import { CategoryContext } from '../../App';
 import { LockIcon } from '../../components/icons/LockIcon';
@@ -43,32 +44,31 @@ export const Profile = () => {
         <View style={[SDGenericStyles.fill]}>
             <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.normal }}
                 style={{ width: width, height: height }} />
-            <View>
-                <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10, SDGenericStyles.bottom220]}>
-                    <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.bottom8]}>
+            <LinearGradient colors={[colors.TRANSPARENT, colors.BLACK]} style={SDGenericStyles.bottom180}>
+                <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10]} >
+                    <Animated.View style={[SDGenericStyles.alignItemsStart]}>
                         <View style={SDGenericStyles.rowFlexDirection}>
-                            <Text style={[SDGenericStyles.ft25, SDGenericStyles.fontFamilyBold,
+                            <Text style={[SDGenericStyles.ft20, SDGenericStyles.fontFamilyBold,
                             SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite]}>
                                 {profile.name}
                             </Text>
                             {
                                 profile.user_type == miscMessage.VERIFIED_AUTHOR &&
-                                <View>
-                                    <VerifiedAuthorBadgeIcon width={numericConstants.TWENTY_FOUR} height={numericConstants.TWENTY_FOUR}
-                                        stroke={colors.GREEN} />
+                                <View >
+                                    <VerifiedAuthorBadgeIcon width={numericConstants.FIFTEEN} height={numericConstants.FIFTEEN} />
                                 </View>
                             }
                         </View>
                         <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter,
-                        SDGenericStyles.textCenterAlign, SDGenericStyles.mt12, SDGenericStyles.textColorWhite]}>{`@`}{profile.user_id}</Text>
+                        SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite]}>{`@`}{profile.user_id}</Text>
                     </Animated.View>
                     <Animated.View style={SDGenericStyles.alignItemsStart}>
-                        <Text style={[SDGenericStyles.textLeftAlign, SDGenericStyles.justifyContentCenter,
+                        <Text style={[SDGenericStyles.textLeftAlign, SDGenericStyles.justifyContentCenter, SDGenericStyles.mt12,
                         SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, { width: width / numericConstants.ONE_PT_NINE },
                         SDGenericStyles.textColorWhite]}>{profile.bio}</Text>
                     </Animated.View>
                 </View>
-                <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom210, SDGenericStyles.paddingRight5]}>
+                <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom18, SDGenericStyles.paddingRight5]}>
                     <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
                         <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.paddingVertical2,
                         SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle, !isDisabled && SDGenericStyles.backgroundColorYellow ||
@@ -115,7 +115,7 @@ export const Profile = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </LinearGradient>
             <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser}
                 setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} />
         </View>
