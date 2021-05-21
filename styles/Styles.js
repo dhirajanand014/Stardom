@@ -14,6 +14,9 @@ export const SDGenericStyles = StyleSheet.create({
     elevation3: {
         elevation: 3
     },
+    elevation8: {
+        elevation: 8
+    },
     right8: {
         right: 8
     },
@@ -239,6 +242,9 @@ export const SDGenericStyles = StyleSheet.create({
     padding5: {
         padding: 5
     },
+    padding8: {
+        padding: 8
+    },
     padding20: {
         padding: 20
     },
@@ -380,6 +386,9 @@ export const SDGenericStyles = StyleSheet.create({
     backGroundColorGreen: {
         backgroundColor: `green`
     },
+    backGroundColorRed: {
+        backgroundColor: `#ff4e4e`
+    },
     backGroundColorBlack: {
         backgroundColor: `#1b1f2b`
     },
@@ -471,6 +480,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     height150: {
         height: 150
+    },
+    bottom150: {
+        bottom: 150
     },
     bottom180: {
         bottom: 180

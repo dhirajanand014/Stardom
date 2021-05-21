@@ -31,37 +31,37 @@ export const Intro = () => {
                 <FastImage source={{
                     uri: Image.resolveAssetSource(require(`../assets/intro/wallpiper_intro_page_1.jpg`)).uri,
                     priority: FastImage.priority.normal
-                }} style={{ width: width, height: height }} resizeMode={miscMessage.STRETCH} />
+                }} style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.stretch} />
             </View>
             <View level={numericConstants.FIFTEEN} style={[introStyles.slide, { width: width, height: height }]}>
                 <FastImage source={{
                     uri: Image.resolveAssetSource(require(`../assets/intro/wallpiper_intro_page_2.jpg`)).uri,
                     priority: FastImage.priority.normal
-                }} style={{ width: width, height: height }} resizeMode={miscMessage.STRETCH} />
+                }} style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.stretch} />
             </View>
             <View level={numericConstants.TWENTY} style={[introStyles.slide, { width: width, height: height }]}>
                 <FastImage source={{
                     uri: Image.resolveAssetSource(require(`../assets/intro/wallpiper_intro_page_3.jpg`)).uri,
                     priority: FastImage.priority.normal
-                }} style={{ width: width, height: height }} resizeMode={miscMessage.STRETCH} />
+                }} style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.stretch} />
             </View>
             <View level={numericConstants.FIFTEEN} style={[introStyles.slide, { width: width, height: height }]}>
                 <FastImage source={{
                     uri: Image.resolveAssetSource(require(`../assets/intro/wallpiper_intro_page_4.jpg`)).uri,
                     priority: FastImage.priority.normal
-                }} style={{ width: width, height: height }} resizeMode={miscMessage.STRETCH} />
+                }} style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.stretch} />
             </View>
             <View level={numericConstants.TWENTY} style={[introStyles.slide, { width: width, height: height }]}>
                 <FastImage source={{
                     uri: Image.resolveAssetSource(require(`../assets/intro/wallpiper_intro_page_5.jpg`)).uri,
                     priority: FastImage.priority.normal
-                }} style={{ width: width, height: height }} resizeMode={miscMessage.STRETCH} />
+                }} style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.stretch} />
             </View>
             <View level={numericConstants.FIFTEEN} style={[introStyles.slide, { width: width, height: height }]}>
                 <FastImage source={{
                     uri: Image.resolveAssetSource(require(`../assets/intro/wallpiper_intro_page_6.jpg`)).uri,
                     priority: FastImage.priority.normal
-                }} style={{ width: width, height: height }} resizeMode={miscMessage.STRETCH} />
+                }} style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.stretch} />
             </View>
         </AppIntro>
     )

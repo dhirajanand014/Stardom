@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo } from 'react';
-import { Text, TouchableOpacity, View } from "react-native"
+import { Image, Text, TouchableOpacity, View, BackHandler } from "react-native"
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated from 'react-native-reanimated';
@@ -9,8 +9,8 @@ import { LockIcon } from '../../components/icons/LockIcon';
 import { UnlockIcon } from '../../components/icons/UnlockIcon';
 import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
 import {
-    actionButtonTextConstants, alertTextMessages, height, jsonConstants,
-    miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, width
+    actionButtonTextConstants, alertTextMessages, backHandlerConstants, height, jsonConstants,
+    miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, width
 } from '../../constants/Constants';
 import { checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile, handleUserPostAction } from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles } from "../../styles/Styles"
@@ -35,16 +35,41 @@ export const Profile = () => {
             await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
             setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
         })();
+        BackHandler.addEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
+        return () => {
+            BackHandler.removeEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
+        };
     }, jsonConstants.EMPTY);
+
+    const resetProfileState = () => {
+        profileDetail.userPosts = jsonConstants.EMPTY;
+        profileDetail.count = {
+            [requestConstants.FOLLOWERS_COUNT]: numericConstants.ZERO,
+            [requestConstants.FOLLOWING_COUNT]: numericConstants.ZERO,
+            [requestConstants.WALLPAPERS_COUNT]: numericConstants.ZERO,
+            [requestConstants.UPLOAD_COUNT]: numericConstants.ZERO,
+            [requestConstants.DOWNLOAD_COUNT]: numericConstants.ZERO,
+        };
+        profileDetail.isFollowing = false;
+        profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
+        profile.isSameUser = false;
+        setProfileDetail({ ...profileDetail });
+    }
 
     const isDisabled = profileDetail.isFollowing && (profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED ||
         profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.APPROVED);
 
     return (
         <View style={[SDGenericStyles.fill]}>
-            <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.normal }}
-                style={{ width: width, height: height }} />
-            <LinearGradient colors={[colors.TRANSPARENT, colors.BLACK]} style={SDGenericStyles.bottom180}>
+            {
+                profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
+                    style={{ width: width, height: height }} fallback /> || <FastImage source={{
+                        uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
+                        priority: FastImage.priority.high
+                    }} style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.center} />
+            }
+            <LinearGradient colors={[colors.TRANSPARENT, colors.BLACK]} style={profileDetail.isSameUser && SDGenericStyles.bottom150
+                || SDGenericStyles.bottom180}>
                 <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10]} >
                     <Animated.View style={[SDGenericStyles.alignItemsStart]}>
                         <View style={SDGenericStyles.rowFlexDirection}>
@@ -68,56 +93,59 @@ export const Profile = () => {
                         SDGenericStyles.textColorWhite]}>{profile.bio}</Text>
                     </Animated.View>
                 </View>
-                <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom18, SDGenericStyles.paddingRight5]}>
-                    <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
-                        <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.paddingVertical2,
-                        SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle, !isDisabled && SDGenericStyles.backgroundColorYellow ||
-                        SDGenericStyles.backGroundColorLightGrey]} onPress={async () => {
-                            setLoader({
-                                ...loader, isLoading: true, loadingText: profileDetail.isFollowing && alertTextMessages.UNFOLLOWING_USER ||
-                                    alertTextMessages.FOLLOWING_USER
-                            });
-                            await handleUserPostAction(profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW,
-                                profile, sdomDatastate, setSdomDatastate, loggedInUser, profileDetail, setProfileDetail, navigation, false);
-                            await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
-                            setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
-                        }} disabled={isDisabled}>
-                            <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
-                            SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16]}>
-                                {profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW}
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.paddingLeft5} onPress={async () => {
-                            setLoader({
-                                ...loader, isLoading: true, loadingText: profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED
-                                    && alertTextMessages.PRIVATE_FOLLOWING_USER || alertTextMessages.PRIVATE_UNFOLLOWING_USER
-                            });
-                            await handleUserPostAction(profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED &&
-                                actionButtonTextConstants.FOLLOW || actionButtonTextConstants.UNFOLLOW, profile, sdomDatastate, setSdomDatastate,
-                                loggedInUser, profileDetail, setProfileDetail, navigation, true);
-                            await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
-                            setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
-                        }}>
-                            {
-                                profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED &&
-                                (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
-                                    <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} fill={colors.WHITE} />
-                                </View>) ||
-                                profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED &&
-                                (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
-                                    <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} fill={colors.SDOM_YELLOW} />
-                                </View>) ||
-                                profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.APPROVED &&
-                                (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
-                                    <UnlockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} fill={colors.GREEN} />
-                                </View>)
-                            }
-                        </TouchableOpacity>
+                {
+                    !profileDetail.isSameUser &&
+                    <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom18, SDGenericStyles.paddingRight5]}>
+                        <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
+                            <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.paddingVertical2,
+                            SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle, !isDisabled && SDGenericStyles.backgroundColorYellow ||
+                            SDGenericStyles.backGroundColorLightGrey]} onPress={async () => {
+                                setLoader({
+                                    ...loader, isLoading: true, loadingText: profileDetail.isFollowing && alertTextMessages.UNFOLLOWING_USER ||
+                                        alertTextMessages.FOLLOWING_USER
+                                });
+                                await handleUserPostAction(profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW,
+                                    profile, sdomDatastate, setSdomDatastate, loggedInUser, profileDetail, setProfileDetail, navigation, false);
+                                await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
+                                setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+                            }} disabled={isDisabled}>
+                                <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,
+                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16]}>
+                                    {profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW}
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.paddingLeft5} onPress={async () => {
+                                setLoader({
+                                    ...loader, isLoading: true, loadingText: profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED
+                                        && alertTextMessages.PRIVATE_FOLLOWING_USER || alertTextMessages.PRIVATE_UNFOLLOWING_USER
+                                });
+                                await handleUserPostAction(profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED &&
+                                    actionButtonTextConstants.FOLLOW || actionButtonTextConstants.UNFOLLOW, profile, sdomDatastate, setSdomDatastate,
+                                    loggedInUser, profileDetail, setProfileDetail, navigation, true);
+                                await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
+                                setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+                            }}>
+                                {
+                                    profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED &&
+                                    (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
+                                        <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} fill={colors.WHITE} />
+                                    </View>) ||
+                                    profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED &&
+                                    (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
+                                        <LockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} fill={colors.SDOM_YELLOW} />
+                                    </View>) ||
+                                    profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.APPROVED &&
+                                    (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding5, SDGenericStyles.borderRadius20]}>
+                                        <UnlockIcon width={numericConstants.SIXTEEN} height={numericConstants.SIXTEEN} fill={colors.GREEN} />
+                                    </View>)
+                                }
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
+                }
             </LinearGradient>
             <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser}
                 setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} />
-        </View>
+        </View >
     )
 }

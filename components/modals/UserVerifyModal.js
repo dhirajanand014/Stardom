@@ -15,7 +15,7 @@ export const UserVerifyModal = props => {
     const { handleSubmit, control, formState, watch } = useForm();
 
     const verifyInputValue = watch(fieldControllerName.VERIFY_USER);
-    const { profileMenu, setProfileMenu, loggedInUser, setLoggedInUser, fetchUpdateLoggedInUserProfile } = props
+    const { profileMenu, setProfileMenu, loggedInUser, setLoggedInUser, fetchUpdateLoggedInUserProfile, loader, setLoader } = props
 
     return (
         <Modal animationType="slide" transparent visible={profileMenu.showSubmitVerifyModal} onRequestClose={() =>
@@ -46,7 +46,7 @@ export const UserVerifyModal = props => {
                             <View>
                                 <TouchableOpacity activeOpacity={.7} style={userMenuStyles.verifyUserSubmitButton}
                                     onPress={handleSubmit(async data => {
-                                        //setLoader(true);
+                                        setLoader({ ...loader, isLoading: true });
                                         const verifyResponse = await userPostAction(requestConstants.USER_VERIFY, data, loggedInUser.loginDetails.token);
                                         verifyResponse.message == responseStringData.SUCCESS &&
                                             setTimeout(() => showSnackBar(alertTextMessages.SUBMITTED_FOR_VERIFICATION, true), numericConstants.THREE_HUNDRED);
@@ -54,7 +54,7 @@ export const UserVerifyModal = props => {
                                             setTimeout(() => showSnackBar(errorMessages.COULD_NOT_SUBMIT_VERIFICATION, false), numericConstants.THREE_HUNDRED);
                                         setProfileMenu({ ...profileMenu, showSubmitVerifyModal: false });
                                         await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
-                                        //setLoader(false);
+                                        setLoader({ ...loader, isLoading: false });
                                     })}>
                                     <Text style={[SDGenericStyles.colorWhite, SDGenericStyles.centerAlignedText, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16,
                                     SDGenericStyles.colorBlack]}>

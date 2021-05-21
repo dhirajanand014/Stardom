@@ -158,26 +158,29 @@ export const setCurrentImageAsWallPaper = async (postUrl, postTitle) => {
     }
 }
 
-export const downloadCurrentImage = async (postUrl, postTitle, isDownload) => {
+export const downloadCurrentImage = async (postUrl, postTitle, isDownload, downloadCallback) => {
     try {
         let config = { fileCache: true };
         if (isDownload) {
             config.path = `${RNFetchBlob.fs.dirs.DownloadDir}${responseStringData.STARDOM_PATH}${stringConstants.SLASH}${postTitle}${responseStringData.DOWNLOAD_IMAGE_EXTENTION}`
         }
-        const response = await RNFetchBlob.config(config).fetch(requestConstants.GET, postUrl);
+        const response = await RNFetchBlob.config(config).fetch(requestConstants.GET, postUrl)
+            .progress({ interval: numericConstants.TWO_HUNDRED_FIFTY }, (progressEvent) => downloadCallback(progressEvent));
         return isDownload && processResponseData(response) || response;
     } catch (error) {
         console.error(errorMessages.COULD_NOT_DOWNLOAD_IMAGE, error);
     }
 }
 
-export const shareImage = async (post) => {
+export const shareImage = async (post, loader, setLoader, downloadCallback) => {
     const { postImage, postTitle } = post
     try {
-        const response = await downloadCurrentImage(postImage, postTitle, false);
+        setLoader({ ...loader, isLoading: true });
+        const response = await downloadCurrentImage(postImage, postTitle, false, downloadCallback);
         if (response) {
             const base64Image = await response.readFile(miscMessage.BASE64);
             const base64Data = `${miscMessage.BASE64_BLOB}${base64Image}`;
+            setLoader({ ...loader, isLoading: false });
             await Share.open({ url: base64Data, filename: postTitle, excludedActivityTypes: [miscMessage.EXCLUDE_TYPE] });
         } else {
             showSnackBar(errorMessages.COULD_NOT_SHARE_IMAGE, false);
@@ -197,7 +200,7 @@ export const getCategoryButtonType = async () => {
     }
 }
 
-export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate) => {
+export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate, loader, setLoader) => {
     try {
         return (
             Alert.alert(
@@ -209,8 +212,10 @@ export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate) 
                     },
                     {
                         text: permissionsButtons.OK, onPress: async () => {
+                            setLoader({ ...loader, isLoading: true });
                             await setCurrentImageAsWallPaper(item.postImage, item.postTitle);
                             await increaseAndSetPostCounts(item, sdomDatastate, setSdomDatastate, postCountTypes.POST_WALLPAPERS);
+                            setLoader({ ...loader, isLoading: false });
                             displaySuccessAlert();
                         }
                     }
@@ -236,7 +241,7 @@ export const displaySuccessAlert = () => {
         ));
 }
 
-export const downloadImageFromURL = async (item, sdomDatastate, setSdomDatastate) => {
+export const downloadImageFromURL = async (item, sdomDatastate, setSdomDatastate, loader, setLoader, downloadCallback) => {
     const write_granted = await accessAndGrantPermssionsToWallPiper(permissionMessages.READ_WRITE_EXTERNAL_STORAGE_TITLE,
         permissionMessages.READ_WRITE_EXTERNAL_STORAGE_MESSAGE, PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
 
@@ -244,8 +249,10 @@ export const downloadImageFromURL = async (item, sdomDatastate, setSdomDatastate
         permissionMessages.READ_WRITE_EXTERNAL_STORAGE_MESSAGE, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
     if (PermissionsAndroid.RESULTS.GRANTED == write_granted && PermissionsAndroid.RESULTS.GRANTED === read_granted) {
-        await downloadCurrentImage(item.postImage, item.postTitle, true);
+        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.DOWNLOADING_IMAGE });
+        await downloadCurrentImage(item.postImage, item.postTitle, true, downloadCallback);
         await increaseAndSetPostCounts(item, sdomDatastate, setSdomDatastate, postCountTypes.POST_DOWNLOADS);
+        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
     } else {
         showSnackBar(errorMessages.EXTERNAL_STORAGE_DENIED, false);
     }
@@ -607,8 +614,10 @@ const filterLoggedInUsersPosts = async (allPosts) => {
                         PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
                     return privateAccess == PRIVATE_FOLLOW_UNFOLLOW.APPROVED;
                 }
-                return true;
+                return post.postType == fieldControllerName.POST_TYPE_PUBLIC;
             });
+        } else {
+            allPosts = allPosts.filter(post => post.postType == fieldControllerName.POST_TYPE_PUBLIC);
         }
         return allPosts;
     } catch (error) {
@@ -1284,14 +1293,22 @@ export const handleUserFollowUnfollowAction = async (action, profileId, isPrivat
     try {
         const user = await getLoggedInUserDetails();
         if (user) {
-            const requestData = {
-                [requestConstants.FOLLOWING_ID]: profileId,
-                [requestConstants.TYPE]: isPrivate && miscMessage.POST_TYPE_PRIVATE_TEXT.toLowerCase() ||
-                    miscMessage.POST_TYPE_PUBLIC_TEXT.toLowerCase()
+            let url, requestData;
+            if (action == actionButtonTextConstants.REMOVE) {
+                const userDetails = JSON.parse(user.details);
+                requestData = {
+                    [requestConstants.ID]: profileId,
+                    [requestConstants.FOLLOWING_ID]: userDetails.id,
+                }
+                url = urlConstants.removeFollower;
+            } else {
+                requestData = {
+                    [requestConstants.FOLLOWING_ID]: profileId,
+                    [requestConstants.TYPE]: isPrivate && miscMessage.POST_TYPE_PRIVATE_TEXT.toLowerCase() ||
+                        miscMessage.POST_TYPE_PUBLIC_TEXT.toLowerCase()
+                }
+                url = action == actionButtonTextConstants.FOLLOW && urlConstants.userFollow || urlConstants.userUnFollow;
             }
-
-            const url = action == actionButtonTextConstants.FOLLOW && urlConstants.userFollow || urlConstants.userUnFollow;
-
             const response = await axiosPostWithHeadersAndToken(url, JSON.stringify(requestData), user.token);
             return processResponseData(response);
         }
@@ -1327,7 +1344,6 @@ export const updateProfileActionValueToState = async (responseData, action, prof
             const followerId = { [fieldControllerName.FOLLOWER_ID]: user.id };
             const followingId = { [fieldControllerName.FOLLOWING_ID]: profile.id };
             const responseDataMessage = responseData.message;
-
             switch (action) {
                 case actionButtonTextConstants.FOLLOW:
                     sdomDatastate.posts.map(selectedPost => {
@@ -1402,6 +1418,7 @@ export const updateProfileActionValueToState = async (responseData, action, prof
 export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUser, profileDetail, setProfileDetail) => {
     if (loggedInUser.loginDetails && loggedInUser.loginDetails.details) {
         const loggedInUserDetails = JSON.parse(loggedInUser.loginDetails.details);
+        profileDetail.isSameUser = loggedInUserDetails.id == profile.id;
         profileDetail.isFollowing = profile.followers.some(follower =>
             follower.follower_id == loggedInUserDetails.id);
         if (profileDetail.isFollowing) {
@@ -1409,8 +1426,8 @@ export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUs
                 following.follower_id == loggedInUserDetails.id).pvtaccess || PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
         }
     }
-    const counts = await fetchProfilePostsCounts(profile.id);
-    setProfileDetail({ ...profileDetail, count: counts });
+    profileDetail.count = await fetchProfilePostsCounts(profile.id);
+    setProfileDetail({ ...profileDetail });
 }
 
 export const fetchPostsOfUserProfile = async (profile, profileDetail, setProfileDetail, sdomDatastate) => {

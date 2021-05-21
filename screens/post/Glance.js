@@ -25,7 +25,7 @@ const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
 export const Glance = ({ navigation }) => {
 
     const { postIdFromNotification, categoryIdFromNotification, sdomDatastate, setSdomDatastate,
-        optionsState, setOptionsState, loggedInUser } = useContext(CategoryContext);
+        optionsState, setOptionsState, loggedInUser, loader, setLoader } = useContext(CategoryContext);
     const viewPagerRef = useRef(null);
     const postDetailsRef = useRef(null);
 
@@ -92,7 +92,7 @@ export const Glance = ({ navigation }) => {
                     </Swiper>
                     <PostDetails ref={postDetailsRef} posts={sdomDatastate.posts} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x}
                         width={width} height={height} optionsState={optionsState} setOptionsState={setOptionsState} navigation={navigation}
-                        sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} optionsState={optionsState}
+                        sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} optionsState={optionsState} loader={loader} setLoader={setLoader}
                         setOptionsState={setOptionsState} viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
                 </View> || sdomDatastate.posts && !sdomDatastate.posts.length &&
                 <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.CATEGORY_WITHOUT_POST}

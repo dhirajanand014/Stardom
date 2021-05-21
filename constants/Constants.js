@@ -84,6 +84,7 @@ export const urlConstants = {
     registerUser: `${BASE_URI}/auth/register`,
     userFollow: `${BASE_URI}/post/follow`,
     userUnFollow: `${BASE_URI}/post/unfollow`,
+    removeFollower: `${BASE_URI}/post/removefollower`,
     fetchAllProfiles: `${BASE_URI}/profile`,
     addPost: `${BASE_URI}/post/details/add`,
     updatePost: `${BASE_URI}/post/details/update`,
@@ -177,7 +178,8 @@ export const actionButtonTextConstants = {
     PRIVATE_FOLLOW: `Private Follow`,
     APPROVE: `Approve`,
     REJECT: `Reject`,
-    PUBLIC_FOLLOW: `Public Follow`
+    PUBLIC_FOLLOW: `Public Follow`,
+    REMOVE: `Remove`
 }
 
 export const formRequiredRules = {
@@ -456,6 +458,7 @@ export const numericConstants = {
     ONE_HUNDRED_FIFTY: 150,
     ONE_HUNDER_EIGHTY: 180,
     TWO_HUNDRED: 200,
+    TWO_HUNDRED_FIFTY: 250,
     TWO_HUNDRED_NINETY: 290,
     THREE_HUNDRED: 300,
     THREE_HUNDRED_THIRTY: 330,
@@ -474,9 +477,11 @@ export const alertTextMessages = {
     SKIP_SAVE_CATEGORIES: `Skip or save categories to view posts!`,
     USER_DETAILS_ADDED_SUCCESSFULLY: `User details added successfully`,
     GO_BACK_TO_POST: `Go back to posts Anytime !!`,
+    REMOVING_FOLLOWER: `Removing follower`,
     SUCCESSFULLY_REGISTERED: `Successfully Registered!`,
     ONLY_THREE_CATEGORIES: `Select only upto 3 categories`,
     SUCCESSFULLY_LOGGED_IN: `Login successful`,
+    DOWNLOADING_IMAGE: `Downloading image`,
     NO_USERS_AVAILABLE: `No Users available`,
     FETCHING_USER_PROFILE_DETAILS: `Fetching user profile details`,
     FOLLOWING_USER: `Following user`,
@@ -648,7 +653,6 @@ export const miscMessage = {
     RIGHT: `right`,
     TRANSPARENT: `transparent`,
     UP: `up`,
-    STRETCH: `stretch`,
     BACKSPACE: `Backspace`,
     BASE64: `base64`,
     BASE64_BLOB: `data: image / png; base64, `,

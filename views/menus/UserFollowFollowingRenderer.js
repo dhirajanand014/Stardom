@@ -24,22 +24,34 @@ export const UserFollowFollowingRenderer = (props) => {
                 <View style={SDGenericStyles.justifyItemsEnd}>
                     <View style={SDGenericStyles.paddingBottom10}>
                         <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorGreen, SDGenericStyles.paddingVertical5,
-                        SDGenericStyles.paddingHorizontal10, SDGenericStyles.borderRadius5]} activeOpacity={.7}
-                            onPress={async () => await props.actionCallBack(props.item.id, actionButtonTextConstants.APPROVE)}>
-                            <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]}>
+                        SDGenericStyles.paddingHorizontal10, SDGenericStyles.borderRadius5, , SDGenericStyles.elevation8]} activeOpacity={.7}
+                            onPress={async () => await props.actionCallBack(props.item.id, props.index, actionButtonTextConstants.APPROVE)}>
+                            <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite, , SDGenericStyles.textCenterAlign]}>
                                 {actionButtonTextConstants.APPROVE}
                             </Text>
                         </TouchableOpacity>
                     </View>
                     <View>
                         <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backgroundColorYellow, SDGenericStyles.paddingVertical5,
-                        SDGenericStyles.paddingHorizontal10, SDGenericStyles.borderRadius5, SDGenericStyles.marginBottom10]} activeOpacity={.7}
-                            onPress={async () => await props.actionCallBack(props.item.id, actionButtonTextConstants.REJECT)}>
-                            <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]}>
+                        SDGenericStyles.paddingHorizontal10, SDGenericStyles.borderRadius5, SDGenericStyles.marginBottom10, , SDGenericStyles.elevation8]}
+                            activeOpacity={.7} onPress={async () => await props.actionCallBack(props.item.id, props.index, actionButtonTextConstants.REJECT)}>
+                            <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite, , SDGenericStyles.textCenterAlign]}>
                                 {actionButtonTextConstants.REJECT}
                             </Text>
                         </TouchableOpacity>
                     </View>
+                </View>
+            }
+            {
+                props.listFor == miscMessage.FOLLOWERS_TEXT &&
+                <View style={SDGenericStyles.justifyContentCenter}>
+                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorRed, SDGenericStyles.justifyContentCenter,
+                    SDGenericStyles.paddingHorizontal10, SDGenericStyles.paddingVertical5, SDGenericStyles.borderRadius5, SDGenericStyles.elevation8]}
+                        activeOpacity={.7} onPress={async () => await props.actionCallBack(props.item.id, props.index, actionButtonTextConstants.REMOVE)}>
+                        <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite, SDGenericStyles.textCenterAlign]}>
+                            {actionButtonTextConstants.REMOVE}
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             }
         </Animated.View>)

@@ -43,7 +43,7 @@ export const SDLoaderView = props => {
                     }
                     {
                         props.loader.loadingText == alertTextMessages.UPDATING_DETAILS || props.loader.loadingText == alertTextMessages.ADDING_NEW_POST
-                        || props.loader.loadingText == alertTextMessages.UPDATING_POST_DETAILS &&
+                        || props.loader.loadingText == alertTextMessages.UPDATING_POST_DETAILS || props.loader.loadingText == alertTextMessages.DOWNLOADING_IMAGE &&
                         <View style={[{ width: numericConstants.ONE_HUNDRED, height: numericConstants.FIVE }, { backgroundColor }, SDGenericStyles.marginVertical10]}>
                             <Animated.View style={[progressStyle, { backgroundColor: foregroundColor }]} />
                         </View>

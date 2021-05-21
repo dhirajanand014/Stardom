@@ -7,7 +7,7 @@ import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
 import { ErrorModal } from '../components/modals/ErrorModal';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
-    actionButtonTextConstants, alertTextMessages, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
+    actionButtonTextConstants, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, screens, stringConstants
 } from '../constants/Constants';
 import { prepareSDOMMenu, fetchProfilePostsCounts, logoutUser, fetchUpdateLoggedInUserProfile } from '../helper/Helper';
@@ -167,7 +167,7 @@ export const SDUserMenus = () => {
                 </View>
             }
             <ErrorModal error={errorMod} setError={setErrorMod} />
-            <UserVerifyModal profileMenu={profileMenu} setProfileMenu={setProfileMenu} loggedInUser={loggedInUser}
+            <UserVerifyModal profileMenu={profileMenu} setProfileMenu={setProfileMenu} loggedInUser={loggedInUser} loader={loader} setLoader={setLoader}
                 setLoggedInUser={setLoggedInUser} fetchUpdateLoggedInUserProfile={fetchUpdateLoggedInUserProfile} />
         </View >
     )

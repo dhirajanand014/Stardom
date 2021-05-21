@@ -89,9 +89,9 @@ export const AddPostDetails = () => {
                 responseData.message == alertTextMessages.POST_UPDATED_SUCCESSFULLY) {
                 navigateUser(responseData);
             } else if (checkTokenStatus(responseData)) {
-                setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
                 setTimeout(() => showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false, true, actionButtonTextConstants.LOGIN,
                     colors.SDOM_YELLOW, loginCallback), numericConstants.THREE_HUNDRED);
+                setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
             }
         }
     }

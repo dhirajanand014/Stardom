@@ -7,7 +7,11 @@ import {
     miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW,
     requestConstants, responseStringData, stringConstants
 } from '../../constants/Constants';
-import { fetchUserFollowersFollowing, showSnackBar, userPostAction } from '../../helper/Helper';
+import {
+    checkLoggedInUserMappedWithUserProfile, fetchUserFollowersFollowing,
+    handleUserFollowUnfollowAction,
+    handleUserPostAction, showSnackBar, userPostAction
+} from '../../helper/Helper';
 import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import Animated, {
     Extrapolate, interpolate, useAnimatedScrollHandler,
@@ -35,7 +39,7 @@ export const UserFollowFollowing = () => {
 
     const AnimatedFlatlist = Animated.createAnimatedComponent(FlatList);
 
-    const { loggedInUser, setLoggedInUser, loader, setLoader } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, loader, setLoader, sdomDatastate, setSdomDatastate, profileDetail, setProfileDetail } = useContext(CategoryContext);
 
     const route = useRoute();
     const listFor = route.params?.listFor || stringConstants.EMPTY;
@@ -64,26 +68,45 @@ export const UserFollowFollowing = () => {
             setLoader({ ...loader, isLoading: isLoading, loadingText: alertTextMessages.APPROVING_VERIFICATION_REQUEST });
         } else if (action == actionButtonTextConstants.REJECT) {
             setLoader({ ...loader, isLoading: isLoading, loadingText: alertTextMessages.REJECTING_VERIFICATION_REQUEST });
+        } else if (action == actionButtonTextConstants.REMOVE) {
+            setLoader({ ...loader, isLoading: isLoading, loadingText: alertTextMessages.REMOVING_FOLLOWER });
         }
     }
 
-    const actionCallBack = useCallback(async (id, action) => {
+    const actionCallBack = useCallback(async (id, index, action) => {
         setLoading(action, true);
-        const requestData = { [requestConstants.FOLLOWER_ID]: id, [requestConstants.APPROVAL_ACTION]: action };
-        const requestJSON = JSON.stringify(requestData);
+        if (action == actionButtonTextConstants.REMOVE) {
+            const responseData = await handleUserFollowUnfollowAction(actionButtonTextConstants.REMOVE, id, false);
+            if (responseData && responseData.message.includes(responseStringData.SUCCESS)) {
+                const userDetails = JSON.parse(loggedInUser.loginDetails.details);
+                const followerIndex = userDetails.followers.findIndex(follower => follower.follower_id = id);
 
-        const responseData = await userPostAction(requestConstants.PRIVATE_ACCESS_ACTION, requestJSON,
-            loggedInUser.loginDetails.token);
+                userDetails.followers.splice(followerIndex, numericConstants.ONE);
+                userFollowerFollowing.users.splice(index, numericConstants.ONE);
 
-        if (responseData.message == responseStringData.SUCCESSFULLY_UPDATED) {
-            const userDetails = JSON.parse(loggedInUser.loginDetails.details);
-            userDetails.followers.filter(follower => follower.follower_id == id)
-                .map(follower => follower.pvtaccess = action == actionButtonTextConstants.APPROVE && PRIVATE_FOLLOW_UNFOLLOW.APPROVED ||
-                    PRIVATE_FOLLOW_UNFOLLOW.REJECTED);
-            loggedInUser.loginDetails.details = JSON.stringify(userDetails);
-            showSnackBar(action == actionButtonTextConstants.APPROVE && alertTextMessages.YOU_HAVE_SUCCESSFULLY_APPROVED ||
-                alertTextMessages.YOU_HAVE_SUCCESSFULLY_REJECTED, true);
-            setLoggedInUser({ ...loggedInUser });
+                loggedInUser.loginDetails.details = JSON.stringify(userDetails);
+
+                setLoggedInUser({ ...loggedInUser });
+                setUserFollowerFollowing({ ...userFollowerFollowing });
+            }
+        } else if (action == actionButtonTextConstants.APPROVE || action == actionButtonTextConstants.REJECT) {
+            const requestData = { [requestConstants.FOLLOWER_ID]: id, [requestConstants.APPROVAL_ACTION]: action };
+            const requestJSON = JSON.stringify(requestData);
+
+            const responseData = await userPostAction(requestConstants.PRIVATE_ACCESS_ACTION, requestJSON,
+                loggedInUser.loginDetails.token);
+            if (responseData.message == responseStringData.SUCCESSFULLY_UPDATED) {
+                const userDetails = JSON.parse(loggedInUser.loginDetails.details);
+                userDetails.followers.filter(follower => follower.follower_id == id)
+                    .map(follower => follower.pvtaccess = action == actionButtonTextConstants.APPROVE && PRIVATE_FOLLOW_UNFOLLOW.APPROVED ||
+                        PRIVATE_FOLLOW_UNFOLLOW.REJECTED);
+                loggedInUser.loginDetails.details = JSON.stringify(userDetails);
+                userFollowerFollowing.users.splice(index, numericConstants.ONE);
+                showSnackBar(action == actionButtonTextConstants.APPROVE && alertTextMessages.YOU_HAVE_SUCCESSFULLY_APPROVED ||
+                    alertTextMessages.YOU_HAVE_SUCCESSFULLY_REJECTED, true);
+                setLoggedInUser({ ...loggedInUser });
+                setUserFollowerFollowing({ ...userFollowerFollowing });
+            }
         }
         setLoading(action, false);
         navigation.goBack();
@@ -150,7 +173,7 @@ export const UserFollowFollowing = () => {
             }
             <AnimatedFlatlist data={listFor == fieldControllerName.SEARCH_USERS && searchList.users || userFollowerFollowing.users}
                 keyExtractor={(item) => item.key} key={`1_${numericConstants.ONE}`} renderItem={({ item, index }) => {
-                    return <RenderFollowingFollower item={item} scrollYValue={scrollYValue} index={index}
+                    return <RenderFollowingFollower item={item} scrollYValue={scrollYValue} index={index} listFor={listFor}
                         actionCallBack={actionCallBack} />
                 }} contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
                 ListEmptyComponent={emptyListMessage} onScroll={listViewScrollHandler} scrollEventThrottle={numericConstants.SIXTEEN} />

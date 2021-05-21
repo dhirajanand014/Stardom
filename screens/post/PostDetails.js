@@ -1,10 +1,10 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 import { Text, View, Image, Linking, TouchableOpacity, Switch } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
     stringConstants, postCountTypes, numericConstants, screens,
-    postitionStringConstants, colorConstants, permissionsButtons
+    postitionStringConstants, colorConstants, permissionsButtons, alertTextMessages
 } from '../../constants/Constants';
 import {
     postWallPaperAlert, increaseAndSetPostCounts,
@@ -24,7 +24,7 @@ const post_share = require(`../../assets/post_share.png`);
 export const PostDetails = forwardRef((props, ref) => {
 
     const { posts, textPostTypeAnimationValue, optionsState, setOptionsState, sdomDatastate, setSdomDatastate,
-        viewPagerRef, width, height, textPostDescriptionAnimationValue } = props;
+        viewPagerRef, width, height, textPostDescriptionAnimationValue, loader, setLoader } = props;
 
     const post_external_link = require('../../assets/post_external_link_icon.png');
 
@@ -61,6 +61,12 @@ export const PostDetails = forwardRef((props, ref) => {
         };
     });
 
+    const downloadCallback = useCallback((progressEvent) => {
+        loader.isLoading = true;
+        loader.loadingText = alertTextMessages.DOWNLOADING_IMAGE;
+        loader.progressValue = Math.round((progressEvent.loaded * numericConstants.ONE_HUNDRED) / progressEvent.total);
+        setLoader({ ...loader });
+    })
     const postDescriptionSpringStyle = useAnimatedStyle(() => {
         return {
             transform: [{
@@ -137,9 +143,14 @@ export const PostDetails = forwardRef((props, ref) => {
                     </View>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} hideLabelShadow={true} fixNativeFeedbackRadius={true}
-                    useNativeFeedback={!posts[postDetailsState.currentPostIndex].likeDisabled} onPress={async () => !posts[postDetailsState.currentPostIndex].likeDisabled &&
-                        await increaseAndSetPostCounts(posts[postDetailsState.currentPostIndex], sdomDatastate, setSdomDatastate,
-                            postCountTypes.POST_LIKES, postDetailsState, setPostDetailsState)}>
+                    useNativeFeedback={!posts[postDetailsState.currentPostIndex].likeDisabled} onPress={async () => {
+                        if (!posts[postDetailsState.currentPostIndex].likeDisabled) {
+                            setLoader({ ...loader, isLoading: true });
+                            await increaseAndSetPostCounts(posts[postDetailsState.currentPostIndex], sdomDatastate, setSdomDatastate,
+                                postCountTypes.POST_LIKES, postDetailsState, setPostDetailsState, loader, setLoader);
+                            setLoader({ ...loader, isLoading: false });
+                        }
+                    }}>
                     <View style={glancePostStyles.backgroundRoundColor} pointerEvents={posts[postDetailsState.currentPostIndex].likeDisabled &&
                         permissionsButtons.NONE || permissionsButtons.AUTO}>
                         <Image style={glancePostStyles.icon_post_like} source={posts[postDetailsState.currentPostIndex].likeDisabled &&
@@ -148,21 +159,21 @@ export const PostDetails = forwardRef((props, ref) => {
                     <Text style={glancePostStyles.icon_count_text}>{posts[postDetailsState.currentPostIndex].postLikes}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
-                    await postWallPaperAlert(posts[postDetailsState.currentPostIndex], sdomDatastate, setSdomDatastate)}>
+                    await postWallPaperAlert(posts[postDetailsState.currentPostIndex], sdomDatastate, setSdomDatastate, loader, setLoader)}>
                     <View style={glancePostStyles.backgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
                     </View>
                     <Text style={glancePostStyles.icon_count_text}>{posts[postDetailsState.currentPostIndex].postWallpapers}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
-                    await downloadImageFromURL(posts[postDetailsState.currentPostIndex], sdomDatastate, setSdomDatastate)}>
+                    await downloadImageFromURL(posts[postDetailsState.currentPostIndex], sdomDatastate, setSdomDatastate, loader, setLoader, downloadCallback)}>
                     <View style={glancePostStyles.backgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_download} />
                     </View>
                     <Text style={glancePostStyles.icon_count_text}>{posts[postDetailsState.currentPostIndex].postDownloads}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
-                    onPress={async () => await shareImage(posts[postDetailsState.currentPostIndex])}>
+                    onPress={async () => await shareImage(posts[postDetailsState.currentPostIndex], loader, setLoader, downloadCallback)}>
                     <View style={glancePostStyles.backgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_share} source={post_share} />
                     </View>
