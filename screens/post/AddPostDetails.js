@@ -166,11 +166,11 @@ export const AddPostDetails = () => {
                                 dropDownDefaultValue={profiles.length && profiles.find(role => role.value == numericConstants.ZERO).value || userPosts.details.postProfile} placeHolderText={placeHolderText.SELECT_A_PROFILE}
                                 extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical5]} globalTextStyle={[SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />
 
-                            <SDPostCategorySelector inputName={fieldControllerName.POST_CATEGORIES} formState={formState} maxLength={numericConstants.THREE} setError={setError}
-                                categories={categories} setCategories={setCategories} postCategories={postCategories} setValue={setValue} />
-
                             <SDPostTypeOptionsView inputName={fieldControllerName.POST_TYPE} control={control} rules={formRequiredRules.postTypeRule} formState={formState}
                                 defaultValue={userPosts.details.postType} checkValue={postValueType} />
+
+                            <SDPostCategorySelector inputName={fieldControllerName.POST_CATEGORIES} formState={formState} maxLength={numericConstants.THREE} setError={setError}
+                                categories={categories} setCategories={setCategories} postCategories={postCategories} setValue={setValue} />
 
                         </Animated.ScrollView>
                         <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentSpaceBetween,

@@ -62,7 +62,7 @@ export const SDCameraImagePreview = () => {
         const FilterComponent = item.filterComponent;
         const image = (
             <Image style={[cameraStyles.filterSelector, SDGenericStyles.alignItemsEnd, SDGenericStyles.borderRadius5, SDGenericStyles.marginHorizontal10]}
-                resizeMode={FastImage.resizeMode.cover} source={{ uri: imageFilterURI }} loadingIndicatorSource={require(`../../assets/stardom_loader.gif`)} />
+                resizeMode={FastImage.resizeMode.cover} source={{ uri: imageFilterURI }} />
         );
         return (
             <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical10]}>

@@ -39,7 +39,7 @@ export const RegistrationConfirmation = () => {
     const navigation = useNavigation();
 
     const validateUserId = useCallback(async () => {
-        if (userIdValue) {
+        if (userIdValue && !/\s/g.test(userIdValue)) {
             setLoader({ ...loader, isLoading: true });
             const responseData = await validateUserAction(fieldControllerName.USER_ID, userIdValue);
             if (responseData.availability) {
@@ -50,6 +50,8 @@ export const RegistrationConfirmation = () => {
                 setError(fieldControllerName.USER_ID, formRequiredRules.userIdAvailability);
             }
             setLoader({ ...loader, isLoading: false });
+        } else {
+            setError(fieldControllerName.USER_ID, formRequiredRules.userIdInvalidSpace);
         }
     });
 

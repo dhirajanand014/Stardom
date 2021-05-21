@@ -69,7 +69,7 @@ export const Profile = () => {
                     }} style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.center} />
             }
             <LinearGradient colors={[colors.TRANSPARENT, colors.BLACK]} style={profileDetail.isSameUser && SDGenericStyles.bottom150
-                || SDGenericStyles.bottom180}>
+                || SDGenericStyles.bottom200}>
                 <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10]} >
                     <Animated.View style={[SDGenericStyles.alignItemsStart]}>
                         <View style={SDGenericStyles.rowFlexDirection}>

@@ -231,7 +231,8 @@ export const formRequiredRules = {
         required: {
             value: true,
             message: `Please enter a user id`
-        }
+        },
+        validate: value => /\s/g.test(value) && `User ID must not have space` || true
     },
     emailRule: {
         required: {
@@ -311,6 +312,10 @@ export const formRequiredRules = {
     userIdAvailability: {
         type: `mismatch`,
         message: `User ID already in use! Please try another ID`
+    },
+    userIdInvalidSpace: {
+        type: `invalid`,
+        message: `User ID must not have space`
     },
     verifyUserInputRule: {
         required: {
