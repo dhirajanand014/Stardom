@@ -29,6 +29,9 @@ export const Glance = ({ navigation }) => {
     const viewPagerRef = useRef(null);
     const postDetailsRef = useRef(null);
 
+    //To be removed
+    const isProfileLinkClick = useRef(false);
+
     useEffect(() => {
         fetchPostsAndSaveToState(sdomDatastate, setSdomDatastate, optionsState, setOptionsState,
             categoryIdFromNotification, loggedInUser);
@@ -66,17 +69,21 @@ export const Glance = ({ navigation }) => {
                 <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorYellow]}>
                     <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
                         bounces={true} onMomentumScrollBegin={() => {
-                            if (optionsState.isImageLoadError) {
-                                setImageLoadError(optionsState, setOptionsState, false);
+                            if (!isProfileLinkClick?.current) {
+                                if (optionsState.isImageLoadError) {
+                                    setImageLoadError(optionsState, setOptionsState, false);
+                                }
+                                postDetailsRef?.current?.setPostAnimationVisible(true);
                             }
-                            postDetailsRef?.current?.setPostAnimationVisible(true);
                         }}
                         onMomentumScrollEnd={(event) => onSwiperScrollEnd(event, postDetailsRef, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x)}
                         onScroll={(event) => {
-                            const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
-                            if (!(index == numericConstants.ZERO || index == sdomDatastate.posts.length - numericConstants.ONE)) {
-                                resetAnimatePostTextDetails(textPostDescriptionAnimationValue_translate_x,
-                                    textPostTypeAnimationValue_translate_x);
+                            if (!isProfileLinkClick?.current) {
+                                const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
+                                if (!(index == numericConstants.ZERO || index == sdomDatastate.posts.length - numericConstants.ONE)) {
+                                    resetAnimatePostTextDetails(textPostDescriptionAnimationValue_translate_x,
+                                        textPostTypeAnimationValue_translate_x);
+                                }
                             }
                             //onPostScrollFunction(event);
                         }}>
@@ -91,7 +98,7 @@ export const Glance = ({ navigation }) => {
                             })}
                     </Swiper>
                     <PostDetails ref={postDetailsRef} posts={sdomDatastate.posts} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x}
-                        width={width} height={height} optionsState={optionsState} setOptionsState={setOptionsState} navigation={navigation}
+                        width={width} height={height} optionsState={optionsState} setOptionsState={setOptionsState} navigation={navigation} isProfileLinkClick={isProfileLinkClick}
                         sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} optionsState={optionsState} loader={loader} setLoader={setLoader}
                         setOptionsState={setOptionsState} viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
                 </View> || sdomDatastate.posts && !sdomDatastate.posts.length &&

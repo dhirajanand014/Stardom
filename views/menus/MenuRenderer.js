@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, TouchableNativeFeedback } from "react-native";
-import { miscMessage, screens } from '../../constants/Constants';
+import { fieldControllerName, miscMessage, screens } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 
 export const MenuRenderer = (item, index, profileMenu, handleMenuClickAction) => {
@@ -16,7 +16,8 @@ export const MenuRenderer = (item, index, profileMenu, handleMenuClickAction) =>
                     </View>
                     {
                         item.key == screens.USER_FOLLOWERS_FOLLOWING &&
-                        <View style={[userAuthStyles.menuRightCountView, SDGenericStyles.textBoxGray, SDGenericStyles.alignItemsEnd]}>
+                        <View style={[item.label != fieldControllerName.SEARCH_USERS && userAuthStyles.menuRightCountView, SDGenericStyles.textBoxGray,
+                        SDGenericStyles.alignItemsEnd]}>
                             {
                                 item.label == miscMessage.FOLLOWERS_TEXT &&
                                 <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16]}>

@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
     stringConstants, postCountTypes, numericConstants, screens,
-    postitionStringConstants, colorConstants, permissionsButtons, alertTextMessages
+    postitionStringConstants, colorConstants, permissionsButtons, alertTextMessages, miscMessage
 } from '../../constants/Constants';
 import {
     postWallPaperAlert, increaseAndSetPostCounts,
@@ -13,6 +13,7 @@ import {
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import ActionButton from '@logvinme/react-native-action-button';
 import LinearGradient from 'react-native-linear-gradient';
+import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
 
 const post_like = require(`../../assets/post_likes_heart_arrow_icon.png`);
 const post_like_selected = require(`../../assets/post_likes_heart_arrow_icon_selected.png`);
@@ -100,12 +101,24 @@ export const PostDetails = forwardRef((props, ref) => {
                                 SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
                                     {`by`}
                                 </Text>
-                                <TouchableOpacity activeOpacity={.7} onPress={() => props.navigation.navigate(screens.PROFILE, { profile: posts[postDetailsState.currentPostIndex].user })}>
+                                <TouchableOpacity activeOpacity={.7} onPress={() => {
+                                    props.isProfileLinkClick.current = true;
+                                    props.navigation.navigate(screens.PROFILE, {
+                                        profile: posts[postDetailsState.currentPostIndex].user,
+                                        isProfileLinkClick: props.isProfileLinkClick
+                                    })
+                                }}>
                                     <Text style={[posts[postDetailsState.currentPostIndex].user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
                                     SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
                                         {posts[postDetailsState.currentPostIndex].user.name && posts[postDetailsState.currentPostIndex].user.name}
                                     </Text>
                                 </TouchableOpacity>
+                                {
+                                    posts[postDetailsState.currentPostIndex].user.user_type == miscMessage.VERIFIED_AUTHOR &&
+                                    <View>
+                                        <VerifiedAuthorBadgeIcon width={numericConstants.TEN} height={numericConstants.TEN} />
+                                    </View>
+                                }
                             </View>
                             <View style={SDGenericStyles.marginTop8}>
                                 <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
