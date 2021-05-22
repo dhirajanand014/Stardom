@@ -6,13 +6,16 @@ import { LockIcon } from '../../components/icons/LockIcon';
 import { fieldControllerName, miscMessage, numericConstants } from "../../constants/Constants"
 import { flatListItemStyles, SDGenericStyles, colors } from "../../styles/Styles";
 
-export const ProfileUserPosts = (item, index, hasPrivateAccess) => {
+export const ProfileUserPosts = (item, index, hasPrivateAccess, isSameUser) => {
+
+    const allowPrivate = hasPrivateAccess && item.postType == fieldControllerName.POST_TYPE_PRIVATE;
+
     return (
         <View style={SDGenericStyles.backgroundColorWhite}>
             <TouchableOpacity activeOpacity={.7} style={flatListItemStyles.GridViewContainer}>
                 <View key={index} style={[flatListItemStyles.userProfileCardSurface]}>
                     {
-                        item.postType == fieldControllerName.POST_TYPE_PUBLIC &&
+                        (allowPrivate || item.postType == fieldControllerName.POST_TYPE_PUBLIC) &&
                         (
                             <FastImage source={{
                                 uri: item.postImage, priority: FastImage.priority.normal
@@ -24,25 +27,34 @@ export const ProfileUserPosts = (item, index, hasPrivateAccess) => {
                                 </View>
                             </FastImage>
                         )
-                        ||
-                        item.postType == fieldControllerName.POST_TYPE_PRIVATE &&
+                        || (!allowPrivate && item.postType == fieldControllerName.POST_TYPE_PRIVATE) &&
                         (
                             <ImageBackground resizeMode={FastImage.resizeMode.cover} source={{ uri: item.postImage }}
-                                style={flatListItemStyles.imageBackGround} blurRadius={numericConstants.TEN}>
+                                style={flatListItemStyles.imageBackGround} blurRadius={hasPrivateAccess && numericConstants.ZERO ||
+                                    numericConstants.TEN}>
                                 {
                                     !hasPrivateAccess &&
                                     <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorGray, SDGenericStyles.paddingTop30, SDGenericStyles.opacitypt6]}>
                                         <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
-                                            <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
-                                                <LockIcon width={numericConstants.THIRTY} height={numericConstants.THIRTY} stroke={colors.WHITE} />
-                                            </Shimmer>
+                                            {
+                                                !isSameUser &&
+                                                <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
+                                                    <LockIcon width={numericConstants.THIRTY} height={numericConstants.THIRTY} stroke={colors.WHITE} />
+                                                </Shimmer>
+                                            }
                                         </View>
                                         <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingHorizontal10]}>
                                             <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
-                                                <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
-                                                SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop10]}>
-                                                    {miscMessage.REQUEST_FOR_PRIVATE_ACCESS}
-                                                </Text>
+                                                {
+                                                    !isSameUser &&
+                                                    <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
+                                                    SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop10]}>
+                                                        {miscMessage.REQUEST_FOR_PRIVATE_ACCESS}
+                                                    </Text> || <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
+                                                    SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop40]}>
+                                                        {miscMessage.PRIVATE_POST}
+                                                    </Text>
+                                                }
                                             </Shimmer>
                                         </View>
                                     </View>

@@ -9,7 +9,7 @@ export const ProfilePosts = props => {
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
             <FlatList data={props.profileDetail.userPosts} numColumns={numericConstants.THREE} key={numericConstants.THREE}
-                keyExtractor={(item) => item.key} renderItem={({ item, index }) => ProfileUserPosts(item, index, props.loggedInUserHasPrivateAccess.current)} />
+                keyExtractor={(item) => item.key} renderItem={({ item, index }) => ProfileUserPosts(item, index, props.loggedInUserHasPrivateAccess, props.profileDetail.isSameUser)} />
             {
                 !props.profileDetail.isSameUser &&
                 <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom30]}>

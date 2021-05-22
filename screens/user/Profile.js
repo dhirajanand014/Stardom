@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Image, Text, TouchableOpacity, View, BackHandler } from "react-native"
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
@@ -20,8 +20,11 @@ export const Profile = () => {
 
     const navigation = useNavigation();
 
+    const [loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess] = useState(false);
+
     const route = useRoute();
     const profile = route.params?.profile;
+    const isProfileLinkClick = route.params?.isProfileLinkClick;
 
     // variables
     const snapPoints = useMemo(() => [numericConstants.TWELVE_PCNT, numericConstants.HUNDRED_PCNT], jsonConstants.EMPTY);
@@ -53,6 +56,8 @@ export const Profile = () => {
         profileDetail.isFollowing = false;
         profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
         profile.isSameUser = false;
+        setLoggedInUserHasPrivateAccess(false);
+        isProfileLinkClick.current = false;
         setProfileDetail({ ...profileDetail });
     }
 
@@ -145,7 +150,8 @@ export const Profile = () => {
                 }
             </LinearGradient>
             <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser}
-                setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} />
+                setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} loader={loader}
+                loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} setLoader={setLoader} />
         </View >
     )
 }

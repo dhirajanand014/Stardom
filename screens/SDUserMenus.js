@@ -92,8 +92,8 @@ export const SDUserMenus = () => {
                 profileMenu.profileImage = details.profile_picture;
                 profileMenu.profileName = details.name;
                 profileMenu.profileUserId = details.user_id;
-                profileMenu.followersCount = counts.followersCount;
-                profileMenu.followingCount = counts.followingCount;
+                profileMenu.followersCount = counts.followingCount;
+                profileMenu.followingCount = counts.followersCount;
             } else {
                 profileMenu.userMenus = prepareSDOMMenu().filter(menu => !menu.loggedIn);
                 profileMenu.followersCount = numericConstants.ZERO;

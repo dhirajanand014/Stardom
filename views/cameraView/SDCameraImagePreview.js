@@ -54,7 +54,8 @@ export const SDCameraImagePreview = () => {
         setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
     };
     const onSelectFilter = selectedIndex => {
-        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_IMAGE });
+        selectedFilterIndex != selectedIndex &&
+            setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_IMAGE });
         setSelectedFilterIndex(selectedIndex);
     };
 

@@ -1427,11 +1427,28 @@ export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUs
     setProfileDetail({ ...profileDetail });
 }
 
-export const fetchPostsOfUserProfile = async (profile, profileDetail, setProfileDetail, sdomDatastate) => {
-    try {//call API later
-        const userPosts = sdomDatastate && sdomDatastate.posts.filter(post => post.user.id == profile.id) || jsonConstants.EMPTY;
+export const fetchPostsOfUserProfile = async (profile, profileDetail, setProfileDetail, loggedInUser, actionCallBack) => {
+    try {
+        let userPosts = jsonConstants.EMPTY, responseData, response;
+        if (loggedInUser.isLoggedIn) {
+            const url = `${urlConstants.fetchPostsByUserId}${stringConstants.SLASH}${profile.id}`;
+            response = await axiosGetWithAuthorization(url, loggedInUser.loginDetails.token);
+            responseData = processResponseData(response);
+            if (responseData == responseStringData.TOKEN_INVALID || responseData == responseStringData.TOKEN_EXPIRED) {
+                showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false, actionCallBack);
+            } else {
+                userPosts = responseData.posts;
+            }
+        } else {
+            response = await axiosGetWithHeaders(urlConstants.fetchAllPosts);
+            responseData = processResponseData(response);
+            if (responseData && responseData.posts) {
+                userPosts = responseData.posts.filter(post => post.user.id == profile.id);
+            }
+        }
         setProfileDetail({ ...profileDetail, userPosts: userPosts });
     } catch (error) {
+        showSnackBar(errorMessages.COULD_NOT_FETCH_USER_PROFILE_POST, false);
         console.error(errorMessages.COULD_NOT_FETCH_USER_PROFILE_POST, error);
     }
 }
