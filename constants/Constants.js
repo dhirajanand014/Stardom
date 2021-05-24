@@ -424,6 +424,7 @@ export const numericConstants = {
     HUNDRED_PCNT: `100%`,
     MINUS_ONE: -1,
     ZEROPTFIVE: 0.5,
+    ZEROPTNINETY: 0.90,
     ZERO: 0,
     ONE: 1,
     ONE_PT_NINE: 1.9,
@@ -471,7 +472,9 @@ export const numericConstants = {
     FOUR_HUNDRED_ONE: 401,
     FIVE_HUNDRED: 500,
     THOUSAND: 1000,
+    MAX_RESOLUTION_WIDTH: 1080,
     THOUSAND_EIGHT_FIFTY: 1850,
+    MAX_RESOLUTION_HEIGHT: 1920,
     TWO_THOUSAND: 2000,
     FIVE_THOUSAND: 5000
 }

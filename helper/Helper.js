@@ -1226,8 +1226,8 @@ export const setAddPostStateValues = (action, userPosts, setUserPosts, item) => 
 export const cropImage = async (imagePath, loader, setLoader) => {
     try {
         return await ImagePicker.openCropper({
-            path: imagePath, width: width, height: height, compressImageMaxWidth: width,
-            compressImageMaxHeight: height, compressImageQuality: numericConstants.ONE, hideBottomControls: false,
+            path: imagePath, width: numericConstants.MAX_RESOLUTION_WIDTH, height: numericConstants.MAX_RESOLUTION_HEIGHT,
+            compressImageQuality: numericConstants.ZEROPTNINETY, hideBottomControls: false,
             cropperStatusBarColor: colors.SDOM_TEXT_BOX, cropperActiveWidgetColor: colors.SDOM_YELLOW,
             cropperToolbarWidgetColor: colors.SDOM_YELLOW, cropperToolbarColor: colors.SDOM_BLACK,
             loadingLabelText: alertTextMessages.CROPPING_IMAGE
