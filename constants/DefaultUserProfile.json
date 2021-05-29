@@ -1,0 +1,12 @@
+{
+    "id": -1,
+    "name": "",
+    "user_id": "",
+    "user_type": "Author",
+    "email": "",
+    "bio": "",
+    "phone_number": "",
+    "profile_image": "../../assets/no_image_available.png",
+    "followers": [],
+    "following": []
+}

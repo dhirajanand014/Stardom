@@ -12,6 +12,7 @@ import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';
 import { ScreenNavigator } from '.';
 import FlashMessage from "react-native-flash-message";
 import { SDLoaderView } from './components/modals/SDLoaderView';
+import { useRef } from 'react/cjs/react.development';
 
 export const CategoryContext = React.createContext();
 
@@ -21,8 +22,11 @@ export default function App({ navigationRef }) {
     isLoggedIn: false
   });
 
+  const currentPostIndexForProfileRef = useRef(numericConstants.ZERO);
+
   const [sdomDatastate, setSdomDatastate] = useState(jsonConstants.EMPTY);
   const [optionsState, setOptionsState] = useState({
+    currentPostIndex: numericConstants.ZERO,
     descriptionModal: false,
     reportAbuseModal: false,
     showSearch: false,
@@ -105,7 +109,8 @@ export default function App({ navigationRef }) {
         fetchCategories, initialCategorySelection, profiles, setLoader,
         postIdFromNotification, categoryIdFromNotification, loader,
         loggedInUser, setLoggedInUser, sdomDatastate, setSdomDatastate,
-        optionsState, setOptionsState, profileDetail, setProfileDetail
+        optionsState, setOptionsState, profileDetail, setProfileDetail,
+        currentPostIndexForProfileRef
       }}>
         <TourGuideProvider androidStatusBarVisible={true}
           backdropColor={navigationRef && navigationRef.initialCategorySelection == screens.INTRO && `rgba(145, 63, 146, 0.6)`}>

@@ -11,7 +11,7 @@ export const ProfileUserPosts = (item, index, hasPrivateAccess, isSameUser) => {
     const allowPrivate = hasPrivateAccess && item.postType == fieldControllerName.POST_TYPE_PRIVATE;
 
     return (
-        <View style={SDGenericStyles.backgroundColorWhite}>
+        <View key={index} style={SDGenericStyles.backgroundColorWhite}>
             <TouchableOpacity activeOpacity={.7} style={flatListItemStyles.GridViewContainer}>
                 <View key={index} style={[flatListItemStyles.userProfileCardSurface]}>
                     {

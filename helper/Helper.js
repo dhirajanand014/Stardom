@@ -498,7 +498,7 @@ export const animateFinishedPostTextDetails = (textPostDescriptionAnimationValue
     textPostTypeAnimationValue.value = withDelay(numericConstants.FIFTY, withSpring(numericConstants.ZERO, text_spring_config));
 }
 
-export const onSwiperScrollEnd = (event, postDetailsRef, textPostDescriptionAnimationValue, textPostTypeAnimationValue) => {
+export const onSwiperScrollEnd = (event, postDetailsRef, textPostDescriptionAnimationValue, textPostTypeAnimationValue, currentPostIndexForProfileRef) => {
     let index = numericConstants.ZERO;
     if (event.position || event.nativeEvent.position) {
         index = event.position - numericConstants.ONE || event.nativeEvent.position - numericConstants.ONE;
@@ -506,6 +506,7 @@ export const onSwiperScrollEnd = (event, postDetailsRef, textPostDescriptionAnim
         index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
     }
     postDetailsRef?.current?.setPostIndex(index);
+    currentPostIndexForProfileRef.current = index;
     animateFinishedPostTextDetails(textPostDescriptionAnimationValue, textPostTypeAnimationValue);
 }
 
