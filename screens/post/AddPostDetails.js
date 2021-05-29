@@ -18,6 +18,7 @@ import { checkTokenStatus, fetchCategoryData, handleAddPostDetails, handlePostDe
 import { colors, glancePostStyles, SDGenericStyles, userAuthStyles } from '../../styles/Styles'
 import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView'
 import { SDDropDownView } from '../../views/dropDownView/SDDropDownView'
+import Geolocation from '@react-native-community/geolocation';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput'
 import { SDPostTypeOptionsView } from '../../views/fromInputView/SDPostTypeOptionView'
 import { SDPostCategorySelector } from '../../views/imagePost/SDPostCategorySelector'
@@ -47,6 +48,7 @@ export const AddPostDetails = () => {
     const navigation = useNavigation();
 
     useEffect(() => {
+        Geolocation.getCurrentPosition(info => { console.log(info) });
         (async () => {
             setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_CATEGORIES });
             const postCategories = await fetchCategoryData();
@@ -160,11 +162,11 @@ export const AddPostDetails = () => {
                                 extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.height100, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite,
                                 SDGenericStyles.ft16, SDGenericStyles.textALignVerticalTop]} maxLength={numericConstants.TWO_HUNDRED} />
 
-                            <SDDropDownView inputName={fieldControllerName.POST_PROFILE} control={control} rules={formRequiredRules.profileRule} selectedLabelStyle={SDGenericStyles.textColorWhite}
+                            {/* <SDDropDownView inputName={fieldControllerName.POST_PROFILE} control={control} rules={formRequiredRules.profileRule} selectedLabelStyle={SDGenericStyles.textColorWhite}
                                 containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle} textContentType={keyBoardTypeConst.NONE}
                                 defaultValue={userPosts.details.postProfile} formState={formState} list={profiles.length && profiles.filter(role => role.value != numericConstants.MINUS_ONE) || jsonConstants.EMPTY}
                                 dropDownDefaultValue={profiles.length && profiles.find(role => role.value == numericConstants.ZERO).value || userPosts.details.postProfile} placeHolderText={placeHolderText.SELECT_A_PROFILE}
-                                extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical5]} globalTextStyle={[SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />
+                                extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical5]} globalTextStyle={[SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} /> */}
 
                             <SDPostTypeOptionsView inputName={fieldControllerName.POST_TYPE} control={control} rules={formRequiredRules.postTypeRule} formState={formState}
                                 defaultValue={userPosts.details.postType} checkValue={postValueType} />

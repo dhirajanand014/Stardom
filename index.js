@@ -40,7 +40,7 @@ export const TabNavigation = () => {
         <TabNavigator.Navigator initialRouteName={screens.GLANCE} tabBarOptions={tabBarOptions}>
             <TabNavigator.Screen name={screens.CAMERA} component={SDCameraView} />
             <TabNavigator.Screen name={screens.GLANCE} component={Glance} />
-            <TabNavigator.Screen name={screens.MENU} component={SDUserMenus} />
+            <TabNavigator.Screen name={screens.PROFILE} component={Profile} options={profileScreenOptions} />
         </TabNavigator.Navigator>
     )
 }
@@ -52,6 +52,7 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.SPLASH_SCREEN} component={SDSplashScreen} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.INTRO} component={Intro} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.GLANCE} component={TabNavigation} options={headerLessStackOptions} />
+                <Stack.Screen name={screens.MENU} component={SDUserMenus} />
                 <Stack.Screen name={screens.OTP_VERIFICATION} component={RegistrationOTP} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.REGISTRATION_DETAILS} component={RegistrationDetails} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.REGISTRATION_CONFIRMATION} component={RegistrationConfirmation} options={headerLessStackOptions} />
@@ -60,7 +61,6 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.ADD_POST_DETAILS} component={AddPostDetails} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.POSTS} component={Posts} options={authorizationHeader} />
                 <Stack.Screen name={screens.REGISTER} component={Register} options={headerLessStackOptions} />
-                <Stack.Screen name={screens.PROFILE} component={Profile} options={profileScreenOptions} />
                 <Stack.Screen name={screens.EDIT_USER_PROFILE} component={EditUserProfile} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.USER_FOLLOWERS_FOLLOWING} component={UserFollowFollowing} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.IMAGE_PREVIEW_FILTERS} component={SDCameraImagePreview} options={headerLessStackOptions} />

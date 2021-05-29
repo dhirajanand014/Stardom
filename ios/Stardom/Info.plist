@@ -39,6 +39,8 @@
 	<string>Stardom app requires camera access to capture photo.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location access is required to run the app.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location access is required to run the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Stardom app requires photo library screen.</string>
 	<key>UIBackgroundModes</key>

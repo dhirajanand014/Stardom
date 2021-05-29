@@ -1,5 +1,5 @@
-import { useNavigation, useRoute } from '@react-navigation/core';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useIsFocused, useNavigation } from '@react-navigation/core';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Image, Text, TouchableOpacity, View, BackHandler } from "react-native"
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
@@ -12,37 +12,44 @@ import {
     actionButtonTextConstants, alertTextMessages, backHandlerConstants, height, jsonConstants,
     miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, width
 } from '../../constants/Constants';
-import { checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile, handleUserPostAction } from '../../helper/Helper';
+import DefaultUserProfile from '../../constants/DefaultUserProfile.json';
+import {
+    checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile,
+    getCurrentPostUser, handleUserPostAction
+} from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles } from "../../styles/Styles"
 import { SDProfileBottomSheet } from '../../views/bottomSheet/SDProfileBottomSheet';
 
 export const Profile = () => {
 
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
+
+    const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail, loader, setLoader,
+        currentPostIndexForProfileRef } = useContext(CategoryContext);
 
     const [loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess] = useState(false);
 
-    const route = useRoute();
-    const profile = route.params?.profile;
-    const isProfileLinkClick = route.params?.isProfileLinkClick;
+    const postIndex = currentPostIndexForProfileRef.current || numericConstants.ZERO;
+    const profile = sdomDatastate.posts && sdomDatastate.posts[postIndex].user || DefaultUserProfile;
 
     // variables
     const snapPoints = useMemo(() => [numericConstants.TWELVE_PCNT, numericConstants.HUNDRED_PCNT], jsonConstants.EMPTY);
 
-    const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail, loader, setLoader } = useContext(CategoryContext);
-
     useEffect(() => {
         (async () => {
-            setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.FETCHING_USER_PROFILE_DETAILS });
-            await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
-            await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
-            setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+            if (isFocused) {
+                // setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.FETCHING_USER_PROFILE_DETAILS });
+                await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
+                //await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
+                //setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+            }
         })();
         BackHandler.addEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
         return () => {
             BackHandler.removeEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
         };
-    }, jsonConstants.EMPTY);
+    }, [isFocused]);
 
     const resetProfileState = () => {
         profileDetail.userPosts = jsonConstants.EMPTY;
@@ -57,7 +64,6 @@ export const Profile = () => {
         profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
         profile.isSameUser = false;
         setLoggedInUserHasPrivateAccess(false);
-        isProfileLinkClick.current = false;
         setProfileDetail({ ...profileDetail });
     }
 
@@ -67,7 +73,7 @@ export const Profile = () => {
     return (
         <View style={[SDGenericStyles.fill]}>
             {
-                profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
+                profile && profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
                     style={{ width: width, height: height }} fallback /> || <FastImage source={{
                         uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
                         priority: FastImage.priority.high
@@ -75,27 +81,28 @@ export const Profile = () => {
             }
             <LinearGradient colors={[colors.TRANSPARENT, colors.BLACK]} style={profileDetail.isSameUser && SDGenericStyles.bottom150
                 || SDGenericStyles.bottom200}>
-                <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10]} >
+                <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10]}>
                     <Animated.View style={[SDGenericStyles.alignItemsStart]}>
                         <View style={SDGenericStyles.rowFlexDirection}>
                             <Text style={[SDGenericStyles.ft20, SDGenericStyles.fontFamilyBold,
                             SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite]}>
-                                {profile.name}
+                                {profile && profile.name || "test"}
                             </Text>
                             {
-                                profile.user_type == miscMessage.VERIFIED_AUTHOR &&
+                                profile && profile.user_type == miscMessage.VERIFIED_AUTHOR &&
                                 <View>
                                     <VerifiedAuthorBadgeIcon width={numericConstants.FIFTEEN} height={numericConstants.FIFTEEN} />
-                                </View>
+                                </View> || <View />
                             }
                         </View>
                         <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter,
-                        SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite]}>{`@`}{profile.user_id}</Text>
+                        SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite]}>{`@`}{profile && profile.user_id || "htht"}
+                        </Text>
                     </Animated.View>
                     <Animated.View style={SDGenericStyles.alignItemsStart}>
                         <Text style={[SDGenericStyles.textLeftAlign, SDGenericStyles.justifyContentCenter, SDGenericStyles.mt12,
                         SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, { width: width / numericConstants.ONE_PT_NINE },
-                        SDGenericStyles.textColorWhite]}>{profile.bio}</Text>
+                        SDGenericStyles.textColorWhite]}>{profile && profile.bio || "fdfdf"}</Text>
                     </Animated.View>
                 </View>
                 {

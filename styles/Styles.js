@@ -735,6 +735,18 @@ export const glancePostStyles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
+    category_selection: {
+        alignItems: "flex-end",
+        position: "absolute",
+        zIndex: 100,
+        top: 10,
+        left: 5,
+        padding: 10
+    },
+    category_selection_image: {
+        width: 25,
+        height: 25
+    },
     modalHideText: {
         color: "white",
         fontFamily: 'wallpiper_roman_font',

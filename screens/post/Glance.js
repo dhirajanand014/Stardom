@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useContext } from 'react';
-import { View, Image, StatusBar, Dimensions } from 'react-native';
+import React, { useEffect, useRef, useContext, useMemo } from 'react';
+import { View, Image, StatusBar, Dimensions, TouchableOpacity } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
-    width, miscMessage, numericConstants, jsonConstants
+    width, miscMessage, numericConstants, jsonConstants, screens
 } from '../../constants/Constants';
 import {
     onSwiperScrollEnd, fetchPostsAndSaveToState,
@@ -19,18 +19,17 @@ import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import { SwipeItem } from '../../components/swiper/SwipeItem';
 import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
+import { TabActions } from '@react-navigation/routers';
 
+const category_selection = require('../../assets/category_selection_icon.png');
 const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
 
 export const Glance = ({ navigation }) => {
 
     const { postIdFromNotification, categoryIdFromNotification, sdomDatastate, setSdomDatastate,
-        optionsState, setOptionsState, loggedInUser, loader, setLoader } = useContext(CategoryContext);
+        optionsState, setOptionsState, loggedInUser, loader, setLoader, currentPostIndexForProfileRef } = useContext(CategoryContext);
     const viewPagerRef = useRef(null);
     const postDetailsRef = useRef(null);
-
-    //To be removed
-    const isProfileLinkClick = useRef(false);
 
     useEffect(() => {
         fetchPostsAndSaveToState(sdomDatastate, setSdomDatastate, optionsState, setOptionsState,
@@ -62,6 +61,11 @@ export const Glance = ({ navigation }) => {
         onScroll: onPostScrollFunction,
     });
 
+    const GlanceComponent = useMemo((postIdFromNotification, sdomDatastate, setSdomDatastate, optionsState, setOptionsState, loader,
+        setLoader, currentPostIndexForProfileRef) => {
+        return
+    }, [sdomDatastate]);
+
     return (
         <View style={SDGenericStyles.fill}>
             {
@@ -69,21 +73,18 @@ export const Glance = ({ navigation }) => {
                 <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorYellow]}>
                     <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
                         bounces={true} onMomentumScrollBegin={() => {
-                            if (!isProfileLinkClick?.current) {
-                                if (optionsState.isImageLoadError) {
-                                    setImageLoadError(optionsState, setOptionsState, false);
-                                }
-                                postDetailsRef?.current?.setPostAnimationVisible(true);
+                            if (optionsState.isImageLoadError) {
+                                setImageLoadError(optionsState, setOptionsState, false);
                             }
+                            postDetailsRef?.current?.setPostAnimationVisible(true);
                         }}
-                        onMomentumScrollEnd={(event) => onSwiperScrollEnd(event, postDetailsRef, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x)}
+                        onMomentumScrollEnd={(event) => onSwiperScrollEnd(event, postDetailsRef, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x,
+                            currentPostIndexForProfileRef)}
                         onScroll={(event) => {
-                            if (!isProfileLinkClick?.current) {
-                                const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
-                                if (!(index == numericConstants.ZERO || index == sdomDatastate.posts.length - numericConstants.ONE)) {
-                                    resetAnimatePostTextDetails(textPostDescriptionAnimationValue_translate_x,
-                                        textPostTypeAnimationValue_translate_x);
-                                }
+                            const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
+                            if (!(index == numericConstants.ZERO || index == sdomDatastate.posts.length - numericConstants.ONE)) {
+                                resetAnimatePostTextDetails(textPostDescriptionAnimationValue_translate_x,
+                                    textPostTypeAnimationValue_translate_x);
                             }
                             //onPostScrollFunction(event);
                         }}>
@@ -98,9 +99,9 @@ export const Glance = ({ navigation }) => {
                             })}
                     </Swiper>
                     <PostDetails ref={postDetailsRef} posts={sdomDatastate.posts} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x}
-                        width={width} height={height} optionsState={optionsState} setOptionsState={setOptionsState} navigation={navigation} isProfileLinkClick={isProfileLinkClick}
-                        sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} optionsState={optionsState} loader={loader} setLoader={setLoader}
-                        setOptionsState={setOptionsState} viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
+                        width={width} height={height} optionsState={optionsState} setOptionsState={setOptionsState} navigation={navigation}
+                        sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} loader={loader} setLoader={setLoader}
+                        viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
                 </View> || sdomDatastate.posts && !sdomDatastate.posts.length &&
                 <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.CATEGORY_WITHOUT_POST}
                     descriptionText={errorMessages.SELECT_OTHER_CATEGORIES} navigation={navigation} /> || <View>
@@ -114,9 +115,12 @@ export const Glance = ({ navigation }) => {
                     </Shimmer>
                 </View>
             }
+            <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => navigation.dispatch(TabActions.jumpTo(screens.PROFILE))}>
+                <Image source={category_selection} style={glancePostStyles.category_selection_image} />
+            </TouchableOpacity>
             <PostDescriptionModal optionsState={optionsState} setOptionsState={setOptionsState}
                 reportAbuseIcon={post_report_abuse} />
             <PostReportAbuseModal optionsState={optionsState} setOptionsState={setOptionsState} />
-        </View >
-    );
+        </View>
+    )
 }

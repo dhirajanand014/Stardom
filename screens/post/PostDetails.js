@@ -30,7 +30,7 @@ export const PostDetails = forwardRef((props, ref) => {
     const post_external_link = require('../../assets/post_external_link_icon.png');
 
     const [postDetailsState, setPostDetailsState] = useState({
-        currentPostIndex: 0,
+        currentPostIndex: numericConstants.ZERO,
         animationVisible: false,
         switchEnabled: true,
         newPostViewed: false,
@@ -102,10 +102,8 @@ export const PostDetails = forwardRef((props, ref) => {
                                     {`by`}
                                 </Text>
                                 <TouchableOpacity activeOpacity={.7} onPress={() => {
-                                    props.isProfileLinkClick.current = true;
                                     props.navigation.navigate(screens.PROFILE, {
-                                        profile: posts[postDetailsState.currentPostIndex].user,
-                                        isProfileLinkClick: props.isProfileLinkClick
+                                        profile: posts[postDetailsState.currentPostIndex].user
                                     })
                                 }}>
                                     <Text style={[posts[postDetailsState.currentPostIndex].user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
