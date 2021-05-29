@@ -2,18 +2,20 @@ import React, { } from 'react';
 import { actionButtonTextConstants, numericConstants } from "../../constants/Constants";
 import { handleUserPostAction } from "../../helper/Helper";
 import { ProfileUserPosts } from "../../views/profileView/ProfileUserPosts"
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler'
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 
 export const ProfilePosts = props => {
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
             <FlatList data={props.profileDetail.userPosts} numColumns={numericConstants.THREE}
-                keyExtractor={(item) => item.id} renderItem={({ item, index }) => ProfileUserPosts(item, index, props.loggedInUserHasPrivateAccess, props.profileDetail.isSameUser)} />
+                keyExtractor={(item) => item.id} renderItem={({ item, index }) => <ProfileUserPosts item={item} index={index}
+                    loggedInUserHasPrivateAccess={props.loggedInUserHasPrivateAccess} isSameUser={props.profileDetail.isSameUser} />} />
             {
                 !props.profileDetail.isSameUser &&
-                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom30]}>
-                    <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal20, SDGenericStyles.padding10, SDGenericStyles.borderWidth3, SDGenericStyles.borderColorBlack,
+                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom10, SDGenericStyles.paddingTop5, SDGenericStyles.elevation8]}>
+                    <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal20, SDGenericStyles.padding5, SDGenericStyles.borderWidth3, SDGenericStyles.borderColorBlack,
                     SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle, SDGenericStyles.backgroundColorYellow]} onPress={async () =>
                         await handleUserPostAction(props.profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW,
                             props.profile, props.sdomDatastate, props.setSdomDatastate, props.loggedInUser, props.profileDetail, props.setProfileDetail, props.navigation)}>

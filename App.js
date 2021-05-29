@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   defaultProfilesValue, jsonConstants, numericConstants,
@@ -94,6 +94,11 @@ export default function App({ navigationRef }) {
     })();
   }, jsonConstants.EMPTY);
 
+  const setLoaderCallback = useCallback((isLoading, loadingText, progressValue) => {
+    setLoader({
+      ...loader, isLoading: isLoading, loadingText: loadingText && loadingText || stringConstants.EMPTY, progressValue: progressValue
+    });
+  })
 
   const fetchCategories = (category, setCategory, categoryIdFromNotification) => {
     fetchAndUpdateCategoryState(category, setCategory, categoryIdFromNotification);
@@ -110,7 +115,7 @@ export default function App({ navigationRef }) {
         postIdFromNotification, categoryIdFromNotification, loader,
         loggedInUser, setLoggedInUser, sdomDatastate, setSdomDatastate,
         optionsState, setOptionsState, profileDetail, setProfileDetail,
-        currentPostIndexForProfileRef
+        currentPostIndexForProfileRef, setLoaderCallback
       }}>
         <TourGuideProvider androidStatusBarVisible={true}
           backdropColor={navigationRef && navigationRef.initialCategorySelection == screens.INTRO && `rgba(145, 63, 146, 0.6)`}>

@@ -172,15 +172,15 @@ export const downloadCurrentImage = async (postUrl, postTitle, isDownload, downl
     }
 }
 
-export const shareImage = async (post, loader, setLoader, downloadCallback) => {
+export const shareImage = async (post, setLoaderCallback, downloadCallback) => {
     const { postImage, postTitle } = post
     try {
-        setLoader({ ...loader, isLoading: true });
+        setLoaderCallback(true);
         const response = await downloadCurrentImage(postImage, postTitle, false, downloadCallback);
         if (response) {
             const base64Image = await response.readFile(miscMessage.BASE64);
             const base64Data = `${miscMessage.BASE64_BLOB}${base64Image}`;
-            setLoader({ ...loader, isLoading: false });
+            setLoaderCallback(false);
             await Share.open({ url: base64Data, filename: postTitle, excludedActivityTypes: [miscMessage.EXCLUDE_TYPE] });
         } else {
             showSnackBar(errorMessages.COULD_NOT_SHARE_IMAGE, false);
@@ -200,7 +200,7 @@ export const getCategoryButtonType = async () => {
     }
 }
 
-export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate, loader, setLoader) => {
+export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate, setLoaderCallback) => {
     try {
         return (
             Alert.alert(
@@ -212,10 +212,10 @@ export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate, 
                     },
                     {
                         text: permissionsButtons.OK, onPress: async () => {
-                            setLoader({ ...loader, isLoading: true });
+                            setLoaderCallback(true);
                             await setCurrentImageAsWallPaper(item.postImage, item.postTitle);
                             await increaseAndSetPostCounts(item, sdomDatastate, setSdomDatastate, postCountTypes.POST_WALLPAPERS);
-                            setLoader({ ...loader, isLoading: false });
+                            setLoaderCallback(false);
                             displaySuccessAlert();
                         }
                     }
@@ -241,7 +241,7 @@ export const displaySuccessAlert = () => {
         ));
 }
 
-export const downloadImageFromURL = async (item, sdomDatastate, setSdomDatastate, loader, setLoader, downloadCallback) => {
+export const downloadImageFromURL = async (item, sdomDatastate, setSdomDatastate, setLoaderCallback, downloadCallback) => {
     const write_granted = await accessAndGrantPermssionsToWallPiper(permissionMessages.READ_WRITE_EXTERNAL_STORAGE_TITLE,
         permissionMessages.READ_WRITE_EXTERNAL_STORAGE_MESSAGE, PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
 
@@ -249,10 +249,10 @@ export const downloadImageFromURL = async (item, sdomDatastate, setSdomDatastate
         permissionMessages.READ_WRITE_EXTERNAL_STORAGE_MESSAGE, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
     if (PermissionsAndroid.RESULTS.GRANTED == write_granted && PermissionsAndroid.RESULTS.GRANTED === read_granted) {
-        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.DOWNLOADING_IMAGE });
+        setLoaderCallback(true, alertTextMessages.DOWNLOADING_IMAGE);
         await downloadCurrentImage(item.postImage, item.postTitle, true, downloadCallback);
         await increaseAndSetPostCounts(item, sdomDatastate, setSdomDatastate, postCountTypes.POST_DOWNLOADS);
-        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setLoaderCallback(false, stringConstants.EMPTY);
     } else {
         showSnackBar(errorMessages.EXTERNAL_STORAGE_DENIED, false);
     }

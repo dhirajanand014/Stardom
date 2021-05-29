@@ -6,20 +6,19 @@ import { LockIcon } from '../../components/icons/LockIcon';
 import { fieldControllerName, miscMessage, numericConstants } from "../../constants/Constants"
 import { flatListItemStyles, SDGenericStyles, colors } from "../../styles/Styles";
 
-export const ProfileUserPosts = (item, index, hasPrivateAccess, isSameUser) => {
+export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isSameUser }) => {
 
     const allowPrivate = hasPrivateAccess && item.postType == fieldControllerName.POST_TYPE_PRIVATE;
 
     return (
-        <View key={index} style={SDGenericStyles.backgroundColorWhite}>
+        <View key={index} style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
             <TouchableOpacity activeOpacity={.7} style={flatListItemStyles.GridViewContainer}>
                 <View key={index} style={[flatListItemStyles.userProfileCardSurface]}>
                     {
                         (allowPrivate || item.postType == fieldControllerName.POST_TYPE_PUBLIC) &&
                         (
-                            <FastImage source={{
-                                uri: item.postImage, priority: FastImage.priority.normal
-                            }} style={flatListItemStyles.imageBackGround}>
+                            <FastImage source={{ uri: item.postImage, priority: FastImage.priority.normal }}
+                                style={flatListItemStyles.imageBackGround}>
                                 <View style={flatListItemStyles.textsView}>
                                     <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
                                         <Text style={flatListItemStyles.textCategoryTitle}>{item.postTitle}</Text>
@@ -66,4 +65,4 @@ export const ProfileUserPosts = (item, index, hasPrivateAccess, isSameUser) => {
             </TouchableOpacity>
         </View>
     )
-}
+})

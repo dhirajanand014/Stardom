@@ -912,9 +912,7 @@ export const glancePostStyles = StyleSheet.create({
         shadowOffset: { width: - 1, height: -3 },
         shadowRadius: 2,
         shadowOpacity: 0.4,
-        paddingTop: 10,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20
+        paddingTop: 10
     },
     panelHandle: {
         width: 40,

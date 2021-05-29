@@ -457,6 +457,7 @@ export const numericConstants = {
     SIXTY: 60,
     SEVENTY: 70,
     EIGHTY: 80,
+    EIGHTY_FIVE: 85,
     NINETY: 90,
     ONE_HUNDRED: 100,
     ONE_HUNDRED_TWENTY: 120,

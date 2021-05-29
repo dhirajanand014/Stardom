@@ -40,10 +40,10 @@ export const SDProfileBottomSheet = props => {
     }
 
     const viewUserPosts = async () => {
-        props.setLoader({ ...props.loader, isLoading: true, loadingText: alertTextMessages.LOADING_USERS_POSTS });
+        props.setLoaderCallback(true, alertTextMessages.LOADING_USERS_POSTS);
         await fetchPostsOfUserProfile(props.profile, props.profileDetail, props.setProfileDetail, props.loggedInUser);
         props.profileDetail.userPosts && checkHasPrivateAccess();
-        props.setLoader({ ...props.loader, isLoading: false, loadingText: alertTextMessages.LOADING_USERS_POSTS });
+        props.setLoaderCallback(false, alertTextMessages.LOADING_USERS_POSTS);
     }
 
     const hideUserPosts = async () => {
@@ -72,7 +72,7 @@ export const SDProfileBottomSheet = props => {
                         <SDProfileBottomTextView label={miscMessage.DOWNLOADS} count={props.profileDetail.count.downloadCount} />
                     </View>
                 </View>
-                <View style={[{ height: height - numericConstants.NINETY }, SDGenericStyles.backgroundColorWhite]}>
+                <View style={[{ height: height - numericConstants.EIGHTY_FIVE }, SDGenericStyles.backgroundColorWhite]}>
                     <ProfilePosts profileDetail={props.profileDetail} profile={props.profile} setProfileDetail={props.setProfileDetail}
                         sdomDatastate={props.sdomDatastate} setSdomDatastate={props.setSdomDatastate} loggedInUser={props.loggedInUser}
                         loggedInUserHasPrivateAccess={props.loggedInUserHasPrivateAccess} />
