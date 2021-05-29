@@ -1,5 +1,5 @@
 import { useIsFocused, useNavigation } from '@react-navigation/core';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../App';
@@ -16,10 +16,12 @@ import { MenuRenderer } from '../views/menus/MenuRenderer';
 
 export const SDUserMenus = () => {
 
+
+    const bottomSheetRef = useRef(null);
     const navigation = useNavigation();
     const isFocused = useIsFocused();
 
-    const { loggedInUser, setLoggedInUser, loader, setLoader } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, setLoaderCallback } = useContext(CategoryContext);
 
     const [profileMenu, setProfileMenu] = useState({
         userMenus: jsonConstants.EMPTY,
@@ -38,8 +40,12 @@ export const SDUserMenus = () => {
         showModal: false
     });
 
+    const bottomSheetRefCallback = useCallback((node) => {
+        bottomSheetRef.current = node;
+    });
+
     const handleMenuClickAction = useCallback(async (item) => {
-        setLoader({ ...loader, isLoading: true });
+        setLoaderCallback(true);
         switch (item.key) {
             case screens.USER_FOLLOWERS_FOLLOWING:
                 navigation.navigate(screens.USER_FOLLOWERS_FOLLOWING, { listFor: item.label });
@@ -48,14 +54,14 @@ export const SDUserMenus = () => {
                 navigation.navigate(screens.CATEGORY);
                 break;
             case screens.POSTS:
-                navigation.navigate(screens.POSTS);
+                navigation.navigate(screens.POSTS, { bottomSheetRefCallback: bottomSheetRefCallback, bottomSheetRef: bottomSheetRef });
                 break;
             case actionButtonTextConstants.VERIFY_USER:
                 setProfileMenu({ ...profileMenu, showSubmitVerifyModal: true });
             default:
                 break;
         }
-        setLoader({ ...loader, isLoading: false });
+        setLoaderCallback(false);
     });
 
     const filterOutLoginMenus = (menu, details) => {
@@ -104,71 +110,83 @@ export const SDUserMenus = () => {
     }, [loggedInUser.loginDetails, isFocused]);
 
     return (
-        <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
-            {
-                loggedInUser.isLoggedIn &&
-                <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]}>
-                    <TouchableOpacity activeOpacity={.7}>
-                        <View style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
-                            {
-                                profileMenu.profileImage &&
-                                <FastImage source={{
-                                    uri: profileMenu.profileImage, priority: FastImage.priority.normal,
-                                }} style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]} /> ||
-                                <RegisterUserIcon width={numericConstants.EIGHTY} height={numericConstants.EIGHTY} stroke={colors.SDOM_PLACEHOLDER} />
-                            }
+        <SDMenuRenderer loggedInUser={loggedInUser} profileMenu={profileMenu} navigation={navigation} handleMenuClickAction={handleMenuClickAction}
+            setLoggedInUser={setLoggedInUser} errorMod={errorMod} setErrorMod={setErrorMod} setProfileMenu={setProfileMenu} setLoaderCallback={setLoaderCallback} />
+    )
+}
+
+const SDMenuRenderer = ({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, errorMod, setErrorMod, setProfileMenu, setLoaderCallback }) => {
+    return <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
+        {
+            loggedInUser.isLoggedIn &&
+            <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]}>
+                <TouchableOpacity activeOpacity={.7}>
+                    <View style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
+                        {profileMenu.profileImage &&
+                            <FastImage source={{
+                                uri: profileMenu.profileImage, priority: FastImage.priority.normal,
+                            }} style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]} /> ||
+                            <RegisterUserIcon width={numericConstants.EIGHTY} height={numericConstants.EIGHTY} stroke={colors.SDOM_PLACEHOLDER} />}
+                    </View>
+                </TouchableOpacity>
+                <View style={SDGenericStyles.fill}>
+                    <Text style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15, SDGenericStyles.ft16,
+                    SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
+                        {profileMenu.profileName}
+                    </Text>
+                    <Text style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15, SDGenericStyles.fontFamilyBold,
+                    SDGenericStyles.ft14, SDGenericStyles.placeHolderTextColor]}>
+                        @{profileMenu.profileUserId}
+                    </Text>
+                    <View style={SDGenericStyles.rowFlexDirection}>
+                        <View>
+                            <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15]}
+                                onPress={() => navigation.navigate(screens.EDIT_USER_PROFILE, { loggedInUser: loggedInUser })}>
+                                <Text style={[SDGenericStyles.fontFamilyBold, SDGenericStyles.ft14, SDGenericStyles.colorYellow]}>
+                                    {modalTextConstants.EDIT_PROFILE}
+                                </Text>
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                    <View style={SDGenericStyles.fill}>
-                        <Text style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15, SDGenericStyles.ft16,
-                        SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
-                            {profileMenu.profileName}
-                        </Text>
-                        <Text style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15, SDGenericStyles.fontFamilyBold,
-                        SDGenericStyles.ft14, SDGenericStyles.placeHolderTextColor]}>
-                            @{profileMenu.profileUserId}
-                        </Text>
-                        <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15]} onPress={() =>
-                            navigation.navigate(screens.EDIT_USER_PROFILE, { loggedInUser: loggedInUser })}>
-                            <Text style={[SDGenericStyles.fontFamilyBold, SDGenericStyles.ft14, SDGenericStyles.colorYellow]}>
-                                {modalTextConstants.EDIT_PROFILE}
-                            </Text>
-                        </TouchableOpacity>
+                        <View>
+                            <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15]}
+                                onPress={() => navigation.navigate(screens.PROFILE)}>
+                                <Text style={[SDGenericStyles.fontFamilyBold, SDGenericStyles.ft14, SDGenericStyles.colorYellow]}>
+                                    {modalTextConstants.VIEW_PROFILE}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View> || <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]} />
-            }
+                </View>
+            </View> || <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]} />}
 
-            <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => `1_${item.label}`}
-                renderItem={({ item, index }) => MenuRenderer(item, index, profileMenu, handleMenuClickAction)}
-                ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />) }} />
+        <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => `1_${item.label}`}
+            renderItem={({ item, index }) => MenuRenderer(item, index, profileMenu, handleMenuClickAction)}
+            ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />); }} />
 
-            {
-                !loggedInUser.isLoggedIn &&
-                <View>
-                    <View style={userAuthStyles.menuLoginButton}>
-                        <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
-                            onPress={() => navigation.navigate(screens.LOGIN)}>
-                            <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.LOGIN}</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={userAuthStyles.menuRegisterButton}>
-                        <TouchableOpacity activeOpacity={.7} onPress={() => navigation.navigate(screens.REGISTER)}>
-                            <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRoman, SDGenericStyles.elevation3,
-                            SDGenericStyles.colorYellow, SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical16, SDGenericStyles.borderRadius10]}>
-                                {actionButtonTextConstants.REGISTER}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View> || <View style={userAuthStyles.menuLoginButton}>
+        {!loggedInUser.isLoggedIn &&
+            <View>
+                <View style={userAuthStyles.menuLoginButton}>
                     <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
-                        onPress={async () => await logoutUser(loggedInUser.loginDetails.token, loggedInUser, setLoggedInUser)}>
-                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.LOGOUT}</Text>
+                        onPress={() => navigation.navigate(screens.LOGIN)}>
+                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.LOGIN}</Text>
                     </TouchableOpacity>
                 </View>
-            }
-            <ErrorModal error={errorMod} setError={setErrorMod} />
-            <UserVerifyModal profileMenu={profileMenu} setProfileMenu={setProfileMenu} loggedInUser={loggedInUser} loader={loader} setLoader={setLoader}
-                setLoggedInUser={setLoggedInUser} fetchUpdateLoggedInUserProfile={fetchUpdateLoggedInUserProfile} />
-        </View >
-    )
+                <View style={userAuthStyles.menuRegisterButton}>
+                    <TouchableOpacity activeOpacity={.7} onPress={() => navigation.navigate(screens.REGISTER)}>
+                        <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRoman, SDGenericStyles.elevation3,
+                        SDGenericStyles.colorYellow, SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical16, SDGenericStyles.borderRadius10]}>
+                            {actionButtonTextConstants.REGISTER}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View> || <View style={userAuthStyles.menuLoginButton}>
+                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
+                    onPress={async () => await logoutUser(loggedInUser.loginDetails.token, loggedInUser, setLoggedInUser)}>
+                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.LOGOUT}</Text>
+                </TouchableOpacity>
+            </View>}
+        <ErrorModal error={errorMod} setError={setErrorMod} />
+        <UserVerifyModal profileMenu={profileMenu} setProfileMenu={setProfileMenu} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
+            setLoggedInUser={setLoggedInUser} fetchUpdateLoggedInUserProfile={fetchUpdateLoggedInUserProfile} />
+    </View>;
 }

@@ -1,5 +1,5 @@
 
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { FlatList, View } from "react-native";
 import {
@@ -18,24 +18,24 @@ import { CategoryContext } from '../../App';
 
 export const Posts = props => {
 
-    const { userPosts, setUserPosts, loader, setLoader } = useContext(CategoryContext);
+    const { userPosts, setUserPosts, setLoaderCallback } = useContext(CategoryContext);
 
     const navigation = useNavigation();
 
-    const bottomSheetRef = useRef(null);
+    const route = useRoute();
+
+    const bottomSheetRefCallback = route.params?.bottomSheetRefCallback;
+    const bottomSheetRef = route.params?.bottomSheetRef;
+
     const snapPoints = useMemo(() => [numericConstants.TWO_HUNDRED_NINETY, numericConstants.ZERO],
         jsonConstants.EMPTY);
-
-    const bottomSheetRefCallback = node => {
-        bottomSheetRef.current = node;
-    };
 
     const fallValue = useSharedValue(numericConstants.ONE);
 
     useEffect(() => {
-        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_USERS_POSTS });
+        setLoaderCallback(true, alertTextMessages.LOADING_USERS_POSTS);
         fetchUserPosts(userPosts, setUserPosts);
-        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setLoaderCallback(false);
     }, [!userPosts.length]);
 
     const postCallback = useCallback((action, item) => {
@@ -43,11 +43,11 @@ export const Posts = props => {
             bottomSheetRef?.current?.snapTo(numericConstants.ZERO);
             setAddPostStateValues(miscMessage.CREATE, userPosts, setUserPosts, stringConstants.EMPTY);
         } else if (action == miscMessage.UPDATE) {
-            setLoader({ ...loader, isLoading: true });
+            setLoaderCallback(true);
             setAddPostStateValues(miscMessage.UPDATE, userPosts, setUserPosts, item);
             navigation.navigate(screens.ADD_POST_DETAILS, { toAction: miscMessage.UPDATE, selectedItem: item });
         }
-        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setLoaderCallback(false);
     })
 
     const postDetailsCallback = useCallback(() => {
@@ -57,7 +57,7 @@ export const Posts = props => {
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
             <FlatList data={userPosts.posts} numColumns={numericConstants.THREE} keyExtractor={(item) => item.id}
-                renderItem={({ item, index }) => PostRenderer(item, postCallback)} />
+                renderItem={({ item }) => <PostRenderer item={item} postCallback={postCallback} />} />
             {
                 userPosts.details.showBottomOptions && <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef}
                     snapPoints={snapPoints} fall={fallValue} detailsCallback={postDetailsCallback} isFrom={screens.POSTS} navigation={navigation} />

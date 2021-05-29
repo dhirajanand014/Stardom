@@ -54,7 +54,7 @@ export default function App({ navigationRef }) {
       postDescription: stringConstants.EMPTY,
       postCategories: jsonConstants.EMPTY,
       postType: stringConstants.EMPTY,
-      postProfile: defaultProfilesValue.value,
+      postLink: stringConstants.EMPTY,
       postImage: stringConstants.EMPTY,
     }
   });
@@ -115,7 +115,7 @@ export default function App({ navigationRef }) {
         postIdFromNotification, categoryIdFromNotification, loader,
         loggedInUser, setLoggedInUser, sdomDatastate, setSdomDatastate,
         optionsState, setOptionsState, profileDetail, setProfileDetail,
-        currentPostIndexForProfileRef, setLoaderCallback
+        currentPostIndexForProfileRef, loader, setLoaderCallback
       }}>
         <TourGuideProvider androidStatusBarVisible={true}
           backdropColor={navigationRef && navigationRef.initialCategorySelection == screens.INTRO && `rgba(145, 63, 146, 0.6)`}>

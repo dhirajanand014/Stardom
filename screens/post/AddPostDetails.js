@@ -9,15 +9,14 @@ import { DeleteIcon } from '../../components/icons/DeleteIcon'
 import { EditIcon } from '../../components/icons/EditIcon'
 import {
     fieldControllerName, formRequiredRules, height,
-    modalTextConstants, numericConstants,
+    modalTextConstants, numericConstants, errorMessages,
     width, placeHolderText, keyBoardTypeConst,
-    actionButtonTextConstants, miscMessage,
-    jsonConstants, alertTextMessages, screens, errorMessages, stringConstants
+    actionButtonTextConstants, miscMessage, isAndroid,
+    jsonConstants, alertTextMessages, screens
 } from '../../constants/Constants'
 import { checkTokenStatus, fetchCategoryData, handleAddPostDetails, handlePostDelete, showSnackBar } from '../../helper/Helper'
-import { colors, glancePostStyles, SDGenericStyles, userAuthStyles } from '../../styles/Styles'
+import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles'
 import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView'
-import { SDDropDownView } from '../../views/dropDownView/SDDropDownView'
 import Geolocation from '@react-native-community/geolocation';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput'
 import { SDPostTypeOptionsView } from '../../views/fromInputView/SDPostTypeOptionView'
@@ -26,7 +25,7 @@ import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextIn
 
 export const AddPostDetails = () => {
 
-    const { userPosts, profiles, loggedInUser, loader, setLoader } = useContext(CategoryContext);
+    const { userPosts, loggedInUser, loader, setLoaderCallback } = useContext(CategoryContext);
 
     const bottomSheetRef = useRef(null);
     const bottomSheetRefCallback = node => {
@@ -50,20 +49,20 @@ export const AddPostDetails = () => {
     useEffect(() => {
         Geolocation.getCurrentPosition(info => { console.log(info) });
         (async () => {
-            setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_CATEGORIES });
+            setLoaderCallback(true, alertTextMessages.LOADING_CATEGORIES);
             const postCategories = await fetchCategoryData();
             postCategories && setCategories(postCategories);
             postCategories.map(category => category.isSelected = userPosts.details.postCategories.some(selectedCategory =>
                 selectedCategory == category.categoryId));
             setValue(fieldControllerName.POST_CATEGORIES, userPosts.details.postCategories);
-            setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+            setLoaderCallback(false);
         })();
         register(fieldControllerName.POST_CATEGORIES, formRequiredRules.postCategoryRule);
     }, jsonConstants.EMPTY);
 
     const navigateUser = (responseData) => {
         navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
-        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setLoaderCallback(false);
         showSnackBar(responseData.message, true);
     }
 
@@ -72,19 +71,14 @@ export const AddPostDetails = () => {
     });
 
     const uploadCallback = useCallback((progressEvent) => {
-        loader.isLoading = true;
-        loader.loadingText = toAction == miscMessage.UPDATE && alertTextMessages.UPDATING_POST_DETAILS ||
-            alertTextMessages.ADDING_NEW_POST;
-        loader.progressValue = Math.round((progressEvent.loaded * numericConstants.ONE_HUNDRED) / progressEvent.total);
-        setLoader({ ...loader });
+        setLoaderCallback(true, toAction == miscMessage.UPDATE && alertTextMessages.UPDATING_POST_DETAILS ||
+            alertTextMessages.ADDING_NEW_POST, Math.round((progressEvent.loaded * numericConstants.ONE_HUNDRED) / progressEvent.total));
     })
 
     const onSubmit = async (data) => {
-        setLoader({
-            ...loader, isLoading: true, loadingText: toAction == miscMessage.UPDATE && alertTextMessages.UPDATING_POST_DETAILS ||
-                alertTextMessages.ADDING_NEW_POST
-        });
-        const responseData = await handleAddPostDetails(data, userPosts.details.capturedImage, toAction, selectedItem, loader, setLoader,
+        setLoaderCallback(true, toAction == miscMessage.UPDATE && alertTextMessages.UPDATING_POST_DETAILS ||
+            alertTextMessages.ADDING_NEW_POST);
+        const responseData = await handleAddPostDetails(data, userPosts.details.capturedImage, toAction, selectedItem, loader, setLoaderCallback,
             uploadCallback);
         if (responseData) {
             if (responseData.message == alertTextMessages.POST_ADDED_SUCCESSFULLY ||
@@ -93,13 +87,13 @@ export const AddPostDetails = () => {
             } else if (checkTokenStatus(responseData)) {
                 setTimeout(() => showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false, true, loginCallback),
                     numericConstants.THREE_HUNDRED);
-                setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+                setLoaderCallback(false);
             }
         }
     }
 
     const handleDelete = async () => {
-        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.DELETING_POST });
+        setLoaderCallback(true, alertTextMessages.DELETING_POST);
         const responseData = await handlePostDelete(selectedItem.id, loggedInUser.loginDetails.token);
         if (responseData && responseData.message == alertTextMessages.POST_DELETED_SUCCESSFULLY) {
             navigateUser(responseData);
@@ -107,7 +101,7 @@ export const AddPostDetails = () => {
             loginCallback();
             showSnackBar(errorMessages.YOUR_SESSION_IS_EXPIRED_PLEASE_LOGIN, false, true, loginCallback);
         }
-        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setLoaderCallback(false);
     }
 
     const postDescriptionValue = watch(fieldControllerName.POST_DESCRIPTION);
@@ -149,7 +143,7 @@ export const AddPostDetails = () => {
                         <Animated.ScrollView contentContainerStyle={[SDGenericStyles.alignItemsCenter]}
                             style={{ maxHeight: height / 2.15 }}>
                             <SDImageFormInput inputName={fieldControllerName.POST_TITLE} control={control} rules={formRequiredRules.addPostTitleRule}
-                                defaultValue={userPosts.details.postTitle} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.ADD_POST_TITLE}
+                                defaultValue={userPosts.details.postTitle} maxLength={numericConstants.FIFTEEN} placeHolderText={placeHolderText.ADD_POST_TITLE}
                                 keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} autoFocus={true} textContentType={keyBoardTypeConst.TITLE}
                                 extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.borderRadius20,
                                 SDGenericStyles.textColorWhite, SDGenericStyles.ft16]} />
@@ -162,11 +156,9 @@ export const AddPostDetails = () => {
                                 extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.height100, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite,
                                 SDGenericStyles.ft16, SDGenericStyles.textALignVerticalTop]} maxLength={numericConstants.TWO_HUNDRED} />
 
-                            {/* <SDDropDownView inputName={fieldControllerName.POST_PROFILE} control={control} rules={formRequiredRules.profileRule} selectedLabelStyle={SDGenericStyles.textColorWhite}
-                                containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle} textContentType={keyBoardTypeConst.NONE}
-                                defaultValue={userPosts.details.postProfile} formState={formState} list={profiles.length && profiles.filter(role => role.value != numericConstants.MINUS_ONE) || jsonConstants.EMPTY}
-                                dropDownDefaultValue={profiles.length && profiles.find(role => role.value == numericConstants.ZERO).value || userPosts.details.postProfile} placeHolderText={placeHolderText.SELECT_A_PROFILE}
-                                extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical5]} globalTextStyle={[SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} /> */}
+                            <SDImageFormInput inputName={fieldControllerName.POST_LINK} control={control} formState={formState} keyboardType={isAndroid && keyBoardTypeConst.DEFAULT || keyBoardTypeConst.IOS_URL}
+                                defaultValue={userPosts.details.postLink} placeHolderText={placeHolderText.ADD_POST_LINK} textContentType={keyBoardTypeConst.URL} rules={formRequiredRules.addPostLinkRule}
+                                extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite, SDGenericStyles.ft16]} />
 
                             <SDPostTypeOptionsView inputName={fieldControllerName.POST_TYPE} control={control} rules={formRequiredRules.postTypeRule} formState={formState}
                                 defaultValue={userPosts.details.postType} checkValue={postValueType} />

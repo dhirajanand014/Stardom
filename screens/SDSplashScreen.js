@@ -11,7 +11,7 @@ import { StardomIcon } from '../components/icons/StardomIcon';
 export const SDSplashScreen = () => {
 
     const navigation = useNavigation();
-    const { error, setError, signUpDetails } = useContext(CategoryContext);
+    const { signUpDetails } = useContext(CategoryContext);
 
     const navigateUser = async (savedCategoryIds, categoryButtonType) => {
         const route = savedCategoryIds && categoryButtonType && screens.GLANCE || screens.INTRO;

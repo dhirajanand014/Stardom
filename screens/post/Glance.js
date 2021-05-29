@@ -117,7 +117,7 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                     </View>
                 </Shimmer>
             </View>}
-        <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => navigation.dispatch(TabActions.jumpTo(screens.PROFILE))}>
+        <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => navigation.navigate(screens.MENU)}>
             <Image source={category_selection} style={glancePostStyles.category_selection_image} />
         </TouchableOpacity>
         <PostDescriptionModal optionsState={optionsState} setOptionsState={setOptionsState}

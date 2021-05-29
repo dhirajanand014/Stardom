@@ -17,11 +17,11 @@ export const SDCameraImagePreview = () => {
     const isFrom = route.params?.isFrom;
 
     const extractedUri = useRef(imageFilterURI);
-    const { userPosts, setUserPosts, loader, setLoader } = useContext(CategoryContext);
+    const { userPosts, setUserPosts, loader, setLoaderCallback } = useContext(CategoryContext);
 
     const proceedAction = async () => {
-        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_IMAGE });
-        const croppedImage = await cropImage(extractedUri.current, loader, setLoader);
+        setLoaderCallback(true, alertTextMessages.LOADING_IMAGE);
+        const croppedImage = await cropImage(extractedUri.current, setLoaderCallback);
         switch (isFrom) {
             case screens.EDIT_USER_PROFILE:
                 navigation.navigate(isFrom, { imageValue: croppedImage.path });
@@ -42,7 +42,7 @@ export const SDCameraImagePreview = () => {
                 }
                 break;
         }
-        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setLoaderCallback(false);
     }
 
     const [selectedFilterIndex, setSelectedFilterIndex] = useState(numericConstants.ZERO);
@@ -51,15 +51,15 @@ export const SDCameraImagePreview = () => {
 
     const onExtractImage = ({ nativeEvent }) => {
         extractedUri.current = nativeEvent.uri;
-        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setLoaderCallback(false);
     };
     const onSelectFilter = selectedIndex => {
         selectedFilterIndex != selectedIndex &&
-            setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_IMAGE });
+            setLoaderCallback(true, alertTextMessages.LOADING_IMAGE);
         setSelectedFilterIndex(selectedIndex);
     };
 
-    const renderFilterComponent = ({ item, index }) => {
+    const SDFilterComponent = React.memo(({ item, index }) => {
         const FilterComponent = item.filterComponent;
         const image = (
             <Image style={[cameraStyles.filterSelector, SDGenericStyles.alignItemsEnd, SDGenericStyles.borderRadius5, SDGenericStyles.marginHorizontal10]}
@@ -76,7 +76,7 @@ export const SDCameraImagePreview = () => {
                 </TouchableOpacity>
             </View>
         );
-    };
+    });
     return (
         <View style={SDGenericStyles.backGroundColorBlack} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
             <SafeAreaView />
@@ -91,8 +91,8 @@ export const SDCameraImagePreview = () => {
                 }
             </View>
             <View style={SDGenericStyles.elevation3}>
-                <FlatList data={CAMERA_IMAGE_FILTERS} keyExtractor={item => item.title} horizontal renderItem={renderFilterComponent}
-                    contentContainerStyle={[SDGenericStyles.paddingVertical10, SDGenericStyles.elevation8]} />
+                <FlatList data={CAMERA_IMAGE_FILTERS} keyExtractor={item => item.title} horizontal renderItem={({ item, index }) =>
+                    <SDFilterComponent item={item} index={index} />} contentContainerStyle={[SDGenericStyles.paddingVertical10, SDGenericStyles.elevation8]} />
             </View>
             <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.marginVertical2, SDGenericStyles.justifyContentCenter,
             SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingBottom10]}>

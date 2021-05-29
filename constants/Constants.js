@@ -7,6 +7,7 @@ import {
     NashvilleCompat, PerpetuaCompat, ReyesCompat, RiseCompat, SlumberCompat, StinsonCompat, ToasterCompat, ValenciaCompat,
     WaldenCompat, WillowCompat, Xpro2Compat, Colo, Normal, Browni
 } from 'react-native-image-filter-kit';
+import { isValidURL } from "../helper/Helper";
 
 export const isIOS = Platform.OS === `ios`;
 export const isAndroid = Platform.OS === `android`;
@@ -117,6 +118,7 @@ export const fieldControllerName = {
     INTERESTS: `interests`,
     CATEGORIES: `categories`,
     POST_TITLE: `postTitle`,
+    POST_LINK: `postLink`,
     POST_DESCRIPTION: `postDescription`,
     FOLLOWER_ID: `follower_id`,
     FOLLOWING_ID: `following_id`,
@@ -132,6 +134,8 @@ export const keyBoardTypeConst = {
     TELPHONETYPE: `telephoneNumber`,
     EMAIL: `email-address`,
     TITLE: `jobTitle`,
+    IOS_URL: `url`,
+    URL: `URL`,
     USERNAME: `username`,
     NONE: `none`,
     NEW_PASSWORD: `newPassword`,
@@ -260,7 +264,14 @@ export const formRequiredRules = {
         required: {
             value: true,
             message: `Please enter a title`
+        },
+        maxLength: {
+            value: 15,
+            message: `Enter only 15 characters`
         }
+    },
+    addPostLinkRule: {
+        validate: value => !value || isValidURL(value) && true || `Please enter a valid URL`
     },
     addPostDescription: {
         required: {
@@ -389,6 +400,7 @@ export const modalTextConstants = {
     OTP_VERIFICATION: `OTP Verification`,
     ACCOUNT_DETAILS: `Account Details`,
     EDIT_PROFILE: `Edit Profile`,
+    VIEW_PROFILE: `View Profile`,
     LOGIN_TO_CONTINUE: `Login to continue`,
     SUBMIT_BUTTON: `Submit`,
     UPLOAD_PHOTO: `Upload Photo`,
@@ -412,6 +424,7 @@ export const placeHolderText = {
     SELECT_A_PROFILE: `Select a profile`,
     SELECT_CATEGORIES: 'Select Categories',
     ADD_POST_TITLE: `Enter Title`,
+    ADD_POST_LINK: `Enter post link`,
     ADD_POST_DESCRIPTION: `Enter Description`,
     VERIFY_USER_DETAILS: `Enter your social media contact details`,
     SELECT_GENDER: `Select a gender`,
@@ -738,6 +751,7 @@ export const requestConstants = {
     USER_TYPE: `user_type`,
     USER_ID: `user_id`,
     PROFILE_ID: `profile_id`,
+    POST_LINK: `post_link`,
     PHONE_NUMBER: `phone_number`,
     SECRET: `password`,
     POST_TITLE: `post_title`,

@@ -1224,7 +1224,7 @@ export const setAddPostStateValues = (action, userPosts, setUserPosts, item) => 
     setUserPosts({ ...userPosts });
 }
 
-export const cropImage = async (imagePath, loader, setLoader) => {
+export const cropImage = async (imagePath, setLoaderCallback) => {
     try {
         return await ImagePicker.openCropper({
             path: imagePath, width: numericConstants.MAX_RESOLUTION_WIDTH, height: numericConstants.MAX_RESOLUTION_HEIGHT,
@@ -1238,11 +1238,11 @@ export const cropImage = async (imagePath, loader, setLoader) => {
             console.error(errorMessages.COULD_NOT_CROP_IMAGE, error);
             showSnackBar(errorMessages.COULD_NOT_CROP_IMAGE, false);
         }
-        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setLoaderCallback(false, stringConstants.EMPTY);
     }
 }
 
-export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem, loader, setLoader,
+export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem, loader, setLoaderCallback,
     uploadProgressCallback) => {
     try {
         const formData = new FormData();
@@ -1260,7 +1260,9 @@ export const handleAddPostDetails = async (data, postImagePath, toAction, select
             formData.append(requestConstants.POST_DESCRIPTION, data.postDescription);
             formData.append(requestConstants.POST_CATEGORIES, categories);
             formData.append(requestConstants.POST_TYPE, data.postType);
-            formData.append(requestConstants.PROFILE_ID, data.postProfile);
+            formData.append(requestConstants.PROFILE_ID, userDetails.profile_id);
+            data.postLink &&
+                formData.append(requestConstants.POST_LINK, data.postLink);
             formData.append(requestConstants.POST_IMAGE, { uri: postImagePath, name: imageName, type: miscMessage.IMAGE_TYPE });
             const response = await axiosPostUploadImageWithHeaders(toAction == miscMessage.UPDATE && urlConstants.updatePost ||
                 urlConstants.addPost, formData, user.token, uploadProgressCallback);
@@ -1269,7 +1271,7 @@ export const handleAddPostDetails = async (data, postImagePath, toAction, select
         return responseStringData.NOT_LOGGED_IN;
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
-        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setLoaderCallback(false);
         setTimeout(() => showSnackBar(toAction == miscMessage.UPDATE && errorMessages.COULD_NOT_UPDATE_POST ||
             errorMessages.COULD_NOT_UPLOAD_POST, false), numericConstants.THREE_HUNDRED)
 

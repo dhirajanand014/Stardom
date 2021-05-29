@@ -6,7 +6,7 @@ import { PlusIcon } from '../../components/icons/PlusIcon';
 import { miscMessage, numericConstants } from '../../constants/Constants';
 import { flatListItemStyles, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 
-export const PostRenderer = (item, postCallback) => {
+export const PostRenderer = React.memo(({ item, postCallback }) => {
     return (
         <TouchableOpacity activeOpacity={.7} style={[flatListItemStyles.GridViewContainer, SDGenericStyles.mv20]}
             onPress={async () => {
@@ -35,4 +35,4 @@ export const PostRenderer = (item, postCallback) => {
             </View>
         </TouchableOpacity>
     )
-}
+})
