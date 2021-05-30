@@ -161,7 +161,7 @@ export const downloadCurrentImage = async (postUrl, postTitle, isDownload, downl
             config.path = `${RNFetchBlob.fs.dirs.DownloadDir}${responseStringData.STARDOM_PATH}${stringConstants.SLASH}${postTitle}${responseStringData.DOWNLOAD_IMAGE_EXTENTION}`
         }
         const response = await RNFetchBlob.config(config).fetch(requestConstants.GET, postUrl)
-            .progress({ interval: numericConstants.TWO_HUNDRED_FIFTY }, (progressEvent) => downloadCallback(progressEvent));
+            .progress((received, total) => { downloadCallback(received, total) });
         return isDownload && processResponseData(response) || response;
     } catch (error) {
         console.error(errorMessages.COULD_NOT_DOWNLOAD_IMAGE, error);
@@ -219,7 +219,7 @@ export const postWallPaperAlert = async (paramKey, postDetailsState, setPostDeta
     }
 }
 
-export const downloadImageFromURL = async (paramKey, postDetailsState, setPostDetailsState, downloadCallback) => {
+export const downloadImageFromURL = async (paramKey, postDetailsState, setPostDetailsState, downloadCallback, resetFlashMessage) => {
     const write_granted = await accessAndGrantPermssionsToWallPiper(permissionMessages.READ_WRITE_EXTERNAL_STORAGE_TITLE,
         permissionMessages.READ_WRITE_EXTERNAL_STORAGE_MESSAGE, PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
 
@@ -229,6 +229,7 @@ export const downloadImageFromURL = async (paramKey, postDetailsState, setPostDe
     if (PermissionsAndroid.RESULTS.GRANTED == write_granted && PermissionsAndroid.RESULTS.GRANTED === read_granted) {
         await downloadCurrentImage(postDetailsState.currentPost.postImage, postDetailsState.currentPost.postTitle, true, downloadCallback);
         await increaseAndSetPostCounts(paramKey, postDetailsState, setPostDetailsState, postCountTypes.POST_DOWNLOADS);
+        resetFlashMessage();
     } else {
         showSnackBar(errorMessages.EXTERNAL_STORAGE_DENIED, false);
     }
@@ -1002,14 +1003,12 @@ export const showSnackBar = (message, success, isLong, actionCallback) => {
     })
 }
 
-export const showProgressSnackbar = (message, progressValue) => {
-    const autoHide = progressValue == numericConstants.ONE_HUNDRED
+export const showProgressSnackbar = (progressValue) => {
     showMessage({
-        message: progressValue >= numericConstants.ZERO && responseStringData.SUCCESS || responseStringData.ERROR,
-        description: message,
-        icon: progressValue >= numericConstants.ZERO && miscMessage.SUCCESS || miscMessage.DANGER,
-        type: progressValue >= numericConstants.ZERO && miscMessage.SUCCESS || miscMessage.DANGER,
-        autoHide: autoHide
+        message: miscMessage.DOWNLOADING,
+        icon: miscMessage.INFO,
+        type: miscMessage.INFO,
+        autoHide: progressValue == numericConstants.ONE
     })
 }
 

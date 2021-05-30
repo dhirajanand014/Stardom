@@ -8,7 +8,7 @@ import {
 } from '../../constants/Constants';
 import {
     postWallPaperAlert, increaseAndSetPostCounts,
-    downloadImageFromURL, setOptionsStateForDescription, shareImage
+    downloadImageFromURL, setOptionsStateForDescription, shareImage, showProgressSnackbar
 } from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import ActionButton from '@logvinme/react-native-action-button';
@@ -27,7 +27,7 @@ export const PostDetails = forwardRef((props, ref) => {
 
     const { textPostTypeAnimationValue, viewPagerRef, width, height, textPostDescriptionAnimationValue } = props;
 
-    const { setLoaderCallback, sdomDatastate, setSdomDatastate, optionsState, setOptionsState } = useContext(CategoryContext);
+    const { downloadProgressState, setDownloadProgressState, sdomDatastate, optionsState, setOptionsState, progressValue } = useContext(CategoryContext);
 
     const post_external_link = require('../../assets/post_external_link_icon.png');
 
@@ -72,18 +72,22 @@ export const PostDetails = forwardRef((props, ref) => {
         };
     });
 
-    const downloadCallback = useCallback((progressEvent) => {
-
-        const progressValue = progressEvent.loaded * numericConstants.ONE_HUNDRED;
-        if (progressValue > numericConstants.ZERO) {
-
-        } else {
-            showProgressSnackbar(alertTextMessages.DOWNLOADING_IMAGE, true)
+    const downloadCallback = useCallback((received, total) => {
+        const value = received / total;
+        if (!downloadProgressState.isDownloading.value) {
+            downloadProgressState.isDownloading.value = true;
+            showProgressSnackbar(value);
         }
+        downloadProgressState.progressValue.value = value;
+        setDownloadProgressState({ ...downloadProgressState });
+    });
 
-        setLoaderCallback(true, alertTextMessages.DOWNLOADING_IMAGE,
-            Math.round((progressEvent.loaded * numericConstants.ONE_HUNDRED) / progressEvent.total));
+    const resetFlashMessage = useCallback((type) => {
+        downloadProgressState.isDownloading.value = false;
+        downloadProgressState.progressValue.value = numericConstants.ZERO;
+        setDownloadProgressState({ ...downloadProgressState });
     })
+
     const postDescriptionSpringStyle = useAnimatedStyle(() => {
         return {
             transform: [{
@@ -182,7 +186,8 @@ export const PostDetails = forwardRef((props, ref) => {
                     <Text style={glancePostStyles.icon_count_text}>{postDetailsState.currentPost.postWallpapers}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
-                    await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback)}>
+                    await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback,
+                        resetFlashMessage)}>
                     <View style={glancePostStyles.backgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_download} />
                     </View>

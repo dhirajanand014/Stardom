@@ -4,16 +4,16 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   jsonConstants, numericConstants,
   screens, stringConstants, requestConstants,
-  PRIVATE_FOLLOW_UNFOLLOW, miscMessage
+  PRIVATE_FOLLOW_UNFOLLOW
 } from './constants/Constants';
 import { fetchAndUpdateCategoryState, fetchUpdateLoggedInUserProfile, getAllProfiles } from './helper/Helper.js';
 import { TourGuideProvider } from 'rn-tourguide';
 import AddPostConstant from './constants/AddPostConstant.json';
 import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';
 import { ScreenNavigator } from '.';
-import FlashMessage from "react-native-flash-message";
 import { SDLoaderView } from './components/modals/SDLoaderView';
 import { useSharedValue } from 'react-native-reanimated';
+import { FlashMessageRenderer } from './components/modals/FlashMessageRenderer';
 
 export const CategoryContext = React.createContext();
 
@@ -24,7 +24,11 @@ export default function App({ navigationRef }) {
   });
 
   const currentPostIndexForProfileRef = useRef(numericConstants.ZERO);
-  const progressValue = useSharedValue(numericConstants.ZERO);
+
+  const [downloadProgressState, setDownloadProgressState] = useState({
+    progressValue: useSharedValue(numericConstants.ZERO),
+    isDownloading: useSharedValue(false)
+  })
 
   const [sdomDatastate, setSdomDatastate] = useState(jsonConstants.EMPTY);
   const [optionsState, setOptionsState] = useState({
@@ -117,7 +121,8 @@ export default function App({ navigationRef }) {
         postIdFromNotification, categoryIdFromNotification, loader,
         loggedInUser, setLoggedInUser, sdomDatastate, setSdomDatastate,
         optionsState, setOptionsState, profileDetail, setProfileDetail,
-        currentPostIndexForProfileRef, loader, setLoaderCallback, progressValue
+        currentPostIndexForProfileRef, loader, setLoaderCallback,
+        downloadProgressState, setDownloadProgressState,
       }}>
         <TourGuideProvider androidStatusBarVisible={true}
           backdropColor={navigationRef && navigationRef.initialCategorySelection == screens.INTRO && `rgba(145, 63, 146, 0.6)`}>
@@ -126,7 +131,7 @@ export default function App({ navigationRef }) {
         {
           loader && <SDLoaderView loader={loader} />
         }
-        <FlashMessage position={miscMessage.TOP} />
+        <FlashMessageRenderer />
       </CategoryContext.Provider>
     </SDErrorBoundary>
   )

@@ -17,7 +17,6 @@ import {
 import { checkTokenStatus, fetchCategoryData, handleAddPostDetails, handlePostDelete, showSnackBar } from '../../helper/Helper'
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles'
 import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView'
-import Geolocation from '@react-native-community/geolocation';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput'
 import { SDPostTypeOptionsView } from '../../views/fromInputView/SDPostTypeOptionView'
 import { SDPostCategorySelector } from '../../views/imagePost/SDPostCategorySelector'
@@ -47,7 +46,6 @@ export const AddPostDetails = () => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        Geolocation.getCurrentPosition(info => { console.log(info) });
         (async () => {
             setLoaderCallback(true, alertTextMessages.LOADING_CATEGORIES);
             const postCategories = await fetchCategoryData();
