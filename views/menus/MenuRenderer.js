@@ -3,7 +3,7 @@ import { Text, View, TouchableNativeFeedback } from "react-native";
 import { fieldControllerName, miscMessage, screens } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 
-export const MenuRenderer = (item, index, profileMenu, handleMenuClickAction) => {
+export const MenuRenderer = React.memo(({ item, index, profileMenu, handleMenuClickAction }) => {
     return (
         <View key={index}>
             <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(colors.SDOM_PLACEHOLDER, false)} useForeground={true}
@@ -34,6 +34,6 @@ export const MenuRenderer = (item, index, profileMenu, handleMenuClickAction) =>
                     }
                 </View>
             </TouchableNativeFeedback>
-        </View >
+        </View>
     )
-}
+});

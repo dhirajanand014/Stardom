@@ -1,21 +1,22 @@
 import { useIsFocused, useNavigation } from '@react-navigation/core';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../App';
 import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
+import { PolygonSvg } from '../components/icons/PolygonSvg';
 import { ErrorModal } from '../components/modals/ErrorModal';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
-    actionButtonTextConstants, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
-    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, screens, stringConstants
+    actionButtonTextConstants, fieldControllerName, height, jsonConstants, miscMessage, modalTextConstants,
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, screens, stringConstants, width
 } from '../constants/Constants';
 import { prepareSDOMMenu, fetchProfilePostsCounts, logoutUser, fetchUpdateLoggedInUserProfile } from '../helper/Helper';
 import { colors, SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';
 import { MenuRenderer } from '../views/menus/MenuRenderer';
 
-export const SDUserMenus = () => {
-
+export const SDUserMenus = (drawerProps) => {
 
     const bottomSheetRef = useRef(null);
     const navigation = useNavigation();
@@ -39,6 +40,9 @@ export const SDUserMenus = () => {
         message: stringConstants.EMPTY,
         showModal: false
     });
+
+    const fromCoords = { x: numericConstants.ZERO, y: height };
+    const toCoords = { x: width, y: numericConstants.ZERO };
 
     const bottomSheetRefCallback = useCallback((node) => {
         bottomSheetRef.current = node;
@@ -110,13 +114,13 @@ export const SDUserMenus = () => {
     }, [loggedInUser.loginDetails, isFocused]);
 
     return (
-        <SDMenuRenderer loggedInUser={loggedInUser} profileMenu={profileMenu} navigation={navigation} handleMenuClickAction={handleMenuClickAction}
-            setLoggedInUser={setLoggedInUser} errorMod={errorMod} setErrorMod={setErrorMod} setProfileMenu={setProfileMenu} setLoaderCallback={setLoaderCallback} />
+        <SDMenuRenderer loggedInUser={loggedInUser} profileMenu={profileMenu} navigation={navigation} handleMenuClickAction={handleMenuClickAction} drawerProps={drawerProps}
+            setLoggedInUser={setLoggedInUser} errorMod={errorMod} setErrorMod={setErrorMod} setProfileMenu={setProfileMenu} setLoaderCallback={setLoaderCallback} fromCoords={fromCoords} toCoords={toCoords} />
     )
 }
 
-const SDMenuRenderer = ({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, errorMod, setErrorMod, setProfileMenu, setLoaderCallback }) => {
-    return <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
+const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, errorMod, setErrorMod, setProfileMenu, setLoaderCallback, drawerProps, fromCoords, toCoords }) => {
+    return <SafeAreaView style={SDGenericStyles.fill}>
         {
             loggedInUser.isLoggedIn &&
             <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]}>
@@ -157,13 +161,17 @@ const SDMenuRenderer = ({ loggedInUser, profileMenu, navigation, handleMenuClick
                         </View>
                     </View>
                 </View>
-            </View> || <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]} />}
+            </View> || <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]} />
+        }
 
-        <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => `1_${item.label}`}
-            renderItem={({ item, index }) => MenuRenderer(item, index, profileMenu, handleMenuClickAction)}
-            ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />); }} />
+        <DrawerContentScrollView {...drawerProps} >
+            <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => `1_${item.label}`}
+                renderItem={({ item, index }) => <MenuRenderer item={item} index={index} profileMenu={profileMenu} handleMenuClickAction={handleMenuClickAction} />}
+                ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />); }} />
+        </DrawerContentScrollView>
 
-        {!loggedInUser.isLoggedIn &&
+        {
+            !loggedInUser.isLoggedIn &&
             <View>
                 <View style={userAuthStyles.menuLoginButton}>
                     <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
@@ -184,9 +192,10 @@ const SDMenuRenderer = ({ loggedInUser, profileMenu, navigation, handleMenuClick
                     onPress={async () => await logoutUser(loggedInUser.loginDetails.token, loggedInUser, setLoggedInUser)}>
                     <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.LOGOUT}</Text>
                 </TouchableOpacity>
-            </View>}
+            </View>
+        }
         <ErrorModal error={errorMod} setError={setErrorMod} />
         <UserVerifyModal profileMenu={profileMenu} setProfileMenu={setProfileMenu} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
             setLoggedInUser={setLoggedInUser} fetchUpdateLoggedInUserProfile={fetchUpdateLoggedInUserProfile} />
-    </View>;
-}
+    </SafeAreaView>;
+});

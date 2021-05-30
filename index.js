@@ -3,10 +3,11 @@ import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AppRegistry, LogBox } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
-import { headerLessStackOptions, profileScreenOptions, screenOptions, screens, tabBarOptions } from './constants/Constants';
+import { headerLessStackOptions, numericConstants, profileScreenOptions, screenOptions, screens, tabBarOptions, width } from './constants/Constants';
 import { authorizationHeader, categoryHeader } from './helper/Helper';
 import { Category } from './screens/category/Category';
 import { Intro } from './screens/Intro';
@@ -25,6 +26,7 @@ import { UserFollowFollowing } from './screens/user/UserFollowFollowing';
 import { EditUserProfile } from './screens/user/EditUserProfile';
 import { SDCameraImagePreview } from './views/cameraView/SDCameraImagePreview';
 import { SDSplashScreen } from './screens/SDSplashScreen';
+import { SDGenericStyles } from './styles/Styles';
 
 LogBox.ignoreLogs(['Remote debugger is in a background tab which may cause apps to perform slowly',
     'Require cycle: node_modules/rn-fetch-blob/index.js',
@@ -33,17 +35,28 @@ LogBox.ignoreAllLogs(true);
 
 const Stack = createStackNavigator();
 const TabNavigator = createMaterialTopTabNavigator();
-
+const DrawerNavigator = createDrawerNavigator();
 
 export const TabNavigation = () => {
     return (
         <TabNavigator.Navigator initialRouteName={screens.GLANCE} tabBarOptions={tabBarOptions}>
             <TabNavigator.Screen name={screens.CAMERA} component={SDCameraView} />
-            <TabNavigator.Screen name={screens.GLANCE} component={Glance} />
+            <TabNavigator.Screen name={screens.GLANCE} component={DrawerNavigation} />
             <TabNavigator.Screen name={screens.PROFILE} component={Profile} options={profileScreenOptions} />
         </TabNavigator.Navigator>
     )
 }
+
+export const DrawerNavigation = () => {
+    return (
+        <DrawerNavigator.Navigator drawerStyle={[SDGenericStyles.backGroundColorBlack, { width: width }]}
+            drawerContent={props => <SDUserMenus {...props} />} edgeWidth={numericConstants.ZERO}>
+            <DrawerNavigator.Screen name={screens.GLANCE} component={Glance} />
+            <DrawerNavigator.Screen name={screens.MENU} component={DrawerNavigation} />
+        </DrawerNavigator.Navigator>
+    )
+}
+
 export const ScreenNavigator = () => {
     return (
         <NavigationContainer>
@@ -52,7 +65,6 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.SPLASH_SCREEN} component={SDSplashScreen} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.INTRO} component={Intro} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.GLANCE} component={TabNavigation} options={headerLessStackOptions} />
-                <Stack.Screen name={screens.MENU} component={SDUserMenus} />
                 <Stack.Screen name={screens.OTP_VERIFICATION} component={RegistrationOTP} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.REGISTRATION_DETAILS} component={RegistrationDetails} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.REGISTRATION_CONFIRMATION} component={RegistrationConfirmation} options={headerLessStackOptions} />
