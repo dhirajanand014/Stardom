@@ -155,6 +155,7 @@ export const actionButtonTextConstants = {
     SUBMIT: `Submit`,
     SURE: `Sure`,
     SAVE: `Save`,
+    ALERT_CANCEL_STYLE: `cancel`,
     CANCEL: `Cancel`,
     ADD_POST: `Add Post`,
     UPDATE: `Update`,
@@ -356,6 +357,9 @@ export const jsonConstants = {
 }
 
 export const postCountTypes = {
+    POST_LIKE_KEY: `postLikes`,
+    POST_DOWNLOADS_KEY: `postDownloads`,
+    POST_WALLPAPERS_KEY: `postWallpapers`,
     POST_LIKES: `likes`,
     POST_DOWNLOADS: `downloads`,
     POST_WALLPAPERS: `wallpapers`

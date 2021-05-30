@@ -50,7 +50,7 @@ export const Category = () => {
     height += StatusBar.currentHeight;
 
     return (
-        <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader && miscMessage.NONE || miscMessage.AUTO}>
+        <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
             <FlatList data={category.categories} numColumns={numericConstants.THREE}
                 renderItem={({ item, index }) => CategoryRenderer(item, index, category, setCategory, miscMessage.SELECT_CATEGORIES)}
                 keyExtractor={(item) => item.categoryId} />

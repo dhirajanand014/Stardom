@@ -80,32 +80,27 @@ export const getSelectedCategoryIdsFromStorage = async () => {
     }
 }
 
-export const increaseAndSetPostCounts = async (post, sdomDatastate, setSdomDatastate, postCountType) => {
+export const increaseAndSetPostCounts = async (paramKey, postDetailsState, setPostDetailsState, postCountType) => {
     try {
-        if (postCountType == postCountTypes.POST_LIKES) {
-            sdomDatastate.posts.find(item => item.id == post.id).postLikes = ++post.postLikes;
-        } else if (postCountType == postCountTypes.POST_DOWNLOADS) {
-            sdomDatastate.posts.find(item => item.id == post.id).postDownloads = ++post.postDownloads;
-        } else if (postCountType == postCountTypes.POST_WALLPAPERS) {
-            sdomDatastate.posts.find(item => item.id == post.id).postWallpapers = ++post.postWallpapers;
-        }
+        ++postDetailsState.currentPost[paramKey];
 
         const postCountRequest = {
-            [requestConstants.POST_ID_KEY]: parseInt(post.id),
+            [requestConstants.POST_ID_KEY]: parseInt(postDetailsState.currentPost.id),
             [requestConstants.REACH_TYPE]: postCountType
         }
-
-        setSdomDatastate({ ...sdomDatastate });
         if (postCountRequest) {
             const response = await axiosPostWithHeaders(urlConstants.setPostReach, JSON.stringify(postCountRequest));
             const responseData = processResponseData(response);
             if (responseData.message == responseStringData.SUCCESS) {
                 if (postCountType == postCountTypes.POST_LIKES) {
-                    showSnackBar(`You have liked the post : ${post.postTitle}`, true, true);
-                    await savePostCounts(post.id, savePostCountKeys.SELECTED_POST_LIKES, sdomDatastate, setSdomDatastate);
+                    showSnackBar(`You have liked the post : ${postDetailsState.currentPost.postTitle}`, true, true);
+                    await savePostCounts(postDetailsState.currentPost.id, savePostCountKeys.SELECTED_POST_LIKES,
+                        postDetailsState, setPostDetailsState);
+                } else {
+                    setPostDetailsState({ ...postDetailsState });
                 }
                 postCountType == postCountTypes.POST_DOWNLOADS &&
-                    showSnackBar(`You have downloaded the post : ${post.postTitle}`, true, true);
+                    showSnackBar(`You have downloaded the post : ${postDetailsState.currentPost.postTitle}`, true, true);
             }
         }
     } catch (error) {
@@ -113,7 +108,7 @@ export const increaseAndSetPostCounts = async (post, sdomDatastate, setSdomDatas
     }
 }
 
-export const savePostCounts = async (postId, postIdForSelectedCountType, sdomDatastate, setSdomDatastate) => {
+export const savePostCounts = async (postId, postIdForSelectedCountType, postDetailsState, setPostDetailsState) => {
     try {
         const getPostIdOfPostForCount = await getPostCounts(keyChainConstansts.SAVE_POST_COUNTS);
         let postCounts, postIds = jsonConstants.EMPTY, postIdsJson;
@@ -131,12 +126,12 @@ export const savePostCounts = async (postId, postIdForSelectedCountType, sdomDat
                     [savePostCountKeys.SELECTED_POST_LIKES]: postIds
                 }
             }
-            sdomDatastate.posts.filter(post => post.id == postId).map(item => item.likeDisabled = true);
-            setSdomDatastate({ ...sdomDatastate });
+            postDetailsState.currentPost.likeDisabled = postDetailsState.currentPost.postLikes <= numericConstants.ONE_HUNDRED;
             postIdsJson = JSON.stringify(postCounts);
             await saveDetailsToKeyChain(keyChainConstansts.SAVE_POST_COUNTS, keyChainConstansts.SAVE_POST_COUNTS,
                 postIdsJson);
         }
+        setPostDetailsState({ ...postDetailsState });
     } catch (error) {
         console.error(`Cannot save the post counts for the post id ${postId}`, error);
     }
@@ -173,15 +168,13 @@ export const downloadCurrentImage = async (postUrl, postTitle, isDownload, downl
     }
 }
 
-export const shareImage = async (post, setLoaderCallback, downloadCallback) => {
+export const shareImage = async (post, downloadCallback) => {
     const { postImage, postTitle } = post
     try {
-        setLoaderCallback(true);
         const response = await downloadCurrentImage(postImage, postTitle, false, downloadCallback);
         if (response) {
             const base64Image = await response.readFile(miscMessage.BASE64);
             const base64Data = `${miscMessage.BASE64_BLOB}${base64Image}`;
-            setLoaderCallback(false);
             await Share.open({ url: base64Data, filename: postTitle, excludedActivityTypes: [miscMessage.EXCLUDE_TYPE] });
         } else {
             showSnackBar(errorMessages.COULD_NOT_SHARE_IMAGE, false);
@@ -201,7 +194,7 @@ export const getCategoryButtonType = async () => {
     }
 }
 
-export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate, setLoaderCallback) => {
+export const postWallPaperAlert = async (paramKey, postDetailsState, setPostDetailsState) => {
     try {
         return (
             Alert.alert(
@@ -209,15 +202,13 @@ export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate, 
                 alertTextMessages.POST_WALLPAPER_TEXT,
                 [
                     {
-                        text: permissionsButtons.CANCEL, style: "cancel"
+                        text: permissionsButtons.CANCEL, style: actionButtonTextConstants.ALERT_CANCEL_STYLE
                     },
                     {
                         text: permissionsButtons.OK, onPress: async () => {
-                            setLoaderCallback(true);
-                            await setCurrentImageAsWallPaper(item.postImage, item.postTitle);
-                            await increaseAndSetPostCounts(item, sdomDatastate, setSdomDatastate, postCountTypes.POST_WALLPAPERS);
-                            setLoaderCallback(false);
-                            displaySuccessAlert();
+                            await setCurrentImageAsWallPaper(postDetailsState.currentPost.postImage, postDetailsState.currentPost.postTitle);
+                            await increaseAndSetPostCounts(paramKey, postDetailsState, setPostDetailsState, postCountTypes.POST_WALLPAPERS);
+                            showSnackBar(alertTextMessages.WALLPAPER_SET_SUCCESS_TEXT, true, true);
                         }
                     }
                 ],
@@ -228,21 +219,7 @@ export const postWallPaperAlert = async (item, sdomDatastate, setSdomDatastate, 
     }
 }
 
-export const displaySuccessAlert = () => {
-    return (
-        Alert.alert(
-            alertTextMessages.WALLPAPER_SET_SUCESS,
-            alertTextMessages.WALLPAPER_SET_SUCCESS_TEXT,
-            [
-                {
-                    text: permissionsButtons.OK
-                }
-            ],
-            { cancelable: true }
-        ));
-}
-
-export const downloadImageFromURL = async (item, sdomDatastate, setSdomDatastate, setLoaderCallback, downloadCallback) => {
+export const downloadImageFromURL = async (paramKey, postDetailsState, setPostDetailsState, downloadCallback) => {
     const write_granted = await accessAndGrantPermssionsToWallPiper(permissionMessages.READ_WRITE_EXTERNAL_STORAGE_TITLE,
         permissionMessages.READ_WRITE_EXTERNAL_STORAGE_MESSAGE, PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
 
@@ -250,10 +227,8 @@ export const downloadImageFromURL = async (item, sdomDatastate, setSdomDatastate
         permissionMessages.READ_WRITE_EXTERNAL_STORAGE_MESSAGE, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
     if (PermissionsAndroid.RESULTS.GRANTED == write_granted && PermissionsAndroid.RESULTS.GRANTED === read_granted) {
-        setLoaderCallback(true, alertTextMessages.DOWNLOADING_IMAGE);
-        await downloadCurrentImage(item.postImage, item.postTitle, true, downloadCallback);
-        await increaseAndSetPostCounts(item, sdomDatastate, setSdomDatastate, postCountTypes.POST_DOWNLOADS);
-        setLoaderCallback(false, stringConstants.EMPTY);
+        await downloadCurrentImage(postDetailsState.currentPost.postImage, postDetailsState.currentPost.postTitle, true, downloadCallback);
+        await increaseAndSetPostCounts(paramKey, postDetailsState, setPostDetailsState, postCountTypes.POST_DOWNLOADS);
     } else {
         showSnackBar(errorMessages.EXTERNAL_STORAGE_DENIED, false);
     }
@@ -506,7 +481,7 @@ export const onSwiperScrollEnd = (event, postDetailsRef, textPostDescriptionAnim
     } else if (event.nativeEvent.layoutMeasurement) {
         index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
     }
-    postDetailsRef?.current?.setPostIndex(index);
+    postDetailsRef?.current?.setCurrentPost(index);
     currentPostIndexForProfileRef.current = index;
     animateFinishedPostTextDetails(textPostDescriptionAnimationValue, textPostTypeAnimationValue);
 }
@@ -1024,6 +999,17 @@ export const showSnackBar = (message, success, isLong, actionCallback) => {
         type: success && miscMessage.SUCCESS || miscMessage.DANGER,
         duration: isLong && numericConstants.THOUSAND_EIGHT_FIFTY || numericConstants.THOUSAND_EIGHT_FIFTY,
         onPress: () => actionCallback()
+    })
+}
+
+export const showProgressSnackbar = (message, progressValue) => {
+    const autoHide = progressValue == numericConstants.ONE_HUNDRED
+    showMessage({
+        message: progressValue >= numericConstants.ZERO && responseStringData.SUCCESS || responseStringData.ERROR,
+        description: message,
+        icon: progressValue >= numericConstants.ZERO && miscMessage.SUCCESS || miscMessage.DANGER,
+        type: progressValue >= numericConstants.ZERO && miscMessage.SUCCESS || miscMessage.DANGER,
+        autoHide: autoHide
     })
 }
 

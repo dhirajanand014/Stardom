@@ -1,9 +1,10 @@
 import 'react-native-gesture-handler';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 
 import {
-  defaultProfilesValue, jsonConstants, numericConstants,
-  screens, stringConstants, requestConstants, PRIVATE_FOLLOW_UNFOLLOW, miscMessage
+  jsonConstants, numericConstants,
+  screens, stringConstants, requestConstants,
+  PRIVATE_FOLLOW_UNFOLLOW, miscMessage
 } from './constants/Constants';
 import { fetchAndUpdateCategoryState, fetchUpdateLoggedInUserProfile, getAllProfiles } from './helper/Helper.js';
 import { TourGuideProvider } from 'rn-tourguide';
@@ -12,7 +13,7 @@ import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';
 import { ScreenNavigator } from '.';
 import FlashMessage from "react-native-flash-message";
 import { SDLoaderView } from './components/modals/SDLoaderView';
-import { useRef } from 'react/cjs/react.development';
+import { useSharedValue } from 'react-native-reanimated';
 
 export const CategoryContext = React.createContext();
 
@@ -23,6 +24,7 @@ export default function App({ navigationRef }) {
   });
 
   const currentPostIndexForProfileRef = useRef(numericConstants.ZERO);
+  const progressValue = useSharedValue(numericConstants.ZERO);
 
   const [sdomDatastate, setSdomDatastate] = useState(jsonConstants.EMPTY);
   const [optionsState, setOptionsState] = useState({
@@ -98,7 +100,7 @@ export default function App({ navigationRef }) {
     setLoader({
       ...loader, isLoading: isLoading, loadingText: loadingText && loadingText || stringConstants.EMPTY, progressValue: progressValue
     });
-  })
+  });
 
   const fetchCategories = (category, setCategory, categoryIdFromNotification) => {
     fetchAndUpdateCategoryState(category, setCategory, categoryIdFromNotification);
@@ -115,7 +117,7 @@ export default function App({ navigationRef }) {
         postIdFromNotification, categoryIdFromNotification, loader,
         loggedInUser, setLoggedInUser, sdomDatastate, setSdomDatastate,
         optionsState, setOptionsState, profileDetail, setProfileDetail,
-        currentPostIndexForProfileRef, loader, setLoaderCallback
+        currentPostIndexForProfileRef, loader, setLoaderCallback, progressValue
       }}>
         <TourGuideProvider androidStatusBarVisible={true}
           backdropColor={navigationRef && navigationRef.initialCategorySelection == screens.INTRO && `rgba(145, 63, 146, 0.6)`}>

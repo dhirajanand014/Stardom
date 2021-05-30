@@ -11,7 +11,7 @@ import {
 import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal';
 import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
-import Animated, { useAnimatedScrollHandler, useDerivedValue, useSharedValue } from 'react-native-reanimated';
+import Animated, { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import Shimmer from 'react-native-shimmer';
 import Swiper from 'react-native-swiper';
 import { PostDetails } from './PostDetails';
@@ -26,7 +26,7 @@ const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
 export const Glance = ({ navigation }) => {
 
     const { postIdFromNotification, categoryIdFromNotification, sdomDatastate, setSdomDatastate,
-        optionsState, setOptionsState, loggedInUser, setLoaderCallback, currentPostIndexForProfileRef } = useContext(CategoryContext);
+        optionsState, setOptionsState, loggedInUser, currentPostIndexForProfileRef } = useContext(CategoryContext);
     const viewPagerRef = useRef(null);
     const postDetailsRef = useRef(null);
 
@@ -56,26 +56,23 @@ export const Glance = ({ navigation }) => {
         postImageParallax.value = event.nativeEvent.contentOffset.y;
     }
 
-    const onPostScroll = useAnimatedScrollHandler({
-        onScroll: onPostScrollFunction,
-    });
 
     return (
         <GlanceComponent sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
             currentPostIndexForProfileRef={currentPostIndexForProfileRef} height={height} postImageParallax={postImageParallax} postIdFromNotification={postIdFromNotification} navigation={navigation}
-            setSdomDatastate={setSdomDatastate} setLoaderCallback={setLoaderCallback} />
+            setSdomDatastate={setSdomDatastate} />
     )
 }
 
 const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRef, optionsState, setOptionsState, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x, currentPostIndexForProfileRef, height,
-    postImageParallax, postIdFromNotification, navigation, setSdomDatastate, setLoaderCallback }) => {
+    postImageParallax, postIdFromNotification, navigation }) => {
     return <View style={SDGenericStyles.fill}>
         {
             sdomDatastate.posts && sdomDatastate.posts.length &&
             <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorYellow]}>
                 <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
-                    bounces={true} onMomentumScrollBegin={() => {
+                    bounces={true} onMomentumScrollBegin={(event) => {
                         if (optionsState.isImageLoadError) {
                             setImageLoadError(optionsState, setOptionsState, false);
                         }
@@ -91,19 +88,18 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                         }
                         //onPostScrollFunction(event);
                     }}>
-                    {sdomDatastate.posts.map((item, index) => {
-                        return <Animated.View key={index}>
-                            <SwipeItem width={width} height={height} item={item} index={index}
-                                postImageParallax={postImageParallax} sdomDatastate={sdomDatastate}
-                                postIdFromNotification={postIdFromNotification} viewPagerRef={viewPagerRef}
-                                postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState} />
-                        </Animated.View>;
-                    })}
+                    {
+                        sdomDatastate.posts.map((item, index) => {
+                            return <Animated.View key={index}>
+                                <SwipeItem width={width} height={height} item={item} index={index}
+                                    postImageParallax={postImageParallax} sdomDatastate={sdomDatastate}
+                                    postIdFromNotification={postIdFromNotification} viewPagerRef={viewPagerRef}
+                                    postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState} />
+                            </Animated.View>;
+                        })}
                 </Swiper>
-                <PostDetails ref={postDetailsRef} posts={sdomDatastate.posts} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x}
-                    width={width} height={height} optionsState={optionsState} setOptionsState={setOptionsState} navigation={navigation}
-                    sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} setLoaderCallback={setLoaderCallback}
-                    viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
+                <PostDetails ref={postDetailsRef} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x} width={width} height={height}
+                    navigation={navigation} viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
             </View> || sdomDatastate.posts && !sdomDatastate.posts.length &&
             <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.CATEGORY_WITHOUT_POST}
                 descriptionText={errorMessages.SELECT_OTHER_CATEGORIES} navigation={navigation} /> || <View>
