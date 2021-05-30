@@ -1,9 +1,10 @@
 import React from 'react';
 import { Text, View, TouchableNativeFeedback } from "react-native";
+import Animated from 'react-native-reanimated';
 import { fieldControllerName, miscMessage, screens } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 
-export const MenuRenderer = React.memo(({ item, index, profileMenu, handleMenuClickAction }) => {
+export const MenuRenderer = React.memo(({ item, index, profileMenu, handleMenuClickAction, animatedStyle }) => {
     return (
         <View key={index}>
             <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(colors.SDOM_PLACEHOLDER, false)} useForeground={true}

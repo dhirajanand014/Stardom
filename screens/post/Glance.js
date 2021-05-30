@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useContext, useMemo } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import { View, Image, StatusBar, Dimensions, TouchableOpacity } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
-    width, miscMessage, numericConstants, jsonConstants, screens
+    width, miscMessage, numericConstants, jsonConstants
 } from '../../constants/Constants';
 import {
     onSwiperScrollEnd, fetchPostsAndSaveToState,
@@ -19,7 +19,6 @@ import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import { SwipeItem } from '../../components/swiper/SwipeItem';
 import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
-import { TabActions } from '@react-navigation/routers';
 
 const category_selection = require('../../assets/category_selection_icon.png');
 const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
@@ -65,7 +64,7 @@ export const Glance = ({ navigation }) => {
         <GlanceComponent sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
             currentPostIndexForProfileRef={currentPostIndexForProfileRef} height={height} postImageParallax={postImageParallax} postIdFromNotification={postIdFromNotification} navigation={navigation}
-            setSdomDatastate={setSdomDatastate} />
+            setSdomDatastate={setSdomDatastate} setLoaderCallback={setLoaderCallback} />
     )
 }
 

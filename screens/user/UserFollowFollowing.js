@@ -35,7 +35,7 @@ export const UserFollowFollowing = () => {
 
     const AnimatedFlatlist = Animated.createAnimatedComponent(FlatList);
 
-    const { loggedInUser, setLoggedInUser, loader, setLoader } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, setLoaderCallback } = useContext(CategoryContext);
 
     const route = useRoute();
     const listFor = route.params?.listFor || stringConstants.EMPTY;
@@ -48,7 +48,7 @@ export const UserFollowFollowing = () => {
     }
 
     useEffect(async () => {
-        setLoader({ ...loader, isLoading: true, loadingText: alertTextMessages.LOADING_USER_DETAILS });
+        setLoaderCallback(true, alertTextMessages.LOADING_USER_DETAILS);
         const responseData = await fetchUserFollowersFollowing(listFor, loggedInUser.loginDetails.token);
         if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS) {
             filterPrivateAccessUsers(responseData);
@@ -56,16 +56,16 @@ export const UserFollowFollowing = () => {
             setSearchList(responseData);
         }
         setUserFollowerFollowing(responseData);
-        setLoader({ ...loader, isLoading: false, loadingText: stringConstants.EMPTY });
+        setLoaderCallback(false);
     }, jsonConstants.EMPTY);
 
     const setLoading = (action, isLoading) => {
         if (action == actionButtonTextConstants.APPROVE) {
-            setLoader({ ...loader, isLoading: isLoading, loadingText: alertTextMessages.APPROVING_VERIFICATION_REQUEST });
+            setLoaderCallback(isLoading, alertTextMessages.APPROVING_VERIFICATION_REQUEST);
         } else if (action == actionButtonTextConstants.REJECT) {
-            setLoader({ ...loader, isLoading: isLoading, loadingText: alertTextMessages.REJECTING_VERIFICATION_REQUEST });
+            setLoaderCallback(isLoading, alertTextMessages.REJECTING_VERIFICATION_REQUEST);
         } else if (action == actionButtonTextConstants.REMOVE) {
-            setLoader({ ...loader, isLoading: isLoading, loadingText: alertTextMessages.REMOVING_FOLLOWER });
+            setLoaderCallback(isLoading, alertTextMessages.REMOVING_FOLLOWER);
         }
     }
 
@@ -168,7 +168,7 @@ export const UserFollowFollowing = () => {
                 </Animated.View>
             }
             <AnimatedFlatlist data={listFor == fieldControllerName.SEARCH_USERS && searchList.users || userFollowerFollowing.users}
-                keyExtractor={(item) => item.key} key={`1_${numericConstants.ONE}`} renderItem={({ item, index }) => {
+                keyExtractor={(item) => item.id} key={`1_${numericConstants.ONE}`} renderItem={({ item, index }) => {
                     return <RenderFollowingFollower item={item} scrollYValue={scrollYValue} index={index} listFor={listFor}
                         actionCallBack={actionCallBack} />
                 }} contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}

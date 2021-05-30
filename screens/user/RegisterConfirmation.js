@@ -24,7 +24,7 @@ import { CategoryContext } from '../../App';
 export const RegistrationConfirmation = () => {
 
     const { control, formState, setError, handleSubmit, watch, clearErrors } = useForm();
-    const { signUpDetails, setSignUpDetails, loader, setLoader } = useContext(CategoryContext);
+    const { signUpDetails, setSignUpDetails, loader, setLoaderCallback } = useContext(CategoryContext);
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
 
     let confirmSecretRef = useRef(null);
@@ -40,7 +40,7 @@ export const RegistrationConfirmation = () => {
 
     const validateUserId = useCallback(async () => {
         if (userIdValue && !/\s/g.test(userIdValue)) {
-            setLoader({ ...loader, isLoading: true });
+            setLoaderCallback(true);
             const responseData = await validateUserAction(fieldControllerName.USER_ID, userIdValue);
             if (responseData.availability) {
                 isUserIdAvailable.current = true;
@@ -49,7 +49,7 @@ export const RegistrationConfirmation = () => {
                 isUserIdAvailable.current = false;
                 setError(fieldControllerName.USER_ID, formRequiredRules.userIdAvailability);
             }
-            setLoader({ ...loader, isLoading: false });
+            setLoaderCallback(false);
         } else {
             setError(fieldControllerName.USER_ID, formRequiredRules.userIdInvalidSpace);
         }
@@ -70,14 +70,14 @@ export const RegistrationConfirmation = () => {
             showSnackBar(alertTextMessages.SUCCESSFULLY_REGISTERED, true);
             navigation.reset({ index: numericConstants.ZERO, routes: [{ name: routeConsts.HOME }] });
         }
-        setLoader({ ...loader, isLoading: false });
+        setLoaderCallback(false);
     }
 
     const onSubmit = async data => {
         if (data.confirmSecret !== data.secret) {
             setError(fieldControllerName.CONFIRM_SECRET, formRequiredRules.confirmPasswordRule);
         } else if (data.confirmSecret === data.secret) {
-            setLoader({ ...loader, isLoading: true });
+            setLoaderCallback(true);
             const responseData = await validateUserAction(fieldControllerName.USER_ID, data.userId);
             if (responseData.availability) {
                 isUserIdAvailable.current = true;
@@ -97,7 +97,7 @@ export const RegistrationConfirmation = () => {
             } else {
                 isUserIdAvailable.current = false;
                 setError(fieldControllerName.USER_ID, formRequiredRules.userIdAvailability);
-                setLoader({ ...loader, isLoading: false });
+                setLoaderCallback(false);
             }
         };
     }

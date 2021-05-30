@@ -17,6 +17,9 @@ export const SDGenericStyles = StyleSheet.create({
     elevation8: {
         elevation: 8
     },
+    right0: {
+        right: 0
+    },
     right8: {
         right: 8
     },

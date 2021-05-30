@@ -16,14 +16,14 @@ import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { CategoryContext } from '../../App';
 export const Register = () => {
 
-    const { signUpDetails, setSignUpDetails, loader, setLoader } = useContext(CategoryContext);
+    const { signUpDetails, setSignUpDetails, loader, setLoaderCallback } = useContext(CategoryContext);
 
     const { control, formState, handleSubmit, getValues } = useForm();
     const navigation = useNavigation();
 
 
     const validateUserRegistered = useCallback(async () => {
-        setLoader({ ...loader, isLoading: true });
+        setLoaderCallback(true);
         const phoneNumber = getValues(fieldControllerName.PHONE_NUMBER);
         const response = await validateUserAction(fieldControllerName.PHONE_NUMBER, phoneNumber);
         if (response) {
@@ -32,7 +32,7 @@ export const Register = () => {
         } else {
             await handleUserSignUpOtp(miscMessage.SIGN_UP, navigation, false);
         }
-        setLoader({ ...loader, isLoading: false });
+        setLoaderCallback(false);
     });
 
     return (

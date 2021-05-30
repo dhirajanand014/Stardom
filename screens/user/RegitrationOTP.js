@@ -31,7 +31,7 @@ export const RegistrationOTP = props => {
     const { attempts } = props;
     let [attemptsRemaining, setAttemptsRemaining] = useState(attempts);
 
-    const { signUpDetails, setLoader, loader } = useContext(CategoryContext);
+    const { signUpDetails, setLoaderCallback, loader } = useContext(CategoryContext);
 
     const navigation = useNavigation();
     const [otpArray, setOtpArray] = useState(otpInputs);
@@ -98,11 +98,11 @@ export const RegistrationOTP = props => {
     // since useEffect use closure to cache variables data, we will not be able to get updated autoSubmitOtpTime value
     // as a solution we are using useRef by keeping its value always updated inside useEffect(componentDidUpdate)
     const autoSubmitOtpTimerIntervalCallback = async () => {
-        setLoader({ ...loader, isLoading: true });
+        setLoaderCallback(true);
         if (autoSubmitOtpTime <= numericConstants.ZERO) {
             clearInterval(autoSubmitOtpTimerInterval);
             await onSubmit();
-            setLoader({ ...loader, isLoading: true });
+            setLoaderCallback(true);
             setAutoSubmittingOtp(false);
         }
         setAutoSubmitOtpTime(autoSubmitOtpTime - numericConstants.ONE);
@@ -114,7 +114,7 @@ export const RegistrationOTP = props => {
     };
 
     const onSubmit = async () => {
-        setLoader({ ...loader, isLoading: true });
+        setLoaderCallback(true);
         const otpString = otpArray.reduce((result, item) => { return `${result}${item}` }, stringConstants.EMPTY);
         const isValid = identifyOtpError(otpString, otpArray, setError, clearErrors);
         if (isValid) {
@@ -127,7 +127,7 @@ export const RegistrationOTP = props => {
         } else {
 
         }
-        setLoader({ ...loader, isLoading: false });
+        setLoaderCallback(false);
     };
 
     return (
@@ -155,7 +155,7 @@ export const RegistrationOTP = props => {
                     || <OTPResendButton text={miscMessage.RESEND_OTP} buttonStyle={userAuthStyles.otpResendButton} textStyle={[SDGenericStyles.colorWhite,
                     SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16]}
                         onPress={async () => await onResendOtpButtonPress(firstTextInputRef, setOtpArray, setResendButtonDisabledTime, setAttemptsRemaining,
-                            attemptsRemaining, startResendOtpTimer, phoneNumber, isFrom, navigation, clearErrors, setLoader)} />
+                            attemptsRemaining, startResendOtpTimer, phoneNumber, isFrom, navigation, clearErrors, setLoaderCallback)} />
                 }
                 <View style={userAuthStyles.registerButtonView}>
                     <Text style={SDGenericStyles.colorWhite}>OTP IS - {route.params.rand_number}</Text>

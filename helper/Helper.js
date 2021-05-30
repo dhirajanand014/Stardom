@@ -10,7 +10,7 @@ import {
     miscMessage, width, height, numericConstants,
     screens, headerStrings, fieldControllerName, isAndroid,
     isIOS, OTP_INPUTS, errorMessages, requestConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions,
+    jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants,
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -21,6 +21,7 @@ import { withDelay, withSpring } from 'react-native-reanimated';
 import { colors, headerStyles, SDGenericStyles } from '../styles/Styles';
 import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
+import DefaultUserProfile from '../constants/DefaultUserProfile.json';
 import { HeaderBackButton } from '@react-navigation/stack';
 import Share from 'react-native-share';
 import { showMessage } from "react-native-flash-message";
@@ -723,7 +724,7 @@ export const authorizationHeader = props => {
 }
 
 export const onResendOtpButtonPress = async (firstTextInputRef, setOtpArray, setResendButtonDisabledTime, setAttemptsRemaining,
-    attemptsRemaining, startResendOtpTimer, phoneNumber, isFrom, navigation, clearErrors, setLoader) => {
+    attemptsRemaining, startResendOtpTimer, phoneNumber, isFrom, navigation, clearErrors, setLoaderCallback) => {
     // clear last OTP
     if (firstTextInputRef) {
         setOtpArray(Array(OTP_INPUTS).fill(stringConstants.EMPTY));
@@ -735,7 +736,7 @@ export const onResendOtpButtonPress = async (firstTextInputRef, setOtpArray, set
     const signUpDetails = {
         [fieldControllerName.PHONE_NUMBER]: phoneNumber
     };
-    await handleUserSignUpOtp(signUpDetails, isFrom, navigation, true, setLoader);
+    await handleUserSignUpOtp(signUpDetails, isFrom, navigation, true, setLoaderCallback);
     clearErrors(fieldControllerName.OTP_INPUT);
 };
 
@@ -866,7 +867,7 @@ export const handleUserSignUpOtp = async (isFrom, navigation, _isResendOtp) => {
         const params = getSignUpParams(random6Digit, isFrom);
 
         navigation.navigate(screens.OTP_VERIFICATION, params);
-        // setLoader(false);
+        // setLoaderCallback(false);
         return true;
         //}
         // showSnackBar(successFulMessages.SENT_SMS_SUCCESSFULLY, true);
@@ -1601,5 +1602,15 @@ export const userPostAction = async (request, data, token, uploadProgressCallbac
         return processResponseData(response);
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+    }
+}
+
+export const checkProfileFrom = (currentPostIndexForProfileRef, sdomDatastate, isFrom, loggedInUser) => {
+    if (isFrom == modalTextConstants.VIEW_PROFILE) {
+        const profile = JSON.parse(loggedInUser.loginDetails.details);
+        return profile && { ...profile, profile_image: profile.profile_picture } || DefaultUserProfile;
+    } else {
+        const postIndex = currentPostIndexForProfileRef.current || numericConstants.ZERO;
+        return sdomDatastate.posts && sdomDatastate.posts[postIndex].user || DefaultUserProfile;
     }
 }

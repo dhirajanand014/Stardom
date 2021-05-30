@@ -1,11 +1,11 @@
 import { useIsFocused, useNavigation } from '@react-navigation/core';
-import { DrawerContentScrollView } from '@react-navigation/drawer';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../App';
 import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
-import { PolygonSvg } from '../components/icons/PolygonSvg';
+import { CloseIcon } from '../components/icons/CloseIcon';
 import { ErrorModal } from '../components/modals/ErrorModal';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
@@ -15,6 +15,7 @@ import {
 import { prepareSDOMMenu, fetchProfilePostsCounts, logoutUser, fetchUpdateLoggedInUserProfile } from '../helper/Helper';
 import { colors, SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';
 import { MenuRenderer } from '../views/menus/MenuRenderer';
+import { Extrapolate, interpolate, useAnimatedStyle, useDerivedValue, useSharedValue, withSpring } from 'react-native-reanimated';
 
 export const SDUserMenus = (drawerProps) => {
 
@@ -44,6 +45,21 @@ export const SDUserMenus = (drawerProps) => {
     const fromCoords = { x: numericConstants.ZERO, y: height };
     const toCoords = { x: width, y: numericConstants.ZERO };
 
+    const play = useSharedValue(false);
+    const progress = useDerivedValue(() => {
+        return play.value ? withSpring(numericConstants.ONE) : numericConstants.ZERO
+    })
+    const animatedStyle = useAnimatedStyle(() => {
+        const opacity = interpolate(progress.value, [numericConstants.ZERO, numericConstants.ONE],
+            [numericConstants.ZERO, numericConstants.ONE], Extrapolate.CLAMP);
+        const translateY = interpolate(progress.value, [numericConstants.ZERO, numericConstants.ONE],
+            [numericConstants.ONE_HUNDRED, numericConstants.ZERO], Extrapolate.CLAMP);
+        return {
+            transform: [{ translateY }],
+            opacity
+        };
+    });
+
     const bottomSheetRefCallback = useCallback((node) => {
         bottomSheetRef.current = node;
     });
@@ -51,6 +67,12 @@ export const SDUserMenus = (drawerProps) => {
     const handleMenuClickAction = useCallback(async (item) => {
         setLoaderCallback(true);
         switch (item.key) {
+            case screens.EDIT_USER_PROFILE:
+                navigation.navigate(screens.EDIT_USER_PROFILE, { loggedInUser: loggedInUser });
+                break;
+            case modalTextConstants.VIEW_PROFILE:
+                navigation.navigate(screens.PROFILE, { isFrom: modalTextConstants.VIEW_PROFILE });
+                break;
             case screens.USER_FOLLOWERS_FOLLOWING:
                 navigation.navigate(screens.USER_FOLLOWERS_FOLLOWING, { listFor: item.label });
                 break;
@@ -62,9 +84,11 @@ export const SDUserMenus = (drawerProps) => {
                 break;
             case actionButtonTextConstants.VERIFY_USER:
                 setProfileMenu({ ...profileMenu, showSubmitVerifyModal: true });
+                break;
             default:
                 break;
         }
+        drawerProps.navigation.closeDrawer();
         setLoaderCallback(false);
     });
 
@@ -109,18 +133,25 @@ export const SDUserMenus = (drawerProps) => {
                 profileMenu.followersCount = numericConstants.ZERO;
                 profileMenu.followingCount = numericConstants.ZERO;
             }
+            play.value = true;
             setProfileMenu({ ...profileMenu });
         })();
     }, [loggedInUser.loginDetails, isFocused]);
 
     return (
-        <SDMenuRenderer loggedInUser={loggedInUser} profileMenu={profileMenu} navigation={navigation} handleMenuClickAction={handleMenuClickAction} drawerProps={drawerProps}
+        <SDMenuRenderer loggedInUser={loggedInUser} profileMenu={profileMenu} navigation={navigation} handleMenuClickAction={handleMenuClickAction} drawerProps={drawerProps} animatedStyle={animatedStyle}
             setLoggedInUser={setLoggedInUser} errorMod={errorMod} setErrorMod={setErrorMod} setProfileMenu={setProfileMenu} setLoaderCallback={setLoaderCallback} fromCoords={fromCoords} toCoords={toCoords} />
     )
 }
 
-const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, errorMod, setErrorMod, setProfileMenu, setLoaderCallback, drawerProps, fromCoords, toCoords }) => {
+const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, errorMod, setErrorMod, setProfileMenu, setLoaderCallback, drawerProps, animatedStyle,
+    fromCoords, toCoords }) => {
     return <SafeAreaView style={SDGenericStyles.fill}>
+        <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.alignSelfEnd, SDGenericStyles.padding8]}>
+            <TouchableOpacity activeOpacity={.7} onPress={() => drawerProps.navigation.closeDrawer()} po>
+                <CloseIcon />
+            </TouchableOpacity>
+        </View>
         {
             loggedInUser.isLoggedIn &&
             <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]}>
@@ -145,7 +176,7 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                     <View style={SDGenericStyles.rowFlexDirection}>
                         <View>
                             <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15]}
-                                onPress={() => navigation.navigate(screens.EDIT_USER_PROFILE, { loggedInUser: loggedInUser })}>
+                                onPress={() => handleMenuClickAction({ key: screens.EDIT_USER_PROFILE })}>
                                 <Text style={[SDGenericStyles.fontFamilyBold, SDGenericStyles.ft14, SDGenericStyles.colorYellow]}>
                                     {modalTextConstants.EDIT_PROFILE}
                                 </Text>
@@ -153,7 +184,7 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                         </View>
                         <View>
                             <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingVertical3, SDGenericStyles.paddingHorizontal15]}
-                                onPress={() => navigation.navigate(screens.PROFILE)}>
+                                onPress={() => handleMenuClickAction({ key: modalTextConstants.VIEW_PROFILE })}>
                                 <Text style={[SDGenericStyles.fontFamilyBold, SDGenericStyles.ft14, SDGenericStyles.colorYellow]}>
                                     {modalTextConstants.VIEW_PROFILE}
                                 </Text>
@@ -164,11 +195,10 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
             </View> || <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]} />
         }
 
-        <DrawerContentScrollView {...drawerProps} >
-            <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => `1_${item.label}`}
-                renderItem={({ item, index }) => <MenuRenderer item={item} index={index} profileMenu={profileMenu} handleMenuClickAction={handleMenuClickAction} />}
-                ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />); }} />
-        </DrawerContentScrollView>
+        <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => `1_${item.label}`}
+            renderItem={({ item, index }) => <MenuRenderer item={item} index={index} profileMenu={profileMenu} handleMenuClickAction={handleMenuClickAction}
+                animatedStyle={animatedStyle} />}
+            ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />); }} />
 
         {
             !loggedInUser.isLoggedIn &&

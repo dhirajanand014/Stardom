@@ -21,7 +21,7 @@ export const Login = () => {
 
     const { handleSubmit, control, formState } = useForm();
 
-    const { loggedInUser, setLoggedInUser, loader, setLoader } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, loader, setLoaderCallback } = useContext(CategoryContext);
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
 
     const route = useRoute();
@@ -36,7 +36,7 @@ export const Login = () => {
     };
 
     const onSubmit = async data => {
-        setLoader({ ...loader, isLoading: true });
+        setLoaderCallback(true);
         const responseData = await handleUserLogin(data, loggedInUser, setLoggedInUser, messaging);
         if (responseData) {
             showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
@@ -50,7 +50,7 @@ export const Login = () => {
         } else {
             showSnackBar(errorMessages.COULD_NOT_LOGIN_USER, false);
         }
-        setLoader({ ...loader, isLoading: false });
+        setLoaderCallback(false);
     }
 
     return (

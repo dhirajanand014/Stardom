@@ -52,7 +52,7 @@ export const DrawerNavigation = () => {
         <DrawerNavigator.Navigator drawerStyle={[SDGenericStyles.backGroundColorBlack, { width: width }]}
             drawerContent={props => <SDUserMenus {...props} />} edgeWidth={numericConstants.ZERO}>
             <DrawerNavigator.Screen name={screens.GLANCE} component={Glance} />
-            <DrawerNavigator.Screen name={screens.MENU} component={DrawerNavigation} />
+            <DrawerNavigator.Screen name={screens.MENU} component={SDUserMenus} />
         </DrawerNavigator.Navigator>
     )
 }

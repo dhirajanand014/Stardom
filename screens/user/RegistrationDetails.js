@@ -23,14 +23,14 @@ import { CategoryContext } from '../../App';
 export const RegistrationDetails = () => {
 
     const { control, formState, handleSubmit, watch } = useForm();
-    const { signUpDetails, profiles, loader, setLoader } = useContext(CategoryContext);
+    const { signUpDetails, profiles, loader, setLoaderCallback } = useContext(CategoryContext);
 
     const navigation = useNavigation();
 
     const genderValue = watch(fieldControllerName.GENDER);
 
     const onSubmit = async (data) => {
-        setLoader({ ...loader, isLoading: true });
+        setLoaderCallback(true);
         const registrationUpdated = await handleUserRegistration(signUpDetails.phoneNumber, data,
             miscMessage.UPDATE);
         if (registrationUpdated) {
@@ -39,7 +39,7 @@ export const RegistrationDetails = () => {
         } else {
             await saveRegistrationStatus(phoneNumber, miscMessage.VERIFIED);
         }
-        setLoader({ ...loader, isLoading: false });
+        setLoaderCallback(false);
     }
 
     return (

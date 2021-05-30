@@ -14,7 +14,7 @@ import {
 
 export const Category = () => {
 
-    const { fetchCategories, initialCategorySelection, loader, setLoader } = useContext(CategoryContext);
+    const { fetchCategories, initialCategorySelection, loader, setLoaderCallback } = useContext(CategoryContext);
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -27,9 +27,9 @@ export const Category = () => {
     });
 
     useEffect(() => {
-        setLoader(true);
+        setLoaderCallback(true);
         fetchCategories(category, setCategory, initialCategorySelection);
-        setLoader(false);
+        setLoaderCallback(false);
         const backHandler = BackHandler.addEventListener(backHandlerConstants.HARDWAREBACKPRESS, () => {
             if (route.params && route.params.fromIntro) {
                 BackHandler.exitApp();
@@ -60,12 +60,12 @@ export const Category = () => {
                     <TourGuideZone zone={numericConstants.THREE} borderRadius={numericConstants.TWENTY}
                         text={alertTextMessages.SKIP_SAVE_CATEGORIES} shape={miscMessage.RECTANGLE}>
                         <TouchableOpacity activeOpacity={.7} onPress={async () => {
-                            setLoader(true);
+                            setLoaderCallback(true);
                             await saveCategoryDetailsToKeyChain(keyChainConstansts.SAVE_CATEGORY_BUTTON_TYPE,
                                 actionButtonTextConstants.SAVE_BUTTON);
                             navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
                             stop();
-                            setLoader(false);
+                            setLoaderCallback(false);
                         }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
                         SDGenericStyles.backgroundColorYellow]}>
                             <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyBold,
@@ -80,7 +80,7 @@ export const Category = () => {
                 category.initialCategory == actionButtonTextConstants.SAVE_BUTTON &&
                 <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingVertical10]}>
                     <TouchableOpacity activeOpacity={.7} onPress={async () => {
-                        setLoader(true);
+                        setLoaderCallback(true);
                         const categoryIds = category.categories.filter(item => item.isSelected).map(selectedCategory => {
                             return {
                                 selectedCategoryId: selectedCategory.categoryId,
@@ -93,7 +93,7 @@ export const Category = () => {
                             actionButtonTextConstants.SAVE_BUTTON);
                         navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }], });
                         stop();
-                        setLoader(false);
+                        setLoaderCallback(false);
                     }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
                     SDGenericStyles.backgroundColorYellow]}>
                         <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyBold,

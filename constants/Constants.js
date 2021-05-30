@@ -415,7 +415,7 @@ export const placeHolderText = {
     EMAIL: `Enter Email Address`,
     NAME: `Enter Name`,
     DOB: `Enter date of birth`,
-    SECRET: `Enter Atleast 6 Character Password`,
+    SECRET: `Enter 6 Character Password`,
     CONFIRM_PASSWORD: `Confirm Password`,
     REGISTER_DESCRIPTION: `We will send you a verification code to your phone`,
     SEARCH_POSTS: `Search Posts`,
