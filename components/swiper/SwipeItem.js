@@ -1,24 +1,13 @@
 import React from 'react';
 import FastImage from 'react-native-fast-image';
-import Animated, { Extrapolate, interpolate, useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
-import { componentErrorConsts, errorMessages, numericConstants } from '../../constants/Constants';
+import Animated, { } from 'react-native-reanimated';
+import { componentErrorConsts, errorMessages } from '../../constants/Constants';
 import { scrollWhenPostIdFromNotification, setImageLoadError } from '../../helper/Helper';
 import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
 
 export const SwipeItem = (props) => {
 
-    const { width, height, item, index, postImageParallax, sdomDatastate, postIdFromNotification, viewPagerRef,
-        postDetailsRef, optionsState, setOptionsState } = props;
-    const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
-
-    const verticalSpeed = Math.abs(height * 0.5 - height)
-
-    const postImageParallax_translate_y = useDerivedValue(() => {
-        return interpolate(postImageParallax.value, [(index - numericConstants.ONE) * height, index * height, (index + numericConstants.ONE) * height],
-            [-verticalSpeed, numericConstants.ZERO, verticalSpeed], Extrapolate.CLAMP)
-    });
-
-    const postTransformParallax = useAnimatedStyle(() => ({ transform: [{ translateY: postImageParallax_translate_y.value }] }));
+    const { width, height, item, index, posts, postIdFromNotification, viewPagerRef, postDetailsRef, optionsState, setOptionsState } = props;
 
     return (
         <Animated.View key={`${index}_${item.categoryId}`}>
@@ -32,7 +21,7 @@ export const SwipeItem = (props) => {
                 priority: FastImage.priority.high,
                 cache: FastImage.cacheControl.immutable
             }} fallback={optionsState.isImageLoadError} onLoadEnd={() =>
-                scrollWhenPostIdFromNotification(sdomDatastate, postIdFromNotification, viewPagerRef,
+                scrollWhenPostIdFromNotification(posts, postIdFromNotification, viewPagerRef,
                     postDetailsRef)} onError={() => setImageLoadError(optionsState, setOptionsState, true)} />
         </Animated.View>)
 }
