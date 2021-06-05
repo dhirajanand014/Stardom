@@ -13,7 +13,7 @@ import {
     jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants,
 } from '../constants/Constants';
 import {
-    Alert, InteractionManager, NativeModules,
+    Alert, InteractionManager, Linking, NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
 import * as Keychain from 'react-native-keychain';
@@ -168,6 +168,14 @@ export const downloadCurrentImage = async (postUrl, postTitle, isDownload, downl
     }
 }
 
+export const openPhotos = (imagePath) => {
+    if (isIOS) {
+        RNFetchBlob.ios.openDocument(imagePath);
+    } else if (isAndroid) {
+        RNFetchBlob.android.actionViewIntent(imagePath, miscMessage.IMAGE_TYPE);
+    }
+}
+
 export const shareImage = async (post, downloadCallback, resetFlashMessage) => {
     const { postImage, postTitle } = post;
     try {
@@ -229,7 +237,9 @@ export const downloadImageFromURL = async (paramKey, postDetailsState, setPostDe
         permissionMessages.READ_WRITE_EXTERNAL_STORAGE_MESSAGE, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
     if (PermissionsAndroid.RESULTS.GRANTED == write_granted && PermissionsAndroid.RESULTS.GRANTED === read_granted) {
-        await downloadCurrentImage(postDetailsState.currentPost.postImage, postDetailsState.currentPost.postTitle, true, downloadCallback);
+        const responseData = await downloadCurrentImage(postDetailsState.currentPost.postImage, postDetailsState.currentPost.postTitle, true,
+            downloadCallback);
+        responseData && openPhotos(responseData.path());
         await increaseAndSetPostCounts(paramKey, postDetailsState, setPostDetailsState, postCountTypes.POST_DOWNLOADS);
         resetFlashMessage();
     } else {
