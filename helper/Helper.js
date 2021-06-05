@@ -168,14 +168,15 @@ export const downloadCurrentImage = async (postUrl, postTitle, isDownload, downl
     }
 }
 
-export const shareImage = async (post, downloadCallback) => {
-    const { postImage, postTitle } = post
+export const shareImage = async (post, downloadCallback, resetFlashMessage) => {
+    const { postImage, postTitle } = post;
     try {
         const response = await downloadCurrentImage(postImage, postTitle, false, downloadCallback);
         if (response) {
+            showSnackBar(`You have downloaded the post : ${postTitle}`, true, true);
             const base64Image = await response.readFile(miscMessage.BASE64);
             const base64Data = `${miscMessage.BASE64_BLOB}${base64Image}`;
-            await Share.open({ url: base64Data, filename: postTitle, excludedActivityTypes: [miscMessage.EXCLUDE_TYPE] });
+            await Share.open({ url: base64Data, filename: postTitle, excludedActivityTypes: [miscMessage.EXCLUDE_TYPE], type: miscMessage.IMAGE_TYPE });
         } else {
             showSnackBar(errorMessages.COULD_NOT_SHARE_IMAGE, false);
         }
@@ -184,6 +185,7 @@ export const shareImage = async (post, downloadCallback) => {
             showSnackBar(errorMessages.USER_CANCELLED_SHARE, false);
         console.error(errorMessages.COULD_NOT_SHARE_IMAGE, error);
     }
+    resetFlashMessage();
 }
 
 export const getCategoryButtonType = async () => {
@@ -495,11 +497,11 @@ export const setAnimationVisible = (postDetailsState, setPostDetailsState, isVis
     });
 }
 
-export const scrollWhenPostIdFromNotification = (sdomDatastate, postIdFromNotification, viewPagerRef,
+export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, viewPagerRef,
     postDetailsRef) => {
     try {
         if (!postDetailsRef?.current?.newPostViewed && postIdFromNotification && viewPagerRef?.current) {
-            const index = sdomDatastate.posts.findIndex(post => post.id == postIdFromNotification)
+            const index = posts.findIndex(post => post.id == postIdFromNotification)
             viewPagerRef.current.scrollBy(index);
             postDetailsRef?.current?.setPostIndex(index);
             postDetailsRef?.current?.setNewPostViewed(true);
@@ -1228,7 +1230,7 @@ export const cropImage = async (imagePath, setLoaderCallback) => {
     }
 }
 
-export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem, loader, setLoaderCallback,
+export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem, _loader, setLoaderCallback,
     uploadProgressCallback) => {
     try {
         const formData = new FormData();
@@ -1435,6 +1437,11 @@ export const fetchPostsOfUserProfile = async (profile, profileDetail, setProfile
                 userPosts = responseData.posts.filter(post => post.user.id == profile.id);
             }
         }
+        userPosts.sort((datePost1, datePost2) => {
+            return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+        }) || responsePostsData.sort((datePost1, datePost2) => {
+            return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+        });
         setProfileDetail({ ...profileDetail, userPosts: userPosts });
     } catch (error) {
         showSnackBar(errorMessages.COULD_NOT_FETCH_USER_PROFILE_POST, false);
@@ -1600,7 +1607,7 @@ export const checkProfileFrom = (currentPostIndexForProfileRef, sdomDatastate, i
     }
 }
 
-export const fetchUserProfilePosts = async (userId, setPosts) => {
+export const fetchUserProfilePosts = async (userId, setPosts, postDetailsRef) => {
     let postData = jsonConstants.EMPTY;
     try {
         const url = `${urlConstants.fetchUserPosts}${stringConstants.SLASH}${userId}`;
@@ -1614,6 +1621,7 @@ export const fetchUserProfilePosts = async (userId, setPosts) => {
                 }) || responsePostsData.sort((datePost1, datePost2) => {
                     return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
                 });
+            postDetailsRef?.current?.setNewPostViewed(true);
         }
     } catch (error) {
         console.error(errorMessages.COULD_NOT_FETCH_USERS_POSTS, error);

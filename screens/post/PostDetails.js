@@ -26,7 +26,7 @@ export const PostDetails = forwardRef((props, ref) => {
 
     const { textPostTypeAnimationValue, viewPagerRef, width, height, textPostDescriptionAnimationValue } = props;
 
-    const { downloadProgressState, setDownloadProgressState, sdomDatastate, optionsState, setOptionsState, progressValue } = useContext(CategoryContext);
+    const { downloadProgressState, setDownloadProgressState, sdomDatastate, optionsState, setOptionsState } = useContext(CategoryContext);
 
     const post_external_link = require('../../assets/post_external_link_icon.png');
 
@@ -81,7 +81,7 @@ export const PostDetails = forwardRef((props, ref) => {
         setDownloadProgressState({ ...downloadProgressState });
     });
 
-    const resetFlashMessage = useCallback((type) => {
+    const resetFlashMessage = useCallback(() => {
         downloadProgressState.isDownloading.value = false;
         downloadProgressState.progressValue.value = numericConstants.ZERO;
         setDownloadProgressState({ ...downloadProgressState });
@@ -193,7 +193,7 @@ export const PostDetails = forwardRef((props, ref) => {
                     <Text style={glancePostStyles.icon_count_text}>{postDetailsState.currentPost.postDownloads}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
-                    onPress={async () => await shareImage(postDetailsState.currentPost, downloadCallback)}>
+                    onPress={async () => await shareImage(postDetailsState.currentPost, downloadCallback, resetFlashMessage)}>
                     <View style={glancePostStyles.backgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_share} source={post_share} />
                     </View>

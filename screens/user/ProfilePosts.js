@@ -10,7 +10,6 @@ import { useNavigation } from '@react-navigation/core';
 export const ProfilePosts = props => {
 
     const navigation = useNavigation();
-
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
             <FlatList data={props.profileDetail.userPosts} numColumns={numericConstants.THREE}

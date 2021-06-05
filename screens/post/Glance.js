@@ -38,10 +38,8 @@ export const Glance = ({ navigation }) => {
     let { height } = Dimensions.get(miscMessage.WINDOW);
     height += StatusBar.currentHeight;
 
-    const textPostDescriptionAnimationValue = useSharedValue(-10);
-    const textPostTypeAnimationValue = useSharedValue(-10);
-
-    const postImageParallax = useSharedValue(numericConstants.ZERO);
+    const textPostDescriptionAnimationValue = useSharedValue(-numericConstants.TEN);
+    const textPostTypeAnimationValue = useSharedValue(-numericConstants.TEN);
 
     const textPostDescriptionAnimationValue_translate_x = useDerivedValue(() => {
         return textPostDescriptionAnimationValue.value * numericConstants.ONE_HUNDRED;
@@ -51,21 +49,16 @@ export const Glance = ({ navigation }) => {
         return textPostTypeAnimationValue.value * numericConstants.ONE_HUNDRED;
     });
 
-    const onPostScrollFunction = (event) => {
-        `worklet`;
-        postImageParallax.value = event.nativeEvent.contentOffset.y;
-    }
-
     return (
         <GlanceComponent sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
-            currentPostIndexForProfileRef={currentPostIndexForProfileRef} height={height} postImageParallax={postImageParallax} postIdFromNotification={postIdFromNotification} navigation={navigation}
+            currentPostIndexForProfileRef={currentPostIndexForProfileRef} height={height} postIdFromNotification={postIdFromNotification} navigation={navigation}
             setSdomDatastate={setSdomDatastate} />
     )
 }
 
 const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRef, optionsState, setOptionsState, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x, currentPostIndexForProfileRef, height,
-    postImageParallax, postIdFromNotification, navigation }) => {
+    postIdFromNotification, navigation }) => {
     return <View style={SDGenericStyles.fill}>
         {
             sdomDatastate.posts && sdomDatastate.posts.length &&
@@ -90,8 +83,7 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                     {
                         sdomDatastate.posts.map((item, index) => {
                             return <Animated.View key={index}>
-                                <SwipeItem width={width} height={height} item={item} index={index}
-                                    postImageParallax={postImageParallax} sdomDatastate={sdomDatastate}
+                                <SwipeItem width={width} height={height} item={item} index={index} posts={sdomDatastate.posts}
                                     postIdFromNotification={postIdFromNotification} viewPagerRef={viewPagerRef}
                                     postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState} />
                             </Animated.View>;

@@ -1079,8 +1079,7 @@ export const flatListItemStyles = StyleSheet.create({
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 6,
-        paddingVertical: 15,
+        paddingHorizontal: 2,
         marginVertical: 5,
     },
     textsView: {

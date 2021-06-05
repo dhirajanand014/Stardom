@@ -34,16 +34,14 @@ export const ViewUserPost = () => {
     const postDetailsRef = useRef(null);
 
     useEffect(() => {
-        fetchUserProfilePosts(userId, setPosts);
+        fetchUserProfilePosts(userId, setPosts, postDetailsRef);
     }, jsonConstants.EMPTY);
 
     let { height } = Dimensions.get(miscMessage.WINDOW);
     height += StatusBar.currentHeight;
 
-    const textPostDescriptionAnimationValue = useSharedValue(-10);
-    const textPostTypeAnimationValue = useSharedValue(-10);
-
-    const postImageParallax = useSharedValue(numericConstants.ZERO);
+    const textPostDescriptionAnimationValue = useSharedValue(-numericConstants.TEN);
+    const textPostTypeAnimationValue = useSharedValue(-numericConstants.TEN);
 
     const textPostDescriptionAnimationValue_translate_x = useDerivedValue(() => {
         return textPostDescriptionAnimationValue.value * numericConstants.ONE_HUNDRED;
@@ -56,12 +54,12 @@ export const ViewUserPost = () => {
     return (
         <UserPostsView posts={posts} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} postsOptions={postsOptions} setPostOptions={setPostOptions}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
-            height={height} postImageParallax={postImageParallax} navigation={navigation} />
+            height={height} navigation={navigation} postIdFromNotification={postId} />
     )
 }
 
 const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOptions, setPostOptions, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x, height,
-    postImageParallax, navigation }) => {
+    navigation, postIdFromNotification }) => {
     return <View style={SDGenericStyles.fill}>
         {
             posts && posts.length &&
@@ -84,7 +82,7 @@ const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOp
                     {
                         posts.map((item, index) => {
                             return <Animated.View key={index}>
-                                <SwipeItem width={width} height={height} item={item} index={index} postImageParallax={postImageParallax} posts={posts}
+                                <SwipeItem width={width} height={height} item={item} index={index} posts={posts} postIdFromNotification={postIdFromNotification}
                                     viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={postsOptions} setOptionsState={setPostOptions} />
                             </Animated.View>;
                         })}

@@ -14,7 +14,7 @@ export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isS
         <View key={index} style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
             <TouchableOpacity activeOpacity={.7} style={flatListItemStyles.GridViewContainer} onPress={() => navigation.navigate(screens.VIEW_USER_POSTS,
                 { userId: item.user.id, postId: item.id })}>
-                <View key={index} style={[flatListItemStyles.userProfileCardSurface]}>
+                <View key={index} style={flatListItemStyles.userProfileCardSurface}>
                     {
                         (allowPrivate || item.postType == fieldControllerName.POST_TYPE_PUBLIC) &&
                         (

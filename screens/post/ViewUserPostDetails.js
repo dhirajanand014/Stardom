@@ -1,20 +1,20 @@
-import React, { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useCallback, useContext, useImperativeHandle, useState } from 'react';
 import { Text, View, Image, Linking, TouchableOpacity } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import {
     stringConstants, postCountTypes, numericConstants
 } from '../../constants/Constants';
-import {
-    downloadImageFromURL, setOptionsStateForDescription, shareImage, showProgressSnackbar
-} from '../../helper/Helper';
+import { downloadImageFromURL, shareImage, showProgressSnackbar } from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import LinearGradient from 'react-native-linear-gradient';
+import { CategoryContext } from '../../App';
 
-const post_description = require(`../../assets/post_description_icon.png`);
 const post_download = require(`../../assets/post_download_icon.png`);
 const post_share = require(`../../assets/post_share.png`);
 
 export const ViewUserPostDetails = forwardRef((props, ref) => {
+
+    const { downloadProgressState, setDownloadProgressState } = useContext(CategoryContext);
 
     const { textPostTypeAnimationValue, textPostDescriptionAnimationValue } = props;
 
@@ -23,18 +23,24 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
         currentPostIndex: numericConstants.ZERO,
         currentPost: props.posts[numericConstants.ZERO],
         animationVisible: false,
+        newPostViewed: false,
         switchEnabled: true
     });
 
     useImperativeHandle(ref,
         () => ({
             postIndex: postDetailsState.currentPostIndex,
+            newPostViewed: postDetailsState.newPostViewed,
             currentPost: postDetailsState.currentPost,
 
             setCurrentPost(index) {
                 postDetailsState.currentPostIndex = index;
                 postDetailsState.currentPost = props.posts[index];
                 setPostDetailsState({ ...postDetailsState });
+            },
+
+            setNewPostViewed(bool) {
+                setPostDetailsState({ ...postDetailsState, newPostViewed: bool });
             },
 
             setPostIndex(index) {
@@ -98,17 +104,7 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                             {postDetailsState.currentPost.profileName && postDetailsState.currentPost.profileName.toUpperCase()}
                         </Text>
                         <View>
-                            <View style={SDGenericStyles.rowFlexDirection}>
-                                <Text style={[postDetailsState.currentPost.user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
-                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
-                                    {`by`}
-                                </Text>
-                                <Text style={[postDetailsState.currentPost.user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
-                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
-                                    {postDetailsState.currentPost.user.name && postDetailsState.currentPost.user.name}
-                                </Text>
-                            </View>
-                            <View style={SDGenericStyles.marginTop8}>
+                            <View style={SDGenericStyles.mt3}>
                                 <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
                                 SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>{
                                         postDetailsState.currentPost.profileName && postDetailsState.currentPost.postCategoriesIn &&
@@ -121,20 +117,17 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                 </LinearGradient>
             </View>
 
-            <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10, SDGenericStyles.paddingTop50]}>
-                <TouchableOpacity style={glancePostStyles.backgroundRoundColor_description} onPress={() => setOptionsStateForDescription(optionsState, setOptionsState,
-                    postDetailsState.currentPost, postDetailsState, setPostDetailsState)}>
-                    <Image style={glancePostStyles.icon_post_description} source={post_description} />
-                </TouchableOpacity>
-                <TouchableOpacity style={[glancePostStyles.backgroundRoundColor, SDGenericStyles.mv15]} onPress={async () =>
+            <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10, SDGenericStyles.paddingTop40]}>
+                <TouchableOpacity style={[glancePostStyles.backgroundRoundColor, SDGenericStyles.mv15]} activeOpacity={.7} onPress={async () =>
                     await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback,
                         resetFlashMessage)}>
                     <Image style={glancePostStyles.icon_post_details} source={post_download} />
                 </TouchableOpacity>
-                <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () => await shareImage(postDetailsState.currentPost, downloadCallback)}>
+                <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () => await shareImage(postDetailsState.currentPost, downloadCallback,
+                    resetFlashMessage)} activeOpacity={.7}>
                     <Image style={glancePostStyles.icon_post_share} source={post_share} />
                 </TouchableOpacity>
             </View>
-        </React.Fragment >
+        </React.Fragment>
     )
 });
