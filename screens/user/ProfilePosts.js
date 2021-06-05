@@ -5,12 +5,16 @@ import { ProfileUserPosts } from "../../views/profileView/ProfileUserPosts"
 import { Text, TouchableOpacity, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler'
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
+import { useNavigation } from '@react-navigation/core';
 
 export const ProfilePosts = props => {
+
+    const navigation = useNavigation();
+
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
             <FlatList data={props.profileDetail.userPosts} numColumns={numericConstants.THREE}
-                keyExtractor={(item) => item.id} renderItem={({ item, index }) => <ProfileUserPosts item={item} index={index}
+                keyExtractor={(item) => item.id} renderItem={({ item, index }) => <ProfileUserPosts item={item} index={index} navigation={navigation}
                     loggedInUserHasPrivateAccess={props.loggedInUserHasPrivateAccess} isSameUser={props.profileDetail.isSameUser} />} />
             {
                 !props.profileDetail.isSameUser &&

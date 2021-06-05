@@ -3,16 +3,17 @@ import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Shimmer from "react-native-shimmer";
 import { LockIcon } from '../../components/icons/LockIcon';
-import { fieldControllerName, miscMessage, numericConstants } from "../../constants/Constants"
+import { fieldControllerName, miscMessage, numericConstants, screens } from "../../constants/Constants"
 import { flatListItemStyles, SDGenericStyles, colors } from "../../styles/Styles";
 
-export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isSameUser }) => {
+export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isSameUser, navigation }) => {
 
     const allowPrivate = hasPrivateAccess && item.postType == fieldControllerName.POST_TYPE_PRIVATE;
 
     return (
         <View key={index} style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
-            <TouchableOpacity activeOpacity={.7} style={flatListItemStyles.GridViewContainer}>
+            <TouchableOpacity activeOpacity={.7} style={flatListItemStyles.GridViewContainer} onPress={() => navigation.navigate(screens.VIEW_USER_POSTS,
+                { userId: item.user.id, postId: item.id })}>
                 <View key={index} style={[flatListItemStyles.userProfileCardSurface]}>
                     {
                         (allowPrivate || item.postType == fieldControllerName.POST_TYPE_PUBLIC) &&

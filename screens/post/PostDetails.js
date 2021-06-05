@@ -3,8 +3,7 @@ import { Text, View, Image, Linking, TouchableOpacity, Switch } from 'react-nati
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
-    stringConstants, postCountTypes, numericConstants, screens,
-    postitionStringConstants, colorConstants, permissionsButtons, alertTextMessages, miscMessage
+    stringConstants, postCountTypes, numericConstants, postitionStringConstants, colorConstants, permissionsButtons, miscMessage
 } from '../../constants/Constants';
 import {
     postWallPaperAlert, increaseAndSetPostCounts,

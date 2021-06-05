@@ -483,7 +483,8 @@ export const onSwiperScrollEnd = (event, postDetailsRef, textPostDescriptionAnim
         index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
     }
     postDetailsRef?.current?.setCurrentPost(index);
-    currentPostIndexForProfileRef.current = index;
+    if (currentPostIndexForProfileRef)
+        currentPostIndexForProfileRef.current = index;
     animateFinishedPostTextDetails(textPostDescriptionAnimationValue, textPostTypeAnimationValue);
 }
 
@@ -887,7 +888,6 @@ export const handleUserLogin = async (data, loggedInUser, setLoggedInUser) => {
             return responseData;
         }
     } catch (error) {
-        const responseData = processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
     }
     return false;
 }
@@ -1598,4 +1598,25 @@ export const checkProfileFrom = (currentPostIndexForProfileRef, sdomDatastate, i
         const postIndex = currentPostIndexForProfileRef.current || numericConstants.ZERO;
         return sdomDatastate.posts && sdomDatastate.posts[postIndex].user || DefaultUserProfile;
     }
+}
+
+export const fetchUserProfilePosts = async (userId, setPosts) => {
+    let postData = jsonConstants.EMPTY;
+    try {
+        const url = `${urlConstants.fetchUserPosts}${stringConstants.SLASH}${userId}`;
+        const response = await axiosGetWithHeaders(url);
+        let responseData = processResponseData(response);
+        if (responseData.posts.length) {
+            postData = await filterLoggedInUsersPosts(responseData.posts) || jsonConstants.EMPTY;
+            postData.map(postItem => postItem.postCategoriesIn = fetchAndDisplayNamesAndCategoryTitles(postItem))
+                .sort((datePost1, datePost2) => {
+                    return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+                }) || responsePostsData.sort((datePost1, datePost2) => {
+                    return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+                });
+        }
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_USERS_POSTS, error);
+    }
+    setPosts(postData);
 }

@@ -284,6 +284,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingTop40: {
         paddingTop: 40
     },
+    paddingTop50: {
+        paddingTop: 50
+    },
     paddingTop80: {
         paddingTop: 80
     },

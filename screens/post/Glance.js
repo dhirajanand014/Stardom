@@ -56,7 +56,6 @@ export const Glance = ({ navigation }) => {
         postImageParallax.value = event.nativeEvent.contentOffset.y;
     }
 
-
     return (
         <GlanceComponent sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
