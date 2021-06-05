@@ -323,13 +323,13 @@ PODS:
     - React-jsi (= 0.64.1)
     - React-perflogger (= 0.64.1)
   - React-jsinspector (0.64.1)
-  - react-native-camera (3.43.9):
+  - react-native-camera (3.44.0):
     - React-Core
-    - react-native-camera/RCT (= 3.43.9)
-    - react-native-camera/RN (= 3.43.9)
-  - react-native-camera/RCT (3.43.9):
+    - react-native-camera/RCT (= 3.44.0)
+    - react-native-camera/RN (= 3.44.0)
+  - react-native-camera/RCT (3.44.0):
     - React-Core
-  - react-native-camera/RN (3.43.9):
+  - react-native-camera/RN (3.44.0):
     - React-Core
   - react-native-image-filter-kit (0.8.0):
     - Bolts/Tasks (= 1.9.0)
@@ -411,7 +411,7 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
-  - RNDateTimePicker (3.5.0):
+  - RNDateTimePicker (3.5.2):
     - React-Core
   - RNFastImage (8.3.4):
     - React-Core
@@ -724,7 +724,7 @@ SPEC CHECKSUMS:
   React-jsi: 5de8204706bd872b78ea646aee5d2561ca1214b6
   React-jsiexecutor: 124e8f99992490d0d13e0649d950d3e1aae06fe9
   React-jsinspector: 500a59626037be5b3b3d89c5151bc3baa9abf1a9
-  react-native-camera: a3193de4cc61352d9309d15a849b1e0c4a085ac4
+  react-native-camera: 14f79f085a97ee82f99344e10888cbc774403926
   react-native-image-filter-kit: b9eca5dfedde622e3801c4657bcdead62896cf00
   react-native-restart: 6cc683e208c080581c147d0875609e64572a9443
   react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
@@ -744,7 +744,7 @@ SPEC CHECKSUMS:
   ReactCommon: bedc99ed4dae329c4fcf128d0c31b9115e5365ca
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
-  RNDateTimePicker: f375105b262e0c13746f467c873b75e12f7f4757
+  RNDateTimePicker: c9911be59b1f8670b9f244b85af3a7c295e175ed
   RNFastImage: d4870d58f5936111c56218dbd7fcfc18e65b58ff
   RNFBApp: 9c90f9d576861947ba75fe0830567c570bcbcf6d
   RNFBMessaging: c873e6c37f69d22de22cab134413030a9c6330a9
