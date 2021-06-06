@@ -10,9 +10,8 @@ import {
     postWallPaperAlert, increaseAndSetPostCounts,
     downloadImageFromURL, setOptionsStateForDescription, shareImage, showProgressSnackbar
 } from '../../helper/Helper';
-import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
+import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import ActionButton from '@logvinme/react-native-action-button';
-import LinearGradient from 'react-native-linear-gradient';
 import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
 import { CategoryContext } from '../../App';
 
@@ -107,7 +106,7 @@ export const PostDetails = forwardRef((props, ref) => {
     return (
         <React.Fragment>
             <View key={`1_${postDetailsState.currentPostIndex}_${postDetailsState.currentPost.categoryId}_post_details`}>
-                <LinearGradient style={glancePostStyles.innerContainer} colors={[colors.TRANSPARENT, colors.BLACK]}>
+                <View style={glancePostStyles.innerContainer}>
                     <Animated.View style={[glancePostStyles.smallButtonsContainer, postDetailsState.animationVisible && postTypeSpringStyle]}>
                         <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
                         {
@@ -150,7 +149,7 @@ export const PostDetails = forwardRef((props, ref) => {
                             </View>
                         </View>
                     </Animated.View>
-                </LinearGradient>
+                </View>
             </View>
             <View style={glancePostStyles.searchIconContainer}>
                 {

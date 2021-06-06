@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext, useCallback } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import { View, Image, StatusBar, Dimensions, TouchableOpacity } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
@@ -62,7 +62,7 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
     return <View style={SDGenericStyles.fill}>
         {
             sdomDatastate.posts && sdomDatastate.posts.length &&
-            <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorYellow]}>
+            <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
                 <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
                     bounces={true} onMomentumScrollBegin={() => {
                         if (optionsState.isImageLoadError) {
@@ -82,7 +82,7 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                     }}>
                     {
                         sdomDatastate.posts.map((item, index) => {
-                            return <Animated.View key={index}>
+                            return <Animated.View key={index} style={glancePostStyles.overlayImage}>
                                 <SwipeItem width={width} height={height} item={item} index={index} posts={sdomDatastate.posts}
                                     postIdFromNotification={postIdFromNotification} viewPagerRef={viewPagerRef}
                                     postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState} />

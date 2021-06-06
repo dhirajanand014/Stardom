@@ -447,6 +447,9 @@ export const SDGenericStyles = StyleSheet.create({
         backgroundColor: `#1b1f2b`,
         zIndex: 10
     },
+    ml_3: {
+        marginLeft: 3
+    },
     ml_8: {
         marginLeft: 8
     },
@@ -1002,6 +1005,15 @@ export const glancePostStyles = StyleSheet.create({
         borderRadius: 10,
         width: width / 3,
         elevation: 5
+    },
+    overlayImage: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgb(0,0,0)',
+        opacity: 0.7
+    },
+    overlayImageProfile: {
+        backgroundColor: 'rgb(0,0,0)',
+        opacity: 0.7
     }
 });
 

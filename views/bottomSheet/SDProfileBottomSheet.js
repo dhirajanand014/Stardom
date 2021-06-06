@@ -1,18 +1,23 @@
-import React, { useRef } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useCallback, useContext, useRef } from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import Animated, { Transition } from 'react-native-reanimated';
+import { CategoryContext } from '../../App';
 import { SDBottomSheet } from '../../components/bottomsheet/SDBottomSheet';
 import { LockIcon } from '../../components/icons/LockIcon';
 import { UnlockIcon } from '../../components/icons/UnlockIcon';
 import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
-import { actionButtonTextConstants, alertTextMessages, height, miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, width } from '../../constants/Constants';
-import { fetchPostsOfUserProfile } from '../../helper/Helper';
+import {
+    actionButtonTextConstants, alertTextMessages, height, miscMessage,
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, width
+} from '../../constants/Constants';
+import { fetchPostsOfUserProfile, shareImage, showProgressSnackbar } from '../../helper/Helper';
 import { ProfilePosts } from '../../screens/user/ProfilePosts';
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 
 export const SDProfileBottomSheet = props => {
-
+    const post_share = require(`../../assets/post_share.png`);
+    const { downloadProgressState, setDownloadProgressState } = useContext(CategoryContext);
 
     const onFadeInTransitionRef = useRef();
     const onFadeOutTransitionRef = useRef();
@@ -32,6 +37,22 @@ export const SDProfileBottomSheet = props => {
             <Transition.Out type="fade" durationMs={10000} />
         </Transition.Sequence>
     );
+
+    const downloadCallback = useCallback((received, total) => {
+        const value = received / total;
+        if (!downloadProgressState.isDownloading.value) {
+            downloadProgressState.isDownloading.value = true;
+            showProgressSnackbar(value);
+        }
+        downloadProgressState.progressValue.value = value;
+        setDownloadProgressState({ ...downloadProgressState });
+    });
+
+    const resetFlashMessage = useCallback(() => {
+        downloadProgressState.isDownloading.value = false;
+        downloadProgressState.progressValue.value = numericConstants.ZERO;
+        setDownloadProgressState({ ...downloadProgressState });
+    })
 
     const checkHasPrivateAccess = () => {
         if (props.loggedInUser.loginDetails.details) {
@@ -66,7 +87,7 @@ export const SDProfileBottomSheet = props => {
         return (
             <React.Fragment>
                 <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingBottom10, SDGenericStyles.backgroundColorWhite,
-                { width: width }]}>
+                SDGenericStyles.justifyContentSpaceBetween, { width: width }]}>
                     <SDProfileBottomTextView label={miscMessage.FOLLOWERS} count={props.profileDetail.count.followersCount} />
                     <SDProfileBottomTextView label={miscMessage.FOLLOWING} count={props.profileDetail.count.followingCount} />
                     <SDProfileBottomTextView label={miscMessage.WALLS} count={props.profileDetail.count.wallsCount} />
@@ -83,9 +104,17 @@ export const SDProfileBottomSheet = props => {
     }
     return (
         <React.Fragment>
+            <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10, SDGenericStyles.paddingTop40]}>
+                <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () => await shareImage({ postImage: props.profile.profile_image, postTitle: props.profile.name },
+                    downloadCallback, resetFlashMessage)} activeOpacity={.7}>
+                    <Image style={glancePostStyles.icon_post_share} source={post_share} />
+                </TouchableOpacity>
+            </View>
+
             <RenderProfileDetails profile={props.profile} profileDetail={props.profileDetail} isDisabled={props.isDisabled} setLoaderCallback={props.setLoaderCallback}
                 sdomDatastate={props.sdomDatastate} setSdomDatastate={props.setSdomDatastate} loggedInUser={props.loggedInUser} setProfileDetail={props.setProfileDetail}
                 navigation={props.navigation} />
+
             <SDBottomSheet refCallback={props.refCallback} snapPoints={props.snapPoints} initialSnap={numericConstants.ZERO}
                 callbackMode={props.fall} renderHeader={renderHeader} renderContent={renderContent} onOpenEnd={() => viewUserPosts()}
                 onCloseEnd={() => hideUserPosts()} />
@@ -104,7 +133,7 @@ const RenderProfileDetails = ({ profile, profileDetail, isDisabled, setLoaderCal
                         {profile.name || stringConstants.EMPTY}
                     </Text>
                     {profile.user_type == miscMessage.VERIFIED_AUTHOR &&
-                        <View>
+                        <View style={SDGenericStyles.ml_3}>
                             <VerifiedAuthorBadgeIcon width={numericConstants.FIFTEEN} height={numericConstants.FIFTEEN} />
                         </View> || <View />}
                 </View>
@@ -160,5 +189,5 @@ const RenderProfileDetails = ({ profile, profileDetail, isDisabled, setLoaderCal
                 </View>
             </View>
         }
-    </View >;
+    </View>;
 }

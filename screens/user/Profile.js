@@ -1,22 +1,17 @@
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Image, Text, TouchableOpacity, View, BackHandler } from "react-native"
+import { Image, View, BackHandler } from "react-native"
 import FastImage from 'react-native-fast-image';
-import LinearGradient from 'react-native-linear-gradient';
-import Animated from 'react-native-reanimated';
 import { CategoryContext } from '../../App';
-import { LockIcon } from '../../components/icons/LockIcon';
-import { UnlockIcon } from '../../components/icons/UnlockIcon';
-import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
 import {
-    actionButtonTextConstants, alertTextMessages, backHandlerConstants, height, jsonConstants,
-    miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, width
+    alertTextMessages, backHandlerConstants, height, jsonConstants,
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, width
 } from '../../constants/Constants';
 import {
     checkLoggedInUserMappedWithUserProfile, checkProfileFrom,
-    fetchUpdateLoggedInUserProfile, handleUserPostAction
+    fetchUpdateLoggedInUserProfile
 } from '../../helper/Helper';
-import { colors, glancePostStyles, SDGenericStyles } from "../../styles/Styles"
+import { glancePostStyles, SDGenericStyles } from "../../styles/Styles"
 import { SDProfileBottomSheet } from '../../views/bottomSheet/SDProfileBottomSheet';
 
 export const Profile = () => {
@@ -80,17 +75,17 @@ export const Profile = () => {
 
 const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, setSdomDatastate, loggedInUser, setLoaderCallback,
     setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess }) => {
-    return <View style={[SDGenericStyles.fill]}>
+    return <View style={SDGenericStyles.fill}>
         {
             profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
-                style={{ width: width, height: height }} fallback /> || <FastImage source={{
+                style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback /> || <FastImage source={{
                     uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
                     priority: FastImage.priority.high
-                }} style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.center} />
+                }} style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} resizeMode={FastImage.resizeMode.center} />
         }
         <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser}
             setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
             loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} isDisabled={isDisabled} />
-    </View >;
+    </View>;
 })
 

@@ -10,7 +10,7 @@ import {
 import {
     checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile
 } from '../../helper/Helper';
-import { SDGenericStyles } from "../../styles/Styles"
+import { glancePostStyles, SDGenericStyles } from "../../styles/Styles"
 import { SDProfileBottomSheet } from '../../views/bottomSheet/SDProfileBottomSheet';
 
 export const FollowerFollowingProfile = () => {
@@ -70,16 +70,16 @@ export const FollowerFollowingProfile = () => {
 
 const FollowerFollowingProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, setSdomDatastate, loggedInUser, setLoaderCallback,
     setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess }) => {
-    return <View style={[SDGenericStyles.fill]}>
+    return <View style={SDGenericStyles.fill}>
         {
             profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
-                style={{ width: width, height: height }} fallback /> || <FastImage source={{
+                style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback /> || <FastImage source={{
                     uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
                     priority: FastImage.priority.high
-                }} style={{ width: width, height: height }} resizeMode={FastImage.resizeMode.center} />
+                }} style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} resizeMode={FastImage.resizeMode.center} />
         }
         <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser}
             setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
             loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} isDisabled={isDisabled} />
-    </View >;
+    </View>;
 });

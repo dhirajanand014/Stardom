@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, StatusBar, Dimensions, Image } from 'react-native';
 import {
     width, miscMessage, numericConstants, jsonConstants, stringConstants
@@ -81,7 +81,7 @@ const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOp
                     }}>
                     {
                         posts.map((item, index) => {
-                            return <Animated.View key={index}>
+                            return <Animated.View key={index} style={glancePostStyles.overlayImage}>
                                 <SwipeItem width={width} height={height} item={item} index={index} posts={posts} postIdFromNotification={postIdFromNotification}
                                     viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={postsOptions} setOptionsState={setPostOptions} />
                             </Animated.View>;
