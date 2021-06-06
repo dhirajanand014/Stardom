@@ -1,39 +1,29 @@
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Image, Text, TouchableOpacity, View, BackHandler } from "react-native"
+import { Image, View, BackHandler } from "react-native"
 import FastImage from 'react-native-fast-image';
-import LinearGradient from 'react-native-linear-gradient';
-import Animated from 'react-native-reanimated';
 import { CategoryContext } from '../../App';
-import { LockIcon } from '../../components/icons/LockIcon';
-import { UnlockIcon } from '../../components/icons/UnlockIcon';
-import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
 import {
-    actionButtonTextConstants, alertTextMessages, backHandlerConstants, height, jsonConstants,
-    miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, width
+    alertTextMessages, backHandlerConstants, height, jsonConstants,
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, width
 } from '../../constants/Constants';
 import {
-    checkLoggedInUserMappedWithUserProfile, checkProfileFrom,
-    fetchUpdateLoggedInUserProfile, handleUserPostAction
+    checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile
 } from '../../helper/Helper';
-import { colors, glancePostStyles, SDGenericStyles } from "../../styles/Styles"
+import { SDGenericStyles } from "../../styles/Styles"
 import { SDProfileBottomSheet } from '../../views/bottomSheet/SDProfileBottomSheet';
 
-export const Profile = () => {
+export const FollowerFollowingProfile = () => {
 
     const navigation = useNavigation();
     const isFocused = useIsFocused();
 
-    const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail, currentPostIndexForProfileRef,
-        setLoaderCallback } = useContext(CategoryContext);
+    const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail, setLoaderCallback } = useContext(CategoryContext);
 
     const [loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess] = useState(false);
 
     const route = useRoute();
-    const isFrom = route.params?.isFrom || stringConstants.EMPTY;
-
-    const profile = checkProfileFrom(currentPostIndexForProfileRef, sdomDatastate, isFrom, loggedInUser);
-
+    const profile = route.params?.followerFollowingProfile;
     // variables
     const snapPoints = useMemo(() => [numericConstants.TWELVE_PCNT, numericConstants.HUNDRED_PCNT], jsonConstants.EMPTY);
 
@@ -72,13 +62,13 @@ export const Profile = () => {
         profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.APPROVED);
 
     return (
-        <ProfileRenderer profile={profile} profileDetail={profileDetail} isDisabled={isDisabled} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess}
+        <FollowerFollowingProfileRenderer profile={profile} profileDetail={profileDetail} isDisabled={isDisabled} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess}
             sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} loggedInUser={loggedInUser} setProfileDetail={setProfileDetail} setLoaderCallback={setLoaderCallback}
             navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} />
     )
 }
 
-const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, setSdomDatastate, loggedInUser, setLoaderCallback,
+const FollowerFollowingProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, setSdomDatastate, loggedInUser, setLoaderCallback,
     setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess }) => {
     return <View style={[SDGenericStyles.fill]}>
         {
@@ -92,5 +82,4 @@ const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDa
             setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
             loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} isDisabled={isDisabled} />
     </View >;
-})
-
+});

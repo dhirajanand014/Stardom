@@ -4,8 +4,8 @@ import { FlatList, StatusBar, View, Text } from "react-native"
 import { CategoryContext } from '../../App';
 import {
     actionButtonTextConstants, alertTextMessages, fieldControllerName, jsonConstants,
-    miscMessage, numericConstants, PRIVATE_FOLLOW_UNFOLLOW,
-    requestConstants, responseStringData, stringConstants
+    miscMessage, modalTextConstants, numericConstants, PRIVATE_FOLLOW_UNFOLLOW,
+    requestConstants, responseStringData, screens, stringConstants
 } from '../../constants/Constants';
 import { fetchUserFollowersFollowing, handleUserFollowUnfollowAction, showSnackBar, userPostAction } from '../../helper/Helper';
 import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
@@ -58,6 +58,16 @@ export const UserFollowFollowing = () => {
         setUserFollowerFollowing(responseData);
         setLoaderCallback(false);
     }, jsonConstants.EMPTY);
+
+
+    const viewFollowerFollowingProfile = useCallback((userItem) => {
+        let item = { ...userItem, profile_image: userItem.profile_picture };
+        delete item.profile_picture;
+        navigation.navigate(screens.FOLLOWER_FOLLOWING_PROFILE, {
+            isFrom: modalTextConstants.VIEW_FOLLOWER_FOLLOWING_PROFILE,
+            followerFollowingProfile: item
+        })
+    });
 
     const setLoading = (action, isLoading) => {
         if (action == actionButtonTextConstants.APPROVE) {
@@ -153,7 +163,7 @@ export const UserFollowFollowing = () => {
             }
         });
         return <UserFollowFollowingRenderer item={props.item} index={props.index} listFor={props.listFor} actionCallBack={props.actionCallBack}
-            animationStyle={animationStyle} />
+            animationStyle={animationStyle} viewFollowerFollowingProfile={props.viewFollowerFollowingProfile} />
     }
 
     return (
@@ -170,7 +180,7 @@ export const UserFollowFollowing = () => {
             <AnimatedFlatlist data={listFor == fieldControllerName.SEARCH_USERS && searchList.users || userFollowerFollowing.users}
                 keyExtractor={(item) => item.id} key={`1_${numericConstants.ONE}`} renderItem={({ item, index }) => {
                     return <RenderFollowingFollower item={item} scrollYValue={scrollYValue} index={index} listFor={listFor}
-                        actionCallBack={actionCallBack} />
+                        actionCallBack={actionCallBack} viewFollowerFollowingProfile={viewFollowerFollowingProfile} />
                 }} contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
                 ListEmptyComponent={emptyListMessage} onScroll={listViewScrollHandler} scrollEventThrottle={numericConstants.SIXTEEN} />
         </Animated.View>

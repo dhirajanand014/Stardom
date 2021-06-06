@@ -31,6 +31,7 @@ import { SDCameraImagePreview } from './views/cameraView/SDCameraImagePreview';
 import { SDSplashScreen } from './screens/SDSplashScreen';
 import { SDGenericStyles } from './styles/Styles';
 import { ViewUserPost } from './screens/post/ViewUserPost';
+import { FollowerFollowingProfile } from './screens/user/FollowerFollowingProfile';
 
 LogBox.ignoreLogs(['Remote debugger is in a background tab which may cause apps to perform slowly',
     'Require cycle: node_modules/rn-fetch-blob/index.js',
@@ -78,6 +79,7 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.POSTS} component={Posts} options={authorizationHeader} />
                 <Stack.Screen name={screens.REGISTER} component={Register} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.EDIT_USER_PROFILE} component={EditUserProfile} options={headerLessStackOptions} />
+                <Stack.Screen name={screens.FOLLOWER_FOLLOWING_PROFILE} component={FollowerFollowingProfile} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.VIEW_USER_POSTS} component={ViewUserPost} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.USER_FOLLOWERS_FOLLOWING} component={UserFollowFollowing} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.IMAGE_PREVIEW_FILTERS} component={SDCameraImagePreview} options={headerLessStackOptions} />

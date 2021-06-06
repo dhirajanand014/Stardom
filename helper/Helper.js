@@ -1607,10 +1607,12 @@ export const userPostAction = async (request, data, token, uploadProgressCallbac
     }
 }
 
-export const checkProfileFrom = (currentPostIndexForProfileRef, sdomDatastate, isFrom, loggedInUser) => {
+export const checkProfileFrom = (currentPostIndexForProfileRef, sdomDatastate, isFrom, loggedInUser, followerFollowingProfile) => {
     if (isFrom == modalTextConstants.VIEW_PROFILE) {
         const profile = JSON.parse(loggedInUser.loginDetails.details);
         return profile && { ...profile, profile_image: profile.profile_picture } || DefaultUserProfile;
+    } else if (isFrom == modalTextConstants.VIEW_FOLLOWER_FOLLOWING_PROFILE) {
+        return followerFollowingProfile || DefaultUserProfile;
     } else {
         const postIndex = currentPostIndexForProfileRef.current || numericConstants.ZERO;
         return sdomDatastate.posts && sdomDatastate.posts[postIndex].user || DefaultUserProfile;
