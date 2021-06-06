@@ -3,7 +3,8 @@ import { Text, View, Image, Linking, TouchableOpacity, Switch } from 'react-nati
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
-    stringConstants, postCountTypes, numericConstants, postitionStringConstants, colorConstants, permissionsButtons, miscMessage
+    stringConstants, postCountTypes, numericConstants,
+    postitionStringConstants, colorConstants, permissionsButtons, miscMessage
 } from '../../constants/Constants';
 import {
     postWallPaperAlert, increaseAndSetPostCounts,
@@ -58,10 +59,18 @@ export const PostDetails = forwardRef((props, ref) => {
                 setPostDetailsState({ ...postDetailsState, currentPostIndex: index });
             },
 
+            setWallPaper() {
+                setWallPaperCallback(postDetailsState, setPostDetailsState);
+            },
+
             setPostAnimationVisible(isVisible) {
                 setPostDetailsState({ ...postDetailsState, animationVisible: isVisible });
             }
         }));
+
+    const setWallPaperCallback = useCallback(async (postDetailsState, setPostDetailsState) => {
+        await postWallPaperAlert(postCountTypes.POST_WALLPAPERS_KEY, postDetailsState, setPostDetailsState);
+    })
 
     const postTypeSpringStyle = useAnimatedStyle(() => {
         return {
@@ -178,7 +187,7 @@ export const PostDetails = forwardRef((props, ref) => {
                     <Text style={glancePostStyles.icon_count_text}>{postDetailsState.currentPost.postLikes}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
-                    await postWallPaperAlert(postCountTypes.POST_WALLPAPERS_KEY, postDetailsState, setPostDetailsState)}>
+                    await setWallPaperCallback(postDetailsState, setPostDetailsState)}>
                     <View style={glancePostStyles.backgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
                     </View>
