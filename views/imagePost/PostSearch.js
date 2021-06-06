@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { TextInput, Image, TouchableOpacity, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import { togglePostSearchBox } from '../../helper/Helper'
-import { colorConstants, miscMessage, numericConstants, placeHolderText, stringConstants } from '../../constants/Constants';
+import { onChangeByValueType, togglePostSearchBox } from '../../helper/Helper'
+import { keyBoardTypeConst, miscMessage, numericConstants, placeHolderText, stringConstants } from '../../constants/Constants';
 import { colors, glancePostStyles } from '../../styles/Styles'
 import { PostSearchContent } from './PostSearchContent';
 
@@ -15,7 +15,8 @@ export function PostSearch(props) {
     const { posts } = sdomDatastate;
     const [searchValues, setSearchValues] = useState({
         searchText: stringConstants.EMPTY,
-        searchForPostId: stringConstants.EMPTY
+        searchForPostId: stringConstants.EMPTY,
+        posts: posts
     });
 
     const inputTextRef = useRef(null);
@@ -43,18 +44,19 @@ export function PostSearch(props) {
             <React.Fragment>
                 <Animated.View style={[glancePostStyles.searchInputBox, translateSearchInputBox]}>
                     <TextInput ref={inputTextRef} placeholder={placeHolderText.SEARCH_POSTS} clearButtonMode={miscMessage.ALWAYS} selectionColor={colors.SDOM_YELLOW}
-                        placeholderTextColor={colorConstants.BLACK} textAlignVertical={miscMessage.CENTER} value={searchValues.searchText}
-                        onChangeText={(value) => setSearchValues({ ...searchValues, searchText: value })} style={glancePostStyles.search_input_text}>
+                        placeholderTextColor={colors.SDOM_PLACEHOLDER} textAlignVertical={miscMessage.CENTER} value={searchValues.searchText} keyboardType={keyBoardTypeConst.DEFAULT}
+                        style={glancePostStyles.search_input_text} onChangeText={value => onChangeByValueType(stringConstants.EMPTY, value, {
+                            ...props, state: searchValues, setState: setSearchValues, posts: posts
+                        })}>
                     </TextInput>
                     <TouchableOpacity style={glancePostStyles.close_button_search_input} onPress={() => togglePostSearchBox(searchValues, setSearchValues, post,
-                        input_search_box_translate_x_shared, content_translate_y_shared, content_opacity_shared, screenWidth, screenWidth, false, inputTextRef, viewPagerRef)}>
+                        input_search_box_translate_x_shared, content_translate_y_shared, content_opacity_shared, screenWidth, screenWidth, false, inputTextRef, viewPagerRef, posts)}>
                         <Image style={glancePostStyles.search_input_close_input_icon} source={post_search_input_close} />
                     </TouchableOpacity>
                 </Animated.View>
-                <PostSearchContent postItem={post} screenWidth={screenWidth} searchValues={searchValues}
-                    contentOpacity={content_opacity_shared} contentTranslateY={content_translate_y_shared} setSearchValues={setSearchValues}
-                    searchValues={searchValues} posts={posts} inputBoxTranslateX={input_search_box_translate_x_shared} screenHeight={screenHeight}
-                    inputTextRef={inputTextRef} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} />
+                <PostSearchContent postItem={post} screenWidth={screenWidth} searchValues={searchValues} setSearchValues={setSearchValues} posts={posts}
+                    contentOpacity={content_opacity_shared} contentTranslateY={content_translate_y_shared} screenHeight={screenHeight} inputTextRef={inputTextRef}
+                    inputBoxTranslateX={input_search_box_translate_x_shared} postDetailsRef={postDetailsRef} viewPagerRef={viewPagerRef} />
             </React.Fragment>
         </View>
     )

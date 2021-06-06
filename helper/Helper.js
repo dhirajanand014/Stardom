@@ -184,7 +184,10 @@ export const shareImage = async (post, downloadCallback, resetFlashMessage) => {
             showSnackBar(`You have downloaded the post : ${postTitle}`, true, true);
             const base64Image = await response.readFile(miscMessage.BASE64);
             const base64Data = `${miscMessage.BASE64_BLOB}${base64Image}`;
-            await Share.open({ url: base64Data, filename: postTitle, excludedActivityTypes: [miscMessage.EXCLUDE_TYPE], type: miscMessage.IMAGE_TYPE });
+            await Share.open({
+                url: base64Data, filename: postTitle, excludedActivityTypes: [miscMessage.EXCLUDE_TYPE],
+                type: miscMessage.IMAGE_TYPE, title: post.postLink, subject: postTitle,
+            });
         } else {
             showSnackBar(errorMessages.COULD_NOT_SHARE_IMAGE, false);
         }
@@ -374,7 +377,7 @@ export const saveReportAbuseOptions = async (optionsState) => {
 
 export const togglePostSearchBox = (searchValues, setSearchValues, post,
     input_search_box_translate_x, content_translate_y, content_opacity, width,
-    height, isShowInputBox, inputTextRef, viewPagerRef) => {
+    height, isShowInputBox, inputTextRef, viewPagerRef, posts) => {
     try {
         const input_text_translate_x_config = {
             damping: 20
@@ -386,21 +389,20 @@ export const togglePostSearchBox = (searchValues, setSearchValues, post,
             damping: 20
         }
         viewPagerRef.current.scrollView.setNativeProps({ scrollEnabled: !isShowInputBox });
-        input_search_box_translate_x.value = withSpring(isShowInputBox && 1 || width, input_text_translate_x_config)
+        input_search_box_translate_x.value = withSpring(isShowInputBox && numericConstants.ONE || width, input_text_translate_x_config)
 
-        content_translate_y.value = withSpring(isShowInputBox && 1 || height + 500, content_translate_y_config);
+        content_translate_y.value = withSpring(isShowInputBox && numericConstants.ONE || height + numericConstants.FIVE_HUNDRED, content_translate_y_config);
 
-        content_opacity.value = withSpring(isShowInputBox && 1 || 0, content_opacity_config);
+        content_opacity.value = withSpring(isShowInputBox && numericConstants.ONE || numericConstants.ZERO, content_opacity_config);
 
         InteractionManager.runAfterInteractions(() => {
             if (!isShowInputBox) {
                 inputTextRef.current.clear();
                 inputTextRef.current.blur();
-                setSearchValues({
-                    ...searchValues,
-                    searchForPostId: stringConstants.EMPTY,
-                    searchText: stringConstants.EMPTY
-                });
+                searchValues.searchForPostId = stringConstants.EMPTY;
+                searchValues.searchText = stringConstants.EMPTY;
+                searchValues.posts = posts;
+                setSearchValues({ ...searchValues });
             } else {
                 setTimeout(() => {
                     inputTextRef.current.focus();
@@ -631,6 +633,13 @@ export const onChangeByValueType = async (inputProps, value, props) => {
         case fieldControllerName.USER_ID:
             inputProps.onChange(value);
             props.clearErrors();
+            break;
+        case fieldControllerName.SEARCH_POSTS:
+            const filteredPosts = value && props.posts.filter(postFilter => postFilter.postTitle.toLowerCase().
+                includes(value.toLowerCase())) || props.posts;
+            props.state.searchText = value;
+            props.state.posts = filteredPosts;
+            props.setState({ ...props.state });
             break;
         case fieldControllerName.SEARCH_USERS:
             const filteredUsers = value && props.items.filter(user => user.name.toLowerCase().includes(value.toLowerCase()) ||

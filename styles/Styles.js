@@ -619,26 +619,12 @@ export const glancePostStyles = StyleSheet.create({
         borderRadius: 16
     },
     search_content_post_selection: {
-        flexDirection: 'row',
-        paddingVertical: 18,
         paddingRight: 50,
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#e6e4eb',
         borderBottomStartRadius: 16,
         borderBottomEndRadius: 16
     },
     search_content_post_title: {
         fontFamily: 'wallpiper_roman_font'
-    },
-    search_content_post_index: {
-        fontFamily: 'wallpiper_bold_font',
-        marginLeft: 16
-    },
-    search_content_activity_indicator: {
-        alignItems: 'center',
-        paddingTop: 120,
-        justifyContent: 'center'
     },
     search_input_text: {
         flex: 1,
@@ -1014,6 +1000,10 @@ export const glancePostStyles = StyleSheet.create({
     overlayImageProfile: {
         backgroundColor: 'rgb(0,0,0)',
         opacity: 0.7
+    },
+    postSearchDivider: {
+        height: 1,
+        backgroundColor: '#e6e4eb'
     }
 });
 

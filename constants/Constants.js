@@ -127,7 +127,8 @@ export const fieldControllerName = {
     FOLLOWING_ID: `following_id`,
     VERIFY_USER: `verifyUserDetails`,
     ADD_USER_BIO: `bio`,
-    SEARCH_USERS: `Search Users`
+    SEARCH_USERS: `Search Users`,
+    SEARCH_POSTS: `Search Posts`
 }
 
 export const keyBoardTypeConst = {
@@ -546,6 +547,7 @@ export const alertTextMessages = {
     YOU_HAVE_SUCCESSFULLY_APPROVED: `You have successfuly approved private access to this user`,
     YOU_HAVE_SUCCESSFULLY_REJECTED: `You have successfuly rejected private access to this user`,
     YOU_HAVE_NO_FOLLOWERS: `You have no followers.`,
+    NO_POSTS: `No Posts`,
     NO_ONE_FOLLOWING: `Looks like no one is following you. Please post images to increase reach.`,
     UPDATING_DETAILS: `Updating Details`,
     DETAILS_UPDATED_SUCCESSFULLY: `Details updated successfully`,

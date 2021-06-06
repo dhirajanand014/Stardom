@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
     stringConstants, postCountTypes, numericConstants,
-    postitionStringConstants, colorConstants, permissionsButtons, miscMessage
+    postitionStringConstants, colorConstants, permissionsButtons, miscMessage, fieldControllerName
 } from '../../constants/Constants';
 import {
     postWallPaperAlert, increaseAndSetPostCounts,
@@ -156,7 +156,7 @@ export const PostDetails = forwardRef((props, ref) => {
                     optionsState.showSearch &&
                     <PostSearch sdomDatastate={sdomDatastate} screenWidth={width} screenHeight={height}
                         optionsState={optionsState} setOptionsState={setOptionsState} viewPagerRef={viewPagerRef}
-                        post={postDetailsState.currentPost} postDetailsRef={ref} />
+                        post={postDetailsState.currentPost} postDetailsRef={ref} inputName={fieldControllerName.SEARCH_POSTS} />
                 }
             </View>
             <ActionButton buttonColor={colorConstants.TRANSPARENT_BUTTON} backgroundTappable={true} size={numericConstants.TWENTY_EIGHT} useNativeFeedback={false} degrees={numericConstants.ZERO}
