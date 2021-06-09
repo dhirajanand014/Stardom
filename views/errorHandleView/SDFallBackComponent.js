@@ -3,6 +3,7 @@ import { Image, View, Text, TouchableOpacity } from "react-native";
 import { componentErrorConsts, numericConstants, miscMessage, screens, errorMessages } from '../../constants/Constants';
 import { errorBoundaryStyles, SDGenericStyles } from "../../styles/Styles";
 import RNRestart from 'react-native-restart';
+import FastImage from 'react-native-fast-image';
 
 export const SDFallBackComponent = (props) => {
 
@@ -14,14 +15,14 @@ export const SDFallBackComponent = (props) => {
         <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
             <View style={[{ width: width, height: height }, errorBoundaryStyles.content]}>
                 <View>
-                    <Image style={errorBoundaryStyles.errorImageStyle} source={error_image} />
+                    <Image resizeMode={FastImage.resizeMode.contain} style={errorBoundaryStyles.errorImageStyle} source={error_image} />
                     <Text style={[errorBoundaryStyles.textMessage2Style, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16]}>
                         {descriptionText}
                     </Text>
                     {
                         descriptionText == errorMessages.ERROR_BOUNDARY &&
                         <Text style={[errorBoundaryStyles.textMessage2Style, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16]}>
-                            {errorMessages.CONTACT_US}
+                            {errorMessages.CONTACT_US_1}<Text style={[SDGenericStyles.fontFamilyRobotoBold, SDGenericStyles.ft16]}>{errorMessages.CONTACT_US_MAIL}</Text>{errorMessages.CONTACT_US_2}
                         </Text>
                     }
                 </View>
@@ -30,7 +31,7 @@ export const SDFallBackComponent = (props) => {
                     <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.mt24]}>
                         <TouchableOpacity activeOpacity={.7} style={errorBoundaryStyles.resetToCategorySelectionButton} onPress={() => RNRestart.Restart()}>
                             <Text style={[SDGenericStyles.ft18, SDGenericStyles.colorYellow, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRobotoMedium]}>
-                                {miscMessage.RELOAD_STARDOM.toUpperCase()}
+                                {miscMessage.RELOAD.toUpperCase()}
                             </Text>
                         </TouchableOpacity>
                     </View>

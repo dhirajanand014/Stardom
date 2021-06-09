@@ -41,6 +41,9 @@ export const SDGenericStyles = StyleSheet.create({
     fontFamilyRobotoMedium: {
         fontFamily: `stardom_roboto_medium`
     },
+    fontFamilyRobotoBold: {
+        fontFamily: `stardom_roboto_bold`
+    },
     fontFamilyRoman: {
         fontFamily: `wallpiper_roman_font`
     },
@@ -1346,19 +1349,17 @@ export const errorBoundaryStyles = StyleSheet.create({
     content: {
         justifyContent: 'center',
         alignSelf: 'center',
-        padding: 15
+        padding: 10
     },
     errorImageStyle: {
         alignSelf: 'center',
         width: 350,
-        height: 350,
-        marginBottom: 12
+        height: 380,
     },
     textMessage2Style: {
         marginVertical: 10,
         lineHeight: 23,
         textAlign: 'center',
-        fontWeight: '500',
     },
     resetToCategorySelectionButton: {
         borderRadius: 25,
