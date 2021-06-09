@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from 'react'
-import { ActivityIndicator, SafeAreaView, Text } from 'react-native';
+import { ActivityIndicator, SafeAreaView, Text, Image, ImageBackground } from 'react-native';
 import { colors, SDGenericStyles } from '../styles/Styles';
 import { CategoryContext } from '../App';
 import { getCategoryButtonType, getSelectedCategoryIdsFromStorage } from '../helper/Helper';
-import { jsonConstants, miscMessage, numericConstants, screens } from '../constants/Constants';
+import { height, jsonConstants, miscMessage, numericConstants, screens, width } from '../constants/Constants';
 import { useNavigation } from '@react-navigation/native';
 import { StardomIcon } from '../components/icons/StardomIcon';
+import FastImage from 'react-native-fast-image';
 //import messaging from '@react-native-firebase/messaging';
 
 export const SDSplashScreen = () => {
@@ -42,13 +43,14 @@ export const SDSplashScreen = () => {
         // });
     }, [])
     return (
-        <SafeAreaView style={[SDGenericStyles.fill, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter,
+        <SafeAreaView style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter,
         SDGenericStyles.backGroundColorBlack]}>
-            <StardomIcon height={numericConstants.ONE_HUNDRED_FIFTY} width={numericConstants.ONE_HUNDRED_FIFTY}
-                stroke={colors.TRA} fill={colors.SDOM_YELLOW} />
-            <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRoman,
-            SDGenericStyles.placeHolderTextColor, SDGenericStyles.paddingVertical14]}>{miscMessage.LOADING}</Text>
-            <ActivityIndicator color={colors.SDOM_YELLOW} shouldRasterizeIOS hidesWhenStopped style={SDGenericStyles.mt20} />
+            <ImageBackground style={[SDGenericStyles.justifyItemsEnd, SDGenericStyles.paddingBottom150,
+            { height: height, width: width }]} source={require(`../assets/splash_screen_image.gif`)} >
+                <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRoman,
+                SDGenericStyles.textColorWhite, SDGenericStyles.paddingVertical10]}>{miscMessage.LOADING}</Text>
+                <ActivityIndicator color={colors.SDOM_YELLOW} shouldRasterizeIOS hidesWhenStopped style={SDGenericStyles.mt5} />
+            </ImageBackground>
         </SafeAreaView>
     )
 }

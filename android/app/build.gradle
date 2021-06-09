@@ -192,6 +192,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'com.facebook.fresco:fresco:2.4.0'
 
 //    if (useIntlJsc) {
 //        implementation 'org.webkit:android-jsc-intl:+'

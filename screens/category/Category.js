@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FlatList, View, StatusBar, Text, TouchableOpacity, BackHandler, Dimensions } from 'react-native';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { FlatList, View, StatusBar, Text, TouchableOpacity, BackHandler, Dimensions, Image } from 'react-native';
 import { CategoryContext } from '../../App';
 import { categoryViewStyles, SDGenericStyles } from '../../styles/Styles';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { saveCategoryDetailsToKeyChain } from '../../helper/Helper'
+import { getCategoryButtonType, saveCategoryDetailsToKeyChain } from '../../helper/Helper'
 import { CategoryRenderer } from './CategoryRenderer.js';
 import { TourGuideZone, useTourGuideController } from 'rn-tourguide';
 import {
@@ -14,7 +14,7 @@ import {
 
 export const Category = () => {
 
-    const { fetchCategories, initialCategorySelection, loader, setLoaderCallback } = useContext(CategoryContext);
+    const { fetchCategories, initialCategorySelection, loader, setLoaderCallback, loggedInUser } = useContext(CategoryContext);
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -40,6 +40,18 @@ export const Category = () => {
         return () => backHandler.remove();
     }, jsonConstants.EMPTY);
 
+    const toggleSelectAllCallback = useCallback(async (type, index) => {
+        if (type == miscMessage.SINGLE_SELECT) {
+            category.categories[index].isSelected = !category.categories[index].isSelected;
+        } else if (type == miscMessage.SELECT_ALL) {
+            category.categories.map((category) => { if (!category.isSelected) category.isSelected = !category.isSelected });
+        }
+        const initialCategoryFromStorage = await getCategoryButtonType();
+        const initialCategory = ((!initialCategoryFromStorage == stringConstants.EMPTY && initialCategoryFromStorage.password == actionButtonTextConstants.SAVE_BUTTON)
+            || category.categories.some((item) => { return true == item.isSelected })) && actionButtonTextConstants.SAVE_BUTTON || actionButtonTextConstants.SKIP_BUTTON;
+        setCategory({ ...category, initialCategory: initialCategory });
+    })
+
     useEffect(() => {
         if (canStart) {
             start();
@@ -51,12 +63,38 @@ export const Category = () => {
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
-            <FlatList data={category.categories} numColumns={numericConstants.THREE}
-                renderItem={({ item, index }) => CategoryRenderer(item, index, category, setCategory, miscMessage.SELECT_CATEGORIES)}
+            <View>
+                <View style={SDGenericStyles.padding10}>
+                    <View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingStart10]}>
+                        {
+                            loggedInUser.isLoggedIn &&
+                            <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                                {miscMessage.HEY} {JSON.parse(loggedInUser.loginDetails.details).name.toUpperCase()}{stringConstants.COMMA}
+                            </Text>
+                        }
+                        <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorPink, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.paddingTop5]}>
+                            {alertTextMessages.WHAT_ARE_YOUR_INTERESTS}
+                        </Text>
+                    </View>
+                </View>
+                <TouchableOpacity activeOpacity={.7} onPress={async () => await toggleSelectAllCallback(miscMessage.SELECT_ALL)}
+                    style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignSelfEnd, SDGenericStyles.paddingRight10]}>
+                    <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingRight5]}>
+                        <Image style={[categoryViewStyles.select_all_categories]} source={require(`../../assets/category_selected.png`)} />
+                    </View>
+                    <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorPink, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.paddingVertical5]}>
+                        {miscMessage.SELECT_ALL}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
+            <FlatList data={category.categories} numColumns={numericConstants.TWO}
+                renderItem={({ item, index }) => <CategoryRenderer item={item} index={index} category={category} toggleSelectAllCallback={toggleSelectAllCallback} />}
                 keyExtractor={(item) => item.categoryId} />
             {
                 category.initialCategory == actionButtonTextConstants.SKIP_BUTTON &&
-                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingVertical10]}>
+                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.positionAbsolute, categoryViewStyles.buttonBottom, SDGenericStyles.bottom18,
+                SDGenericStyles.justifyItemsEnd]}>
                     <TourGuideZone zone={numericConstants.THREE} borderRadius={numericConstants.TWENTY}
                         text={alertTextMessages.SKIP_SAVE_CATEGORIES} shape={miscMessage.RECTANGLE}>
                         <TouchableOpacity activeOpacity={.7} onPress={async () => {
@@ -78,7 +116,8 @@ export const Category = () => {
             }
             {
                 category.initialCategory == actionButtonTextConstants.SAVE_BUTTON &&
-                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingVertical10]}>
+                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.positionAbsolute, categoryViewStyles.buttonBottom, SDGenericStyles.bottom18,
+                SDGenericStyles.justifyItemsEnd]}>
                     <TouchableOpacity activeOpacity={.7} onPress={async () => {
                         setLoaderCallback(true);
                         const categoryIds = category.categories.filter(item => item.isSelected).map(selectedCategory => {
@@ -96,7 +135,7 @@ export const Category = () => {
                         setLoaderCallback(false);
                     }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
                     SDGenericStyles.backgroundColorYellow]}>
-                        <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyBold,
+                        <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyRobotoMedium,
                         SDGenericStyles.textCenterAlign]}>
                             {actionButtonTextConstants.SAVE}
                         </Text>

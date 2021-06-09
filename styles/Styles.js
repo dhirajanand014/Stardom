@@ -35,6 +35,12 @@ export const SDGenericStyles = StyleSheet.create({
     fontFamilyNormal: {
         fontFamily: isAndroid && `normal` || `System`
     },
+    fontFamilyRobotoRegular: {
+        fontFamily: `stardom_roboto_regular`
+    },
+    fontFamilyRobotoMedium: {
+        fontFamily: `stardom_roboto_medium`
+    },
     fontFamilyRoman: {
         fontFamily: `wallpiper_roman_font`
     },
@@ -323,6 +329,9 @@ export const SDGenericStyles = StyleSheet.create({
     bottom30: {
         bottom: 30
     },
+    padding1: {
+        padding: 1
+    },
     paddingBottom5: {
         paddingBottom: 5
     },
@@ -340,6 +349,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingBottom60: {
         paddingBottom: 60
+    },
+    paddingBottom150: {
+        paddingBottom: 150
     },
     paddingVertical2: {
         paddingVertical: 2
@@ -415,6 +427,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     textColorWhite: {
         color: `#f4f4f4`
+    },
+    textColorPink: {
+        color: `#dd5f93`
     },
     paddingHorizontal12: {
         paddingHorizontal: 12
@@ -884,8 +899,8 @@ export const glancePostStyles = StyleSheet.create({
         backgroundColor: '#fafafa',
     },
     tourGuideStyle: {
-        width: 120,
-        height: 130
+        height: 130,
+        width: 180,
     },
     preloaderStyle: {
         width: 50,
@@ -1009,21 +1024,26 @@ export const glancePostStyles = StyleSheet.create({
 
 export const categoryViewStyles = StyleSheet.create({
     saveButtonContainer: {
-        paddingVertical: 12,
+        paddingVertical: 8,
         borderRadius: 20,
-        width: width / 2.2,
+        width: width / 3,
     },
     bottomButtonLayout: {
         height: 63
     },
-    userFollowerFollowingList: {
-        shadowColor: '#fff',
-        shadowOffset: {
-            width: 0,
-            height: 10
-        },
-        shadowOpacity: .3,
-        shadowRadius: 20
+    select_all_categories: {
+        height: 18,
+        width: 18,
+    },
+    category_selected_check: {
+        height: 24,
+        width: 24,
+        tintColor: `rgba(0,0,0,255)`
+    },
+    buttonBottom: {
+        top: 0,
+        right: 0,
+        left: 0
     }
 })
 
@@ -1033,10 +1053,6 @@ export const flatListItemStyles = StyleSheet.create({
         textAlign: "center",
         margin: 10,
         fontWeight: "bold"
-    },
-    GridViewContainer: {
-        flex: 1 / 3,
-        justifyContent: 'space-between',
     },
     checkBoxSelected: {
         width: '100%',
@@ -1065,14 +1081,14 @@ export const flatListItemStyles = StyleSheet.create({
         overflow: 'hidden'
     },
     cardSurface: {
-        height: 122,
-        width: 122,
+        height: 115,
+        width: 170,
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
         left: 5,
         right: 100,
-        marginVertical: 5,
+        marginVertical: 10,
         borderRadius: 8,
     },
     userProfileCardSurface: {
@@ -1089,23 +1105,8 @@ export const flatListItemStyles = StyleSheet.create({
         flexDirection: 'column',
         top: 2,
         paddingTop: 2,
-        left: 4
+        left: 10
     },
-    textCategoryTitle: {
-        fontFamily: 'wallpiper_bold_font',
-        color: "#ffffff",
-        fontSize: 14,
-        justifyContent: 'center',
-        alignItems: "center"
-    },
-    textCategoryCity: {
-        fontFamily: 'wallpiper_roman_font',
-        color: "#ffffff",
-        padding: 1,
-        fontSize: 12,
-        justifyContent: 'center',
-        alignItems: "center"
-    }
 });
 
 export const headerStyles = StyleSheet.create({
