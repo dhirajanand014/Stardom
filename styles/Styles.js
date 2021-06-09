@@ -1348,35 +1348,24 @@ export const errorBoundaryStyles = StyleSheet.create({
         alignSelf: 'center',
         padding: 15
     },
-    infoIconStyle: {
+    errorImageStyle: {
         alignSelf: 'center',
-        width: 60,
-        height: 60
-    },
-    textMessage1Style: {
-        fontSize: 32,
-        textAlign: 'center',
-        fontFamily: 'wallpiper_roman_font',
+        width: 350,
+        height: 350,
+        marginBottom: 12
     },
     textMessage2Style: {
         marginVertical: 10,
         lineHeight: 23,
         textAlign: 'center',
         fontWeight: '500',
-        fontFamily: 'wallpiper_roman_font'
     },
     resetToCategorySelectionButton: {
         borderRadius: 25,
-        marginTop: 25,
-        padding: 15,
+        padding: 8,
+        width: width / 3.5,
         elevation: 3,
-        backgroundColor: "#3d3d3d"
-    },
-    redirectButtonText: {
-        color: "white",
-        fontFamily: 'wallpiper_roman_font',
-        textAlign: "center",
-        fontSize: 20
+        backgroundColor: "#000"
     },
     modalErrorImage: {
         width: 35,
