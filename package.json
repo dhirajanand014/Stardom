@@ -54,8 +54,8 @@
     "rn-tourguide": "^2.7.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.3",
-    "@babel/runtime": "^7.14.0",
+    "@babel/core": "^7.14.5",
+    "@babel/runtime": "^7.14.5",
     "@react-native-community/eslint-config": "2.0.0",
     "babel-jest": "26.6.3",
     "eslint": "7.14.0",

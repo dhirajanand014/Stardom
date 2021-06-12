@@ -137,7 +137,7 @@ export const Category = () => {
                     SDGenericStyles.backgroundColorYellow]}>
                         <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyRobotoMedium,
                         SDGenericStyles.textCenterAlign]}>
-                            {actionButtonTextConstants.SAVE}
+                            {actionButtonTextConstants.SAVE.toUpperCase()}
                         </Text>
                     </TouchableOpacity>
                 </View>

@@ -14,7 +14,7 @@ export const SDFormInput = props => {
                     <React.Fragment>
                         {
                             props.isPhoneNumberEntry &&
-                            <Text style={[userAuthStyles.mobileCountryCode, SDGenericStyles.fontFamilyRoman, SDGenericStyles.borderRightWidth1,
+                            <Text style={[userAuthStyles.mobileCountryCode, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.borderRightWidth1,
                             SDGenericStyles.colorWhite, SDGenericStyles.borderRightColor]}>
                                 {countryCodesConstants.INDIA}
                             </Text>

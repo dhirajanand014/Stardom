@@ -27,16 +27,16 @@ export const SDImageFormInput = props => {
                     {
                         props.isUserIdAvailable.current &&
                         <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsStart]}>
-                            <Text style={[userAuthStyles.formInputNoError, SDGenericStyles.fontFamilyBold]}>{`User id ${props.userIdValue} is available`}</Text>
+                            <Text style={[userAuthStyles.formInputNoError, SDGenericStyles.fontFamilyRobotoMedium]}>{`User id ${props.userIdValue} is available`}</Text>
                         </View> || <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsStart]}>
-                            <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyBold]}>{props.formState.errors[props.inputName]?.message}</Text>
+                            <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyRobotoMedium]}>{props.formState.errors[props.inputName]?.message}</Text>
                         </View>
                     }
                     <TouchableOpacity activeOpacity={.7} onPress={async () => await props.validateUserId()}>
-                        <Text style={[SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyBold]}>{actionButtonTextConstants.CHECK_AVAILABILITY}</Text>
+                        <Text style={[SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>{actionButtonTextConstants.CHECK_AVAILABILITY}</Text>
                     </TouchableOpacity>
                 </View> ||
-                <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyBold]}>{props.formState.errors[props.inputName]?.message}</Text>
+                <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyRobotoMedium]}>{props.formState.errors[props.inputName]?.message}</Text>
             }
         </KeyboardAvoidingView >
     );

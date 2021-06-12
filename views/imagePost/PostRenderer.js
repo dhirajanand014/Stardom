@@ -8,14 +8,14 @@ import { flatListItemStyles, glancePostStyles, SDGenericStyles } from '../../sty
 
 export const PostRenderer = React.memo(({ item, postCallback }) => {
     return (
-        <TouchableOpacity activeOpacity={.7} style={[flatListItemStyles.GridViewContainer, SDGenericStyles.mv20]}
+        <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.mv5}
             onPress={async () => {
                 const action = item.id == numericConstants.MINUS_ONE && item.type == miscMessage.CREATE &&
                     miscMessage.CREATE || miscMessage.UPDATE;
                 postCallback(action, item);
             }}>
 
-            <View style={flatListItemStyles.cardSurface}>
+            <View style={[flatListItemStyles.addPostCardSurface]}>
                 {
                     item.id == numericConstants.MINUS_ONE && item.type == miscMessage.CREATE &&
                     <View style={glancePostStyles.addPostView}>

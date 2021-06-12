@@ -323,6 +323,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingHorizontal30: {
         paddingHorizontal: 30
     },
+    paddingHorizontal65: {
+        paddingHorizontal: 65
+    },
     bottom8: {
         bottom: 8
     },
@@ -528,6 +531,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingRight10: {
         paddingRight: 10
+    },
+    paddingRight15: {
+        paddingRight: 15
     }
 });
 
@@ -939,15 +945,10 @@ export const glancePostStyles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 7,
     },
-    cancelAddPostButton: {
-        padding: 10
-    },
-    addPostButton: {
-        borderWidth: 1,
-        paddingHorizontal: 20,
-        borderRadius: 10,
+    postButtonStyle: {
+        borderRadius: 20,
         backgroundColor: colorConstants.YELLOW,
-        padding: 15
+        paddingVertical: 10
     },
     addPostDetailsTitleDivider: {
         width: width / 1.2,
@@ -1083,6 +1084,17 @@ export const flatListItemStyles = StyleSheet.create({
         height: '100%',
         overflow: 'hidden'
     },
+    addPostCardSurface: {
+        height: 122,
+        width: 130,
+        overflow: 'hidden',
+        alignItems: 'center',
+        justifyContent: 'center',
+        left: 5,
+        right: 100,
+        paddingHorizontal: 2,
+        borderRadius: 8,
+    },
     cardSurface: {
         height: 115,
         width: 170,
@@ -1110,12 +1122,6 @@ export const flatListItemStyles = StyleSheet.create({
         paddingTop: 2,
         left: 10
     },
-});
-
-export const headerStyles = StyleSheet.create({
-    headerText: {
-        fontWeight: 'bold',
-    }
 });
 
 export const introStyles = StyleSheet.create({

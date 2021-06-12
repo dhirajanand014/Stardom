@@ -36,7 +36,6 @@ export const AddPostDetails = () => {
 
     const fallValue = useSharedValue(numericConstants.ONE);
 
-    const [categories, setCategories] = useState(jsonConstants.EMPTY);
     const route = useRoute();
     const toAction = route.params?.toAction;
     const selectedItem = route.params?.selectedItem;
@@ -45,28 +44,15 @@ export const AddPostDetails = () => {
 
     const navigation = useNavigation();
 
-    useEffect(() => {
-        (async () => {
-            setLoaderCallback(true, alertTextMessages.LOADING_CATEGORIES);
-            const postCategories = await fetchCategoryData();
-            postCategories && setCategories(postCategories);
-            postCategories.map(category => category.isSelected = userPosts.details.postCategories.some(selectedCategory =>
-                selectedCategory == category.categoryId));
-            setValue(fieldControllerName.POST_CATEGORIES, userPosts.details.postCategories);
-            setLoaderCallback(false);
-        })();
-        register(fieldControllerName.POST_CATEGORIES, formRequiredRules.postCategoryRule);
-    }, jsonConstants.EMPTY);
-
     const navigateUser = (responseData) => {
         navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
         setLoaderCallback(false);
         showSnackBar(responseData.message, true);
     }
 
-    const loginCallback = useCallback(() => {
-        navigation.navigate(screens.LOGIN, { isIntermediateLogin: true });
-    });
+    const setErrorCallback = useCallback((inputName, value) => setError(inputName, value));
+    const setValueCallBack = useCallback((categories) => setValue(fieldControllerName.POST_CATEGORIES, categories));
+    const loginCallback = useCallback(() => navigation.navigate(screens.LOGIN, { isIntermediateLogin: true }));
 
     const uploadCallback = useCallback((progressEvent) => {
         setLoaderCallback(true, toAction == miscMessage.UPDATE && alertTextMessages.UPDATING_POST_DETAILS ||
@@ -113,7 +99,7 @@ export const AddPostDetails = () => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
-                <View style={[glancePostStyles.addPostDetailsStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingTop5]}>
+                <View style={[glancePostStyles.addPostDetailsStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingTop10]}>
                     <FastImage source={{ uri: userPosts.details.capturedImage }} resizeMode={FastImage.resizeMode.contain}
                         style={{ width: width, height: height / numericConstants.THREE }} />
                     {
@@ -132,50 +118,55 @@ export const AddPostDetails = () => {
                         </View>
                     }
                     <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical20]}>
-                        <Text style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.fontFamilyBold, SDGenericStyles.textColorWhite, SDGenericStyles.ft20,
+                        <Text style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.placeHolderTextColor, SDGenericStyles.ft20,
                         SDGenericStyles.paddingBottom5]}>
-                            {modalTextConstants.ADD_POST_DETAILS}</Text>
+                            {modalTextConstants.ADD_WALLPAPER_DETAILS}</Text>
                         <View style={[glancePostStyles.addPostDetailsTitleDivider, SDGenericStyles.backgroundColorWhite]} />
                     </View>
-                    <KeyboardAvoidingView style={SDGenericStyles.mv15}>
-                        <Animated.ScrollView contentContainerStyle={[SDGenericStyles.alignItemsCenter]}
-                            style={{ maxHeight: height / 2.15 }}>
+                    <KeyboardAvoidingView style={SDGenericStyles.marginVertical2}>
+                        <View style={SDGenericStyles.alignItemsCenter}>
+
+                            <SDPostTypeOptionsView inputName={fieldControllerName.POST_TYPE} control={control} rules={formRequiredRules.postTypeRule} formState={formState}
+                                defaultValue={userPosts.details.postType} checkValue={postValueType} />
+
                             <SDImageFormInput inputName={fieldControllerName.POST_TITLE} control={control} rules={formRequiredRules.addPostTitleRule}
-                                defaultValue={userPosts.details.postTitle} maxLength={numericConstants.FIFTEEN} placeHolderText={placeHolderText.ADD_POST_TITLE}
+                                defaultValue={userPosts.details.postTitle} maxLength={numericConstants.FIFTEEN} placeHolderText={placeHolderText.ADD_TITLE}
                                 keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} autoFocus={true} textContentType={keyBoardTypeConst.TITLE}
-                                extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.borderRadius20,
+                                extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.borderRadius20,
                                 SDGenericStyles.textColorWhite, SDGenericStyles.ft16]} />
+
+                            <SDImageFormInput inputName={fieldControllerName.POST_LINK} control={control} formState={formState} keyboardType={isAndroid && keyBoardTypeConst.DEFAULT || keyBoardTypeConst.IOS_URL}
+                                defaultValue={userPosts.details.postLink} placeHolderText={placeHolderText.ADD_URL} textContentType={keyBoardTypeConst.URL} rules={formRequiredRules.addPostLinkRule}
+                                extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite, SDGenericStyles.ft16]} />
 
                             <SDMultiTextInputLengthText value={postDescriptionValue} maxLength={numericConstants.TWO_HUNDRED} />
 
                             <SDImageFormInput inputName={fieldControllerName.POST_DESCRIPTION} control={control} rules={formRequiredRules.addPostDescription}
                                 defaultValue={userPosts.details.postDescription} maxLength={numericConstants.TWO_HUNDRED} placeHolderText={placeHolderText.ADD_POST_DESCRIPTION}
-                                keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} isMultiline={true} numberOfLines={numericConstants.FIVE} textContentType={keyBoardTypeConst.NONE}
-                                extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.height100, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite,
+                                keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} isMultiline={true} numberOfLines={numericConstants.THREE} textContentType={keyBoardTypeConst.NONE}
+                                extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.height100, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite,
                                 SDGenericStyles.ft16, SDGenericStyles.textALignVerticalTop]} maxLength={numericConstants.TWO_HUNDRED} />
 
-                            <SDImageFormInput inputName={fieldControllerName.POST_LINK} control={control} formState={formState} keyboardType={isAndroid && keyBoardTypeConst.DEFAULT || keyBoardTypeConst.IOS_URL}
-                                defaultValue={userPosts.details.postLink} placeHolderText={placeHolderText.ADD_POST_LINK} textContentType={keyBoardTypeConst.URL} rules={formRequiredRules.addPostLinkRule}
-                                extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRoman, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite, SDGenericStyles.ft16]} />
-
-                            <SDPostTypeOptionsView inputName={fieldControllerName.POST_TYPE} control={control} rules={formRequiredRules.postTypeRule} formState={formState}
-                                defaultValue={userPosts.details.postType} checkValue={postValueType} />
-
-                            <SDPostCategorySelector inputName={fieldControllerName.POST_CATEGORIES} formState={formState} maxLength={numericConstants.THREE} setError={setError}
-                                categories={categories} setCategories={setCategories} postCategories={postCategories} setValue={setValue} />
-
-                        </Animated.ScrollView>
+                        </View>
                         <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentSpaceBetween,
-                        SDGenericStyles.paddingHorizontal30, SDGenericStyles.mt5]}>
-                            <TouchableOpacity activeOpacity={.7} style={glancePostStyles.cancelAddPostButton}>
-                                <Text style={[SDGenericStyles.fontFamilyRoman, glancePostStyles.addPostButtonText, SDGenericStyles.colorWhite]} onPress={() => navigation.goBack()}>
-                                    {actionButtonTextConstants.CANCEL_POST}
+                        SDGenericStyles.paddingHorizontal65, SDGenericStyles.mb5]}>
+                            <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR }]}>
+                                <Text style={[SDGenericStyles.fontFamilyRobotoMedium, glancePostStyles.addPostButtonText, SDGenericStyles.colorBlack,
+                                SDGenericStyles.textCenterAlign]} onPress={() => navigation.goBack()}>
+                                    {actionButtonTextConstants.CANCEL_POST.toUpperCase()}
                                 </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity activeOpacity={.7} style={glancePostStyles.addPostButton} onPress={handleSubmit(onSubmit)}>
-                                <Text style={[SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft14]}>
-                                    {toAction == miscMessage.UPDATE && actionButtonTextConstants.UPDATE_POST || actionButtonTextConstants.ADD_POST}</Text>
+
+                            <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR }]} onPress={handleSubmit(onSubmit)}>
+                                <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft14, SDGenericStyles.colorBlack, SDGenericStyles.textCenterAlign]}>
+                                    {actionButtonTextConstants.NEXT.toUpperCase()}
+                                </Text>
                             </TouchableOpacity>
+
+                            {/* <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.THREE }]} onPress={handleSubmit(onSubmit)}>
+                                <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft14, SDGenericStyles.colorBlack, SDGenericStyles.textCenterAlign]}>
+                                    {toAction == miscMessage.UPDATE && actionButtonTextConstants.UPDATE_POST.toUpperCase() || actionButtonTextConstants.ADD_POST.toUpperCase()}</Text>
+                            </TouchableOpacity> */}
                         </View>
                     </KeyboardAvoidingView>
                 </View>

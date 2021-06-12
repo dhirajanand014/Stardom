@@ -13,7 +13,7 @@ import {
     jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants,
 } from '../constants/Constants';
 import {
-    Alert, InteractionManager, Linking, NativeModules,
+    Alert, InteractionManager, NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
 import * as Keychain from 'react-native-keychain';
@@ -693,7 +693,7 @@ export const categoryHeader = () => {
         headerStyle: SDGenericStyles.backGroundColorBlack,
         headerTintColor: colorConstants.WHITE,
         headerTitleAlign: miscMessage.CENTER,
-        headerTitleStyle: headerStyles.headerText,
+        headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium,
         navigationOptions: ({ navigation }) => ({
             headerLeft: (
                 <TourGuideZone zone={numericConstants.TWO} borderRadius={numericConstants.EIGHT} shape={miscMessage.CIRCLE}
@@ -712,7 +712,7 @@ export const authorizationHeader = props => {
         headerStyle: SDGenericStyles.backGroundColorBlack,
         headerTintColor: colorConstants.WHITE,
         headerTitleAlign: miscMessage.CENTER,
-        headerTitleStyle: headerStyles.headerText,
+        headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium,
         navigationOptions: ({ navigation }) => ({
             headerLeft: (
                 <HeaderBackButton tintColor={SDGenericStyles.colorWhite} onPress={() => { navigation.goBack() }} />
