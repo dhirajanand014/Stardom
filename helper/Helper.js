@@ -1200,7 +1200,12 @@ export const fetchUserPosts = async (userPosts, setUserPosts) => {
             if (responseData == responseStringData.TOKEN_INVALID || responseData == responseStringData.TOKEN_EXPIRED) {
                 console.error('login redirect')
             } else {
-                userPosts.posts = [AddPostConstant, ...responseData.posts];
+                const sortedPosts = responseData.posts.sort((datePost1, datePost2) => {
+                    return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+                }) || responsePostsData.sort((datePost1, datePost2) => {
+                    return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+                });
+                userPosts.posts = [AddPostConstant, ...sortedPosts];
                 setUserPosts({ ...userPosts });
             }
         }
