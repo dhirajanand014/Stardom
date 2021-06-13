@@ -1,10 +1,9 @@
 
-import { useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { FlatList, View } from "react-native";
 import {
-    alertTextMessages,
-    jsonConstants, miscMessage,
+    alertTextMessages, jsonConstants, miscMessage,
     numericConstants, screens, stringConstants
 } from '../../constants/Constants';
 
@@ -13,7 +12,7 @@ import { SDGenericStyles } from '../../styles/Styles';
 import { PostRenderer } from './PostRenderer';
 import { useCallback } from 'react';
 import { BottomSheetView } from '../bottomSheet/BottomSheetView';
-import { useSharedValue } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { CategoryContext } from '../../App';
 
 export const Posts = props => {
@@ -21,16 +20,12 @@ export const Posts = props => {
     const { userPosts, setUserPosts, setLoaderCallback } = useContext(CategoryContext);
 
     const navigation = useNavigation();
-
-    const route = useRoute();
-
-    const bottomSheetRefCallback = route.params?.bottomSheetRefCallback;
-    const bottomSheetRef = route.params?.bottomSheetRef;
+    const bottomSheetRef = useRef(null);
 
     const snapPoints = useMemo(() => [numericConstants.TWO_HUNDRED_NINETY, numericConstants.ZERO],
         jsonConstants.EMPTY);
 
-    const fallValue = useSharedValue(numericConstants.ONE);
+    const fallValue = new Animated.Value(numericConstants.ONE);
 
     useEffect(() => {
         setLoaderCallback(true, alertTextMessages.LOADING_USERS_POSTS);
@@ -59,7 +54,7 @@ export const Posts = props => {
             <FlatList data={userPosts.posts} numColumns={numericConstants.THREE} keyExtractor={(item) => item.id}
                 renderItem={({ item }) => <PostRenderer item={item} postCallback={postCallback} />} />
             {
-                userPosts.details.showBottomOptions && <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef}
+                userPosts.details.showBottomOptions && <BottomSheetView bottomSheetRef={bottomSheetRef}
                     snapPoints={snapPoints} fall={fallValue} detailsCallback={postDetailsCallback} isFrom={screens.POSTS} navigation={navigation} />
             }
         </View>

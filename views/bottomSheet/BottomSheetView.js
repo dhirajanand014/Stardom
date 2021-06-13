@@ -56,7 +56,7 @@ export const BottomSheetView = props => {
         )
     }
     return (
-        <SDBottomSheet refCallback={props.refCallback} snapPoints={props.snapPoints} initialSnap={numericConstants.ONE}
-            callbackMode={props.fall} renderHeader={renderHeader} renderContent={renderContent} onCloseEnd={props.onCloseEnd} />
+        <SDBottomSheet refCallback={props.bottomSheetRef} snapPoints={props.snapPoints} initialSnap={numericConstants.ONE}
+            fall={props.fall} renderHeader={renderHeader} renderContent={renderContent} onCloseEnd={props.onCloseEnd} />
     );
 }

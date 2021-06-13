@@ -1,9 +1,9 @@
 import { useNavigation, useRoute } from '@react-navigation/core'
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useContext, useMemo, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { Keyboard, KeyboardAvoidingView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
-import Animated, { useSharedValue } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import { CategoryContext } from '../../App'
 import { DeleteIcon } from '../../components/icons/DeleteIcon'
 import { EditIcon } from '../../components/icons/EditIcon'
@@ -12,14 +12,13 @@ import {
     modalTextConstants, numericConstants, errorMessages,
     width, placeHolderText, keyBoardTypeConst,
     actionButtonTextConstants, miscMessage, isAndroid,
-    jsonConstants, alertTextMessages, screens
+    jsonConstants, alertTextMessages, screens, stringConstants
 } from '../../constants/Constants'
-import { checkTokenStatus, fetchCategoryData, handleAddPostDetails, handlePostDelete, showSnackBar } from '../../helper/Helper'
+import { checkTokenStatus, handlePostDelete, showSnackBar } from '../../helper/Helper'
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles'
 import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView'
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput'
 import { SDPostTypeOptionsView } from '../../views/fromInputView/SDPostTypeOptionView'
-import { SDPostCategorySelector } from '../../views/imagePost/SDPostCategorySelector'
 import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextInputLengthText'
 
 export const AddPostDetails = () => {
@@ -27,20 +26,17 @@ export const AddPostDetails = () => {
     const { userPosts, loggedInUser, loader, setLoaderCallback } = useContext(CategoryContext);
 
     const bottomSheetRef = useRef(null);
-    const bottomSheetRefCallback = node => {
-        bottomSheetRef.current = node;
-    };
 
-    const snapPoints = useMemo(() => [numericConstants.THREE_HUNDRED_THIRTY, numericConstants.ZERO],
+    const snapPoints = useMemo(() => [numericConstants.TWO_HUNDRED_NINETY, numericConstants.ZERO],
         jsonConstants.EMPTY);
 
-    const fallValue = useSharedValue(numericConstants.ONE);
+    const fallValue = new Animated.Value(numericConstants.ONE);
 
     const route = useRoute();
     const toAction = route.params?.toAction;
     const selectedItem = route.params?.selectedItem;
 
-    const { control, formState, handleSubmit, setError, watch, register, setValue } = useForm();
+    const { control, formState, handleSubmit, watch } = useForm();
 
     const navigation = useNavigation();
 
@@ -50,30 +46,16 @@ export const AddPostDetails = () => {
         showSnackBar(responseData.message, true);
     }
 
-    const setErrorCallback = useCallback((inputName, value) => setError(inputName, value));
-    const setValueCallBack = useCallback((categories) => setValue(fieldControllerName.POST_CATEGORIES, categories));
     const loginCallback = useCallback(() => navigation.navigate(screens.LOGIN, { isIntermediateLogin: true }));
 
-    const uploadCallback = useCallback((progressEvent) => {
-        setLoaderCallback(true, toAction == miscMessage.UPDATE && alertTextMessages.UPDATING_POST_DETAILS ||
-            alertTextMessages.ADDING_NEW_POST, Math.round((progressEvent.loaded * numericConstants.ONE_HUNDRED) / progressEvent.total));
-    })
-
     const onSubmit = async (data) => {
-        setLoaderCallback(true, toAction == miscMessage.UPDATE && alertTextMessages.UPDATING_POST_DETAILS ||
-            alertTextMessages.ADDING_NEW_POST);
-        const responseData = await handleAddPostDetails(data, userPosts.details.capturedImage, toAction, selectedItem, loader, setLoaderCallback,
-            uploadCallback);
-        if (responseData) {
-            if (responseData.message == alertTextMessages.POST_ADDED_SUCCESSFULLY ||
-                responseData.message == alertTextMessages.POST_UPDATED_SUCCESSFULLY) {
-                navigateUser(responseData);
-            } else if (checkTokenStatus(responseData)) {
-                setTimeout(() => showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false, true, loginCallback),
-                    numericConstants.THREE_HUNDRED);
-                setLoaderCallback(false);
-            }
-        }
+        navigation.navigate(screens.SELECT_POST_CATEGORIES, {
+            postDetails: data,
+            loginCallback: loginCallback,
+            toAction: toAction,
+            navigateUser: navigateUser,
+            selectedItem: selectedItem
+        });
     }
 
     const handleDelete = async () => {
@@ -89,8 +71,8 @@ export const AddPostDetails = () => {
     }
 
     const postDescriptionValue = watch(fieldControllerName.POST_DESCRIPTION);
-    const postValueType = watch(fieldControllerName.POST_TYPE);
-    const postCategories = watch(fieldControllerName.POST_CATEGORIES);
+    const postValueType = watch(fieldControllerName.POST_TYPE,
+        toAction == miscMessage.UPDATE && userPosts.details.postType || stringConstants.EMPTY);
 
     const detailsCallback = useCallback(() => {
         bottomSheetRef?.current?.snapTo(numericConstants.ONE)
@@ -118,7 +100,7 @@ export const AddPostDetails = () => {
                         </View>
                     }
                     <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical20]}>
-                        <Text style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.placeHolderTextColor, SDGenericStyles.ft20,
+                        <Text style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.placeHolderTextColor, SDGenericStyles.ft18,
                         SDGenericStyles.paddingBottom5]}>
                             {modalTextConstants.ADD_WALLPAPER_DETAILS}</Text>
                         <View style={[glancePostStyles.addPostDetailsTitleDivider, SDGenericStyles.backgroundColorWhite]} />
@@ -142,7 +124,7 @@ export const AddPostDetails = () => {
                             <SDMultiTextInputLengthText value={postDescriptionValue} maxLength={numericConstants.TWO_HUNDRED} />
 
                             <SDImageFormInput inputName={fieldControllerName.POST_DESCRIPTION} control={control} rules={formRequiredRules.addPostDescription}
-                                defaultValue={userPosts.details.postDescription} maxLength={numericConstants.TWO_HUNDRED} placeHolderText={placeHolderText.ADD_POST_DESCRIPTION}
+                                defaultValue={userPosts.details.postDescription} maxLength={numericConstants.TWO_HUNDRED} placeHolderText={placeHolderText.ADD_DESCRIPTION}
                                 keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} isMultiline={true} numberOfLines={numericConstants.THREE} textContentType={keyBoardTypeConst.NONE}
                                 extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.height100, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite,
                                 SDGenericStyles.ft16, SDGenericStyles.textALignVerticalTop]} maxLength={numericConstants.TWO_HUNDRED} />
@@ -162,15 +144,10 @@ export const AddPostDetails = () => {
                                     {actionButtonTextConstants.NEXT.toUpperCase()}
                                 </Text>
                             </TouchableOpacity>
-
-                            {/* <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.THREE }]} onPress={handleSubmit(onSubmit)}>
-                                <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft14, SDGenericStyles.colorBlack, SDGenericStyles.textCenterAlign]}>
-                                    {toAction == miscMessage.UPDATE && actionButtonTextConstants.UPDATE_POST.toUpperCase() || actionButtonTextConstants.ADD_POST.toUpperCase()}</Text>
-                            </TouchableOpacity> */}
                         </View>
                     </KeyboardAvoidingView>
                 </View>
-                <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef} detailsCallback={detailsCallback}
+                <BottomSheetView bottomSheetRef={bottomSheetRef} detailsCallback={detailsCallback}
                     snapPoints={snapPoints} fall={fallValue} navigation={navigation} isFrom={screens.EDIT_POST_DETAILS} />
             </View>
         </TouchableWithoutFeedback>

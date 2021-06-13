@@ -11,7 +11,7 @@ import {
 import { SDGenericStyles, userAuthStyles, colors, glancePostStyles, userMenuStyles } from '../../styles/Styles';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
-import Animated, { useSharedValue } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { showSnackBar, redirectUserToGlance, saveRegistrationStatus, userPostAction, fetchUpdateLoggedInUserProfile } from '../../helper/Helper';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { CategoryContext } from '../../App';
@@ -40,11 +40,8 @@ export const EditUserProfile = () => {
         jsonConstants.EMPTY);
 
     const bottomSheetRef = useRef(null);
-    const bottomSheetRefCallback = node => {
-        bottomSheetRef.current = node;
-    };
 
-    const fallValue = useSharedValue(numericConstants.ONE);
+    const fallValue = new Animated.Value(numericConstants.ONE);
     /**
      * Notify progress upload to loader.
      */
@@ -90,13 +87,12 @@ export const EditUserProfile = () => {
     return (
         <EditProfile loader={loader} profileDetails={profileDetails} bottomSheetRef={bottomSheetRef} control={control} formState={formState}
             setIsSecureTextEntry={setIsSecureTextEntry} isSecureTextEntry={isSecureTextEntry} bioInput={bioInput} handleSubmit={handleSubmit}
-            onSubmit={onSubmit} bottomSheetRefCallback={bottomSheetRefCallback} detailsCallback={detailsCallback} snapPoints={snapPoints}
-            fallValue={fallValue} navigation={navigation} />
+            onSubmit={onSubmit} detailsCallback={detailsCallback} snapPoints={snapPoints} fallValue={fallValue} navigation={navigation} />
     )
 }
 
 const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, control, formState, setIsSecureTextEntry, isSecureTextEntry, bioInput,
-    handleSubmit, onSubmit, bottomSheetRefCallback, detailsCallback, snapPoints, fallValue, navigation }) => {
+    handleSubmit, onSubmit, detailsCallback, snapPoints, fallValue, navigation }) => {
     return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.alignItemsCenter]}
             pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
@@ -151,7 +147,7 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
                         {actionButtonTextConstants.UPDATE}</Text>
                 </TouchableOpacity>
             </View>
-            <BottomSheetView refCallback={bottomSheetRefCallback} bottomSheetRef={bottomSheetRef} detailsCallback={detailsCallback}
+            <BottomSheetView bottomSheetRef={bottomSheetRef} detailsCallback={detailsCallback}
                 snapPoints={snapPoints} fall={fallValue} navigation={navigation} isFrom={screens.EDIT_USER_PROFILE} />
         </View>
     </TouchableWithoutFeedback>;

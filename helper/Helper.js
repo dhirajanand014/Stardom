@@ -1249,8 +1249,7 @@ export const cropImage = async (imagePath, setLoaderCallback) => {
     }
 }
 
-export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem, _loader, setLoaderCallback,
-    uploadProgressCallback) => {
+export const handleAddPostDetails = async (data, postImagePath, toAction, selectedItem, setLoaderCallback, uploadProgressCallback) => {
     try {
         const formData = new FormData();
         const categories = data.postCategories && data.postCategories.join() || stringConstants.EMPTY;

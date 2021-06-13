@@ -25,6 +25,7 @@ import { RegistrationOTP } from './screens/user/RegitrationOTP';
 import { Posts } from './views/imagePost/Posts';
 import { SDCameraView } from './views/cameraView/SDCameraView';
 import { Glance } from './screens/post/Glance';
+import { SelectPostCategories } from './screens/post/SelectPostCategories';
 import { UserFollowFollowing } from './screens/user/UserFollowFollowing';
 import { EditUserProfile } from './screens/user/EditUserProfile';
 import { SDCameraImagePreview } from './views/cameraView/SDCameraImagePreview';
@@ -76,6 +77,7 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.CATEGORY} component={Category} options={categoryHeader} />
                 <Stack.Screen name={screens.LOGIN} component={Login} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.ADD_POST_DETAILS} component={AddPostDetails} options={headerLessStackOptions} />
+                <Stack.Screen name={screens.SELECT_POST_CATEGORIES} component={SelectPostCategories} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.POSTS} component={Posts} options={authorizationHeader} />
                 <Stack.Screen name={screens.REGISTER} component={Register} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.EDIT_USER_PROFILE} component={EditUserProfile} options={headerLessStackOptions} />

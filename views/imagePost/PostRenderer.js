@@ -20,7 +20,7 @@ export const PostRenderer = React.memo(({ item, postCallback }) => {
                     item.id == numericConstants.MINUS_ONE && item.type == miscMessage.CREATE &&
                     <View style={glancePostStyles.addPostView}>
                         <PlusIcon width={numericConstants.ONE_HUNDRED_TWENTY} height={numericConstants.ONE_HUNDRED_TWENTY} />
-                    </View> || <FastImage source={{ uri: item.postImage, priority: FastImage.priority.normal }}
+                    </View> || <FastImage source={{ uri: item.postImage, priority: FastImage.priority.high }}
                         style={flatListItemStyles.imageBackGround}>
                         <View style={flatListItemStyles.textsView}>
                             <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>

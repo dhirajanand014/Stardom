@@ -1,11 +1,11 @@
 import React from 'react'
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity, View, Text, Image } from 'react-native';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import FastImage from 'react-native-fast-image';
 import { alertTextMessages, miscMessage, numericConstants } from '../../constants/Constants';
 
-export const PostCategoryRenderer = (item, index, inputName, postCategories, categories,
-    setCategories, setValue, setError, formState) => {
+export const PostCategoryRenderer = React.memo(({ item, index, inputName, postCategories, categories,
+    setCategories, setValue, setError, formState }) => {
     const { categoryCover } = item;
 
     const handleCategorySelection = () => {
@@ -38,19 +38,22 @@ export const PostCategoryRenderer = (item, index, inputName, postCategories, cat
         <View style={SDGenericStyles.padding5}>
             <TouchableOpacity activeOpacity={.7} onPress={async () => handleCategorySelection()}
                 style={[SDGenericStyles.borderRadius20, SDGenericStyles.paddingVertical2, glancePostStyles.addPostCategoriesStyle,
-                item.isSelected && SDGenericStyles.backGroundColorGreen || SDGenericStyles.textBoxGray]}>
+                item.isSelected && SDGenericStyles.backgroundColorYellow || SDGenericStyles.textBoxGray]}>
                 <View style={SDGenericStyles.rowFlexDirection}>
-                    <FastImage source={{ uri: categoryCover, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable }}
-                        style={glancePostStyles.addPostDetailsCategoryImageStyle}>
-                    </FastImage>
+                    {
+                        item.isSelected && <Image style={[glancePostStyles.selectedPostDetailsCategoryImageStyle]}
+                            source={require(`../../assets/category_selected.png`)} /> ||
+                        <FastImage source={{ uri: categoryCover, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable }}
+                            style={glancePostStyles.addPostDetailsCategoryImageStyle} />
+                    }
                     <View style={[SDGenericStyles.padding12, SDGenericStyles.alignItemsCenter]}>
-                        <Text style={[SDGenericStyles.ft12, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
-                        SDGenericStyles.textCenterAlign]}>
+                        <Text style={[SDGenericStyles.ft12, item.isSelected && SDGenericStyles.textBlackColor || SDGenericStyles.textColorWhite,
+                        SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textCenterAlign]}>
                             {item.categoryTitle}
                         </Text>
                     </View>
                 </View>
             </TouchableOpacity>
-        </View >
+        </View>
     )
-}
+});

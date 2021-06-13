@@ -842,6 +842,10 @@ export const glancePostStyles = StyleSheet.create({
         elevation: 3,
         backgroundColor: "#fcc200"
     },
+    bottomPostSubmitButton: {
+        right: 0,
+        left: 0
+    },
     postReportAbuse: {
         left: 12,
         marginTop: 10,
@@ -951,7 +955,7 @@ export const glancePostStyles = StyleSheet.create({
         paddingVertical: 10
     },
     addPostDetailsTitleDivider: {
-        width: width / 1.2,
+        width: width / 1.15,
         height: 1,
     },
     addPostDetailInputView: {
@@ -993,6 +997,14 @@ export const glancePostStyles = StyleSheet.create({
         height: 40,
         borderRadius: 58,
         alignItems: 'flex-start',
+        marginLeft: 1
+    },
+    selectedPostDetailsCategoryImageStyle: {
+        width: 40,
+        height: 40,
+        borderRadius: 58,
+        alignItems: 'flex-start',
+        tintColor: `black`,
         marginLeft: 1
     },
     profileBioTextStyle: {

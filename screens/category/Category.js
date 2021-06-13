@@ -80,7 +80,7 @@ export const Category = () => {
                 <TouchableOpacity activeOpacity={.7} onPress={async () => await toggleSelectAllCallback(miscMessage.SELECT_ALL)}
                     style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignSelfEnd, SDGenericStyles.paddingRight10]}>
                     <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingRight5]}>
-                        <Image style={[categoryViewStyles.select_all_categories]} source={require(`../../assets/category_selected.png`)} />
+                        <Image style={categoryViewStyles.select_all_categories} source={require(`../../assets/category_selected.png`)} />
                     </View>
                     <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorPink, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.paddingVertical5]}>
                         {miscMessage.SELECT_ALL}

@@ -1,5 +1,5 @@
 import { useIsFocused, useNavigation } from '@react-navigation/core';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
@@ -19,7 +19,6 @@ import { Extrapolate, interpolate, useAnimatedStyle, useDerivedValue, useSharedV
 
 export const SDUserMenus = (drawerProps) => {
 
-    const bottomSheetRef = useRef(null);
     const navigation = useNavigation();
     const isFocused = useIsFocused();
 
@@ -60,10 +59,6 @@ export const SDUserMenus = (drawerProps) => {
         };
     });
 
-    const bottomSheetRefCallback = useCallback((node) => {
-        bottomSheetRef.current = node;
-    });
-
     const handleMenuClickAction = useCallback(async (item) => {
         setLoaderCallback(true);
         switch (item.key) {
@@ -80,7 +75,7 @@ export const SDUserMenus = (drawerProps) => {
                 navigation.navigate(screens.CATEGORY);
                 break;
             case screens.POSTS:
-                navigation.navigate(screens.POSTS, { bottomSheetRefCallback: bottomSheetRefCallback, bottomSheetRef: bottomSheetRef });
+                navigation.navigate(screens.POSTS);
                 break;
             case actionButtonTextConstants.VERIFY_USER:
                 setProfileMenu({ ...profileMenu, showSubmitVerifyModal: true });
