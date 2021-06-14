@@ -30,7 +30,7 @@ import { UserFollowFollowing } from './screens/user/UserFollowFollowing';
 import { EditUserProfile } from './screens/user/EditUserProfile';
 import { SDCameraImagePreview } from './views/cameraView/SDCameraImagePreview';
 import { SDSplashScreen } from './screens/SDSplashScreen';
-import { SDGenericStyles } from './styles/Styles';
+import { userMenuStyles } from './styles/Styles';
 import { ViewUserPost } from './screens/post/ViewUserPost';
 import { FollowerFollowingProfile } from './screens/user/FollowerFollowingProfile';
 
@@ -55,7 +55,7 @@ export const TabNavigation = () => {
 
 export const DrawerNavigation = () => {
     return (
-        <DrawerNavigator.Navigator drawerStyle={[SDGenericStyles.backGroundColorBlack, { width: width }]}
+        <DrawerNavigator.Navigator lazy drawerStyle={[userMenuStyles.menuBackgroundColor, { width: width }]}
             drawerContent={props => <SDUserMenus {...props} />} edgeWidth={numericConstants.ZERO}>
             <DrawerNavigator.Screen name={screens.GLANCE} component={Glance} />
             <DrawerNavigator.Screen name={screens.MENU} component={SDUserMenus} />

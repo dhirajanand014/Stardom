@@ -5,7 +5,7 @@ import {
     AdenCompat, _1977Compat, BrannanCompat, BrooklynCompat, ClarendonCompat, EarlybirdCompat, GinghamCompat,
     HudsonCompat, InkwellCompat, KelvinCompat, LarkCompat, LofiCompat, MavenCompat, MayfairCompat, MoonCompat,
     NashvilleCompat, PerpetuaCompat, ReyesCompat, RiseCompat, SlumberCompat, StinsonCompat, ToasterCompat, ValenciaCompat,
-    WaldenCompat, WillowCompat, Xpro2Compat, Colo, Normal, Browni
+    WaldenCompat, WillowCompat, Xpro2Compat, Normal
 } from 'react-native-image-filter-kit';
 import { isValidURL } from "../helper/Helper";
 
@@ -165,6 +165,7 @@ export const actionButtonTextConstants = {
     CANCEL: `Cancel`,
     ADD_POST: `Add Post`,
     UPDATE: `Update`,
+    ABOUT_STARDOM: `About Stardom`,
     DELETE_POST: `Delete Post`,
     CANCEL_POST: `Cancel`,
     NOT_NOW: `Not now`,
@@ -401,6 +402,7 @@ export const modalTextConstants = {
     ADD_WALLPAPER_DETAILS: `Add Wallpaper details`,
     CANCEL_BUTTON: `Cancel`,
     CLOSE_BUTTON: `Close`,
+    ADD_WALLPAPER: `Add WallPaper`,
     REGISTER_TITLE_HEADER: `Create New`,
     REGISTER_TITLE_TEXT: `Account`,
     LOGIN_TITLE_HEADER: `Welcome Back`,
@@ -473,6 +475,7 @@ export const numericConstants = {
     TWENTY_FOUR: 24,
     TWENTY_EIGHT: 28,
     THIRTY: 30,
+    THIRTY_EIGHT: 38,
     FORTY_TWO: 42,
     FORTY_FIVE: 45,
     FORTY_EIGHT: 48,
@@ -682,6 +685,7 @@ export const miscMessage = {
     CREATE: `create`,
     UPDATE: `update`,
     CREATE: `create`,
+    VIEW: `View`,
     SHARE_FILE_TYPE: `.png`,
     HEY: `Hey`,
     TOP: `top`,
@@ -848,33 +852,50 @@ export const PRIVATE_FOLLOW_UNFOLLOW = {
 
 export const SDMenuOptions = [
     {
-        label: miscMessage.FOLLOWING_TEXT,
-        key: screens.USER_FOLLOWERS_FOLLOWING,
-        loggedIn: true
+        label: modalTextConstants.ADD_WALLPAPER,
+        key: screens.POSTS,
+        loggedIn: true,
+        icon: require(`../assets/menu/add_wallpaper_icon.png`),
+        actionIcon: require(`../assets/menu/add_wallpaper_action_icon.png`)
     }, {
         label: miscMessage.FOLLOWERS_TEXT,
         key: screens.USER_FOLLOWERS_FOLLOWING,
-        loggedIn: true
+        loggedIn: true,
+        icon: require(`../assets/menu/followers_icon.png`)
     }, {
-        label: miscMessage.PRIVATE_REQUEST_ACCESS,
+        label: miscMessage.FOLLOWING_TEXT,
         key: screens.USER_FOLLOWERS_FOLLOWING,
-        loggedIn: true
-    }, {
-        label: screens.POSTS,
-        key: screens.POSTS,
-        loggedIn: true
-    }, {
-        label: miscMessage.GET_VERIFIED,
-        key: actionButtonTextConstants.VERIFY_USER,
-        loggedIn: true
+        loggedIn: true,
+        icon: require(`../assets/menu/following_icon.png`)
     }, {
         label: fieldControllerName.SEARCH_USERS,
         key: screens.USER_FOLLOWERS_FOLLOWING,
-        loggedIn: true
+        loggedIn: true,
+        icon: require(`../assets/post_search_icon.png`)
+    }, {
+        label: miscMessage.PRIVATE_REQUEST_ACCESS,
+        key: screens.USER_FOLLOWERS_FOLLOWING,
+        loggedIn: true,
+        icon: require(`../assets/menu/get_verified_icon.gif`)
+    }, {
+        label: miscMessage.GET_VERIFIED,
+        key: actionButtonTextConstants.VERIFY_USER,
+        loggedIn: true,
+        icon: require(`../assets/menu/get_verified_icon.gif`)
     }, {
         label: screens.CATEGORY,
-        key: screens.CATEGORY
-    }
+        key: screens.CATEGORY,
+        icon: require(`../assets/menu/categories_icon.png`)
+    }, {
+        label: actionButtonTextConstants.LOGOUT,
+        key: actionButtonTextConstants.LOGOUT,
+        loggedIn: true,
+        icon: require(`../assets/menu/logout_icon.png`)
+    }, {
+        label: actionButtonTextConstants.ABOUT_STARDOM,
+        key: actionButtonTextConstants.ABOUT_STARDOM,
+        icon: require(`../assets/menu/about_stardom_icon.png`)
+    },
 ];
 
 export const cameraConstants = {

@@ -17,8 +17,19 @@ export const SDGenericStyles = StyleSheet.create({
     elevation8: {
         elevation: 8
     },
+    iconStyle: {
+        width: numericConstants.TWENTY_EIGHT,
+        height: numericConstants.TWENTY_EIGHT
+    },
+    menuIconStyle: {
+        width: numericConstants.EIGHTEEN,
+        height: numericConstants.EIGHTEEN
+    },
     right0: {
         right: 0
+    },
+    top8: {
+        top: 8
     },
     right8: {
         right: 8
@@ -283,6 +294,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingTop10: {
         paddingTop: 10
+    },
+    paddingTop16: {
+        paddingTop: 16
     },
     paddingTop20: {
         paddingTop: 20
@@ -602,8 +616,8 @@ export const glancePostStyles = StyleSheet.create({
         height: 22
     },
     icon_post_search: {
-        width: 22,
-        height: 22
+        width: 18,
+        height: 18
     },
     searchInputBox: {
         flex: 1,
@@ -765,6 +779,11 @@ export const glancePostStyles = StyleSheet.create({
     category_selection_image: {
         width: 25,
         height: 25
+    },
+    editProfileAbsolute: {
+        top: 0,
+        bottom: 0,
+        right: 5
     },
     modalHideText: {
         color: "white",
@@ -1243,6 +1262,11 @@ export const userAuthStyles = StyleSheet.create({
         top: 0,
         bottom: 0
     },
+    menu_close_icon_style: {
+        width: 22,
+        height: 22,
+        tintColor: `white`
+    },
     registrationConfirmationView: {
         alignSelf: 'center',
         paddingVertical: 20,
@@ -1477,15 +1501,15 @@ export const colors = {
 export const userMenuStyles = {
     profileImageView: {
         alignItems: 'flex-start',
-        paddingTop: 20,
         paddingLeft: 20
     },
     profileImageStyle: {
         width: 80,
         height: 80,
         borderRadius: 58,
-        borderWidth: 3,
-        borderColor: `#969696`
+    },
+    menuBackgroundColor: {
+        backgroundColor: `rgba(27,31,43,.3)`
     },
     editProfileImageStyle: {
         width: 100,
