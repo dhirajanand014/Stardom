@@ -17,7 +17,6 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
 
     const { textPostTypeAnimationValue, textPostDescriptionAnimationValue } = props;
 
-    const post_external_link = require('../../assets/post_external_link_icon.png');
     const [postDetailsState, setPostDetailsState] = useState({
         currentPostIndex: numericConstants.ZERO,
         currentPost: props.posts[numericConstants.ZERO],
@@ -91,9 +90,9 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                         <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
                         {
                             postDetailsState.currentPost.postLink &&
-                            <TouchableOpacity style={SDGenericStyles.width38} onPress={() => Linking.openURL(postDetailsState.currentPost.postLink)}>
-                                <Animated.Image style={[glancePostStyles.icon_external_link]} source={post_external_link} />
-                            </TouchableOpacity>
+                            <TouchableOpacity activeOpacity={.5} onPress={() => Linking.openURL(postDetailsState.currentPost.postLink)}>
+                                <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
+                            </TouchableOpacity> || <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
                         }
                     </Animated.View>
                     <Animated.View style={[glancePostStyles.postTitleAndProfileStyle, SDGenericStyles.marginBottom8,

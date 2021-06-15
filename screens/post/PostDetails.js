@@ -3,16 +3,17 @@ import { Text, View, Image, Linking, TouchableOpacity, Switch } from 'react-nati
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
-    stringConstants, postCountTypes, numericConstants,
-    postitionStringConstants, colorConstants, permissionsButtons, miscMessage, fieldControllerName
+    stringConstants, postCountTypes, numericConstants, miscMessage, jsonConstants,
+    postitionStringConstants, colorConstants, permissionsButtons, fieldControllerName
 } from '../../constants/Constants';
 import {
-    postWallPaperAlert, increaseAndSetPostCounts,
-    downloadImageFromURL, setOptionsStateForDescription, shareImage, showProgressSnackbar
+    postWallPaperAlert, increaseAndSetPostCounts, setPostDetailsStateForModal,
+    downloadImageFromURL, shareImage, showProgressSnackbar
 } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import ActionButton from '@logvinme/react-native-action-button';
-import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
+import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal';
+import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
 import { CategoryContext } from '../../App';
 
 const post_like = require(`../../assets/post_likes_heart_arrow_icon.png`);
@@ -28,15 +29,20 @@ export const PostDetails = forwardRef((props, ref) => {
 
     const { downloadProgressState, setDownloadProgressState, sdomDatastate, optionsState, setOptionsState } = useContext(CategoryContext);
 
-    const post_external_link = require('../../assets/post_external_link_icon.png');
-
     const [postDetailsState, setPostDetailsState] = useState({
         currentPostIndex: numericConstants.ZERO,
         currentPost: sdomDatastate.posts[numericConstants.ZERO],
         animationVisible: false,
         switchEnabled: true,
         newPostViewed: false,
+        descriptionModal: false,
+        reportAbuseModal: false,
+        selectedReportAbuse: {},
+        reportAbuses: jsonConstants.EMPTY,
+        reportAbuseSubmitDisabled: false,
     });
+
+    const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
 
     useImperativeHandle(ref,
         () => ({
@@ -108,12 +114,11 @@ export const PostDetails = forwardRef((props, ref) => {
             <View key={`1_${postDetailsState.currentPostIndex}_${postDetailsState.currentPost.categoryId}_post_details`}>
                 <View style={glancePostStyles.innerContainer}>
                     <Animated.View style={[glancePostStyles.smallButtonsContainer, postDetailsState.animationVisible && postTypeSpringStyle]}>
-                        <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
                         {
                             postDetailsState.currentPost.postLink &&
-                            <TouchableOpacity style={SDGenericStyles.width38} onPress={() => Linking.openURL(postDetailsState.currentPost.postLink)}>
-                                <Animated.Image style={[glancePostStyles.icon_external_link]} source={post_external_link} />
-                            </TouchableOpacity>
+                            <TouchableOpacity activeOpacity={.5} onPress={() => Linking.openURL(postDetailsState.currentPost.postLink)}>
+                                <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
+                            </TouchableOpacity> || <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
                         }
                     </Animated.View>
                     <Animated.View style={[glancePostStyles.postTitleAndProfileStyle, SDGenericStyles.marginBottom8,
@@ -123,8 +128,8 @@ export const PostDetails = forwardRef((props, ref) => {
                             {postDetailsState.currentPost.profileName && postDetailsState.currentPost.profileName.toUpperCase()}
                         </Text>
                         <View>
-                            <View style={SDGenericStyles.rowFlexDirection}>
-                                <Text style={[postDetailsState.currentPost.user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
+                            <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter]}>
+                                <Text style={[postDetailsState.currentPost.user.name && glancePostStyles.postProfileNameBy, SDGenericStyles.textColorWhite,
                                 SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
                                     {`by`}
                                 </Text>
@@ -135,7 +140,7 @@ export const PostDetails = forwardRef((props, ref) => {
                                 {
                                     postDetailsState.currentPost.user.user_type == miscMessage.VERIFIED_AUTHOR &&
                                     <View>
-                                        <VerifiedAuthorBadgeIcon width={numericConstants.TEN} height={numericConstants.TEN} />
+                                        <Image style={glancePostStyles.verifiedIconStyle} source={require(`../../assets/verified_icon.gif`)} />
                                     </View>
                                 }
                             </View>
@@ -168,8 +173,7 @@ export const PostDetails = forwardRef((props, ref) => {
                         onValueChange={() => setPostDetailsState({ ...postDetailsState, switchEnabled: !isActive })} />
                 }>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} hideLabelShadow={true}
-                    useNativeFeedback={false} onPress={() => setOptionsStateForDescription(optionsState, setOptionsState,
-                        postDetailsState.currentPost, postDetailsState, setPostDetailsState)}>
+                    useNativeFeedback={false} onPress={() => setPostDetailsStateForModal(postDetailsState, setPostDetailsState, miscMessage.POST_DESCRIPTION_MODAL_NAME)}>
                     <View style={glancePostStyles.backgroundRoundColor_description}>
                         <Image style={glancePostStyles.icon_post_description} source={post_description} />
                     </View>
@@ -207,6 +211,10 @@ export const PostDetails = forwardRef((props, ref) => {
                     </View>
                 </ActionButton.Item>
             </ActionButton>
-        </React.Fragment >
+            <PostDescriptionModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
+                setPostDetailsState={setPostDetailsState} />
+            <PostReportAbuseModal optionsState={optionsState} postDetailsState={postDetailsState}
+                setPostDetailsState={setPostDetailsState} />
+        </React.Fragment>
     )
 });

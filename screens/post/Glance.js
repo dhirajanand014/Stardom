@@ -8,8 +8,6 @@ import {
     onSwiperScrollEnd, fetchPostsAndSaveToState,
     resetAnimatePostTextDetails, setImageLoadError
 } from '../../helper/Helper';
-import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal';
-import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import Animated, { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import Shimmer from 'react-native-shimmer';
@@ -21,7 +19,6 @@ import { SwipeItem } from '../../components/swiper/SwipeItem';
 import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
 
 const category_selection = require('../../assets/category_selection_icon.png');
-const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
 
 export const Glance = ({ navigation }) => {
 
@@ -106,8 +103,5 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
         <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => navigation.openDrawer()}>
             <Image source={category_selection} style={glancePostStyles.category_selection_image} />
         </TouchableOpacity>
-        <PostDescriptionModal optionsState={optionsState} setOptionsState={setOptionsState}
-            reportAbuseIcon={post_report_abuse} />
-        <PostReportAbuseModal optionsState={optionsState} setOptionsState={setOptionsState} />
     </View>;
 });

@@ -100,6 +100,9 @@ export const SDGenericStyles = StyleSheet.create({
     mb20: {
         marginBottom: 20,
     },
+    mb25: {
+        marginBottom: 25,
+    },
     mb30: {
         marginBottom: 30,
     },
@@ -273,9 +276,6 @@ export const SDGenericStyles = StyleSheet.create({
     },
     padding12: {
         padding: 12
-    },
-    width38: {
-        width: 38
     },
     opacitypt6: {
         opacity: 0.6
@@ -585,6 +585,15 @@ export const glancePostStyles = StyleSheet.create({
         borderRadius: 16,
     },
     postProfileName: {
+        marginRight: 1,
+        display: 'flex',
+        textShadowOffset: {
+            width: 2,
+            height: 2
+        },
+        textShadowColor: `#fafafa`
+    },
+    postProfileNameBy: {
         marginRight: 4,
         display: 'flex',
         textShadowOffset: {
@@ -722,7 +731,6 @@ export const glancePostStyles = StyleSheet.create({
     modalView: {
         marginRight: 20,
         backgroundColor: "white",
-        borderRadius: 20,
         top: 30,
         maxHeight: 250,
         width: 300,
@@ -748,10 +756,13 @@ export const glancePostStyles = StyleSheet.create({
         justifyContent: 'center',
         width: width / 1.15
     },
+    verifiedIconStyle: {
+        width: 16,
+        height: 16
+    },
     radioButtonModalView: {
         marginRight: 20,
         backgroundColor: "white",
-        borderRadius: 20,
         padding: 15,
         maxHeight: 700,
         width: 300,
@@ -796,15 +807,9 @@ export const glancePostStyles = StyleSheet.create({
         textDecorationLine: 'underline',
         fontFamily: 'wallpiper_roman_font'
     },
-    reportAbuseModalTitle: {
-        fontFamily: 'wallpiper_bold_font',
-        fontSize: 20,
-        padding: 10
-    },
     reportAbuseModalTitleDivider: {
-        width: 230,
-        height: 1,
-        backgroundColor: "lightgray"
+        width: width / 1.66,
+        height: 1.5,
     },
     icon_count_text: {
         color: "white",
@@ -838,10 +843,8 @@ export const glancePostStyles = StyleSheet.create({
         paddingRight: 2
     },
     postDescriptionModalButton: {
-        top: 0,
-        right: 0,
-        marginHorizontal: 12,
-        marginVertical: 10,
+        top: 20,
+        right: 40,
         elevation: 3,
     },
     reportAbuseSubmitButton: {
@@ -910,13 +913,6 @@ export const glancePostStyles = StyleSheet.create({
         borderColor: '#fafafa',
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    reportAbuseAlreadySelected: {
-        alignItems: 'center',
-        marginBottom: 25,
-        justifyContent: 'center',
-        padding: 8,
-        fontFamily: 'wallpiper_bold_font'
     },
     reportAbuseSelectedRb: {
         width: 10,

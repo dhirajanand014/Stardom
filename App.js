@@ -33,13 +33,8 @@ export default function App({ navigationRef }) {
   const [sdomDatastate, setSdomDatastate] = useState(jsonConstants.EMPTY);
   const [optionsState, setOptionsState] = useState({
     currentPostIndex: numericConstants.ZERO,
-    descriptionModal: false,
-    reportAbuseModal: false,
     showSearch: false,
     selectedPost: stringConstants.EMPTY,
-    selectedReportAbuse: {},
-    reportAbuses: jsonConstants.EMPTY,
-    reportAbuseSubmitDisabled: false,
     isImageLoadError: false
   });
 

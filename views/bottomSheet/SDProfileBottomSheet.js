@@ -5,7 +5,6 @@ import { CategoryContext } from '../../App';
 import { SDBottomSheet } from '../../components/bottomsheet/SDBottomSheet';
 import { LockIcon } from '../../components/icons/LockIcon';
 import { UnlockIcon } from '../../components/icons/UnlockIcon';
-import { VerifiedAuthorBadgeIcon } from '../../components/icons/VerifiedAuthorBadgeIcon';
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
     actionButtonTextConstants, alertTextMessages, height, miscMessage,
@@ -19,24 +18,8 @@ export const SDProfileBottomSheet = props => {
     const post_share = require(`../../assets/post_share.png`);
     const { downloadProgressState, setDownloadProgressState } = useContext(CategoryContext);
 
-    const onFadeInTransitionRef = useRef();
-    const onFadeOutTransitionRef = useRef();
 
-    const onFadeInTransition = (
-        <Transition.Sequence>
-            <Transition.In type="fade" durationMs={10000} />
-            <Transition.Change interpolation="easeInOut" />
-            <Transition.Out type="fade" durationMs={10000} />
-        </Transition.Sequence>
-    );
 
-    const onFadeOutTransition = (
-        <Transition.Sequence>
-            <Transition.In type="fade" durationMs={10000} />
-            <Transition.Change interpolation="easeInOut" />
-            <Transition.Out type="fade" durationMs={10000} />
-        </Transition.Sequence>
-    );
 
     const downloadCallback = useCallback((received, total) => {
         const value = received / total;
@@ -134,7 +117,7 @@ const RenderProfileDetails = ({ profile, profileDetail, isDisabled, setLoaderCal
                     </Text>
                     {profile.user_type == miscMessage.VERIFIED_AUTHOR &&
                         <View style={SDGenericStyles.ml_3}>
-                            <VerifiedAuthorBadgeIcon width={numericConstants.FIFTEEN} height={numericConstants.FIFTEEN} />
+                            <Image style={glancePostStyles.verifiedIconStyle} source={require(`../../assets/verified_icon.gif`)} />
                         </View> || <View />}
                 </View>
                 <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter,

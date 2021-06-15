@@ -285,17 +285,17 @@ export const fetchAndDisplayNamesAndCategoryTitles = (post) => {
     return names.join(stringConstants.PIPELINE_JOIN) || stringConstants.EMPTY;
 }
 
-export const setOptionsStateForDescription = (optionsState, setOptionsState, item,
-    postDetailsState, setPostDetailsState) => {
-    setAnimationVisible(postDetailsState, setPostDetailsState, false);
-    setOptionsState({ ...optionsState, descriptionModal: true, selectedPost: item });
+export const setPostDetailsStateForModal = (postDetailsState, setPostDetailsState, modalKey) => {
+    modalKey == miscMessage.POST_DESCRIPTION_MODAL_NAME &&
+        setAnimationVisible(postDetailsState, setPostDetailsState, false);
+    setPostDetailsState({ ...postDetailsState, [modalKey]: true });
 }
 
-export const setReportAbuseSelectedOption = (optionsState, setOptionsState, selectedReportAbuseId) => {
-    setOptionsState({
-        ...optionsState,
+export const setReportAbuseSelectedOption = (postDetailsState, setPostDetailsState, selectedReportAbuseId) => {
+    setPostDetailsState({
+        ...postDetailsState,
         selectedReportAbuse: {
-            [requestConstants.POST_ID]: optionsState.selectedPost.id,
+            [requestConstants.POST_ID]: postDetailsState.currentPost.id,
             [requestConstants.POST_REPORT_ABUSE_ID]: selectedReportAbuseId,
             [requestConstants.POST_REPORT_ABUSE_SUBMITTED]: false
         }
@@ -309,19 +309,21 @@ export const setOptionsStateRadioOptions = (optionsState, setOptionsState) => {
     });
 }
 
-export const resetOptionsState = (optionsState, setOptionsState) => {
-    setOptionsState({
-        ...optionsState,
-        descriptionModal: false,
-        selectedPost: stringConstants.EMPTY
-    });
+export const resetModalState = (postDetailsState, setPostDetailsState, modalKey) => {
+    postDetailsState[modalKey] = false;
+    if (modalKey == miscMessage.POST_REPORT_ABUSE_MODAL_NAME) {
+        postDetailsState.selectedReportAbuse = {};
+        postDetailsState.reportAbuses = [];
+        postDetailsState.reportAbuseSubmitDisabled = false;
+    }
+    setPostDetailsState({ ...postDetailsState });
 }
 
-export const setReportIdForPost = async (optionsState, setOptionsState) => {
-    const { selectedPost, selectedReportAbuse } = optionsState;
-    const { id, postTitle } = selectedPost;
+export const setReportIdForPost = async (postDetailsState, setPostDetailsState) => {
+    const { currentPost, selectedReportAbuse } = postDetailsState;
+    const { id, postTitle } = currentPost;
     try {
-        optionsState.reportAbuseSubmitDisabled = true;
+        postDetailsState.reportAbuseSubmitDisabled = true;
         const requestReportAbusePayload = {
             [requestConstants.POST_ID_KEY]: id,
             [requestConstants.POST_REPORT_ABUSE_ID]: selectedReportAbuse.postReportAbuseId
@@ -333,39 +335,29 @@ export const setReportIdForPost = async (optionsState, setOptionsState) => {
 
         if (responseData && responseData.message == responseStringData.SUCCESS) {
             requestReportAbusePayload[requestConstants.POST_REPORT_ABUSE_SUBMITTED] = true;
-            optionsState.selectedReportAbuse = requestReportAbusePayload;
+            postDetailsState.selectedReportAbuse = requestReportAbusePayload;
         }
 
         ToastAndroid.show(`Thank you for submitting the report!`, ToastAndroid.SHORT);
 
-        saveReportAbuseOptions(optionsState);
-        closeReportAbuseModal(optionsState, setOptionsState);
+        await saveReportAbuseOptions(postDetailsState);
+        resetModalState(postDetailsState, setPostDetailsState, miscMessage.POST_REPORT_ABUSE_MODAL_NAME);
     } catch (error) {
         console.error(`Cannot set report abuse id for ${postTitle}`, error);
     }
 }
 
-export const closeReportAbuseModal = (optionsState, setOptionsState) => {
-    setOptionsState({
-        ...optionsState,
-        reportAbuseModal: false,
-        selectedReportAbuse: {},
-        reportAbuses: [],
-        reportAbuseSubmitDisabled: false
-    });
-}
-
-export const saveReportAbuseOptions = async (optionsState) => {
+export const saveReportAbuseOptions = async (postDetailsState) => {
     try {
         var saveReportsArray = [], isReportAbuseAlreadySet = false;
         const savedReportAbuses = await fetchSavedReportAbuseOptions();
         if (savedReportAbuses) {
             saveReportsArray = JSON.parse(savedReportAbuses.password);
-            isReportAbuseAlreadySet = saveReportsArray && saveReportsArray.some((item) => item.postId == optionsState.selectedReportAbuse.id &&
-                optionsState.selectedReportAbuse[requestConstants.POST_REPORT_ABUSE_SUBMITTED]);
+            isReportAbuseAlreadySet = saveReportsArray && saveReportsArray.some((item) => item.postId == postDetailsState.selectedReportAbuse.id &&
+                postDetailsState.selectedReportAbuse[requestConstants.POST_REPORT_ABUSE_SUBMITTED]);
         }
         if (!isReportAbuseAlreadySet) {
-            saveReportsArray.push(optionsState.selectedReportAbuse);
+            saveReportsArray.push(postDetailsState.selectedReportAbuse);
 
             const saveReportsJSON = JSON.stringify(saveReportsArray);
             setReportAbuseOptions(saveReportsJSON);
@@ -419,14 +411,14 @@ export const togglePostSearchBox = (searchValues, setSearchValues, post,
     }
 }
 
-export const fetchReportAbuseValues = async (optionsState, setOptionsState) => {
+export const fetchReportAbuseValues = async (postDetailsState, setPostDetailsState) => {
     try {
         const savedReportAbusesJSON = await fetchSavedReportAbuseOptions();
 
         let reportAbusesData = savedReportAbusesJSON && JSON.parse(savedReportAbusesJSON.password);
 
         const reportAbuseForPostPresent = reportAbusesData && reportAbusesData.find((item) =>
-            item.postId == optionsState.selectedPost.id && item.reportAbuseSubmitted) || {};
+            item.postId == postDetailsState.currentPost.id && item.reportAbuseSubmitted) || {};
 
         if (!Object.keys(reportAbuseForPostPresent).length) {
 
@@ -443,8 +435,8 @@ export const fetchReportAbuseValues = async (optionsState, setOptionsState) => {
                 reportAbusesData = responseData;
             }
         }
-        setOptionsState({
-            ...optionsState,
+        setPostDetailsState({
+            ...postDetailsState,
             reportAbuses: reportAbusesData || [],
             selectedReportAbuse: reportAbuseForPostPresent || {}
         });
