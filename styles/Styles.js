@@ -340,6 +340,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingHorizontal65: {
         paddingHorizontal: 65
     },
+    bottom6: {
+        bottom: 6
+    },
     bottom8: {
         bottom: 8
     },
@@ -1511,8 +1514,11 @@ export const userMenuStyles = {
         width: 100,
         height: 100,
         borderRadius: 58,
-        borderWidth: 3,
-        borderColor: `#969696`
+    },
+    editProfileCameraIconStyle: {
+        width: 20,
+        height: 20,
+        tintColor: `#eabe05`
     },
     followerFollowingImageStyle: {
         width: 70,

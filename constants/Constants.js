@@ -569,6 +569,7 @@ export const errorMessages = {
     SELECT_OTHER_CATEGORIES: `Selected category has no posts! Please select another category by clicking below.`,
     CONTACT_US_1: `Please contact us at `,
     CONTACT_US_MAIL: `error@stardom.app`,
+    COULD_NOT_SET_COLORS: `Could not set colors`,
     CONTACT_US_2: `, if this issue persists`,
     POST_IMAGE_LOAD_ERROR: `Image failed to load!`,
     CANNOT_REQUEST_PERMISSION_TO_USER: `Could not provide permission to user`,
@@ -768,7 +769,6 @@ export const miscMessage = {
     PRIVATE_REQUEST_ACCESS: `Private request access`,
     TYPE: `type`,
     FLASH_MODE: `flashMode`,
-    EDIT_PROFILE_IMAGE: `Edit profile image`,
 }
 
 export const requestConstants = {
@@ -915,6 +915,8 @@ export const cameraConstants = {
         buttonNegative: 'Cancel',
     }
 }
+
+export const userSearchColors = [`#fa9c92`, `#73d9b4`, `#85d7ef`];
 
 export const CAMERA_IMAGE_FILTERS = [
     {

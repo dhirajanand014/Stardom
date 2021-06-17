@@ -1,7 +1,7 @@
 
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Image } from 'react-native';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import {
     fieldControllerName, stringConstants, keyBoardTypeConst,
@@ -96,15 +96,16 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
     return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.alignItemsCenter]}
             pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
-            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingTop20]}>
-                <FastImage source={{
-                    uri: profileDetails.profile_picture, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
-                }} style={[userMenuStyles.editProfileImageStyle, SDGenericStyles.paddingHorizontal25]} />
-                <TouchableOpacity activeOpacity={.7} onPress={() => { Keyboard.dismiss(); bottomSheetRef?.current?.snapTo(numericConstants.ZERO); }}>
-                    <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.colorYellow,
-                    SDGenericStyles.textCenterAlign, SDGenericStyles.paddingVertical10]}>
-                        {miscMessage.EDIT_PROFILE_IMAGE}
-                    </Text>
+            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingTop10]}>
+                <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.elevation8} onPress={() => { Keyboard.dismiss(); bottomSheetRef?.current?.snapTo(numericConstants.ZERO) }}>
+                    <FastImage source={{
+                        uri: profileDetails.profile_picture, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
+                    }} style={[userMenuStyles.editProfileImageStyle, SDGenericStyles.paddingHorizontal25]}>
+                    </FastImage>
+                    <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.alignItemsStart, SDGenericStyles.elevation8]}>
+                        <Image style={[userMenuStyles.editProfileCameraIconStyle, SDGenericStyles.bottom6, SDGenericStyles.positionAbsolute,
+                        SDGenericStyles.right8]} source={require(`../../assets/camera_icon.png`)} />
+                    </View>
                 </TouchableOpacity>
             </View>
             <AuthHeaderText titleText={modalTextConstants.EDIT_PROFILE} />
@@ -112,14 +113,14 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
                 <SDImageFormInput inputName={fieldControllerName.NAME} control={control}
                     defaultValue={profileDetails.name} placeHolderText={placeHolderText.FULL_NAME} autofocus={true}
                     keyboardType={keyBoardTypeConst.DEFAULT} textContentType={keyBoardTypeConst.NAME} formState={formState}
-                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
+                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}
                     icon={<RegisterUserIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN}
                         stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
                 <SDImageFormInput inputName={fieldControllerName.EMAIL} control={control}
                     defaultValue={profileDetails.email} placeHolderText={placeHolderText.EMAIL}
                     keyboardType={keyBoardTypeConst.EMAIL} textContentType={keyBoardTypeConst.NONE} formState={formState}
-                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
+                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}
                     icon={<RegisterUserIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN}
                         stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
@@ -127,14 +128,14 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
                     defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.NEW_PASSWORD}
                     keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
                         colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} minLength={numericConstants.SIX} setIsSecureTextEntry={setIsSecureTextEntry}
-                    isSecureTextEntry={isSecureTextEntry} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} />
+                    isSecureTextEntry={isSecureTextEntry} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textColorWhite]} />
 
                 <SDMultiTextInputLengthText value={bioInput} maxLength={numericConstants.TWO_HUNDRED} />
 
                 <SDImageFormInput inputName={fieldControllerName.ADD_USER_BIO} control={control} maxLength={numericConstants.TWO_HUNDRED}
                     defaultValue={profileDetails.bio} placeHolderText={placeHolderText.VERIFY_USER_DETAILS} isFeedbackInput={true}
                     formState={formState} isMultiline={true} underlineColorAndroid={miscMessage.TRANSPARENT} numberOfLines={numericConstants.FIVE}
-                    extraStyles={[SDGenericStyles.height150, SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.borderRadius5,
+                    extraStyles={[SDGenericStyles.height150, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft16, SDGenericStyles.borderRadius5,
                     SDGenericStyles.justifyContentCenter, SDGenericStyles.textBoxGray, SDGenericStyles.textColorWhite, glancePostStyles.userBioTextHeight,
                     SDGenericStyles.textALignVerticalTop, SDGenericStyles.paddingLeft5]} textContentType={keyBoardTypeConst.NONE} keyboardType={keyBoardTypeConst.DEFAULT} />
 
@@ -143,12 +144,12 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
             <View style={userAuthStyles.registerationDetailsView}>
                 <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
                     onPress={handleSubmit(onSubmit)}>
-                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman, SDGenericStyles.fontFamilyBold]}>
+                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>
                         {actionButtonTextConstants.UPDATE}</Text>
                 </TouchableOpacity>
             </View>
             <BottomSheetView bottomSheetRef={bottomSheetRef} detailsCallback={detailsCallback}
                 snapPoints={snapPoints} fall={fallValue} navigation={navigation} isFrom={screens.EDIT_USER_PROFILE} />
         </View>
-    </TouchableWithoutFeedback>;
+    </TouchableWithoutFeedback >;
 });

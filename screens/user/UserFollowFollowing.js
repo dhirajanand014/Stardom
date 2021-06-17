@@ -7,7 +7,10 @@ import {
     miscMessage, modalTextConstants, numericConstants, PRIVATE_FOLLOW_UNFOLLOW,
     requestConstants, responseStringData, screens, stringConstants
 } from '../../constants/Constants';
-import { fetchUserFollowersFollowing, handleUserFollowUnfollowAction, showSnackBar, userPostAction } from '../../helper/Helper';
+import {
+    fetchUserFollowersFollowing, handleUserFollowUnfollowAction, setBackgroundColorsForList,
+    showSnackBar, userPostAction
+} from '../../helper/Helper';
 import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import Animated, {
     Extrapolate, interpolate, useAnimatedScrollHandler,
@@ -55,6 +58,7 @@ export const UserFollowFollowing = () => {
         } else if (listFor == fieldControllerName.SEARCH_USERS) {
             setSearchList(responseData);
         }
+        setBackgroundColorsForList(responseData);
         setUserFollowerFollowing(responseData);
         setLoaderCallback(false);
     }, jsonConstants.EMPTY);

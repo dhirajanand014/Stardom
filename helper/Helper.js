@@ -10,7 +10,7 @@ import {
     miscMessage, width, height, numericConstants,
     screens, headerStrings, fieldControllerName, isAndroid,
     isIOS, OTP_INPUTS, errorMessages, requestConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants,
+    jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants, userSearchColors,
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -1644,4 +1644,17 @@ export const fetchUserProfilePosts = async (userId, setPosts, postDetailsRef) =>
         console.error(errorMessages.COULD_NOT_FETCH_USERS_POSTS, error);
     }
     setPosts(postData);
+}
+
+export const setBackgroundColorsForList = (data) => {
+    try {
+        let counterPoint = numericConstants.ZERO;
+        data.users.map((user, index) => {
+            user.backgroundColor = userSearchColors[Math.abs(counterPoint - index)];
+            if (Math.abs(counterPoint - (index + numericConstants.ONE)) == numericConstants.THREE)
+                counterPoint += numericConstants.THREE;
+        });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_SET_COLORS, error);
+    }
 }
