@@ -8,7 +8,7 @@ export const OTPInputText = props => {
     return (
         <View style={[userAuthStyles.otpContainerStyle, containerStyle, SDGenericStyles.textBoxGray]}>
             {LeftComponent}
-            <TextInput {...remainingProps} style={[userAuthStyles.otpInputStyle, SDGenericStyles.fill, SDGenericStyles.fontFamilyBold,
+            <TextInput {...remainingProps} style={[userAuthStyles.otpInputStyle, SDGenericStyles.fill, SDGenericStyles.fontFamilyRobotoRegular,
             SDGenericStyles.centerAlignedText, SDGenericStyles.textColorWhite]} ref={refCallback} selectionColor={colors.SDOM_YELLOW} />
             {RightComponent}
         </View>

@@ -9,7 +9,7 @@ export const SDDropDownView = props => {
             <View style={[userAuthStyles.registrationUserDropDownView, isIOS && SDGenericStyles.zIndex10]}>
                 <SDDropDownPicker {...props} />
             </View>
-            <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyBold]}>{props.formState.errors[props.inputName]?.message}</Text>
+            <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyRobotoRegular]}>{props.formState.errors[props.inputName]?.message}</Text>
         </React.Fragment>
     );
 }

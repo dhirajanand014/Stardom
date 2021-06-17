@@ -18,7 +18,7 @@ export const SDRadioOption = props => {
                             }
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={.7} onPress={() => onChangeByValueType(inputProps, props.value, props)}>
-                            <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold, SDGenericStyles.alignItemsCenter,
+                            <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.alignItemsCenter,
                             SDGenericStyles.paddingVertical2]}>
                                 {props.text}
                             </Text>

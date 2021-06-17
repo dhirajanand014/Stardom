@@ -18,7 +18,8 @@ import {
 } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 import { withDelay, withSpring } from 'react-native-reanimated';
-import { colors, headerStyles, SDGenericStyles } from '../styles/Styles';
+import { colors, SDGenericStyles } from '../styles/Styles';
+import RNOtpVerify from 'react-native-otp-verify';
 import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
 import DefaultUserProfile from '../constants/DefaultUserProfile.json';
@@ -844,27 +845,82 @@ export const verifyOtpRequest = async (otpString, randomNumber) => {
     }
 }
 
-export const handleUserSignUpOtp = async (isFrom, navigation, _isResendOtp) => {
+export const verifyOtpReceived = async (setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp) => {
+    try {
+        // docs: https://github.com/faizalshap/react-native-otp-verify
+        if (isAndroid) {
+            const otpMessage = await RNOtpVerify.getOtp();
+            otpMessage && RNOtpVerify.addListener((message) =>
+                listenOtp(message, setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp));
+        }
+        // remove listener on unmount
+        return () => isAndroid && RNOtpVerify.removeListener();
+    } catch (error) {
+        console.error(error.message, 'RNOtpVerify.getOtp, OtpVerification');
+    }
+}
+
+const listenOtp = (message, setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp) => {
+    try {
+        if (message) {
+            const messageArray = message.split(stringConstants.NEW_LINE);
+            if (messageArray[numericConstants.ZERO]) {
+                const otp = messageArray[numericConstants.ZERO].split(stringConstants.SPACE)[numericConstants.EIGHT];
+                if (otp.length === numericConstants.SIX) {
+                    setOtpArray(otp.split(stringConstants.EMPTY));
+                    setAutoSubmitOtpTime(AUTO_SUBMIT_OTP_TIME_LIMIT);
+                    startAutoSubmitOtpTimer();
+                    setAutoSubmittingOtp(true);
+                    return true;
+                }
+            }
+        }
+    } catch (error) {
+        console.error(error.message, 'RNOtpVerify.getOtp - read message, OtpVerification');
+    }
+    return false;
+}
+
+export const handleUserSignUpOtp = async (phoneNumber, isFrom, navigation, isResendOtp) => {
     try {
 
         // Math.random() returns float between 0 and 1, 
         // so minimum number will be 100000, max - 999999. 
         const random6Digit = Math.floor(Math.random() * 899999 + 100000);
+        const hashValue = isAndroid && await RNOtpVerify.getHash() || "RaZGrAI03n4";
 
-        // const response = await axios.post(urlConstants.TRIGGER_SMS_OTP, otpRequestDataJSON);
+        const otpRequestData = {
+            phoneNumber: phoneNumber,
+            rand_number: random6Digit,
+            hash_value: hashValue[numericConstants.ZERO]
+        }
 
-        // if (response && response.data && !isResendOtp) {
-        const params = getSignUpParams(random6Digit, isFrom);
+        const otpRequestDataJSON = JSON.stringify(otpRequestData);
+        //const response = await axiosPostWithHeaders(urlConstants.triggerSmsOtp, otpRequestDataJSON)
+        // const responseData = processResponseData(response);
 
-        navigation.navigate(screens.OTP_VERIFICATION, params);
-        // setLoaderCallback(false);
-        return true;
-        //}
-        // showSnackBar(successFulMessages.SENT_SMS_SUCCESSFULLY, true);
+        if (true && !isResendOtp) {
+            const params = getSignUpParams(random6Digit, isFrom);
+            navigation.navigate(screens.OTP_VERIFICATION, params);
+            return true;
+        }
+        showSnackBar(alertTextMessages.SENT_SMS_SUCCESSFULLY, true);
     } catch (error) {
-        console.error(`${errorModalMessageConstants.REQUEST_OTP_FAILED} : ${signUpDetails.phoneNumber}`, error);
+        console.error(`${errorMessages.REQUEST_OTP_FAILED} : ${phoneNumber}`, error);
     }
     return false;
+}
+
+export const processSaveRegistrationStatus = async (isUserIdAvailable, registrationResponse, phoneNumber, navigateUser, data) => {
+    isUserIdAvailable.current = false;
+    let isFromForgotPassword = false;
+    if (registrationResponse == `${miscMessage.RESET}_${miscMessage.SUCCESSFUL}`) {
+        await resetTokens();
+        isFromForgotPassword = true;
+    } else {
+        await saveRegistrationStatus(phoneNumber, miscMessage.REGISTERED);
+    }
+    await navigateUser(data, isFromForgotPassword);
 }
 
 export const getSignUpParams = (random6Digit, isFrom) => {

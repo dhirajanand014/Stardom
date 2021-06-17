@@ -15,8 +15,9 @@ import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
 import { useNavigation } from '@react-navigation/core';
 import {
     focusOnInputIfFormInvalid, handleUserRegistration,
-    resetTokens, showSnackBar, saveRegistrationStatus,
-    validateUserAction
+    showSnackBar, saveRegistrationStatus,
+    validateUserAction,
+    processSaveRegistrationStatus
 } from '../../helper/Helper';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { CategoryContext } from '../../App';
@@ -84,15 +85,7 @@ export const RegistrationConfirmation = () => {
                 clearErrors(fieldControllerName.USER_ID);
                 const registrationResponse = await handleUserRegistration(phoneNumber, data, miscMessage.CREATE);
                 if (registrationResponse) {
-                    isUserIdAvailable.current = false;
-                    let isFromForgotPassword = false;
-                    if (registrationResponse == `${miscMessage.RESET}_${miscMessage.SUCCESSFUL}`) {
-                        await resetTokens();
-                        isFromForgotPassword = true;
-                    } else {
-                        await saveRegistrationStatus(phoneNumber, miscMessage.REGISTERED);
-                    }
-                    await navigateUser(data, isFromForgotPassword);
+                    await processSaveRegistrationStatus(isUserIdAvailable, registrationResponse, phoneNumber, navigateUser, data);
                 }
             } else {
                 isUserIdAvailable.current = false;
@@ -106,35 +99,37 @@ export const RegistrationConfirmation = () => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}
                 pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
-                <AuthHeaderText titleText={modalTextConstants.CONFIRM_REGISTRATION} />
+                <AuthHeaderText titleText={modalTextConstants.CONFIRM_REGISTRATION} paddingTopNeeded />
                 <ScrollView>
-                    <SDImageFormInput inputName={fieldControllerName.USER_ID} control={control} rules={formRequiredRules.usedIdFormRule} clearErrors={clearError}
+                    <SDImageFormInput inputName={fieldControllerName.USER_ID} control={control} rules={formRequiredRules.usedIdFormRule} clearErrors={clearError} isUserIdEntry
                         defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.USER_ID} autofocus={true} icon={<RegisterUserIcon width={numericConstants.EIGHTEEN}
                             height={numericConstants.EIGHTEEN} stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || isUserIdAvailable?.current && colors.LIGHT_GREEN ||
                                 colors.SDOM_PLACEHOLDER} />} userIdValue={userIdValue} formState={formState} keyboardType={keyBoardTypeConst.DEFAULT} validateUserId={validateUserId}
-                        isUserIdAvailable={isUserIdAvailable} isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]} />
+                        isUserIdAvailable={isUserIdAvailable} isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]} />
 
                     <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule} setIsSecureTextEntry={setIsSecureTextEntry}
                         defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.PASSWORD} minLength={numericConstants.SIX}
                         keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
                             colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} onSubmitEditing={() => focusOnInputIfFormInvalid(formState, confirmSecretRef)}
-                        isSecureTextEntry={isSecureTextEntry} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} isPasswordInput={true} />
+                        isSecureTextEntry={isSecureTextEntry} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]} isPasswordInput={true} />
 
                     <SDImageFormInput inputName={fieldControllerName.CONFIRM_SECRET} control={control} rules={formRequiredRules.passwordFormRule} isPasswordInput={true}
                         defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.CONFIRM_PASSWORD} textContentType={keyBoardTypeConst.NEW_PASSWORD}
                         keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.CONFIRM_SECRET]?.message &&
                             colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} refCallback={refCallback} minLength={numericConstants.SIX}
-                        extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]} isSecureTextEntry={isSecureTextEntry}
+                        extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]} isSecureTextEntry={isSecureTextEntry}
                         setIsSecureTextEntry={setIsSecureTextEntry} />
                 </ScrollView>
 
                 <View style={userAuthStyles.registrationConfirmationView}>
                     <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
                         onPress={handleSubmit(onSubmit)}>
-                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman]}>{actionButtonTextConstants.PROCEED}</Text>
+                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoRegular]}>{actionButtonTextConstants.PROCEED.toUpperCase()}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </TouchableWithoutFeedback>
     )
 }
+
+

@@ -4,7 +4,8 @@ import { View, Text, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import {
     onOtpKeyPress, onResendOtpButtonPress,
     identifyOtpError, verifyOtpRequest,
-    onOtpChange
+    onOtpChange,
+    verifyOtpReceived
 } from '../../helper/Helper';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useForm } from 'react-hook-form';
@@ -12,7 +13,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import {
     numericConstants, AUTO_SUBMIT_OTP_TIME_LIMIT, keyBoardTypeConst,
     isAndroid, RESEND_OTP_TIME_LIMIT, stringConstants, OTP_INPUTS,
-    actionButtonTextConstants, miscMessage, screens, modalTextConstants
+    actionButtonTextConstants, miscMessage, screens, modalTextConstants, jsonConstants, isIOS
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { OTPTimeText } from '../../components/texts/OTPTimeText';
@@ -40,6 +41,8 @@ export const RegistrationOTP = props => {
     const route = useRoute();
     const isFrom = route?.params?.isFrom;
 
+    let isIOSOtpAutoFilled;
+
     const phoneNumber = signUpDetails.phoneNumber || stringConstants.EMPTY;
 
     const { handleSubmit, control, setError, formState, clearErrors } = useForm();
@@ -55,7 +58,6 @@ export const RegistrationOTP = props => {
     const fifthTextInputRef = useRef(null);
     const sixththTextInputRef = useRef(null);
 
-
     const autoSubmitOtpTimerIntervalCallbackReference = useRef();
 
     useEffect(() => {
@@ -69,19 +71,19 @@ export const RegistrationOTP = props => {
     }, [resendButtonDisabledTime]);
 
     useEffect(() => {
-        // (async () => {
-        //     await verifyOtpReceived(setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp);
-        //     if (isIOS) {
-        //         isIOSOtpAutoFilled = await checkPinCodeFromClipBoardIOS(setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp);
-        //         if (!isIOSOtpAutoFilled) {
-        //             iosOtpAutoFillInterval = setInterval(async () => {
-        //                 isIOSOtpAutoFilled = await checkPinCodeFromClipBoardIOS(setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp);
-        //             }, numericConstants.TWO_HUNDRED);
-        //         }
-        //         iosOtpAutoFillInterval && isIOSOtpAutoFilled && clearInterval(iosOtpAutoFillInterval);
-        //     }
-        // })();
-    }, []);
+        (async () => {
+            await verifyOtpReceived(setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp);
+            if (isIOS) {
+                isIOSOtpAutoFilled = await checkPinCodeFromClipBoardIOS(setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp);
+                if (!isIOSOtpAutoFilled) {
+                    iosOtpAutoFillInterval = setInterval(async () => {
+                        isIOSOtpAutoFilled = await checkPinCodeFromClipBoardIOS(setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp);
+                    }, numericConstants.TWO_HUNDRED);
+                }
+                iosOtpAutoFillInterval && isIOSOtpAutoFilled && clearInterval(iosOtpAutoFillInterval);
+            }
+        })();
+    }, jsonConstants.EMPTY);
 
     const startResendOtpTimer = () => {
         resendOtpTimerInterval && clearInterval(resendOtpTimerInterval);
@@ -108,6 +110,12 @@ export const RegistrationOTP = props => {
         setAutoSubmitOtpTime(autoSubmitOtpTime - numericConstants.ONE);
     };
 
+    const startAutoSubmitOtpTimer = () => {
+        autoSubmitOtpTimerInterval && clearInterval(autoSubmitOtpTimerInterval);
+        autoSubmitOtpTimerInterval = setInterval(() => {
+            autoSubmitOtpTimerIntervalCallbackReference.current();
+        }, numericConstants.THOUSAND);
+    };
 
     const refCallback = textInputRef => node => {
         textInputRef.current = node;
@@ -134,7 +142,7 @@ export const RegistrationOTP = props => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE ||
                 miscMessage.AUTO}>
-                <AuthHeaderText titleText={modalTextConstants.OTP_VERIFICATION} />
+                <AuthHeaderText titleText={modalTextConstants.OTP_VERIFICATION} paddingTopNeeded />
                 <View style={[userAuthStyles.otpFieldRows, SDGenericStyles.mt12]}>
                     {
                         [firstTextInputRef, secondTextInputRef, thirdTextInputRef, fourthTextInputRef, fifthTextInputRef,
@@ -149,17 +157,17 @@ export const RegistrationOTP = props => {
                                     key={index} autoFocus={index === numericConstants.ZERO && true || false} />
                             ))}
                 </View>
-                <Text style={[userAuthStyles.otpErrorMessageStyle, SDGenericStyles.fontFamilyBold]}>{formState.errors.otpInput?.message}</Text>
+                <Text style={[userAuthStyles.otpErrorMessageStyle, SDGenericStyles.fontFamilyRobotoMedium]}>{formState.errors.otpInput?.message}</Text>
                 {
                     resendButtonDisabledTime > numericConstants.ZERO && <OTPTimeText text={miscMessage.RESEND_OTP_IN} time={resendButtonDisabledTime} />
                     || <OTPResendButton text={miscMessage.RESEND_OTP} buttonStyle={userAuthStyles.otpResendButton} textStyle={[SDGenericStyles.colorWhite,
-                    SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16]}
+                    SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft16, SDGenericStyles.colorYellow]}
                         onPress={async () => await onResendOtpButtonPress(firstTextInputRef, setOtpArray, setResendButtonDisabledTime, setAttemptsRemaining,
                             attemptsRemaining, startResendOtpTimer, phoneNumber, isFrom, navigation, clearErrors, setLoaderCallback)} />
                 }
                 <View style={userAuthStyles.registerButtonView}>
                     <Text style={SDGenericStyles.colorWhite}>OTP IS - {route.params.rand_number}</Text>
-                    <OTPTextView style={[SDGenericStyles.centerAlignedText, SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyBold, SDGenericStyles.mt36]}>
+                    <OTPTextView style={[SDGenericStyles.centerAlignedText, SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.mt36]}>
                         {attemptsRemaining || numericConstants.ZERO} {miscMessage.ATTEMPT_REMAINING}
                     </OTPTextView>
                     {
@@ -167,7 +175,7 @@ export const RegistrationOTP = props => {
                         <View style={userAuthStyles.registerButtonView}>
                             <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
                                 onPress={handleSubmit(onSubmit)}>
-                                <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman]}>{actionButtonTextConstants.VERIFY}</Text>
+                                <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>{actionButtonTextConstants.VERIFY}</Text>
                             </TouchableOpacity>
                         </View>
                     }

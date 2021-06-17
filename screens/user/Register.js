@@ -21,7 +21,6 @@ export const Register = () => {
     const { control, formState, handleSubmit, getValues } = useForm();
     const navigation = useNavigation();
 
-
     const validateUserRegistered = useCallback(async () => {
         setLoaderCallback(true);
         const phoneNumber = getValues(fieldControllerName.PHONE_NUMBER);
@@ -30,7 +29,7 @@ export const Register = () => {
             showSnackBar(errorMessages.NUMBER_ALREADY_REGISTERED_LOGIN, false);
             navigation.navigate(screens.LOGIN);
         } else {
-            await handleUserSignUpOtp(miscMessage.SIGN_UP, navigation, false);
+            await handleUserSignUpOtp(phoneNumber, miscMessage.SIGN_UP, navigation, false);
         }
         setLoaderCallback(false);
     });
@@ -43,14 +42,14 @@ export const Register = () => {
                 <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
                     defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
                     keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} textContentType={keyBoardTypeConst.TELPHONETYPE}
-                    formState={formState} autofocus={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
+                    formState={formState} autofocus={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
                     signUpDetails={signUpDetails} setSignUpDetails={setSignUpDetails} isSignUp={true} icon={<PhoneIcon stroke={formState.errors[fieldControllerName.PHONE_NUMBER]?.message &&
                         colors.RED || colors.SDOM_PLACEHOLDER} />} />
-                <Text style={[userAuthStyles.registerDescription, SDGenericStyles.fontFamilyBold]}>{placeHolderText.REGISTER_DESCRIPTION}</Text>
+                <Text style={[userAuthStyles.registerDescription, SDGenericStyles.fontFamilyRobotoMedium]}>{placeHolderText.REGISTER_DESCRIPTION}</Text>
                 <View style={userAuthStyles.registerButtonView}>
                     <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
                         onPress={handleSubmit(() => validateUserRegistered())}>
-                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman]}>{actionButtonTextConstants.PROCEED}</Text>
+                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoRegular]}>{actionButtonTextConstants.PROCEED.toUpperCase()}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

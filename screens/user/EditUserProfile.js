@@ -113,14 +113,14 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
                 <SDImageFormInput inputName={fieldControllerName.NAME} control={control}
                     defaultValue={profileDetails.name} placeHolderText={placeHolderText.FULL_NAME} autofocus={true}
                     keyboardType={keyBoardTypeConst.DEFAULT} textContentType={keyBoardTypeConst.NAME} formState={formState}
-                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}
+                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
                     icon={<RegisterUserIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN}
                         stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
                 <SDImageFormInput inputName={fieldControllerName.EMAIL} control={control}
                     defaultValue={profileDetails.email} placeHolderText={placeHolderText.EMAIL}
                     keyboardType={keyBoardTypeConst.EMAIL} textContentType={keyBoardTypeConst.NONE} formState={formState}
-                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}
+                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
                     icon={<RegisterUserIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN}
                         stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
@@ -128,14 +128,14 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
                     defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.NEW_PASSWORD}
                     keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
                         colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} minLength={numericConstants.SIX} setIsSecureTextEntry={setIsSecureTextEntry}
-                    isSecureTextEntry={isSecureTextEntry} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textColorWhite]} />
+                    isSecureTextEntry={isSecureTextEntry} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]} />
 
                 <SDMultiTextInputLengthText value={bioInput} maxLength={numericConstants.TWO_HUNDRED} />
 
                 <SDImageFormInput inputName={fieldControllerName.ADD_USER_BIO} control={control} maxLength={numericConstants.TWO_HUNDRED}
                     defaultValue={profileDetails.bio} placeHolderText={placeHolderText.VERIFY_USER_DETAILS} isFeedbackInput={true}
                     formState={formState} isMultiline={true} underlineColorAndroid={miscMessage.TRANSPARENT} numberOfLines={numericConstants.FIVE}
-                    extraStyles={[SDGenericStyles.height150, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft16, SDGenericStyles.borderRadius5,
+                    extraStyles={[SDGenericStyles.height150, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16, SDGenericStyles.borderRadius5,
                     SDGenericStyles.justifyContentCenter, SDGenericStyles.textBoxGray, SDGenericStyles.textColorWhite, glancePostStyles.userBioTextHeight,
                     SDGenericStyles.textALignVerticalTop, SDGenericStyles.paddingLeft5]} textContentType={keyBoardTypeConst.NONE} keyboardType={keyBoardTypeConst.DEFAULT} />
 

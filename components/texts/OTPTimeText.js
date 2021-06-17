@@ -8,7 +8,7 @@ export const OTPTimeText = props => {
     return (
         <OTPTextView style={[SDGenericStyles.centerAlignedText, userAuthStyles.otpResendTimerText, SDGenericStyles.mt24]}>
             {text}
-            <OTPTextView style={[SDGenericStyles.fontFamilyRoman, SDGenericStyles.colorWhite]}>{stringConstants.SPACE + time}s</OTPTextView>
+            <OTPTextView style={[SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.colorWhite]}>{stringConstants.SPACE + time}s</OTPTextView>
         </OTPTextView>
     );
 };

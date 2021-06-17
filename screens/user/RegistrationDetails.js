@@ -46,19 +46,19 @@ export const RegistrationDetails = () => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}
                 pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
-                <AuthHeaderText titleText={modalTextConstants.ACCOUNT_DETAILS} />
+                <AuthHeaderText titleText={modalTextConstants.ACCOUNT_DETAILS} paddingTopNeeded />
                 <Animated.ScrollView>
                     <SDImageFormInput inputName={fieldControllerName.NAME} control={control} rules={formRequiredRules.nameFormRule}
                         defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.FULL_NAME} autofocus={true}
                         keyboardType={keyBoardTypeConst.DEFAULT} textContentType={keyBoardTypeConst.NAME} formState={formState}
-                        extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
+                        extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
                         icon={<RegisterUserIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN}
                             stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
                     <SDImageFormInput inputName={fieldControllerName.EMAIL} control={control} rules={formRequiredRules.emailRule}
                         defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.EMAIL}
                         keyboardType={keyBoardTypeConst.EMAIL} textContentType={keyBoardTypeConst.NONE} formState={formState}
-                        extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
+                        extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
                         icon={<RegisterUserIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN}
                             stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
@@ -71,7 +71,7 @@ export const RegistrationDetails = () => {
                         containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle} placeHolderText={placeHolderText.SELECT_A_PROFILE}
                         defaultValue={stringConstants.EMPTY} formState={formState} list={profiles.filter(role => role.value != numericConstants.MINUS_ONE)}
                         dropDownDefaultValue={profiles.length && profiles.find(role => role.value == numericConstants.ZERO).value || defaultProfilesValue.value}
-                        extraStyles={[SDGenericStyles.textBoxGray]} globalTextStyle={[SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />
+                        extraStyles={[SDGenericStyles.textBoxGray]} globalTextStyle={[SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />
 
                     <SDGenderRadioOptionView inputName={fieldControllerName.GENDER} control={control} rules={formRequiredRules.genderRule} formState={formState}
                         defaultValue={stringConstants.EMPTY} checkValue={genderValue} />
@@ -80,7 +80,7 @@ export const RegistrationDetails = () => {
 
                 <View style={userAuthStyles.registerationDetailsView}>
                     <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]} onPress={handleSubmit(onSubmit)}>
-                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRoman]}>{actionButtonTextConstants.REGISTER}</Text>
+                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoRegular]}>{actionButtonTextConstants.REGISTER.toUpperCase()}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

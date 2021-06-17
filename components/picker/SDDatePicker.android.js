@@ -15,7 +15,7 @@ export const SDDatePicker = props => {
             <React.Fragment>
                 <View style={SDGenericStyles.fill}>
                     <TouchableOpacity activeOpacity={.4} onPress={() => setShow(true)}>
-                        <Text style={[SDGenericStyles.leftAlignedText, SDGenericStyles.fontFamilyRoman, !datePickerProps.value && SDGenericStyles.placeHolderTextColor ||
+                        <Text style={[SDGenericStyles.leftAlignedText, SDGenericStyles.fontFamilyRobotoRegular, !datePickerProps.value && SDGenericStyles.placeHolderTextColor ||
                             SDGenericStyles.textColorWhite, SDGenericStyles.ft16]}>
                             {datePickerProps.value && moment(datePickerProps.value).format(miscMessage.DOB_DATE_FORMAT) || props.placeHolderText}</Text>
                     </TouchableOpacity>

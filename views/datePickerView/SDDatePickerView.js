@@ -10,7 +10,7 @@ export const SDDatePickerView = props => {
                 <SDDatePicker {...props} />
                 {props.icon && props.icon}
             </View>
-            <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyBold]}>{props.formState.errors[props.inputName]?.message}</Text>
+            <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyRobotoRegular]}>{props.formState.errors[props.inputName]?.message}</Text>
         </KeyboardAvoidingView>
     );
 }
