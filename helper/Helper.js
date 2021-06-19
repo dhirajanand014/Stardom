@@ -636,8 +636,8 @@ export const onChangeByValueType = async (inputProps, value, props) => {
             props.setState({ ...props.state });
             break;
         case fieldControllerName.SEARCH_USERS:
-            const filteredUsers = value && props.items.filter(user => user.name.toLowerCase().includes(value.toLowerCase()) ||
-                user.user_id.toString().toLowerCase().includes(value.toString().toLowerCase())) || props.items;
+            const filteredUsers = value && props.items.filter(user => user.name && user.name.toLowerCase().includes(value.toString().toLowerCase()) ||
+                user.user_id && user.user_id.toString().toLowerCase().includes(value.toString().toLowerCase())) || props.items;
             props.setState({ ...props.state, users: filteredUsers });
             break;
         default:
