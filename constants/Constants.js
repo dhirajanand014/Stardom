@@ -358,7 +358,8 @@ export const savePostCountKeys = {
 export const componentErrorConsts = {
     ERROR_BOUNDARY: 1,
     CATEGORY_WITHOUT_POST: 2,
-    POST_IMAGE_LOAD_ERROR: 3
+    POST_IMAGE_LOAD_ERROR: 3,
+    POSTS_WITHOUT_PROFILE: 4
 }
 
 export const jsonConstants = {
@@ -524,6 +525,9 @@ export const alertTextMessages = {
     REMOVING_FOLLOWER: `Removing follower`,
     SUCCESSFULLY_REGISTERED: `Successfully Registered!`,
     ONLY_THREE_CATEGORIES: `Select only upto 3 categories`,
+    POST_LIKED: `You have liked the post : `,
+    POST_DISLIKED: `You have disliked the post : `,
+    POST_DOWNLOADED: `You have downloaded the post : `,
     SUCCESSFULLY_LOGGED_IN: `Login successful`,
     DOWNLOAD_COMPLETE: `Download Complete`,
     DOWNLOADING_IMAGE: `Downloading image`,
@@ -571,7 +575,8 @@ export const alertTextMessages = {
 
 export const errorMessages = {
     ERROR_BOUNDARY: `The App ran into a problem and could not continue. We apologise for any inconvenience this has caused! Press the button below to restart the app and sign back in.`,
-    SELECT_OTHER_CATEGORIES: `Selected category has no posts! Please select another category by clicking below.`,
+    SELECT_OTHER_CATEGORIES: `No Posts Available! Either the categories selected have no posts or no posts have reached atleast 100 likes! Please select other categories by clicking below.`,
+    NO_USER_PROFILE_FOR_POST: `No User Profile is available for the post!`,
     CONTACT_US_1: `Please contact us at `,
     CONTACT_US_MAIL: `error@stardom.app`,
     COULD_NOT_SET_COLORS: `Could not set colors`,
@@ -690,6 +695,7 @@ export const miscMessage = {
     SUCCESSFUL: `Successful`,
     SINGLE_SELECT: `Single select`,
     SELECT_ALL: `Select All`,
+    UNSELECT_ALL: `Unselect All`,
     CREATE: `create`,
     UPDATE: `update`,
     CREATE: `create`,
@@ -722,7 +728,7 @@ export const miscMessage = {
     UP: `up`,
     BACKSPACE: `Backspace`,
     BASE64: `base64`,
-    BASE64_BLOB: `data: image / png; base64, `,
+    BASE64_BLOB: `data:image/png;base64,`,
     PHONE_NUMBER: `phoneNumber`,
     TOKEN: `token`,
     USER_DETAILS: `details`,
@@ -820,6 +826,7 @@ export const requestConstants = {
     SDOM_DATA_STATE: `sdomDatastate`,
     SET_SDOM_DATA_STATE: `setSdomDatastate`,
     POST_ID_KEY: `postId`,
+    POST_DISLIKED: `postDisliked`,
     REACH_TYPE: `reachType`,
     REPORT_ID: `report_id`,
     POST_REPORT_ABUSE_ID: `postReportAbuseId`,
@@ -926,6 +933,14 @@ export const cameraConstants = {
 }
 
 export const userSearchColors = [`#fa9c92`, `#73d9b4`, `#85d7ef`];
+
+export const getDefaultProfilePostsCounts = {
+    [requestConstants.FOLLOWERS_COUNT]: numericConstants.ZERO,
+    [requestConstants.FOLLOWING_COUNT]: numericConstants.ZERO,
+    [requestConstants.WALLPAPERS_COUNT]: numericConstants.ZERO,
+    [requestConstants.UPLOAD_COUNT]: numericConstants.ZERO,
+    [requestConstants.DOWNLOAD_COUNT]: numericConstants.ZERO,
+}
 
 export const CAMERA_IMAGE_FILTERS = [
     {

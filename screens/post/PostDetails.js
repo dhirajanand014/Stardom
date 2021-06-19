@@ -179,13 +179,11 @@ export const PostDetails = forwardRef((props, ref) => {
                     </View>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} hideLabelShadow={true} fixNativeFeedbackRadius={true}
-                    useNativeFeedback={!postDetailsState.currentPost.likeAdded} onPress={async () => !postDetailsState.currentPost.likeAdded &&
-                        await increaseAndSetPostCounts(postCountTypes.POST_LIKE_KEY, postDetailsState, setPostDetailsState,
-                            postCountTypes.POST_LIKES)}>
-                    <View style={glancePostStyles.likesBackgroundRoundColor} pointerEvents={postDetailsState.currentPost.likeAdded &&
-                        permissionsButtons.NONE || permissionsButtons.AUTO}>
-                        <Image style={[glancePostStyles.icon_post_like, postDetailsState.currentPost.likeAdded && SDGenericStyles.tintRedColor]}
-                            source={postDetailsState.currentPost.likeAdded && post_like_selected || post_like} />
+                    onPress={async () => await increaseAndSetPostCounts(postCountTypes.POST_LIKE_KEY, postDetailsState, setPostDetailsState,
+                        postCountTypes.POST_LIKES)}>
+                    <View style={glancePostStyles.likesBackgroundRoundColor}>
+                        <Image style={glancePostStyles.icon_post_like} source={postDetailsState.currentPost.likeAdded &&
+                            post_like_selected || post_like} />
                     </View>
                     <Text style={glancePostStyles.icon_count_text}>{postDetailsState.currentPost.postLikes}</Text>
                 </ActionButton.Item>
@@ -205,7 +203,7 @@ export const PostDetails = forwardRef((props, ref) => {
                     <Text style={glancePostStyles.icon_count_text}>{postDetailsState.currentPost.postDownloads}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
-                    onPress={async () => await shareImage(postDetailsState.currentPost, downloadCallback, resetFlashMessage)}>
+                    onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage)}>
                     <View style={glancePostStyles.backgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_share} source={post_share} />
                     </View>

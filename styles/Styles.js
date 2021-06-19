@@ -119,9 +119,6 @@ export const SDGenericStyles = StyleSheet.create({
     width100: {
         width: 100
     },
-    tintRedColor: {
-        tintColor: `#ff4e4e`
-    },
     width100pct: {
         width: `100%`
     },
@@ -443,6 +440,9 @@ export const SDGenericStyles = StyleSheet.create({
     colorBlack: {
         color: `#3d3d3d`
     },
+    textColorSDOMBlack: {
+        color: `#1b1f2b`
+    },
     backGroundColorGreen: {
         backgroundColor: `green`
     },
@@ -537,7 +537,9 @@ export const SDGenericStyles = StyleSheet.create({
     borderRadius20: {
         borderRadius: 20
     },
-
+    borderRadius28: {
+        borderRadius: 28
+    },
     height63: {
         height: 63
     },
@@ -658,7 +660,6 @@ export const glancePostStyles = StyleSheet.create({
         color: 'black',
     },
     icon_post_like: {
-        borderColor: '#ff4e4e',
         width: 18,
         height: 18
     },
@@ -1178,7 +1179,7 @@ export const flatListItemStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 2,
-        marginVertical: 5,
+        marginVertical: 2,
     },
     textsView: {
         flex: 1,
@@ -1437,10 +1438,17 @@ export const errorBoundaryStyles = StyleSheet.create({
         lineHeight: 23,
         textAlign: 'center',
     },
-    resetToCategorySelectionButton: {
+    resetStardomButton: {
         borderRadius: 25,
         padding: 8,
         width: width / 3.5,
+        elevation: 3,
+        backgroundColor: "#000"
+    },
+    resetToCategorySelectionButton: {
+        borderRadius: 25,
+        padding: 8,
+        width: width / 1.37,
         elevation: 3,
         backgroundColor: "#000"
     },

@@ -4,13 +4,13 @@ import AddPostConstant from '../constants/AddPostConstant.json';
 import {
     urlConstants, keyChainConstansts, permissionsButtons,
     postCountTypes, savePostCountKeys, permissionMessages,
-    stringConstants, alertTextMessages,
+    stringConstants, alertTextMessages, userSearchColors,
     responseStringData, PRIVATE_FOLLOW_UNFOLLOW,
-    actionButtonTextConstants, colorConstants,
+    actionButtonTextConstants, colorConstants, getDefaultProfilePostsCounts,
     miscMessage, width, height, numericConstants,
     screens, headerStrings, fieldControllerName, isAndroid,
     isIOS, OTP_INPUTS, errorMessages, requestConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants, userSearchColors,
+    jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -65,7 +65,7 @@ export const fetchPostsAndSaveToState = async (sdomDatastate, setSdomDatastate, 
     setOptionsState, categoryIdFromNotification, loggedInUser) => {
     try {
         const categoryPostsData = await retrievePostData(categoryIdFromNotification, loggedInUser);
-        setSdomDatastate({ ...sdomDatastate, posts: categoryPostsData, });
+        setSdomDatastate({ ...sdomDatastate, posts: categoryPostsData });
         setOptionsState({ ...optionsState, showSearch: true });
     } catch (error) {
         console.error(errorMessages.COULD_NOT_FETCH_ALL_POSTS, error);
@@ -84,25 +84,34 @@ export const getSelectedCategoryIdsFromStorage = async () => {
 
 export const increaseAndSetPostCounts = async (paramKey, postDetailsState, setPostDetailsState, postCountType) => {
     try {
-        ++postDetailsState.currentPost[paramKey];
+        paramKey == postCountTypes.POST_LIKE_KEY && postDetailsState.currentPost.likeAdded && --postDetailsState.currentPost[paramKey] ||
+            ++postDetailsState.currentPost[paramKey];
 
         const postCountRequest = {
             [requestConstants.POST_ID_KEY]: parseInt(postDetailsState.currentPost.id),
             [requestConstants.REACH_TYPE]: postCountType
+        }
+
+        if (paramKey == postCountTypes.POST_LIKE_KEY && postDetailsState.currentPost.likeAdded) {
+            postCountRequest[requestConstants.POST_DISLIKED] = true;
         }
         if (postCountRequest) {
             const response = await axiosPostWithHeaders(urlConstants.setPostReach, JSON.stringify(postCountRequest));
             const responseData = processResponseData(response);
             if (responseData.message == responseStringData.SUCCESS) {
                 if (postCountType == postCountTypes.POST_LIKES) {
-                    showSnackBar(`You have liked the post : ${postDetailsState.currentPost.postTitle}`, true, true);
+                    const message = postDetailsState.currentPost.likeAdded && `${alertTextMessages.POST_DISLIKED}${postDetailsState.currentPost.postTitle}` ||
+                        `${alertTextMessages.POST_LIKED}${postDetailsState.currentPost.postTitle}`;
+
+                    showSnackBar(message, true, true);
+                    postDetailsState.currentPost.likeAdded = !postDetailsState.currentPost.likeAdded;
                     await savePostCounts(postDetailsState.currentPost.id, savePostCountKeys.SELECTED_POST_LIKES,
                         postDetailsState, setPostDetailsState);
                 } else {
                     setPostDetailsState({ ...postDetailsState });
                 }
                 postCountType == postCountTypes.POST_DOWNLOADS &&
-                    showSnackBar(`You have downloaded the post : ${postDetailsState.currentPost.postTitle}`, true, true);
+                    showSnackBar(`${alertTextMessages.POST_DOWNLOADED}${postDetailsState.currentPost.postTitle}`, true, true);
             }
         }
     } catch (error) {
@@ -120,15 +129,17 @@ export const savePostCounts = async (postId, postIdForSelectedCountType, postDet
         if (postIdForSelectedCountType == savePostCountKeys.SELECTED_POST_LIKES) {
             if (postCounts) {
                 postIds = postCounts[savePostCountKeys.SELECTED_POST_LIKES];
-                !postIds.includes(postId) && postIds.push(postId);
-            }
-            else {
+                if (!postIds.includes(postId)) {
+                    postIds.push(postId);
+                } else if (postIds.includes(postId) && !postDetailsState.currentPost.likeAdded) {
+                    postIds.splice(postIds.findIndex(id => id == postId), numericConstants.ONE);
+                }
+            } else {
                 postIds.push(postId);
                 postCounts = {
                     [savePostCountKeys.SELECTED_POST_LIKES]: postIds
                 }
             }
-            postDetailsState.currentPost.likeAdded = postDetailsState.currentPost.postLikes <= numericConstants.ONE_HUNDRED;
             postIdsJson = JSON.stringify(postCounts);
             await saveDetailsToKeyChain(keyChainConstansts.SAVE_POST_COUNTS, keyChainConstansts.SAVE_POST_COUNTS,
                 postIdsJson);
@@ -163,7 +174,7 @@ export const downloadCurrentImage = async (postUrl, postTitle, isDownload, downl
             config.path = `${RNFetchBlob.fs.dirs.DownloadDir}${responseStringData.STARDOM_PATH}${stringConstants.SLASH}${postTitle}${responseStringData.DOWNLOAD_IMAGE_EXTENTION}`
         }
         const response = await RNFetchBlob.config(config).fetch(requestConstants.GET, postUrl)
-            .progress((received, total) => { downloadCallback(received, total) });
+            .progress((received, total) => { downloadCallback && downloadCallback(received, total) });
         return isDownload && processResponseData(response) || response;
     } catch (error) {
         console.error(errorMessages.COULD_NOT_DOWNLOAD_IMAGE, error);
@@ -178,12 +189,12 @@ export const openPhotos = (imagePath) => {
     }
 }
 
-export const shareImage = async (post, downloadCallback, resetFlashMessage) => {
+export const shareImage = async (post, resetFlashMessage) => {
     const { postImage, postTitle } = post;
     try {
-        const response = await downloadCurrentImage(postImage, postTitle, false, downloadCallback);
+        showSnackBar(`Sharing post image`, true, true);
+        const response = await downloadCurrentImage(postImage, postTitle, false, null);
         if (response) {
-            showSnackBar(`You have downloaded the post : ${postTitle}`, true, true);
             const base64Image = await response.readFile(miscMessage.BASE64);
             const base64Data = `${miscMessage.BASE64_BLOB}${base64Image}`;
             await Share.open({
@@ -604,7 +615,8 @@ const filterLoggedInUsersPosts = async (allPosts) => {
                 return post.postType == fieldControllerName.POST_TYPE_PUBLIC;
             });
         } else {
-            allPosts = allPosts.filter(post => post.postType == fieldControllerName.POST_TYPE_PUBLIC);
+            allPosts = allPosts.filter(post => post.postType == fieldControllerName.POST_TYPE_PUBLIC &&
+                post.postLikes >= numericConstants.ONE_HUNDRED);
         }
         return allPosts;
     } catch (error) {
@@ -1486,7 +1498,8 @@ export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUs
                 following.follower_id == loggedInUserDetails.id).pvtaccess || PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
         }
     }
-    profileDetail.count = await fetchProfilePostsCounts(profile.id);
+    profileDetail.count = profile.id == numericConstants.MINUS_ONE && getDefaultProfilePostsCounts ||
+        await fetchProfilePostsCounts(profile.id);
     setProfileDetail({ ...profileDetail });
 }
 
@@ -1677,7 +1690,7 @@ export const checkProfileFrom = (currentPostIndexForProfileRef, sdomDatastate, i
         return followerFollowingProfile || DefaultUserProfile;
     } else {
         const postIndex = currentPostIndexForProfileRef.current || numericConstants.ZERO;
-        return sdomDatastate.posts && sdomDatastate.posts[postIndex].user || DefaultUserProfile;
+        return sdomDatastate.posts && sdomDatastate.posts.length && sdomDatastate.posts[postIndex].user || DefaultUserProfile;
     }
 }
 
