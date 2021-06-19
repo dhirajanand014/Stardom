@@ -331,6 +331,8 @@ PODS:
     - React-Core
   - react-native-camera/RN (3.44.1):
     - React-Core
+  - react-native-cameraroll (4.0.4):
+    - React-Core
   - react-native-image-filter-kit (0.8.0):
     - Bolts/Tasks (= 1.9.0)
     - React
@@ -523,6 +525,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
   - react-native-image-filter-kit (from `../node_modules/react-native-image-filter-kit`)
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -621,6 +624,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-cameraroll:
+    :path: "../node_modules/@react-native-community/cameraroll"
   react-native-image-filter-kit:
     :path: "../node_modules/react-native-image-filter-kit"
   react-native-restart:
@@ -725,6 +730,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
   react-native-camera: 6e6d25f6318980dd2837747760628b4442aac01a
+  react-native-cameraroll: 7c6c7ca84844f93b3dac9a87670bbad6541684ec
   react-native-image-filter-kit: b9eca5dfedde622e3801c4657bcdead62896cf00
   react-native-restart: 6cc683e208c080581c147d0875609e64572a9443
   react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
