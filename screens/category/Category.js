@@ -23,7 +23,8 @@ export const Category = () => {
 
     const [category, setCategory] = useState({
         categories: jsonConstants.EMPTY,
-        initialCategory: stringConstants.EMPTY
+        initialCategory: stringConstants.EMPTY,
+        isSelectAll: false
     });
 
     useEffect(() => {
@@ -45,6 +46,10 @@ export const Category = () => {
             category.categories[index].isSelected = !category.categories[index].isSelected;
         } else if (type == miscMessage.SELECT_ALL) {
             category.categories.map((category) => { if (!category.isSelected) category.isSelected = !category.isSelected });
+            category.isSelectAll = true;
+        } else if (type == miscMessage.UNSELECT_ALL) {
+            category.categories.map((category) => category.isSelected = !category.isSelected);
+            category.isSelectAll = false;
         }
         const initialCategoryFromStorage = await getCategoryButtonType();
         const initialCategory = ((!initialCategoryFromStorage == stringConstants.EMPTY && initialCategoryFromStorage.password == actionButtonTextConstants.SAVE_BUTTON)
@@ -77,13 +82,14 @@ export const Category = () => {
                         </Text>
                     </View>
                 </View>
-                <TouchableOpacity activeOpacity={.7} onPress={async () => await toggleSelectAllCallback(miscMessage.SELECT_ALL)}
+                <TouchableOpacity activeOpacity={.7} onPress={async () => await toggleSelectAllCallback(!category.isSelectAll && miscMessage.SELECT_ALL ||
+                    miscMessage.UNSELECT_ALL)}
                     style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignSelfEnd, SDGenericStyles.paddingRight10]}>
                     <View style={[SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingRight5]}>
                         <Image style={categoryViewStyles.select_all_categories} source={require(`../../assets/category_selected.png`)} />
                     </View>
                     <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorPink, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.paddingVertical5]}>
-                        {miscMessage.SELECT_ALL}
+                        {!category.isSelectAll && miscMessage.SELECT_ALL || miscMessage.UNSELECT_ALL}
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -106,7 +112,7 @@ export const Category = () => {
                             setLoaderCallback(false);
                         }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
                         SDGenericStyles.backgroundColorYellow]}>
-                            <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyBold,
+                            <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyRobotoMedium,
                             SDGenericStyles.textCenterAlign]}>
                                 {actionButtonTextConstants.SKIP_BUTTON_TEXT}
                             </Text>

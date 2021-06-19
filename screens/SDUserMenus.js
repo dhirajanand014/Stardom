@@ -74,13 +74,17 @@ export const SDUserMenus = (drawerProps) => {
             case screens.CATEGORY:
                 navigation.navigate(screens.CATEGORY);
                 break;
+            case actionButtonTextConstants.LOGOUT:
+                await logoutUser(loggedInUser.loginDetails.token, loggedInUser, setLoggedInUser);
+                navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
+                break;
             case screens.POSTS:
                 navigation.navigate(screens.POSTS);
                 break;
             case actionButtonTextConstants.VERIFY_USER:
                 setProfileMenu({ ...profileMenu, showSubmitVerifyModal: true });
                 break;
-            default:
+            default: navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
                 break;
         }
         drawerProps.navigation.closeDrawer();
@@ -206,28 +210,21 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
             !loggedInUser.isLoggedIn &&
             <View>
                 <View style={userAuthStyles.menuLoginButton}>
-                    <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
+                    <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingVertical12, SDGenericStyles.borderRadius28, SDGenericStyles.backgroundColorYellow]}
                         onPress={() => navigation.navigate(screens.LOGIN)}>
-                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>
+                        <Text style={[SDGenericStyles.ft16, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textColorSDOMBlack]}>
                             {actionButtonTextConstants.LOGIN.toUpperCase()}
                         </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={userAuthStyles.menuRegisterButton}>
                     <TouchableOpacity activeOpacity={.7} onPress={() => navigation.navigate(screens.REGISTER)}>
-                        <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.elevation3,
-                        SDGenericStyles.colorYellow, SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical16, SDGenericStyles.borderRadius10]}>
+                        <Text style={[SDGenericStyles.ft16, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.borderRadius28,
+                        SDGenericStyles.colorYellow, SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical12]}>
                             {actionButtonTextConstants.REGISTER.toUpperCase()}
                         </Text>
                     </TouchableOpacity>
                 </View>
-            </View> || <View style={userAuthStyles.menuLoginButton}>
-                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
-                    onPress={async () => await logoutUser(loggedInUser.loginDetails.token, loggedInUser, setLoggedInUser)}>
-                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>
-                        {actionButtonTextConstants.LOGOUT.toUpperCase()}
-                    </Text>
-                </TouchableOpacity>
             </View>
         }
         <ErrorModal error={errorMod} setError={setErrorMod} />

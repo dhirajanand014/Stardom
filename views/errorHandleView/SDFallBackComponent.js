@@ -20,16 +20,16 @@ export const SDFallBackComponent = (props) => {
                         {descriptionText}
                     </Text>
                     {
-                        descriptionText == errorMessages.ERROR_BOUNDARY &&
+                        descriptionText == errorMessages.ERROR_BOUNDARY || descriptionText == errorMessages.NO_USER_PROFILE_FOR_POST &&
                         <Text style={[errorBoundaryStyles.textMessage2Style, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16]}>
                             {errorMessages.CONTACT_US_1}<Text style={[SDGenericStyles.fontFamilyRobotoBold, SDGenericStyles.ft16]}>{errorMessages.CONTACT_US_MAIL}</Text>{errorMessages.CONTACT_US_2}
                         </Text>
                     }
                 </View>
                 {
-                    componentErrorConsts.ERROR_BOUNDARY == componentErrorConst &&
+                    componentErrorConsts.ERROR_BOUNDARY == componentErrorConst || componentErrorConsts.POSTS_WITHOUT_PROFILE == componentErrorConst &&
                     <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.mt24]}>
-                        <TouchableOpacity activeOpacity={.7} style={errorBoundaryStyles.resetToCategorySelectionButton} onPress={() => RNRestart.Restart()}>
+                        <TouchableOpacity activeOpacity={.7} style={errorBoundaryStyles.resetStardomButton} onPress={() => RNRestart.Restart()}>
                             <Text style={[SDGenericStyles.ft18, SDGenericStyles.colorYellow, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRobotoMedium]}>
                                 {miscMessage.RELOAD.toUpperCase()}
                             </Text>

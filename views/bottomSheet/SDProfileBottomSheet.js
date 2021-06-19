@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import Animated, { Transition } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { CategoryContext } from '../../App';
 import { SDBottomSheet } from '../../components/bottomsheet/SDBottomSheet';
 import { LockIcon } from '../../components/icons/LockIcon';
@@ -17,9 +17,6 @@ import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 export const SDProfileBottomSheet = props => {
     const post_share = require(`../../assets/post_share_icon.png`);
     const { downloadProgressState, setDownloadProgressState } = useContext(CategoryContext);
-
-
-
 
     const downloadCallback = useCallback((received, total) => {
         const value = received / total;

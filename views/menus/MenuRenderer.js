@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, View, TouchableNativeFeedback, Image } from "react-native";
-import Animated from 'react-native-reanimated';
 import { fieldControllerName, miscMessage, screens } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 

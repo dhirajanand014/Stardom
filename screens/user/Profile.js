@@ -4,15 +4,13 @@ import { Image, View, BackHandler } from "react-native"
 import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import {
-    alertTextMessages, backHandlerConstants, height, jsonConstants,
+    alertTextMessages, backHandlerConstants, componentErrorConsts, errorMessages, height, jsonConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, width
 } from '../../constants/Constants';
-import {
-    checkLoggedInUserMappedWithUserProfile, checkProfileFrom,
-    fetchUpdateLoggedInUserProfile
-} from '../../helper/Helper';
+import { checkLoggedInUserMappedWithUserProfile, checkProfileFrom, fetchUpdateLoggedInUserProfile } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from "../../styles/Styles"
 import { SDProfileBottomSheet } from '../../views/bottomSheet/SDProfileBottomSheet';
+import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
 
 export const Profile = () => {
 
@@ -26,7 +24,6 @@ export const Profile = () => {
 
     const route = useRoute();
     const isFrom = route.params?.isFrom || stringConstants.EMPTY;
-
     const profile = checkProfileFrom(currentPostIndexForProfileRef, sdomDatastate, isFrom, loggedInUser);
 
     // variables
@@ -77,15 +74,21 @@ const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDa
     setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess }) => {
     return <View style={SDGenericStyles.fill}>
         {
-            profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
-                style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback /> || <FastImage source={{
-                    uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
-                    priority: FastImage.priority.high
-                }} style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} resizeMode={FastImage.resizeMode.center} />
+            profile.id !== numericConstants.MINUS_ONE &&
+            <React.Fragment>
+                {
+                    profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
+                        style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback /> || <FastImage source={{
+                            uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
+                            priority: FastImage.priority.high
+                        }} style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} resizeMode={FastImage.resizeMode.center} />
+                }
+                <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser}
+                    setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
+                    loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} isDisabled={isDisabled} />
+            </React.Fragment> || <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.POSTS_WITHOUT_PROFILE}
+                descriptionText={errorMessages.NO_USER_PROFILE_FOR_POST} navigation={navigation} />
         }
-        <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser}
-            setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
-            loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} isDisabled={isDisabled} />
     </View>;
 })
 
