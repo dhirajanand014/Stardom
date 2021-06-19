@@ -28,6 +28,7 @@ import Share from 'react-native-share';
 import { showMessage } from "react-native-flash-message";
 import moment from 'moment';
 import RNFetchBlob from 'rn-fetch-blob';
+import CameraRoll from '@react-native-community/cameraroll';
 
 export const fetchCategoryData = async () => {
     try {
@@ -127,7 +128,7 @@ export const savePostCounts = async (postId, postIdForSelectedCountType, postDet
                     [savePostCountKeys.SELECTED_POST_LIKES]: postIds
                 }
             }
-            postDetailsState.currentPost.likeDisabled = postDetailsState.currentPost.postLikes <= numericConstants.ONE_HUNDRED;
+            postDetailsState.currentPost.likeAdded = postDetailsState.currentPost.postLikes <= numericConstants.ONE_HUNDRED;
             postIdsJson = JSON.stringify(postCounts);
             await saveDetailsToKeyChain(keyChainConstansts.SAVE_POST_COUNTS, keyChainConstansts.SAVE_POST_COUNTS,
                 postIdsJson);
@@ -579,7 +580,7 @@ const retrievePostData = async (categoryIdFromNotification) => {
             const postHasLikes = postCounts && postCounts[savePostCountKeys.SELECTED_POST_LIKES] &&
                 postCounts[savePostCountKeys.SELECTED_POST_LIKES].some(postId => postItem.id == postId);
             if (postHasLikes) {
-                postItem.likeDisabled = postHasLikes;
+                postItem.likeAdded = postHasLikes;
             }
             postItem.postCategoriesIn = fetchAndDisplayNamesAndCategoryTitles(postItem);
         });
@@ -1712,5 +1713,21 @@ export const setBackgroundColorsForList = (data) => {
         });
     } catch (error) {
         console.error(errorMessages.COULD_NOT_SET_COLORS, error);
+    }
+}
+
+export const fetchGalleryImages = async (cameraState, setCameraState) => {
+    try {
+        const photos = await CameraRoll.getPhotos({
+            first: numericConstants.ONE_HUNDRED,
+            assetType: miscMessage.PHOTOS,
+            fromTime: moment().subtract(numericConstants.TWO, miscMessage.MONTHS).valueOf()
+        });
+        setCameraState({
+            ...cameraState, galleryImages: photos.edges && photos.edges.map(item => item.node) || jsonConstants.EMPTY,
+            uploadFromGallery: true
+        });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_PHOTOS_FROM_GALLERY, error);
     }
 }

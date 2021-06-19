@@ -16,12 +16,12 @@ import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal
 import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
 import { CategoryContext } from '../../App';
 
-const post_like = require(`../../assets/post_likes_heart_arrow_icon.png`);
-const post_like_selected = require(`../../assets/post_likes_heart_arrow_icon_selected.png`);
+const post_like = require(`../../assets/post_likes_icon.png`);
+const post_like_selected = require(`../../assets/post_likes_selected_icon.png`);
 const post_description = require(`../../assets/post_description_icon.png`);
-const post_wallpaper = require(`../../assets/post_set_wallpaper_icon.png`);
+const post_wallpaper = require(`../../assets/menu/add_wallpaper_icon.png`);
 const post_download = require(`../../assets/post_download_icon.png`);
-const post_share = require(`../../assets/post_share.png`);
+const post_share = require(`../../assets/post_share_icon.png`);
 
 export const PostDetails = forwardRef((props, ref) => {
 
@@ -179,19 +179,19 @@ export const PostDetails = forwardRef((props, ref) => {
                     </View>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} hideLabelShadow={true} fixNativeFeedbackRadius={true}
-                    useNativeFeedback={!postDetailsState.currentPost.likeDisabled} onPress={async () => !postDetailsState.currentPost.likeDisabled &&
+                    useNativeFeedback={!postDetailsState.currentPost.likeAdded} onPress={async () => !postDetailsState.currentPost.likeAdded &&
                         await increaseAndSetPostCounts(postCountTypes.POST_LIKE_KEY, postDetailsState, setPostDetailsState,
                             postCountTypes.POST_LIKES)}>
-                    <View style={glancePostStyles.backgroundRoundColor} pointerEvents={postDetailsState.currentPost.likeDisabled &&
+                    <View style={glancePostStyles.likesBackgroundRoundColor} pointerEvents={postDetailsState.currentPost.likeAdded &&
                         permissionsButtons.NONE || permissionsButtons.AUTO}>
-                        <Image style={glancePostStyles.icon_post_like} source={postDetailsState.currentPost.likeDisabled &&
-                            post_like_selected || post_like} />
+                        <Image style={[glancePostStyles.icon_post_like, postDetailsState.currentPost.likeAdded && SDGenericStyles.tintRedColor]}
+                            source={postDetailsState.currentPost.likeAdded && post_like_selected || post_like} />
                     </View>
                     <Text style={glancePostStyles.icon_count_text}>{postDetailsState.currentPost.postLikes}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
                     await setWallPaperCallback(postDetailsState, setPostDetailsState)}>
-                    <View style={glancePostStyles.backgroundRoundColor}>
+                    <View style={glancePostStyles.setWallPaperBackgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
                     </View>
                     <Text style={glancePostStyles.icon_count_text}>{postDetailsState.currentPost.postWallpapers}</Text>

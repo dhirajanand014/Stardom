@@ -21,6 +21,10 @@ export const SDGenericStyles = StyleSheet.create({
         width: numericConstants.TWENTY_EIGHT,
         height: numericConstants.TWENTY_EIGHT
     },
+    cameraIconStyle: {
+        width: 50,
+        height: 50
+    },
     menuIconStyle: {
         width: numericConstants.EIGHTEEN,
         height: numericConstants.EIGHTEEN
@@ -36,6 +40,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     bottom0: {
         bottom: 0
+    },
+    bottom80: {
+        bottom: 80
     },
     positionAbsolute: {
         position: 'absolute'
@@ -112,6 +119,9 @@ export const SDGenericStyles = StyleSheet.create({
     width100: {
         width: 100
     },
+    tintRedColor: {
+        tintColor: `#ff4e4e`
+    },
     width100pct: {
         width: `100%`
     },
@@ -165,6 +175,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     marginRight4: {
         marginRight: 4
+    },
+    marginRight10: {
+        marginRight: 10
     },
     marginRight15: {
         marginRight: 15
@@ -345,6 +358,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     bottom8: {
         bottom: 8
+    },
+    bottom15: {
+        bottom: 15
     },
     bottom18: {
         bottom: 18
@@ -574,7 +590,23 @@ export const glancePostStyles = StyleSheet.create({
     },
     backgroundRoundColor_description: {
         paddingRight: 1,
-        paddingTop: 3,
+        paddingTop: 6,
+        alignItems: 'center',
+        width: 29,
+        height: 29,
+        backgroundColor: 'rgba(0,0,0,0.25)',
+        borderRadius: 16,
+    },
+    likesBackgroundRoundColor: {
+        paddingTop: 4,
+        alignItems: 'center',
+        width: 27,
+        height: 27,
+        backgroundColor: 'rgba(0,0,0,0.25)',
+        borderRadius: 16,
+    },
+    setWallPaperBackgroundRoundColor: {
+        paddingTop: 6,
         alignItems: 'center',
         width: 29,
         height: 29,
@@ -626,9 +658,9 @@ export const glancePostStyles = StyleSheet.create({
         color: 'black',
     },
     icon_post_like: {
-        borderColor: 'red',
-        width: 22,
-        height: 22
+        borderColor: '#ff4e4e',
+        width: 18,
+        height: 18
     },
     icon_post_search: {
         width: 18,
@@ -689,16 +721,16 @@ export const glancePostStyles = StyleSheet.create({
         fontSize: 15
     },
     icon_post_description: {
-        width: 25,
-        height: 25
+        width: 16,
+        height: 16
     },
     icon_post_details: {
-        width: 22,
-        height: 22,
+        width: 18,
+        height: 18,
     },
     icon_post_share: {
-        width: 20,
-        height: 20
+        width: 18,
+        height: 18
     },
     icon_external_link: {
         width: 23,
@@ -988,7 +1020,7 @@ export const glancePostStyles = StyleSheet.create({
         marginTop: 16
     },
     addPostDetailsInputError: {
-        color: 'red',
+        color: '#ff4e4e',
         marginVertical: isIOS && 5 || 2,
         justifyContent: 'center',
         alignItems: 'flex-start'
@@ -1415,7 +1447,7 @@ export const errorBoundaryStyles = StyleSheet.create({
     modalErrorImage: {
         width: 35,
         height: 35,
-        tintColor: 'red'
+        tintColor: '#ff4e4e'
     },
     modalTitleDivider: {
         width: 290,
@@ -1570,5 +1602,10 @@ export const cameraStyles = StyleSheet.create({
     filterSelector: {
         width: 120,
         height: 120
+    },
+    addImageGalleryIconStyle: {
+        width: 20,
+        height: 20,
+        tintColor: `#000000`
     }
 });

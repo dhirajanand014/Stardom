@@ -36,7 +36,6 @@ export const Login = () => {
     };
 
     const onSubmit = async data => {
-        debugger
         setLoaderCallback(true);
         const responseData = await handleUserLogin(data, loggedInUser, setLoggedInUser, messaging);
         if (responseData) {

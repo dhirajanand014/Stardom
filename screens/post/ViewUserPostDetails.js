@@ -9,7 +9,7 @@ import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import { CategoryContext } from '../../App';
 
 const post_download = require(`../../assets/post_download_icon.png`);
-const post_share = require(`../../assets/post_share.png`);
+const post_share = require(`../../assets/post_share_icon.png`);
 
 export const ViewUserPostDetails = forwardRef((props, ref) => {
 

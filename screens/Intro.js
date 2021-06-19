@@ -5,7 +5,7 @@ import { View, Image } from 'react-native';
 import { introStyles } from '../styles/Styles';
 import { colorConstants } from '../constants/Constants';
 import FastImage from 'react-native-fast-image';
-import { height, miscMessage, numericConstants, screens, width } from '../constants/Constants';
+import { height, numericConstants, screens, width } from '../constants/Constants';
 export const Intro = () => {
 
     const navigation = useNavigation();

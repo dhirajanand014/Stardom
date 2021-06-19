@@ -15,7 +15,7 @@ import { ProfilePosts } from '../../screens/user/ProfilePosts';
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 
 export const SDProfileBottomSheet = props => {
-    const post_share = require(`../../assets/post_share.png`);
+    const post_share = require(`../../assets/post_share_icon.png`);
     const { downloadProgressState, setDownloadProgressState } = useContext(CategoryContext);
 
 
