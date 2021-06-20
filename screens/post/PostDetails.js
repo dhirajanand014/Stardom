@@ -19,6 +19,7 @@ import { CategoryContext } from '../../App';
 const post_like = require(`../../assets/post_likes_icon.png`);
 const post_like_selected = require(`../../assets/post_likes_selected_icon.png`);
 const post_description = require(`../../assets/post_description_icon.png`);
+const reportAbuseIcon = require('../../assets/post_report_abuse_icon.png');
 const post_wallpaper = require(`../../assets/menu/add_wallpaper_icon.png`);
 const post_download = require(`../../assets/post_download_icon.png`);
 const post_share = require(`../../assets/post_share_icon.png`);
@@ -185,14 +186,16 @@ export const PostDetails = forwardRef((props, ref) => {
                         <Image style={glancePostStyles.icon_post_like} source={postDetailsState.currentPost.likeAdded &&
                             post_like_selected || post_like} />
                     </View>
-                    <Text style={glancePostStyles.icon_count_text}>{postDetailsState.currentPost.postLikes}</Text>
+                    <Text style={[SDGenericStyles.ft10, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{postDetailsState.currentPost.postLikes}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
                     await setWallPaperCallback(postDetailsState, setPostDetailsState)}>
                     <View style={glancePostStyles.setWallPaperBackgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
                     </View>
-                    <Text style={glancePostStyles.icon_count_text}>{postDetailsState.currentPost.postWallpapers}</Text>
+                    <Text style={[SDGenericStyles.ft10, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{postDetailsState.currentPost.postWallpapers}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
                     await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback,
@@ -200,13 +203,22 @@ export const PostDetails = forwardRef((props, ref) => {
                     <View style={glancePostStyles.backgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_download} />
                     </View>
-                    <Text style={glancePostStyles.icon_count_text}>{postDetailsState.currentPost.postDownloads}</Text>
+                    <Text style={[SDGenericStyles.ft10, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{postDetailsState.currentPost.postDownloads}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
                     onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage)}>
                     <View style={glancePostStyles.backgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_share} source={post_share} />
                     </View>
+                </ActionButton.Item>
+                <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} hideLabelShadow={true}
+                    useNativeFeedback={false} onPress={() => setPostDetailsStateForModal(postDetailsState, setPostDetailsState, miscMessage.POST_REPORT_ABUSE_MODAL_NAME)}>
+                    <View style={glancePostStyles.backgroundRoundColor_report_abuse}>
+                        <Image style={glancePostStyles.icon_post_report_abuse} source={reportAbuseIcon} />
+                    </View>
+                    <Text style={[SDGenericStyles.ft7, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{miscMessage.REPORT_ABUSE_TEXT}</Text>
                 </ActionButton.Item>
             </ActionButton>
             <PostDescriptionModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}

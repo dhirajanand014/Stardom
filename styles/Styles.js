@@ -32,6 +32,9 @@ export const SDGenericStyles = StyleSheet.create({
     right0: {
         right: 0
     },
+    top1: {
+        top: 1
+    },
     top8: {
         top: 8
     },
@@ -128,8 +131,14 @@ export const SDGenericStyles = StyleSheet.create({
     width130: {
         width: 130
     },
+    ft7: {
+        fontSize: 7
+    },
     ft9: {
         fontSize: 9
+    },
+    ft10: {
+        fontSize: 10
     },
     ft12: {
         fontSize: 12
@@ -599,6 +608,15 @@ export const glancePostStyles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.25)',
         borderRadius: 16,
     },
+    backgroundRoundColor_report_abuse: {
+        paddingRight: 1,
+        paddingTop: 3,
+        alignItems: 'center',
+        width: 29,
+        height: 29,
+        backgroundColor: 'rgba(0,0,0,0.25)',
+        borderRadius: 16,
+    },
     likesBackgroundRoundColor: {
         paddingTop: 4,
         alignItems: 'center',
@@ -725,6 +743,10 @@ export const glancePostStyles = StyleSheet.create({
         width: 16,
         height: 16
     },
+    icon_post_report_abuse: {
+        width: 18,
+        height: 18
+    },
     icon_post_details: {
         width: 18,
         height: 18,
@@ -736,10 +758,6 @@ export const glancePostStyles = StyleSheet.create({
     icon_external_link: {
         width: 23,
         height: 23
-    },
-    icon_post_report_abuse: {
-        width: 22,
-        height: 22
     },
     smallButtonsContainer: {
         flexDirection: 'row',
@@ -850,13 +868,6 @@ export const glancePostStyles = StyleSheet.create({
         width: width / 1.66,
         height: 1.5,
     },
-    icon_count_text: {
-        color: "white",
-        fontFamily: 'wallpiper_roman_font',
-        textAlign: "center",
-        fontSize: 10,
-        top: 1
-    },
     shimmerViewInit: {
         flex: 1,
         justifyContent: 'center',
@@ -906,11 +917,6 @@ export const glancePostStyles = StyleSheet.create({
     bottomPostSubmitButton: {
         right: 0,
         left: 0
-    },
-    postReportAbuse: {
-        left: 12,
-        marginTop: 10,
-        elevation: 3,
     },
     cancelReportAbuse: {
         position: 'absolute',

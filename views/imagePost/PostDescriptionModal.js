@@ -2,11 +2,10 @@ import moment from 'moment';
 import React from 'react';
 import { View, TouchableOpacity, Text, ScrollView, Modal, Image } from 'react-native';
 import { miscMessage } from '../../constants/Constants';
-import { resetModalState, setPostDetailsStateForModal } from '../../helper/Helper';
+import { resetModalState } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 
 const post_modal_close_icon = require('../../assets/post_modal_close_icon.png');
-const reportAbuseIcon = require('../../assets/post_report_abuse_icon.png');
 
 export const PostDescriptionModal = React.memo(({ postDetailsState, setPostDetailsState }) => {
 
@@ -18,10 +17,6 @@ export const PostDescriptionModal = React.memo(({ postDetailsState, setPostDetai
                 <View style={glancePostStyles.modalView}>
                     <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween,
                     SDGenericStyles.width100pct]}>
-                        {/* <TouchableOpacity style={glancePostStyles.postReportAbuse} onPress={() =>
-                            setPostDetailsStateForModal(postDetailsState, setPostDetailsState, miscMessage.POST_REPORT_ABUSE_MODAL_NAME)}>
-                            <Image style={glancePostStyles.icon_post_report_abuse} source={reportAbuseIcon} />
-                        </TouchableOpacity> */}
                         {
                             postDetailsState.currentPost.postTitle &&
                             <View style={[SDGenericStyles.padding20, SDGenericStyles.paddingHorizontal30]}>

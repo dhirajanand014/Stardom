@@ -696,6 +696,7 @@ export const miscMessage = {
     SINGLE_SELECT: `Single select`,
     SELECT_ALL: `Select All`,
     UNSELECT_ALL: `Unselect All`,
+    REPORT_ABUSE_TEXT: `REPORT\nABUSE`,
     CREATE: `create`,
     UPDATE: `update`,
     CREATE: `create`,
