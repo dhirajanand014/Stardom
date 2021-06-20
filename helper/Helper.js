@@ -10,7 +10,7 @@ import {
     miscMessage, width, height, numericConstants,
     screens, headerStrings, fieldControllerName, isAndroid,
     isIOS, OTP_INPUTS, errorMessages, requestConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants
+    jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants, placeHolderText
 } from '../constants/Constants';
 import {
     Alert, InteractionManager, NativeModules,
@@ -970,6 +970,7 @@ export const handleUserLogin = async (data, loggedInUser, setLoggedInUser) => {
             return responseData;
         }
     } catch (error) {
+        console.error(errorMessages.COULD_NOT_LOGIN_USER, error);
     }
     return false;
 }
@@ -992,7 +993,7 @@ export const handleUserRegistration = async (phoneNumber, data, isFrom) => {
                 requestData = {
                     [requestConstants.PHONE_NUMBER]: phoneNumber,
                     [requestConstants.SECRET]: data.secret,
-                    [requestConstants.USER_ID]: data.userId
+                    [requestConstants.USER_ID]: placeHolderText.AMPERSAND + data.userId
                 }
                 break;
             case miscMessage.UPDATE:
@@ -1549,7 +1550,7 @@ const navigateUserFromPostAction = (action, responseData, profile, sdomDatastate
     if (responseData == responseStringData.TOKEN_EXPIRED || responseData == responseStringData.TOKEN_INVALID
         || responseData == responseStringData.REDIRECT_USER_LOGIN) {
         showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false);
-        navigation.navigate(screens.LOGIN, { isIntermediateLogin: true });
+        navigation.navigate(screens.LOGIN, { intermediateLogin: screens.PROFILE });
     } else if (responseData && responseData.message.includes(responseStringData.SUCCESS)) {
         updateProfileActionValueToState(responseData, action, profile, sdomDatastate, setSdomDatastate, loggedInUser,
             profileDetail, setProfileDetail);

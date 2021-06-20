@@ -175,7 +175,7 @@ export const RegistrationOTP = props => {
                         <View style={userAuthStyles.registerButtonView}>
                             <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
                                 onPress={handleSubmit(onSubmit)}>
-                                <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>{actionButtonTextConstants.VERIFY}</Text>
+                                <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>{actionButtonTextConstants.VERIFY.toUpperCase()}</Text>
                             </TouchableOpacity>
                         </View>
                     }

@@ -25,7 +25,7 @@ export const Login = () => {
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
 
     const route = useRoute();
-    const isIntermediateLogin = route.params?.isIntermediateLogin || false;
+    const intermediateLogin = route.params?.intermediateLogin || false;
 
     const navigation = useNavigation();
 
@@ -38,14 +38,23 @@ export const Login = () => {
     const onSubmit = async data => {
         setLoaderCallback(true);
         const responseData = await handleUserLogin(data, loggedInUser, setLoggedInUser, messaging);
-        if (responseData) {
+        if (responseData && responseData.user) {
             showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
-            if (isIntermediateLogin) {
-                navigation.goBack();
-            } else {
-                const categoriesViewed = await redirectUserToGlance();
-                categoriesViewed && navigation.dispatch(TabActions.jumpTo(screens.GLANCE))
-                    || navigation.navigate(screens.CATEGORY);
+            if (responseData.user.status == miscMessage.REGISTERED) {
+                navigation.navigate(screens.REGISTRATION_DETAILS, {
+                    isFrom: screens.LOGIN,
+                    phoneNumber: data.phoneNumber,
+                    intermediateLogin: !intermediateLogin && screens.CATEGORY
+                        || intermediateLogin
+                });
+            } else if (responseData.user.status == miscMessage.VERIFIED) {
+                if (intermediateLogin) {
+                    navigation.goBack();
+                } else {
+                    const categoriesViewed = await redirectUserToGlance();
+                    categoriesViewed && navigation.dispatch(TabActions.jumpTo(screens.GLANCE))
+                        || navigation.navigate(screens.CATEGORY);
+                }
             }
         } else {
             showSnackBar(errorMessages.COULD_NOT_LOGIN_USER, false);

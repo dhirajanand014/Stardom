@@ -46,7 +46,7 @@ export const AddPostDetails = () => {
         showSnackBar(responseData.message, true);
     }
 
-    const loginCallback = useCallback(() => navigation.navigate(screens.LOGIN, { isIntermediateLogin: true }));
+    const loginCallback = useCallback(() => navigation.navigate(screens.LOGIN, { intermediateLogin: toAction }));
 
     const onSubmit = async (data) => {
         navigation.navigate(screens.SELECT_POST_CATEGORIES, {

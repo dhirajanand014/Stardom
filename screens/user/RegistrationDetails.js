@@ -19,23 +19,40 @@ import { SDDropDownView } from '../../views/dropDownView/SDDropDownView';
 import { showSnackBar, handleUserRegistration, saveRegistrationStatus } from '../../helper/Helper';
 import { useNavigation } from '@react-navigation/core';
 import { CategoryContext } from '../../App';
+import { useRoute } from '@react-navigation/native';
 
 export const RegistrationDetails = () => {
 
     const { control, formState, handleSubmit, watch } = useForm();
-    const { signUpDetails, profiles, loader, setLoaderCallback } = useContext(CategoryContext);
+    const { signUpDetails, profiles, loader, setLoaderCallback, loggedInUser, setLoggedInUser } = useContext(CategoryContext);
 
     const navigation = useNavigation();
+
+    const route = useRoute();
+    const isFrom = route.params?.isFrom || stringConstants.EMPTY;
+    const intermediateLogin = route.params?.intermediateLogin;
+
+    const phoneNumber = signUpDetails.phoneNumber || route.params?.phoneNumber;
 
     const genderValue = watch(fieldControllerName.GENDER);
 
     const onSubmit = async (data) => {
         setLoaderCallback(true);
-        const registrationUpdated = await handleUserRegistration(signUpDetails.phoneNumber, data,
-            miscMessage.UPDATE);
+        const registrationUpdated = await handleUserRegistration(phoneNumber, data, miscMessage.UPDATE);
         if (registrationUpdated) {
             showSnackBar(alertTextMessages.USER_DETAILS_ADDED_SUCCESSFULLY, true);
-            navigation.navigate(screens.LOGIN);
+
+            loggedInUser.loginDetails.details = JSON.stringify(registrationUpdated.user);
+            setLoggedInUser({ ...loggedInUser });
+            if (isFrom == screens.LOGIN) {
+                if (intermediateLogin == miscMessage.CREATE || intermediateLogin == miscMessage.UPDATE) {
+                    navigation.navigate(screens.ADD_POST_DETAILS, { toAction: intermediateLogin });
+                } else {
+                    navigation.navigate(intermediateLogin && intermediateLogin || screens.LOGIN);
+                }
+            } else {
+                navigation.navigate(screens.LOGIN);
+            }
         } else {
             await saveRegistrationStatus(phoneNumber, miscMessage.VERIFIED);
         }

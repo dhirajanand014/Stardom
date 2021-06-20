@@ -27,7 +27,7 @@ export const SDImageFormInput = props => {
                     {
                         props.isUserIdAvailable.current &&
                         <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsStart]}>
-                            <Text style={[userAuthStyles.formInputNoError, SDGenericStyles.fontFamilyRobotoMedium]}>{`User id ${props.userIdValue} is available`}</Text>
+                            <Text style={[userAuthStyles.formInputNoError, SDGenericStyles.fontFamilyRobotoMedium]}>{`User id @${props.userIdValue} is available`}</Text>
                         </View> || <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsStart]}>
                             <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyRobotoMedium]}>{props.formState.errors[props.inputName]?.message}</Text>
                         </View>
