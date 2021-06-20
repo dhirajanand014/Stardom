@@ -48,7 +48,7 @@ export const UserFollowFollowingRenderer = (props) => {
                         <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorRed, SDGenericStyles.justifyContentCenter,
                         SDGenericStyles.paddingHorizontal10, SDGenericStyles.paddingVertical5, SDGenericStyles.borderRadius5, SDGenericStyles.elevation8]}
                             activeOpacity={.7} onPress={async () => await props.actionCallBack(props.item.id, props.index, actionButtonTextConstants.REMOVE)}>
-                            <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite, SDGenericStyles.textCenterAlign]}>
+                            <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite, SDGenericStyles.textCenterAlign]}>
                                 {actionButtonTextConstants.REMOVE}
                             </Text>
                         </TouchableOpacity>

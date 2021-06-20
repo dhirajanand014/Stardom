@@ -98,12 +98,12 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                     <Animated.View style={[glancePostStyles.postTitleAndProfileStyle, SDGenericStyles.marginBottom8,
                     postDetailsState.animationVisible && postDescriptionSpringStyle]}>
                         <Text style={[postDetailsState.currentPost.profileName && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
-                        SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft9]}>
+                        SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft9]}>
                             {postDetailsState.currentPost.profileName && postDetailsState.currentPost.profileName.toUpperCase()}
                         </Text>
                         <View>
                             <View style={SDGenericStyles.mt3}>
-                                <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
+                                <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular,
                                 SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>{
                                         postDetailsState.currentPost.profileName && postDetailsState.currentPost.postCategoriesIn &&
                                         stringConstants.PIPELINE_JOIN.concat(postDetailsState.currentPost.postCategoriesIn) ||

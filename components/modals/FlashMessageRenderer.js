@@ -14,7 +14,7 @@ export const FlashMessageRenderer = props => {
             SDGenericStyles.padding10]}>
                 <Progress.Bar progress={downloadProgressState.progressValue.value * numericConstants.TWO} width={width - numericConstants.SIXTY}
                     height={numericConstants.TEN} indeterminate={downloadProgressState.progressValue.value == numericConstants.ZERO} />
-                <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.ft14, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textColorWhite]}>
+                <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.ft14, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]}>
                     {
                         downloadProgressState.progressValue.value == numericConstants.ONE && alertTextMessages.DOWNLOAD_COMPLETE ||
                         alertTextMessages.DOWNLOADING_IMAGE

@@ -35,7 +35,7 @@ export const SDLoaderView = props => {
                     }} style={{ width: numericConstants.THIRTY, height: numericConstants.THIRTY }} resizeMode={FastImage.resizeMode.contain} />
                     {
                         props.loader.loadingText && <View>
-                            <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRoman, SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop10,
+                            <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop10,
                             SDGenericStyles.placeHolderTextColor]}>
                                 {props.loader.loadingText}
                             </Text>

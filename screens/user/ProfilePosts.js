@@ -22,7 +22,7 @@ export const ProfilePosts = props => {
                     SDGenericStyles.alignItemsCenter, glancePostStyles.profileBioTextStyle, SDGenericStyles.backgroundColorYellow]} onPress={async () =>
                         await handleUserPostAction(props.profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW,
                             props.profile, props.sdomDatastate, props.setSdomDatastate, props.loggedInUser, props.profileDetail, props.setProfileDetail, props.navigation)}>
-                        <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter, SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16]}>
+                        <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16]}>
                             {props.profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW}
                         </Text>
                     </TouchableOpacity>

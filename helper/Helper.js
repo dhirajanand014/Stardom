@@ -1115,7 +1115,7 @@ export const getAllProfiles = async () => {
         }, defaultProfilesValue];
         let response = await axiosGetWithHeaders(urlConstants.fetchAllProfiles);
         response.data && response.data.map(profile => profile.textStyle = {
-            fontFamily: `wallpiper_bold_font`,
+            fontFamily: `stardom_roboto_medium`,
         });
         return profiles.concat(response.data);
     } catch (error) {

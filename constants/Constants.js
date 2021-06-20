@@ -502,6 +502,7 @@ export const numericConstants = {
     TWO_HUNDRED_NINETY: 290,
     THREE_HUNDRED: 300,
     THREE_HUNDRED_THIRTY: 330,
+    THREE_HUNDRED_FIFTY: 350,
     FOUR_HUNDRED_ONE: 401,
     FIVE_HUNDRED: 500,
     THOUSAND: 1000,
@@ -848,8 +849,7 @@ export const defaultPickerValue = {
     value: 0,
     untouchable: true,
     textStyle: {
-        fontWeight: `bold`,
-        fontFamily: `wallpiper_bold_font`,
+        fontFamily: `stardom_roboto_medium`,
     }
 }
 
@@ -859,7 +859,7 @@ export const defaultProfilesValue = {
     untouchable: true,
     textStyle: {
         color: `#fafafa`,
-        fontFamily: `wallpiper_roman_font`,
+        fontFamily: `stardom_roboto_regular`,
     }
 }
 

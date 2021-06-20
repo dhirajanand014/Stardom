@@ -29,7 +29,7 @@ export const UserVerifyModal = props => {
                         <SDImageFormInput inputName={fieldControllerName.VERIFY_USER} control={control} rules={formRequiredRules.verifyUserInputRule}
                             defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.VERIFY_USER_DETAILS} isFeedbackInput={true}
                             formState={formState} isMultiline={true} autofocus={true} underlineColorAndroid={miscMessage.TRANSPARENT} numberOfLines={numericConstants.TWO}
-                            extraStyles={[SDGenericStyles.height150, SDGenericStyles.fontFamilyRoman, SDGenericStyles.ft16, SDGenericStyles.borderRadius5,
+                            extraStyles={[SDGenericStyles.height150, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16, SDGenericStyles.borderRadius5,
                             SDGenericStyles.justifyContentCenter, SDGenericStyles.backGroundColorGray, SDGenericStyles.textColorWhite, userMenuStyles.verifyUserTextHeight,
                             SDGenericStyles.textALignVerticalTop, SDGenericStyles.paddingLeft5]} maxLength={numericConstants.TWO_HUNDRED} keyboardType={keyBoardTypeConst.DEFAULT} />
 
@@ -37,7 +37,7 @@ export const UserVerifyModal = props => {
                             <View>
                                 <TouchableOpacity activeOpacity={.2} style={[{ width: width / 2 }, SDGenericStyles.mv10]}
                                     onPress={() => setProfileMenu({ ...profileMenu, showSubmitVerifyModal: false })}>
-                                    <Text style={[userMenuStyles.verifyUserCancelText, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16,
+                                    <Text style={[userMenuStyles.verifyUserCancelText, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft16,
                                     SDGenericStyles.placeHolderTextColor]}>
                                         {actionButtonTextConstants.CANCEL_POST}
                                     </Text>
@@ -56,7 +56,7 @@ export const UserVerifyModal = props => {
                                         await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
                                         setLoaderCallback(false);
                                     })}>
-                                    <Text style={[SDGenericStyles.colorWhite, SDGenericStyles.centerAlignedText, SDGenericStyles.fontFamilyBold, SDGenericStyles.ft16,
+                                    <Text style={[SDGenericStyles.colorWhite, SDGenericStyles.centerAlignedText, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft16,
                                     SDGenericStyles.colorBlack]}>
                                         {actionButtonTextConstants.SUBMIT}
                                     </Text>

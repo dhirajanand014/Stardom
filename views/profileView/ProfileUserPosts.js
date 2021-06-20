@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View, Image } from "react-native";
 import FastImage from "react-native-fast-image";
 import Shimmer from "react-native-shimmer";
 import { LockIcon } from '../../components/icons/LockIcon';
@@ -39,7 +39,8 @@ export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isS
                                             {
                                                 !isSameUser &&
                                                 <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
-                                                    <LockIcon width={numericConstants.THIRTY} height={numericConstants.THIRTY} stroke={colors.WHITE} />
+                                                    <Image style={[SDGenericStyles.privateLockUnlockIconStyle, SDGenericStyles.tintColorWhite]}
+                                                        source={require(`../../assets/locked_icon.png`)} />
                                                 </Shimmer>
                                             }
                                         </View>
@@ -47,10 +48,10 @@ export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isS
                                             <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
                                                 {
                                                     !isSameUser &&
-                                                    <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
+                                                    <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular,
                                                     SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop10]}>
                                                         {miscMessage.REQUEST_FOR_PRIVATE_ACCESS}
-                                                    </Text> || <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
+                                                    </Text> || <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular,
                                                     SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop40]}>
                                                         {miscMessage.PRIVATE_POST}
                                                     </Text>

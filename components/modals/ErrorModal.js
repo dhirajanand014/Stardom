@@ -14,14 +14,14 @@ export const ErrorModal = props => {
             <View style={errorBoundaryStyles.errorModalContainer}>
                 <View style={errorBoundaryStyles.modalViewStyle}>
                     <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.marginBottom4]}>
-                        <Text style={[errorBoundaryStyles.modalTitleTextStyle, SDGenericStyles.fontFamilyBold,
+                        <Text style={[errorBoundaryStyles.modalTitleTextStyle, SDGenericStyles.fontFamilyRobotoMedium,
                         SDGenericStyles.ft18]}>
                             {error.title}
                         </Text>
                         <View style={errorBoundaryStyles.modalTitleDivider} />
                     </View>
                     <View style={errorBoundaryStyles.modalMessageViewStyle}>
-                        <Text style={[errorBoundaryStyles.modalMessageTextStyle, SDGenericStyles.fontFamilyRoman,
+                        <Text style={[errorBoundaryStyles.modalMessageTextStyle, SDGenericStyles.fontFamilyRobotoRegular,
                         SDGenericStyles.ft18]}>{error.message}</Text>
                         <Image source={require(`../../assets/login_error_icon.png`)} style={errorBoundaryStyles.modalErrorImage} />
                     </View>

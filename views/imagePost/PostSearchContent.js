@@ -21,7 +21,7 @@ export const PostSearchContent = (props) => {
 
     const loadingComponent = () => {
         return <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingTop80]}>
-            <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRoman, SDGenericStyles.placeHolderTextColor,
+            <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.placeHolderTextColor,
             SDGenericStyles.textCenterAlign]}>
                 {alertTextMessages.NO_POSTS}
             </Text>

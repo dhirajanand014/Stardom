@@ -125,17 +125,17 @@ export const PostDetails = forwardRef((props, ref) => {
                     <Animated.View style={[glancePostStyles.postTitleAndProfileStyle, SDGenericStyles.marginBottom8,
                     postDetailsState.animationVisible && postDescriptionSpringStyle]}>
                         <Text style={[postDetailsState.currentPost.profileName && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
-                        SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft9]}>
+                        SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft9]}>
                             {postDetailsState.currentPost.profileName && postDetailsState.currentPost.profileName.toUpperCase()}
                         </Text>
                         <View>
                             <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter]}>
                                 <Text style={[postDetailsState.currentPost.user.name && glancePostStyles.postProfileNameBy, SDGenericStyles.textColorWhite,
-                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
+                                SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
                                     {`by`}
                                 </Text>
                                 <Text style={[postDetailsState.currentPost.user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
-                                SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
+                                SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
                                     {postDetailsState.currentPost.user.name && postDetailsState.currentPost.user.name}
                                 </Text>
                                 {
@@ -146,7 +146,7 @@ export const PostDetails = forwardRef((props, ref) => {
                                 }
                             </View>
                             <View style={SDGenericStyles.marginTop8}>
-                                <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman,
+                                <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular,
                                 SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>{
                                         postDetailsState.currentPost.profileName && postDetailsState.currentPost.postCategoriesIn &&
                                         stringConstants.PIPELINE_JOIN.concat(postDetailsState.currentPost.postCategoriesIn) ||

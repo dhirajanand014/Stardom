@@ -68,7 +68,7 @@ export const SDCameraImagePreview = () => {
         return (
             <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical10]}>
                 <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.ft14, SDGenericStyles.paddingTop5, SDGenericStyles.paddingBottom10,
-                SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyBold]}>
+                SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                     {item.title}
                 </Text>
                 <TouchableOpacity activeOpacity={.7} onPress={() => onSelectFilter(index)}>
@@ -98,7 +98,7 @@ export const SDCameraImagePreview = () => {
             SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingBottom10]}>
                 <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow, { width: width / 1.8 }]}
                     onPress={() => proceedAction()}>
-                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyBold]}>
+                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>
                         {actionButtonTextConstants.PROCEED}</Text>
                 </TouchableOpacity>
             </View>

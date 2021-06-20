@@ -125,7 +125,7 @@ export const UserFollowFollowing = () => {
     const emptyListMessage = () => {
         return (
             <View style={[SDGenericStyles.fill_half, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter]}>
-                <Text style={[SDGenericStyles.ft18, SDGenericStyles.fontFamilyRoman, SDGenericStyles.placeHolderTextColor,
+                <Text style={[SDGenericStyles.ft18, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.placeHolderTextColor,
                 SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop40]}>
                     {
                         listFor == miscMessage.FOLLOWERS_TEXT && alertTextMessages.YOU_HAVE_NO_FOLLOWERS
@@ -176,7 +176,7 @@ export const UserFollowFollowing = () => {
                 listFor == fieldControllerName.SEARCH_USERS &&
                 <Animated.View style={SDGenericStyles.padding20}>
                     <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.paddingStart10]}>
-                        <SDSearchInput extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman]}
+                        <SDSearchInput extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
                             state={searchList} setState={setSearchList} inputName={fieldControllerName.SEARCH_USERS} items={userFollowerFollowing.users} />
                     </Animated.View>
                 </Animated.View>

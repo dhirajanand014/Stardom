@@ -21,6 +21,23 @@ export const SDGenericStyles = StyleSheet.create({
         width: numericConstants.TWENTY_EIGHT,
         height: numericConstants.TWENTY_EIGHT
     },
+    lockUnlockIconStyle: {
+        width: numericConstants.TWENTY,
+        height: numericConstants.TWENTY
+    },
+    privateLockUnlockIconStyle: {
+        width: numericConstants.FIFTY,
+        height: numericConstants.FIFTY
+    },
+    tintColorWhite: {
+        tintColor: `#f4f4f4`
+    },
+    tintColorYellow: {
+        tintColor: `#eabe05`
+    },
+    tintColorGreen: {
+        tintColor: `#7FFF00`
+    },
     cameraIconStyle: {
         width: 50,
         height: 50
@@ -49,9 +66,6 @@ export const SDGenericStyles = StyleSheet.create({
     },
     positionAbsolute: {
         position: 'absolute'
-    },
-    bold: {
-        fontWeight: 'bold'
     },
     fontFamilyNormal: {
         fontFamily: isAndroid && `normal` || `System`
@@ -284,6 +298,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingEnd10: {
         paddingEnd: 10
     },
+    padding4: {
+        padding: 4
+    },
     padding5: {
         padding: 5
     },
@@ -453,7 +470,7 @@ export const SDGenericStyles = StyleSheet.create({
         color: `#1b1f2b`
     },
     backGroundColorGreen: {
-        backgroundColor: `green`
+        backgroundColor: `#7FFF00`
     },
     backGroundColorRed: {
         backgroundColor: `#ff4e4e`
@@ -507,7 +524,7 @@ export const SDGenericStyles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     colorGreen: {
-        color: 'green'
+        color: '#7FFF00'
     },
     dropDownBackGround: {
         backgroundColor: `#1b1f2b`,
@@ -595,7 +612,7 @@ export const glancePostStyles = StyleSheet.create({
     },
     titleName: {
         fontSize: 18,
-        fontFamily: 'wallpiper_roman_font',
+        fontFamily: 'stardom_roboto_regular',
         display: 'flex',
         color: 'white',
     },
@@ -635,7 +652,7 @@ export const glancePostStyles = StyleSheet.create({
     },
     backgroundRoundColor: {
         paddingRight: 1,
-        paddingTop: 3,
+        paddingTop: 5,
         alignItems: 'center',
         width: 27,
         height: 27,
@@ -728,7 +745,7 @@ export const glancePostStyles = StyleSheet.create({
         borderBottomEndRadius: 16
     },
     search_content_post_title: {
-        fontFamily: 'wallpiper_roman_font'
+        fontFamily: 'stardom_roboto_regular'
     },
     search_input_text: {
         flex: 1,
@@ -736,7 +753,7 @@ export const glancePostStyles = StyleSheet.create({
         backgroundColor: '#e4e6eb',
         borderRadius: 20,
         paddingHorizontal: 20,
-        fontFamily: 'wallpiper_roman_font',
+        fontFamily: 'stardom_roboto_regular',
         fontSize: 15
     },
     icon_post_description: {
@@ -855,14 +872,14 @@ export const glancePostStyles = StyleSheet.create({
     },
     modalHideText: {
         color: "white",
-        fontFamily: 'wallpiper_roman_font',
+        fontFamily: 'stardom_roboto_regular',
         textAlign: "center",
         fontSize: 15
     },
     reportAbuseCancelText: {
         fontSize: 14,
         textDecorationLine: 'underline',
-        fontFamily: 'wallpiper_roman_font'
+        fontFamily: 'stardom_roboto_regular'
     },
     reportAbuseModalTitleDivider: {
         width: width / 1.66,
@@ -1128,7 +1145,7 @@ export const flatListItemStyles = StyleSheet.create({
         fontSize: 20,
         textAlign: "center",
         margin: 10,
-        fontWeight: "bold"
+        fontFamily: "stardom_roboto_regular"
     },
     checkBoxSelected: {
         width: '100%',
