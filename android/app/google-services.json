@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "889718412166",
+    "project_id": "stardom-c3602",
+    "storage_bucket": "stardom-c3602.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889718412166:android:d1d8fe420c4c5edd7a5207",
+        "android_client_info": {
+          "package_name": "com.stardom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "889718412166-0jbiv582nernvlkkn2t8komgrh063dr3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLuZak9Yx6ARkUe_CMrZrA7gftp7wm4NQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "889718412166-0jbiv582nernvlkkn2t8komgrh063dr3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -63,7 +63,7 @@ const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOp
     return <View style={SDGenericStyles.fill}>
         {
             posts && posts.length &&
-            <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorYellow]}>
+            <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
                 <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
                     bounces={true} onMomentumScrollBegin={() => {
                         if (postsOptions.isImageLoadError) {

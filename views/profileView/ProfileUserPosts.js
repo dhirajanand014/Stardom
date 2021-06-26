@@ -2,19 +2,19 @@ import React from 'react';
 import { ImageBackground, Text, TouchableOpacity, View, Image } from "react-native";
 import FastImage from "react-native-fast-image";
 import Shimmer from "react-native-shimmer";
-import { LockIcon } from '../../components/icons/LockIcon';
-import { fieldControllerName, miscMessage, numericConstants, screens } from "../../constants/Constants"
-import { flatListItemStyles, SDGenericStyles, colors } from "../../styles/Styles";
+import { fieldControllerName, height, miscMessage, numericConstants, screens, width } from "../../constants/Constants"
+import { flatListItemStyles, SDGenericStyles } from "../../styles/Styles";
 
 export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isSameUser, navigation }) => {
 
     const allowPrivate = hasPrivateAccess && item.postType == fieldControllerName.POST_TYPE_PRIVATE;
-
     return (
         <View key={index} style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
             <TouchableOpacity activeOpacity={.7} onPress={() => navigation.navigate(screens.VIEW_USER_POSTS,
                 { userId: item.user.id, postId: item.id })}>
-                <View key={index} style={flatListItemStyles.userProfileCardSurface}>
+                <View key={index} style={[{
+                    height: height / numericConstants.FOUR, width: width / numericConstants.THREE
+                }, flatListItemStyles.userProfileCardSurface]}>
                     {
                         (allowPrivate || item.postType == fieldControllerName.POST_TYPE_PUBLIC) &&
                         (
@@ -22,7 +22,10 @@ export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isS
                                 style={flatListItemStyles.imageBackGround}>
                                 <View style={flatListItemStyles.textsView}>
                                     <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
-                                        <Text style={flatListItemStyles.textCategoryTitle}>{item.postTitle}</Text>
+                                        <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRobotoRegular,
+                                        SDGenericStyles.colorWhite]}>
+                                            {item.postTitle}
+                                        </Text>
                                     </Shimmer>
                                 </View>
                             </FastImage>

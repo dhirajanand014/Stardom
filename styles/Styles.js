@@ -1196,8 +1196,6 @@ export const flatListItemStyles = StyleSheet.create({
         borderRadius: 8,
     },
     userProfileCardSurface: {
-        height: 200,
-        width: 130,
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',

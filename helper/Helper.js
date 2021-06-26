@@ -595,12 +595,12 @@ const retrievePostData = async (categoryIdFromNotification) => {
             }
             postItem.postCategoriesIn = fetchAndDisplayNamesAndCategoryTitles(postItem);
         });
-        categoryPostsData = await filterLoggedInUsersPosts(categoryPostsData);
+        categoryPostsData = await filterLoggedInUsersPosts(categoryPostsData, true);
     }
     return categoryPostsData;
 }
 
-const filterLoggedInUsersPosts = async (allPosts) => {
+const filterLoggedInUsersPosts = async (allPosts, isForPostWallpaper) => {
     try {
         const loggedInUser = await getLoggedInUserDetails();
         if (loggedInUser && loggedInUser.details) {
@@ -615,8 +615,8 @@ const filterLoggedInUsersPosts = async (allPosts) => {
                 return post.postType == fieldControllerName.POST_TYPE_PUBLIC;
             });
         } else {
-            allPosts = allPosts.filter(post => post.postType == fieldControllerName.POST_TYPE_PUBLIC &&
-                post.postLikes >= numericConstants.ONE_HUNDRED);
+            allPosts = isForPostWallpaper && allPosts.filter(post => post.postType == fieldControllerName.POST_TYPE_PUBLIC &&
+                post.postLikes >= numericConstants.ONE_HUNDRED) || allPosts.filter(post => post.postType == fieldControllerName.POST_TYPE_PUBLIC);
         }
         return allPosts;
     } catch (error) {
@@ -1702,7 +1702,7 @@ export const fetchUserProfilePosts = async (userId, setPosts, postDetailsRef) =>
         const response = await axiosGetWithHeaders(url);
         let responseData = processResponseData(response);
         if (responseData.posts.length) {
-            postData = await filterLoggedInUsersPosts(responseData.posts) || jsonConstants.EMPTY;
+            postData = await filterLoggedInUsersPosts(responseData.posts, false) || jsonConstants.EMPTY;
             postData.map(postItem => postItem.postCategoriesIn = fetchAndDisplayNamesAndCategoryTitles(postItem))
                 .sort((datePost1, datePost2) => {
                     return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);

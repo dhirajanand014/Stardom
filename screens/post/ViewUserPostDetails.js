@@ -121,8 +121,8 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                         resetFlashMessage)}>
                     <Image style={glancePostStyles.icon_post_details} source={post_download} />
                 </TouchableOpacity>
-                <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () => await shareImage(postDetailsState.currentPost, downloadCallback,
-                    resetFlashMessage)} activeOpacity={.7}>
+                <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage)}
+                    activeOpacity={.7}>
                     <Image style={glancePostStyles.icon_post_share} source={post_share} />
                 </TouchableOpacity>
             </View>

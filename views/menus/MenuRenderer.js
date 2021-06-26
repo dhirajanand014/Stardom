@@ -12,11 +12,14 @@ export const MenuRenderer = React.memo(({ item, index, profileMenu, handleMenuCl
                     <View style={[SDGenericStyles.paddingStart10, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter]}>
                         <Image style={SDGenericStyles.menuIconStyle} source={item.icon} />
                     </View>
-                    <View style={[SDGenericStyles.paddingHorizontal20, SDGenericStyles.paddingVertical10, SDGenericStyles.alignItemsStart]}>
-                        <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft16]}>
-                            {item.label.toUpperCase()}
-                        </Text>
-                    </View>
+                    {
+                        item.label &&
+                        <View style={[SDGenericStyles.paddingHorizontal20, SDGenericStyles.paddingVertical10, SDGenericStyles.alignItemsStart]}>
+                            <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft16]}>
+                                {item.label.toUpperCase()}
+                            </Text>
+                        </View>
+                    }
                     <View style={[userAuthStyles.menuRightCountView, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter]}>
                         <Image style={SDGenericStyles.menuIconStyle} source={item.actionIcon} />
                     </View>
