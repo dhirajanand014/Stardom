@@ -22,7 +22,7 @@ export const SDUserMenus = (drawerProps) => {
     const navigation = useNavigation();
     const isFocused = useIsFocused();
 
-    const { loggedInUser, setLoggedInUser, setLoaderCallback } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, setLoaderCallback, currentPostIndexForProfileRef } = useContext(CategoryContext);
 
     const [profileMenu, setProfileMenu] = useState({
         userMenus: jsonConstants.EMPTY,
@@ -77,6 +77,7 @@ export const SDUserMenus = (drawerProps) => {
             case actionButtonTextConstants.LOGOUT:
                 await logoutUser(loggedInUser.loginDetails.token, loggedInUser, setLoggedInUser);
                 navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
+                currentPostIndexForProfileRef.current = numericConstants.ZERO;
                 break;
             case screens.POSTS:
                 navigation.navigate(screens.POSTS);

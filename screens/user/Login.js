@@ -13,19 +13,24 @@ import {
     screens, alertTextMessages, errorMessages, modalTextConstants
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
-import { focusOnInputIfFormInvalid, handleUserLogin, redirectUserToGlance, showSnackBar } from '../../helper/Helper';
+import {
+    focusOnInputIfFormInvalid, handleForgotPassword, handleUserLogin,
+    redirectUserToGlance, showSnackBar
+} from '../../helper/Helper';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { CategoryContext } from '../../App';
 export const Login = () => {
 
-    const { handleSubmit, control, formState } = useForm();
+    const { handleSubmit, control, formState, trigger, watch, setError, clearErrors } = useForm();
 
-    const { loggedInUser, setLoggedInUser, loader, setLoaderCallback } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, loader, setLoaderCallback, signUpDetails, setSignUpDetails } = useContext(CategoryContext);
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
 
     const route = useRoute();
     const intermediateLogin = route.params?.intermediateLogin || false;
+
+    const watchMobileNumber = watch(fieldControllerName.PHONE_NUMBER);
 
     const navigation = useNavigation();
 
@@ -69,14 +74,23 @@ export const Login = () => {
                 <AuthHeaderText titleTextHeader={modalTextConstants.LOGIN_TITLE_HEADER} titleText={modalTextConstants.LOGIN_TITLE_TEXT} paddingTopNeeded />
                 <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
                     defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
-                    keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} icon={<PhoneIcon stroke={colors.SDOM_PLACEHOLDER} />}
+                    keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} icon={<PhoneIcon stroke={formState.errors[fieldControllerName.PHONE_NUMBER]?.message &&
+                        colors.RED || colors.SDOM_PLACEHOLDER} />}
                     textContentType={keyBoardTypeConst.TELPHONETYPE} formState={formState} autofocus={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular,
                     SDGenericStyles.textColorWhite]} onSubmitEditing={() => focusOnInputIfFormInvalid(formState, secretRef)} />
 
                 <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule} setIsSecureTextEntry={setIsSecureTextEntry}
                     defaultValue={stringConstants.EMPTY} minLength={numericConstants.SIX} placeHolderText={placeHolderText.SECRET} refCallback={refCallback} isPasswordInput={true}
-                    keyboardType={keyBoardTypeConst.DEFAULT} isSecureTextEntry={isSecureTextEntry} icon={<LoginSecretIcon stroke={colors.SDOM_PLACEHOLDER} />}
-                    textContentType={keyBoardTypeConst.PASSWORD} formState={formState} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]} />
+                    keyboardType={keyBoardTypeConst.DEFAULT} isSecureTextEntry={isSecureTextEntry} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
+                        colors.RED || colors.SDOM_PLACEHOLDER} />} textContentType={keyBoardTypeConst.PASSWORD} formState={formState}
+                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]} />
+
+                <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.justifyContentCenter, SDGenericStyles.mtMinus10, SDGenericStyles.mb15]}
+                    onPress={async () => await handleForgotPassword(watchMobileNumber, navigation, trigger, setError, clearErrors, signUpDetails, setSignUpDetails)}>
+                    <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textColorPink]}>
+                        {miscMessage.FORGOT_PASSWORD}
+                    </Text>
+                </TouchableOpacity>
 
                 <View activeOpacity={.7} style={userAuthStyles.signInCreateAccount}>
                     <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>

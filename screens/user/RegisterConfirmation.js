@@ -1,5 +1,5 @@
 
-import React, { useCallback, useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { View, Text, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
@@ -7,7 +7,7 @@ import {
     fieldControllerName, formRequiredRules,
     stringConstants, numericConstants, keyBoardTypeConst,
     placeHolderText, actionButtonTextConstants, screens,
-    miscMessage, alertTextMessages, modalTextConstants
+    miscMessage, alertTextMessages, modalTextConstants, jsonConstants
 } from '../../constants/Constants';
 import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
@@ -17,20 +17,24 @@ import {
     focusOnInputIfFormInvalid, handleUserRegistration,
     showSnackBar, saveRegistrationStatus,
     validateUserAction,
-    processSaveRegistrationStatus
+    processSaveRegistrationStatus,
+    fetchUserIdByPhoneNumber
 } from '../../helper/Helper';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { CategoryContext } from '../../App';
+import { useRoute } from '@react-navigation/native';
 
 export const RegistrationConfirmation = () => {
 
-    const { control, formState, setError, handleSubmit, watch, clearErrors } = useForm();
+    const { control, formState, setError, handleSubmit, watch, setValue, clearErrors } = useForm();
     const { signUpDetails, setSignUpDetails, loader, setLoaderCallback } = useContext(CategoryContext);
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
 
     let confirmSecretRef = useRef(null);
     let isUserIdAvailable = useRef(null);
 
+    const route = useRoute();
+    const isFrom = route.params?.isFrom;
     const phoneNumber = signUpDetails.phoneNumber || stringConstants.EMPTY;
     const userIdValue = watch(fieldControllerName.USER_ID);
 
@@ -68,8 +72,8 @@ export const RegistrationConfirmation = () => {
             await saveRegistrationStatus(phoneNumber, miscMessage.VERIFIED);
             navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.REGISTRATION_DETAILS }] });
         } else {
-            showSnackBar(alertTextMessages.SUCCESSFULLY_REGISTERED, true);
-            navigation.reset({ index: numericConstants.ZERO, routes: [{ name: routeConsts.HOME }] });
+            showSnackBar(alertTextMessages.SUCCESSFULLY_UPDATED_PASSWORD, true);
+            navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.LOGIN }] });
         }
         setLoaderCallback(false);
     }
@@ -81,9 +85,12 @@ export const RegistrationConfirmation = () => {
             setLoaderCallback(true);
             const responseData = await validateUserAction(fieldControllerName.USER_ID, data.userId);
             if (responseData.availability) {
-                isUserIdAvailable.current = true;
-                clearErrors(fieldControllerName.USER_ID);
-                const registrationResponse = await handleUserRegistration(phoneNumber, data, miscMessage.CREATE);
+                if (isFrom != miscMessage.FORGOT_PASSWORD) {
+                    isUserIdAvailable.current = true;
+                    clearErrors(fieldControllerName.USER_ID);
+                }
+                const registrationResponse = await handleUserRegistration(phoneNumber, data,
+                    isFrom == miscMessage.FORGOT_PASSWORD && miscMessage.FORGOT_PASSWORD || miscMessage.CREATE);
                 if (registrationResponse) {
                     await processSaveRegistrationStatus(isUserIdAvailable, registrationResponse, phoneNumber, navigateUser, data);
                 }
@@ -95,6 +102,16 @@ export const RegistrationConfirmation = () => {
         };
     }
 
+    useEffect(() => {
+        if (isFrom == miscMessage.FORGOT_PASSWORD) {
+            (async () => {
+                const userId = await fetchUserIdByPhoneNumber(phoneNumber);
+                setValue(fieldControllerName.USER_ID, userId.split(placeHolderText.AMPERSAND)[numericConstants.ONE]);
+            }
+            )();
+        }
+    }, jsonConstants.EMPTY);
+
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}
@@ -105,7 +122,8 @@ export const RegistrationConfirmation = () => {
                         defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.USER_ID} autofocus={true} icon={<RegisterUserIcon width={numericConstants.EIGHTEEN}
                             height={numericConstants.EIGHTEEN} stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || isUserIdAvailable?.current && colors.LIGHT_GREEN ||
                                 colors.SDOM_PLACEHOLDER} />} userIdValue={userIdValue} formState={formState} keyboardType={keyBoardTypeConst.DEFAULT} validateUserId={validateUserId}
-                        isUserIdAvailable={isUserIdAvailable} isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]} />
+                        isUserIdAvailable={isUserIdAvailable} isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
+                        editable={isFrom && isFrom != miscMessage.FORGOT_PASSWORD} caretHidden={isFrom && isFrom == miscMessage.FORGOT_PASSWORD} />
 
                     <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule} setIsSecureTextEntry={setIsSecureTextEntry}
                         defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.PASSWORD} minLength={numericConstants.SIX}

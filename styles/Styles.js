@@ -94,6 +94,9 @@ export const SDGenericStyles = StyleSheet.create({
     mt5: {
         marginTop: 5
     },
+    mtMinus10: {
+        marginTop: -10
+    },
     mt12: {
         marginTop: 12,
     },
@@ -393,6 +396,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     padding1: {
         padding: 1
+    },
+    marginTop1: {
+        marginTop: 1
     },
     paddingBottom3: {
         paddingBottom: 3

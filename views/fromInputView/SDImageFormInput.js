@@ -22,7 +22,7 @@ export const SDImageFormInput = props => {
                 {props.icon && props.icon}
             </View>
             {
-                props.isUserId &&
+                props.isUserId && props.editable &&
                 <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.mv5]}>
                     {
                         props.isUserIdAvailable.current &&

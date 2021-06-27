@@ -22,14 +22,15 @@ export const SDFormInput = props => {
                         {
                             props.isUserIdEntry &&
                             <Text style={[SDGenericStyles.ft16, SDGenericStyles.paddingLeft5, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.borderRightColor,
-                            SDGenericStyles.placeHolderTextColor, SDGenericStyles.paddingBottom3, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter]}>
+                            SDGenericStyles.placeHolderTextColor, SDGenericStyles.paddingBottom3, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter,
+                            SDGenericStyles.marginTop1]}>
                                 {placeHolderText.AMPERSAND}
                             </Text>
                         }
                         <TextInput {...inputProps} maxLength={props.maxLength} value={inputProps.value} textContentType={props.textContentType}
                             autoCapitalize={miscMessage.NONE} placeholder={props.placeHolderText} secureTextEntry={props.isSecureTextEntry}
-                            keyboardType={props.keyboardType} placeholderTextColor={colors.SDOM_PLACEHOLDER} autoFocus={props.autofocus}
-                            style={[userAuthStyles.textInputStyle, props.extraStyles]} onSubmitEditing={props.onSubmitEditing}
+                            keyboardType={props.keyboardType} placeholderTextColor={colors.SDOM_PLACEHOLDER} autoFocus={props.autofocus} caretHidden={props.caretHidden}
+                            style={[userAuthStyles.textInputStyle, props.extraStyles]} onSubmitEditing={props.onSubmitEditing} editable={props.editable}
                             onChangeText={value => onChangeByValueType(inputProps, value, props)} ref={props.refCallback} multiline={props.isMultiline}
                             numberOfLines={props.numberOfLines} selectionColor={colors.SDOM_YELLOW} onBlur={() => props.isUserId && props.validateUserId()} />
                     </React.Fragment >

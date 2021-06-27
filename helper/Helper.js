@@ -927,7 +927,7 @@ export const handleUserSignUpOtp = async (phoneNumber, isFrom, navigation, isRes
 export const processSaveRegistrationStatus = async (isUserIdAvailable, registrationResponse, phoneNumber, navigateUser, data) => {
     isUserIdAvailable.current = false;
     let isFromForgotPassword = false;
-    if (registrationResponse == `${miscMessage.RESET}_${miscMessage.SUCCESSFUL}`) {
+    if (registrationResponse.message && registrationResponse.message == alertTextMessages.SECRET_UPDATED_SUCCESSFULLY) {
         await resetTokens();
         isFromForgotPassword = true;
     } else {
@@ -996,6 +996,12 @@ export const handleUserRegistration = async (phoneNumber, data, isFrom) => {
                     [requestConstants.USER_ID]: placeHolderText.AMPERSAND + data.userId
                 }
                 break;
+            case miscMessage.FORGOT_PASSWORD:
+                requestData = {
+                    [requestConstants.PHONE_NUMBER]: phoneNumber,
+                    [requestConstants.SECRET]: data.secret
+                }
+                break;
             case miscMessage.UPDATE:
                 requestData = {
                     [requestConstants.PHONE_NUMBER]: phoneNumber,
@@ -1006,11 +1012,12 @@ export const handleUserRegistration = async (phoneNumber, data, isFrom) => {
                     [requestConstants.PROFILE_ID]: data.profile
                 }
                 break
-            default:
+            default: console.warn(isFrom);
                 break;
         }
         const requestJSON = JSON.stringify(requestData);
-        const responseData = await axiosPostWithHeaders(urlConstants.registerUser, requestJSON);
+        const url = isFrom == miscMessage.FORGOT_PASSWORD && urlConstants.resetSecret || urlConstants.registerUser;
+        const responseData = await axiosPostWithHeaders(url, requestJSON);
         return processResponseData(responseData);
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
@@ -1622,7 +1629,6 @@ export const logoutUser = async (token, loggedInUser, setLoggedInUser) => {
 export const validateUserAction = async (action, value) => {
     try {
         let actionValue;
-
         if (action == fieldControllerName.USER_ID) {
             actionValue = requestConstants.USER_ID;
         } else if (action == fieldControllerName.PHONE_NUMBER) {
@@ -1743,5 +1749,40 @@ export const fetchGalleryImages = async (cameraState, setCameraState) => {
         });
     } catch (error) {
         console.error(errorMessages.COULD_NOT_FETCH_PHOTOS_FROM_GALLERY, error);
+    }
+}
+
+export const fetchUserIdByPhoneNumber = async (phoneNumber) => {
+    try {
+        const url = urlConstants.getUserIdByPhoneNumber + stringConstants.SLASH + phoneNumber;
+        const response = await axiosGetWithHeaders(url);
+        const responseData = processResponseData(response);
+        return responseData && responseData.user_id
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_USER_ID_BY_PHONE_NUMBER, error);
+    }
+}
+
+export const handleForgotPassword = async (watchMobileNumber, navigation, trigger, setError, clearErrors, signUpDetails,
+    setSignUpDetails) => {
+    try {
+        if (watchMobileNumber && watchMobileNumber.length >= numericConstants.TEN) {
+            const response = await validateUserAction(fieldControllerName.PHONE_NUMBER, watchMobileNumber);
+            if (!response) {
+                setError(fieldControllerName.PHONE_NUMBER, {
+                    type: "mismatch",
+                    message: "Phone Number does not exist",
+                });
+            } else {
+                clearErrors(fieldControllerName.PHONE_NUMBER);
+                const phone = { phoneNumber: watchMobileNumber };
+                await handleUserSignUpOtp(phone, miscMessage.FORGOT_PASSWORD, navigation, false);
+                setSignUpDetails({ ...signUpDetails, phoneNumber: watchMobileNumber });
+            }
+        } else {
+            trigger(fieldControllerName.PHONE_NUMBER);
+        }
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_REQUEST_FORGOT_PASSWORD, error);
     }
 }
