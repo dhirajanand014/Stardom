@@ -591,6 +591,7 @@ export const errorMessages = {
     USER_DENIED_NOTIFICATION: `Permission denied by user`,
     FAILED_TO_UPDATE_REGISTRATION_DETAILS: `Failed to update Registration Details`,
     CANNOT_REGISITER_USER: `Could not register user`,
+    OTP_MESSAGE_READ_ERROR: `RnotpVerification - read message error`,
     COULD_NOT_REQUEST_FORGOT_PASSWORD: `Could not request for forgot password`,
     COULD_NOT_FETCH_USER_ID_BY_PHONE_NUMBER: `Could not fetch user id by phone number`,
     PRIVATE_IMAGE_NOT_APPEAR_ON_PUBLIC_FEED: `Private wallpaper will not appear on public posts`,

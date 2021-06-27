@@ -889,7 +889,7 @@ const listenOtp = (message, setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOt
             }
         }
     } catch (error) {
-        console.error(error.message, 'RNOtpVerify.getOtp - read message, OtpVerification');
+        console.error(error.message, errorMessages.OTP_MESSAGE_READ_ERROR);
     }
     return false;
 }
