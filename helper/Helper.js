@@ -953,7 +953,6 @@ export const handleUserLogin = async (data, loggedInUser, setLoggedInUser) => {
         const loginJson = JSON.stringify(loginRequest);
         const response = await axiosPostWithHeaders(urlConstants.login, loginJson);
         const responseData = processResponseData(response);
-        debugger
         if (responseData && responseData.user.block == numericConstants.ZERO) {
             const userName = `${data.phoneNumber}${stringConstants.SEMI_COLON}${responseData.access_token}`;
             const userDetailsJSON = JSON.stringify(responseData.user);

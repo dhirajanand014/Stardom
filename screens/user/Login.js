@@ -43,7 +43,6 @@ export const Login = () => {
     const onSubmit = async data => {
         setLoaderCallback(true);
         const responseData = await handleUserLogin(data, loggedInUser, setLoggedInUser, messaging);
-        debugger
         if (responseData && responseData.user) {
             if (responseData.user.block == numericConstants.ONE) {
                 showSnackBar(errorMessages.BLOCKED_BY_ADMIN, false, true);
