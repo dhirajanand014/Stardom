@@ -43,9 +43,12 @@ export const Login = () => {
     const onSubmit = async data => {
         setLoaderCallback(true);
         const responseData = await handleUserLogin(data, loggedInUser, setLoggedInUser, messaging);
+        debugger
         if (responseData && responseData.user) {
-            showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
-            if (responseData.user.status == miscMessage.REGISTERED) {
+            if (responseData.user.block == numericConstants.ONE) {
+                showSnackBar(errorMessages.BLOCKED_BY_ADMIN, false, true);
+            } else if (responseData.user.status == miscMessage.REGISTERED) {
+                showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
                 navigation.navigate(screens.REGISTRATION_DETAILS, {
                     isFrom: screens.LOGIN,
                     phoneNumber: data.phoneNumber,
@@ -53,6 +56,7 @@ export const Login = () => {
                         || intermediateLogin
                 });
             } else if (responseData.user.status == miscMessage.VERIFIED) {
+                showSnackBar(alertTextMessages.SUCCESSFULLY_LOGGED_IN, true);
                 if (intermediateLogin) {
                     navigation.goBack();
                 } else {
@@ -64,6 +68,7 @@ export const Login = () => {
         } else {
             showSnackBar(errorMessages.COULD_NOT_LOGIN_USER, false);
         }
+
         setLoaderCallback(false);
     }
 

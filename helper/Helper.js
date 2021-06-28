@@ -908,7 +908,6 @@ export const handleUserSignUpOtp = async (phoneNumber, isFrom, navigation, isRes
             hash_value: hashValue[numericConstants.ZERO]
         }
 
-        const otpRequestDataJSON = JSON.stringify(otpRequestData);
         //const response = await axiosPostWithHeaders(urlConstants.triggerSmsOtp, otpRequestDataJSON)
         // const responseData = processResponseData(response);
 
@@ -954,7 +953,8 @@ export const handleUserLogin = async (data, loggedInUser, setLoggedInUser) => {
         const loginJson = JSON.stringify(loginRequest);
         const response = await axiosPostWithHeaders(urlConstants.login, loginJson);
         const responseData = processResponseData(response);
-        if (responseData) {
+        debugger
+        if (responseData && responseData.user.block == numericConstants.ZERO) {
             const userName = `${data.phoneNumber}${stringConstants.SEMI_COLON}${responseData.access_token}`;
             const userDetailsJSON = JSON.stringify(responseData.user);
 
@@ -967,8 +967,8 @@ export const handleUserLogin = async (data, loggedInUser, setLoggedInUser) => {
 
             await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER, userName,
                 userDetailsJSON);
-            return responseData;
         }
+        return responseData;
     } catch (error) {
         console.error(errorMessages.COULD_NOT_LOGIN_USER, error);
     }
@@ -1088,7 +1088,7 @@ export const showSnackBar = (message, success, isLong, actionCallback) => {
         description: message,
         icon: success && miscMessage.SUCCESS || miscMessage.DANGER,
         type: success && miscMessage.SUCCESS || miscMessage.DANGER,
-        duration: isLong && numericConstants.THOUSAND_EIGHT_FIFTY || numericConstants.THOUSAND_EIGHT_FIFTY,
+        duration: isLong && numericConstants.FIVE_THOUSAND || numericConstants.THOUSAND_EIGHT_FIFTY,
         onPress: () => actionCallback()
     })
 }

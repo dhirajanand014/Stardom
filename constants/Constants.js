@@ -582,6 +582,7 @@ export const errorMessages = {
     SELECT_OTHER_CATEGORIES: `No Posts Available! Either the categories selected have no posts or no posts have reached atleast 100 likes! Please select other categories by clicking below.`,
     NO_USER_PROFILE_FOR_POST: `No User Profile is available for the post!`,
     CONTACT_US_1: `Please contact us at `,
+    BLOCKED_BY_ADMIN: `User is blocked access to stardom by admin. Please contact at info@stardom.app`,
     CONTACT_US_MAIL: `error@stardom.app`,
     COULD_NOT_SET_COLORS: `Could not set colors`,
     COULD_NOT_FETCH_PHOTOS_FROM_GALLERY: `Could not fetch photos from gallery`,
