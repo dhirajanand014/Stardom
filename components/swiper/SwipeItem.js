@@ -11,7 +11,8 @@ import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackCompo
 
 export const SwipeItem = (props) => {
 
-    const { width, height, item, index, posts, postIdFromNotification, viewPagerRef, postDetailsRef, optionsState, setOptionsState } = props;
+    const { width, height, item, index, posts, postIdFromNotification, viewPagerRef,
+        postDetailsRef, optionsState, setOptionsState } = props;
 
     const imageScale = useSharedValue(numericConstants.ONE);
     const focalX = useSharedValue(numericConstants.ZERO);
