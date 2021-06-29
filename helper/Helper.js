@@ -7,13 +7,13 @@ import {
     stringConstants, alertTextMessages, userSearchColors,
     responseStringData, PRIVATE_FOLLOW_UNFOLLOW,
     actionButtonTextConstants, colorConstants, getDefaultProfilePostsCounts,
-    miscMessage, width, height, numericConstants,
+    miscMessage, width, height, numericConstants, placeHolderText,
     screens, headerStrings, fieldControllerName, isAndroid,
     isIOS, OTP_INPUTS, errorMessages, requestConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants, placeHolderText
+    jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants
 } from '../constants/Constants';
 import {
-    Alert, InteractionManager, NativeModules,
+    InteractionManager, NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
 import * as Keychain from 'react-native-keychain';
@@ -159,9 +159,9 @@ export const getPostCounts = async () => {
     }
 }
 
-export const setCurrentImageAsWallPaper = async (postUrl, postTitle) => {
+export const setCurrentImageAsWallPaper = async (postUrl, postTitle, option) => {
     try {
-        NativeModules.StartomApi.setPostAsWallPaper(postTitle, postUrl);
+        NativeModules.StartomApi.setPostAsWallPaper(postTitle, postUrl, option);
     } catch (error) {
         console.error(errorMessages.COULD_NOT_SET_WALLPAPER, error);
     }
@@ -220,26 +220,11 @@ export const getCategoryButtonType = async () => {
     }
 }
 
-export const postWallPaperAlert = async (paramKey, postDetailsState, setPostDetailsState) => {
+export const setWallpaperByOption = async (paramKey, option, postDetailsState, setPostDetailsState) => {
     try {
-        return (
-            Alert.alert(
-                alertTextMessages.CONFIRM_TITLE,
-                alertTextMessages.POST_WALLPAPER_TEXT,
-                [
-                    {
-                        text: permissionsButtons.CANCEL, style: actionButtonTextConstants.ALERT_CANCEL_STYLE
-                    },
-                    {
-                        text: permissionsButtons.OK, onPress: async () => {
-                            await setCurrentImageAsWallPaper(postDetailsState.currentPost.postImage, postDetailsState.currentPost.postTitle);
-                            await increaseAndSetPostCounts(paramKey, postDetailsState, setPostDetailsState, postCountTypes.POST_WALLPAPERS);
-                            showSnackBar(alertTextMessages.WALLPAPER_SET_SUCCESS_TEXT, true, true);
-                        }
-                    }
-                ],
-                { cancelable: false }
-            ));
+        await setCurrentImageAsWallPaper(postDetailsState.currentPost.postImage, postDetailsState.currentPost.postTitle, option);
+        await increaseAndSetPostCounts(paramKey, postDetailsState, setPostDetailsState, postCountTypes.POST_WALLPAPERS);
+        showSnackBar(alertTextMessages.WALLPAPER_SET_SUCCESS_TEXT, true, true);
     } catch (error) {
         console.error(error);
     }

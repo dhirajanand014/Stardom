@@ -4,16 +4,17 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
     stringConstants, postCountTypes, numericConstants, miscMessage, jsonConstants,
-    postitionStringConstants, colorConstants, permissionsButtons, fieldControllerName
+    postitionStringConstants, colorConstants, fieldControllerName
 } from '../../constants/Constants';
 import {
-    postWallPaperAlert, increaseAndSetPostCounts, setPostDetailsStateForModal,
+    increaseAndSetPostCounts, setPostDetailsStateForModal,
     downloadImageFromURL, shareImage, showProgressSnackbar
 } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import ActionButton from '@logvinme/react-native-action-button';
 import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal';
 import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
+import { SDWallpaperModal } from '../../views/imagePost/SDWallpaperModal';
 import { CategoryContext } from '../../App';
 
 const post_like = require(`../../assets/post_likes_icon.png`);
@@ -36,6 +37,7 @@ export const PostDetails = forwardRef((props, ref) => {
         animationVisible: false,
         switchEnabled: true,
         newPostViewed: false,
+        wallpaperModal: false,
         descriptionModal: false,
         reportAbuseModal: false,
         selectedReportAbuse: {},
@@ -66,7 +68,7 @@ export const PostDetails = forwardRef((props, ref) => {
             },
 
             setWallPaper() {
-                setWallPaperCallback(postDetailsState, setPostDetailsState);
+                setWallPaperModal(postDetailsState, setPostDetailsState);
             },
 
             setPostAnimationVisible(isVisible) {
@@ -74,9 +76,9 @@ export const PostDetails = forwardRef((props, ref) => {
             }
         }));
 
-    const setWallPaperCallback = useCallback(async (postDetailsState, setPostDetailsState) => {
-        await postWallPaperAlert(postCountTypes.POST_WALLPAPERS_KEY, postDetailsState, setPostDetailsState);
-    })
+    const setWallPaperModal = useCallback((postDetailsState, setPostDetailsState) => {
+        setPostDetailsState({ ...postDetailsState, wallpaperModal: true });
+    });
 
     const postTypeSpringStyle = useAnimatedStyle(() => {
         return {
@@ -189,8 +191,8 @@ export const PostDetails = forwardRef((props, ref) => {
                     <Text style={[SDGenericStyles.ft10, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
                     SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{postDetailsState.currentPost.postLikes}</Text>
                 </ActionButton.Item>
-                <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
-                    await setWallPaperCallback(postDetailsState, setPostDetailsState)}>
+                <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={() =>
+                    setPostDetailsState({ ...postDetailsState, wallpaperModal: true })}>
                     <View style={glancePostStyles.setWallPaperBackgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
                     </View>
@@ -224,6 +226,8 @@ export const PostDetails = forwardRef((props, ref) => {
             <PostDescriptionModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
                 setPostDetailsState={setPostDetailsState} />
             <PostReportAbuseModal optionsState={optionsState} postDetailsState={postDetailsState}
+                setPostDetailsState={setPostDetailsState} />
+            <SDWallpaperModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
                 setPostDetailsState={setPostDetailsState} />
         </React.Fragment>
     )

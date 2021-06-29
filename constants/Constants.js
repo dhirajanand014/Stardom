@@ -186,6 +186,9 @@ export const actionButtonTextConstants = {
     SKIP_BUTTON: `skipButton`,
     SAVE_BUTTON: `saveButton`,
     SKIP_BUTTON_TEXT: `SKIP >>`,
+    WALLPAPER_HOME_SCREEN: `Home Screen`,
+    WALLPAPER_LOCK_SCREEN: `Lock Screen`,
+    WALLPAPER_BOTH_SCREENS: `Both`,
     ADD_BIO: `Add bio`,
     VERIFY_USER: `Verify User`,
     FOLLOW: `Follow`,
@@ -373,7 +376,7 @@ export const postCountTypes = {
     POST_WALLPAPERS_KEY: `postWallpapers`,
     POST_LIKES: `likes`,
     POST_DOWNLOADS: `downloads`,
-    POST_WALLPAPERS: `wallpapers`
+    POST_WALLPAPERS: `wallpapers`,
 }
 
 export const permissionsButtons = {
@@ -731,6 +734,7 @@ export const miscMessage = {
     POST_DESCRIPTION_DATE_FORMAT: `h[.]mm A DD MMMM YYYY`,
     POST_DESCRIPTION_MODAL_NAME: `descriptionModal`,
     POST_REPORT_ABUSE_MODAL_NAME: `reportAbuseModal`,
+    POST_WALLPAPER_MODAL: `wallpaperModal`,
     USER_ID: `userid`,
     RIGHT: `right`,
     TRANSPARENT: `transparent`,
@@ -838,6 +842,9 @@ export const requestConstants = {
     POST_DISLIKED: `postDisliked`,
     REACH_TYPE: `reachType`,
     REPORT_ID: `report_id`,
+    WALLPAPER_HOME_SCREEN: `homeScreen`,
+    WALLPAPER_LOCK_SCREEN: `lockScreen`,
+    WALLPAPER_BOTH_SCREENS: `Both`,
     POST_REPORT_ABUSE_ID: `postReportAbuseId`,
     POST_REPORT_ABUSE_SUBMITTED: `reportAbuseSubmitted`
 };

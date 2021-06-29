@@ -1,22 +1,11 @@
 package com.stardom.api;
 
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.WallpaperManager;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -24,18 +13,14 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.stardom.constants.Constants;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.FileProvider;
 
 public class StardomApiModule extends ReactContextBaseJavaModule {
     private static ReactApplicationContext reactContext;
@@ -57,12 +42,13 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
      * the Ok button of the wallpaper setting modal panel.
      *
      * @param inCategoryTitle
-     * @param inTempFilePath
+     * @param inPostImage
+     * @param inOption
      */
     @ReactMethod
-    public void setPostAsWallPaper(String inCategoryTitle, String inPostImage) {
+    public void setPostAsWallPaper(String inCategoryTitle, String inPostImage, String inOption) {
         try {
-            new AsyncSetImage(reactContext).execute(inCategoryTitle, inPostImage);
+            new AsyncSetImage(reactContext).execute(inCategoryTitle, inPostImage, inOption);
         } catch (Exception exception) {
             Toast.makeText(reactContext, "Cannot set image " + inCategoryTitle +
                     " as wallpaper or the lockScreen", Toast.LENGTH_SHORT).show();
@@ -102,20 +88,40 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
             return BitmapFactory.decodeStream(input);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected String doInBackground(String... inParameters) {
             try {
                 mPostTitle = inParameters[Constants.INT_ZERO];
+                String option = inParameters[Constants.INT_TWO];
                 Bitmap bitmapImage = getBitmapFromURL(inParameters[Constants.INT_ONE]);
                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(mContext);
                 wallpaperManager.setBitmap(bitmapImage, null, true,
-                        WallpaperManager.FLAG_LOCK | WallpaperManager.FLAG_SYSTEM);
+                        getWallPaperSetFlag(option));
                 return Constants.POST_WALLPAPER_SET;
             } catch (IOException exception) {
                 Toast.makeText(reactContext, "Cannot set image " + mPostTitle +
                         " as wallpaper or the lockScreen", Toast.LENGTH_SHORT).show();
             }
             return Constants.EMPTY;
+        }
+
+        /**
+         * Sets the wallpaper flag option based on the option selected from the UI.
+         *
+         * @param option
+         * @return
+         */
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        private int getWallPaperSetFlag(String option) {
+            switch (option) {
+                case Constants.WALLPAPER_HOME_SCREEN:
+                    return WallpaperManager.FLAG_SYSTEM;
+                case Constants.WALLPAPER_LOCK_SCREEN:
+                    return WallpaperManager.FLAG_LOCK;
+                default:
+                    return WallpaperManager.FLAG_LOCK | WallpaperManager.FLAG_SYSTEM;
+            }
         }
 
         @Override

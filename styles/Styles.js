@@ -355,6 +355,12 @@ export const SDGenericStyles = StyleSheet.create({
     paddingTop100: {
         paddingTop: 100
     },
+    marginHorizontalNeg2: {
+        marginHorizontal: -2
+    },
+    paddingHorizontal2: {
+        paddingHorizontal: 2
+    },
     paddingHorizontal5: {
         paddingHorizontal: 5
     },
@@ -824,6 +830,21 @@ export const glancePostStyles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
+    wallpaperModalView: {
+        marginRight: 20,
+        backgroundColor: "white",
+        maxHeight: 180,
+        width: 260,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
     dropDownStyle: {
         backgroundColor: colorConstants.GREY,
         justifyContent: 'center',
@@ -909,6 +930,14 @@ export const glancePostStyles = StyleSheet.create({
         height: 22,
         width: 22
     },
+    icon_wallpaper_modal_close: {
+        height: 20,
+        width: 20
+    },
+    icon_wallpaper_modal: {
+        height: 25,
+        width: 25
+    },
     glanceTopIcons: {
         paddingTop: 4,
         paddingLeft: 2,
@@ -918,6 +947,11 @@ export const glancePostStyles = StyleSheet.create({
     postDescriptionModalButton: {
         top: 20,
         right: 40,
+        elevation: 3,
+    },
+    postWallpaperModalButton: {
+        top: 10,
+        right: 30,
         elevation: 3,
     },
     reportAbuseSubmitButton: {
