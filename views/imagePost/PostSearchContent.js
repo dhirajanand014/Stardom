@@ -72,29 +72,6 @@ const RenderPostSearch = React.memo(({ searchValues, translateSearchContent, scr
                         }} contentContainerStyle={[SDGenericStyles.padding20]} ItemSeparatorComponent={() => <View style={glancePostStyles.postSearchDivider} />} ListEmptyComponent={loadingComponent} scrollEventThrottle={numericConstants.SIXTEEN} />
                         || <ActivityIndicator style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter,
                         SDGenericStyles.paddingTop100]} color={colorConstants.BLACK} size={miscMessage.SMALL} hidesWhenStopped />}
-                    {/* <ScrollView keyboardShouldPersistTaps={miscMessage.ALWAYS} bounces={true} decelerationRate="fast" scrollEnabled={true}
-                alwaysBounceVertical={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-                {
-                    searchValues !== undefined && searchValues.searchForPostId == postItem.id && posts && posts
-                        .filter((postFilter) => postFilter.postTitle.toLowerCase().includes(searchValues.searchText.toLowerCase()))
-                        .map((post) => {
-                            const postIndex = posts.indexOf(post);
-                            return (
-                                <TouchableOpacity key={`0_${post.id}`} style={[glancePostStyles.search_content_post_selection]}
-                                    onPress={() => {
-                                        viewPagerRef.current.scrollBy(postIndex - postDetailsRef?.current?.postIndex);
-                                        togglePostSearchBox(searchValues, setSearchValues, postItem, inputBoxTranslateX,
-                                            contentTranslateY, contentOpacity, screenWidth, screenHeight, false,
-                                            inputTextRef, viewPagerRef);
-                                        postDetailsRef?.current?.setPostAnimationVisible(false);
-                                    }}>
-                                    <Text style={glancePostStyles.search_content_post_title}>{post.postTitle}</Text>
-                                </TouchableOpacity>
-                            )
-                        }) || <ActivityIndicator style={glancePostStyles.search_content_activity_indicator}
-                            color={colorConstants.BLACK} size={miscMessage.SMALL} />
-                }
-            </ScrollView> */}
                 </View>
             </View>
         </Animated.View>;

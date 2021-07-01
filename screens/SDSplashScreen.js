@@ -1,18 +1,14 @@
-import React, { useContext, useEffect } from 'react'
-import { ActivityIndicator, SafeAreaView, Text, Image, ImageBackground } from 'react-native';
+import React, { useEffect } from 'react'
+import { ActivityIndicator, SafeAreaView, Text, ImageBackground } from 'react-native';
 import { colors, SDGenericStyles } from '../styles/Styles';
-import { CategoryContext } from '../App';
 import { getCategoryButtonType, getSelectedCategoryIdsFromStorage } from '../helper/Helper';
 import { height, jsonConstants, miscMessage, numericConstants, screens, width } from '../constants/Constants';
 import { useNavigation } from '@react-navigation/native';
-import { StardomIcon } from '../components/icons/StardomIcon';
-import FastImage from 'react-native-fast-image';
 //import messaging from '@react-native-firebase/messaging';
 
 export const SDSplashScreen = () => {
 
     const navigation = useNavigation();
-    const { signUpDetails } = useContext(CategoryContext);
 
     const navigateUser = async (savedCategoryIds, categoryButtonType) => {
         const route = savedCategoryIds && categoryButtonType && screens.GLANCE || screens.INTRO;

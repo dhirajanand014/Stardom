@@ -50,19 +50,20 @@ export const UserFollowFollowing = () => {
         responseData.users && responseData.users.filter(user => followerIds.some(followerId => followerId == user.id));
     }
 
-    useEffect(async () => {
-        setLoaderCallback(true, alertTextMessages.LOADING_USER_DETAILS);
-        const responseData = await fetchUserFollowersFollowing(listFor, loggedInUser.loginDetails.token);
-        if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS) {
-            filterPrivateAccessUsers(responseData);
-        } else if (listFor == fieldControllerName.SEARCH_USERS) {
-            setSearchList(responseData);
-        }
-        setBackgroundColorsForList(responseData);
-        setUserFollowerFollowing(responseData);
-        setLoaderCallback(false);
+    useEffect(() => {
+        (async () => {
+            setLoaderCallback(true, alertTextMessages.LOADING_USER_DETAILS);
+            const responseData = await fetchUserFollowersFollowing(listFor, loggedInUser.loginDetails.token);
+            if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS) {
+                filterPrivateAccessUsers(responseData);
+            } else if (listFor == fieldControllerName.SEARCH_USERS) {
+                setSearchList(responseData);
+            }
+            setBackgroundColorsForList(searchList, screens.USERS_TAB);
+            setUserFollowerFollowing(responseData);
+            setLoaderCallback(false);
+        })();
     }, jsonConstants.EMPTY);
-
 
     const viewFollowerFollowingProfile = useCallback((userItem) => {
         let item = { ...userItem, profile_image: userItem.profile_picture };

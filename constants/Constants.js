@@ -64,7 +64,10 @@ export const screens = {
     MENU: `Menu`,
     OTP_VERIFICATION: `OTP Verification`,
     USER_FOLLOWERS_FOLLOWING: `User Follow Following`,
-    IMAGE_PREVIEW_FILTERS: `Image Preview Filters`
+    POSTS_USERS_SEARCH: `Posts Users Search`,
+    IMAGE_PREVIEW_FILTERS: `Image Preview Filters`,
+    POSTS_TAB: `posts`,
+    USERS_TAB: `users`
 }
 
 export const headerStrings = {
@@ -446,6 +449,8 @@ export const placeHolderText = {
     SELECT_CATEGORIES: 'Select Categories',
     ADD_TITLE: `Title`,
     ADD_URL: `URL`,
+    POSTS: `Posts`,
+    USERS: `Users`,
     ADD_DESCRIPTION: `Enter Description`,
     VERIFY_USER_DETAILS: `Enter your social media contact details`,
     SELECT_GENDER: `Select a gender`,
@@ -554,6 +559,7 @@ export const alertTextMessages = {
     POST_ADDED_SUCCESSFULLY: `Added Successfully`,
     POST_UPDATED_SUCCESSFULLY: `Updated Successfully`,
     LOADING_USER_DETAILS: `Loading user details`,
+    LOADING_USERS: `Loading users`,
     CROPPING_IMAGE: `Cropping image`,
     PARSING_IMAGE: `Parsing image to crop`,
     LOADING_IMAGE: `Please wait. Loading image`,
@@ -591,6 +597,7 @@ export const errorMessages = {
     COULD_NOT_FETCH_PHOTOS_FROM_GALLERY: `Could not fetch photos from gallery`,
     CONTACT_US_2: `, if this issue persists`,
     POST_IMAGE_LOAD_ERROR: `Image failed to load!`,
+    COULD_NOT_PERFORM_ACTION: `Could not perform action`,
     CANNOT_REQUEST_PERMISSION_TO_USER: `Could not provide permission to user`,
     USER_DENIED_NOTIFICATION: `Permission denied by user`,
     FAILED_TO_UPDATE_REGISTRATION_DETAILS: `Failed to update Registration Details`,
@@ -606,6 +613,7 @@ export const errorMessages = {
     REQUEST_OTP_FAILED: `Cannot request OTP for number`,
     COULD_NOT_RESET_KEYCHAIN_VALUES: `Could not reset keychain values`,
     COULD_NOT_FETCH_ALL_POSTS: `Could not fetch all posts`,
+    COULD_NOT_FETCH_ALL_USERS: `Could not fetch all users`,
     CANNOT_FETCH_SAVE_BUTTON_TYPE: `Cannot fetch the save button type from the storage`,
     COULD_NOT_UPLOAD_POST: `Could not upload post`,
     COULD_NOT_UPDATE_POST: `Could not update post`,

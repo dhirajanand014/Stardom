@@ -27,7 +27,7 @@ export const SDFallBackComponent = (props) => {
                     }
                 </View>
                 {
-                    componentErrorConsts.ERROR_BOUNDARY == componentErrorConst || componentErrorConsts.POSTS_WITHOUT_PROFILE == componentErrorConst &&
+                    (componentErrorConsts.ERROR_BOUNDARY == componentErrorConst || componentErrorConsts.POSTS_WITHOUT_PROFILE == componentErrorConst) &&
                     <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.mt24]}>
                         <TouchableOpacity activeOpacity={.7} style={errorBoundaryStyles.resetStardomButton} onPress={() => RNRestart.Restart()}>
                             <Text style={[SDGenericStyles.ft18, SDGenericStyles.colorYellow, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRobotoMedium]}>

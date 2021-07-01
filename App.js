@@ -23,6 +23,8 @@ export default function App({ navigationRef }) {
     isLoggedIn: false
   });
 
+  const postIdFromNotification = useRef(null);
+  const viewPagerPostsRef = useRef(null);
   const currentPostIndexForProfileRef = useRef(numericConstants.ZERO);
 
   const [downloadProgressState, setDownloadProgressState] = useState({
@@ -105,7 +107,6 @@ export default function App({ navigationRef }) {
     fetchAndUpdateCategoryState(category, setCategory, categoryIdFromNotification);
   }
   const initialCategorySelection = navigationRef && navigationRef.initialCategorySelection || false;
-  const postIdFromNotification = navigationRef && navigationRef.postIdFromNotification || false;
   const categoryIdFromNotification = navigationRef && navigationRef.categoryIdFromNotification || false;
 
   return (
@@ -117,7 +118,7 @@ export default function App({ navigationRef }) {
         loggedInUser, setLoggedInUser, sdomDatastate, setSdomDatastate,
         optionsState, setOptionsState, profileDetail, setProfileDetail,
         currentPostIndexForProfileRef, loader, setLoaderCallback,
-        downloadProgressState, setDownloadProgressState,
+        downloadProgressState, setDownloadProgressState, viewPagerPostsRef
       }}>
         <TourGuideProvider androidStatusBarVisible={true}
           backdropColor={navigationRef && navigationRef.initialCategorySelection == screens.INTRO && `rgba(145, 63, 146, 0.6)`}>

@@ -6,7 +6,7 @@ import { onChangeByValueType } from '../../helper/Helper';
 
 export const SDSearchInput = props => {
     return (
-        <TextInput value={props.searchValue} textContentType={keyBoardTypeConst.NONE} placeholder={placeHolderText.SEARCH_USERS} clearButtonMode={miscMessage.ALWAYS}
+        <TextInput value={props.searchValue} textContentType={keyBoardTypeConst.NONE} placeholder={props.placeHolderText} clearButtonMode={miscMessage.ALWAYS}
             placeholderTextColor={colors.SDOM_PLACEHOLDER} keyboardType={keyBoardTypeConst.DEFAULT} ref={props.refCallback} selectionColor={colors.SDOM_YELLOW}
             style={[userAuthStyles.textInputStyle, props.extraStyles]} onChangeText={value => onChangeByValueType(stringConstants.EMPTY, value, props)} />
     )

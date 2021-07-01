@@ -502,7 +502,7 @@ export const setAnimationVisible = (postDetailsState, setPostDetailsState, isVis
 export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, viewPagerRef,
     postDetailsRef) => {
     try {
-        if (!postDetailsRef?.current?.newPostViewed && postIdFromNotification && viewPagerRef?.current) {
+        if (!postDetailsRef?.current?.newPostViewed && postIdFromNotification?.current && viewPagerRef?.current) {
             const index = posts.findIndex(post => post.id == postIdFromNotification)
             viewPagerRef.current.scrollBy(index);
             postDetailsRef?.current?.setPostIndex(index);
@@ -1594,6 +1594,16 @@ export const fetchUserFollowersFollowing = async (listFor, token) => {
     }
 }
 
+export const fetchUserForSearch = async (token) => {
+    try {
+        const response = await axiosGetWithAuthorization(urlConstants.fetchAllUsers, token);
+        return processResponseData(response);
+    } catch (error) {
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(errorMessages.COULD_NOT_FETCH_ALL_USERS, false);
+    }
+}
+
 export const logoutUser = async (token, loggedInUser, setLoggedInUser) => {
     try {
         const response = await axiosPostWithHeadersAndToken(urlConstants.logout, stringConstants.EMPTY, token);
@@ -1707,10 +1717,10 @@ export const fetchUserProfilePosts = async (userId, setPosts, postDetailsRef) =>
     setPosts(postData);
 }
 
-export const setBackgroundColorsForList = (data) => {
+export const setBackgroundColorsForList = (data, value) => {
     try {
         let counterPoint = numericConstants.ZERO;
-        data.users.map((user, index) => {
+        data[value].map((user, index) => {
             user.backgroundColor = userSearchColors[Math.abs(counterPoint - index)];
             if (Math.abs(counterPoint - (index + numericConstants.ONE)) == numericConstants.THREE)
                 counterPoint += numericConstants.THREE;

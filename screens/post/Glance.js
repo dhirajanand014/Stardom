@@ -22,8 +22,8 @@ const category_selection = require('../../assets/category_selection_icon.png');
 
 export const Glance = ({ navigation }) => {
 
-    const { postIdFromNotification, categoryIdFromNotification, sdomDatastate, setSdomDatastate,
-        optionsState, setOptionsState, loggedInUser, currentPostIndexForProfileRef } = useContext(CategoryContext);
+    const { postIdFromNotification, categoryIdFromNotification, sdomDatastate, setSdomDatastate, currentPostIndexForProfileRef,
+        optionsState, setOptionsState, loggedInUser } = useContext(CategoryContext);
     const viewPagerRef = useRef(null);
     const postDetailsRef = useRef(null);
 
@@ -75,7 +75,6 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                             resetAnimatePostTextDetails(textPostDescriptionAnimationValue_translate_x,
                                 textPostTypeAnimationValue_translate_x);
                         }
-                        //onPostScrollFunction(event);
                     }}>
                     {
                         sdomDatastate.posts.map((item, index) => {

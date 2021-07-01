@@ -2,12 +2,13 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from "react-native"
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
-import { actionButtonTextConstants, miscMessage } from '../../constants/Constants';
+import { actionButtonTextConstants, miscMessage, screens } from '../../constants/Constants';
 import { SDGenericStyles, userMenuStyles } from '../../styles/Styles';
 
 export const UserFollowFollowingRenderer = (props) => {
     return (
-        <TouchableOpacity activeOpacity={.7} onPress={() => props.viewFollowerFollowingProfile(props.item)}>
+        <TouchableOpacity activeOpacity={.7} onPress={() => props.isSearchUser && props.actionCallBack(screens.USERS_TAB, props.index, props.item) ||
+            props.viewFollowerFollowingProfile(props.item)}>
             <Animated.View key={`1_${props.index}`} style={[props.animationStyle, SDGenericStyles.rowFlexDirection, { backgroundColor: props.item.backgroundColor },
             SDGenericStyles.padding20, SDGenericStyles.marginBottom15, SDGenericStyles.borderRadius5]}>
                 <FastImage source={{

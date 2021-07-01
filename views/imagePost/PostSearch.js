@@ -2,15 +2,19 @@ import React, { useRef, useState } from 'react'
 import { TextInput, Image, TouchableOpacity, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { onChangeByValueType, togglePostSearchBox } from '../../helper/Helper'
-import { keyBoardTypeConst, miscMessage, numericConstants, placeHolderText, stringConstants } from '../../constants/Constants';
+import { keyBoardTypeConst, miscMessage, numericConstants, placeHolderText, screens, stringConstants } from '../../constants/Constants';
 import { colors, glancePostStyles } from '../../styles/Styles'
 import { PostSearchContent } from './PostSearchContent';
+import { useNavigation } from '@react-navigation/native';
+import { useContext } from 'react/cjs/react.development';
+import { CategoryContext } from '../../App';
 
 const post_search_input_close = require('../../assets/post_search_input_close_icon.png');
 const post_search = require('../../assets/post_search_icon.png');
 
 export function PostSearch(props) {
 
+    const { viewPagerPostsRef } = useContext(CategoryContext);
     const { sdomDatastate, screenWidth, screenHeight, post, viewPagerRef, postDetailsRef } = props;
     const { posts } = sdomDatastate;
     const [searchValues, setSearchValues] = useState({
@@ -18,7 +22,7 @@ export function PostSearch(props) {
         searchForPostId: stringConstants.EMPTY,
         posts: posts
     });
-
+    const navigation = useNavigation();
     const inputTextRef = useRef(null);
 
     const input_search_box_translate_x_shared = useSharedValue(screenWidth * numericConstants.ONE_HUNDRED);
@@ -35,9 +39,13 @@ export function PostSearch(props) {
     return (
         <View>
             <View style={glancePostStyles.glanceTopIcons}>
-                <TouchableOpacity onPress={() => togglePostSearchBox(searchValues, setSearchValues, post,
+                <TouchableOpacity onPress={() => {
+                    viewPagerPostsRef.current = viewPagerRef.current;
+                    navigation.navigate(screens.POSTS_USERS_SEARCH,
+                        { toIndex: numericConstants.ZERO, userPosts: searchValues.posts, postDetailsRef: postDetailsRef });
+                }/*togglePostSearchBox(searchValues, setSearchValues, post,
                     input_search_box_translate_x_shared, content_translate_y_shared, content_opacity_shared, screenWidth, screenHeight,
-                    true, inputTextRef, viewPagerRef)}>
+                true, inputTextRef, viewPagerRef)*/}>
                     <Image style={glancePostStyles.icon_post_search} source={post_search} />
                 </TouchableOpacity>
             </View>
