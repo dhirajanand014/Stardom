@@ -626,11 +626,12 @@ export const onChangeByValueType = async (inputProps, value, props) => {
             props.clearErrors();
             break;
         case fieldControllerName.SEARCH_POSTS:
-            const filteredPosts = value && props.posts.filter(postFilter => postFilter.postTitle.toLowerCase().
-                includes(value.toLowerCase())) || props.posts;
-            props.state.searchText = value;
-            props.state.posts = filteredPosts;
-            props.setState({ ...props.state });
+            const filteredPosts = value && props.items.filter(postFilter => postFilter.postTitle.toLowerCase().
+                includes(value.toLowerCase())) || props.items;
+            // props.state.searchText = value;
+            // props.state.posts = filteredPosts;
+            // props.setState({ ...props.state });
+            props.setState({ ...props.state, posts: filteredPosts });
             break;
         case fieldControllerName.SEARCH_USERS:
             const filteredUsers = value && props.items.filter(user => user.name && user.name.toLowerCase().includes(value.toString().toLowerCase()) ||

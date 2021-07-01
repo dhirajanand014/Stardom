@@ -540,6 +540,7 @@ export const alertTextMessages = {
     POST_DISLIKED: `You have disliked the post : `,
     POST_DOWNLOADED: `You have downloaded the post : `,
     SUCCESSFULLY_LOGGED_IN: `Login successful`,
+    PLEASE_LOGIN_TO_VIEW_USERS: `Please login to view users`,
     DOWNLOAD_COMPLETE: `Download Complete`,
     DOWNLOADING_IMAGE: `Downloading image`,
     NO_USERS_AVAILABLE: `No Users available`,

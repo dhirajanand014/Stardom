@@ -18,6 +18,9 @@ export const SDSearchUserAndPosts = props => {
 
     const { viewPagerPostsRef } = useContext(CategoryContext);
 
+    const [userFollowerFollowing, setUserFollowerFollowing] = useState({
+        users: jsonConstants.EMPTY
+    });
     const [searchList, setSearchList] = useState({
         users: jsonConstants.EMPTY,
         posts: jsonConstants.EMPTY
@@ -52,6 +55,7 @@ export const SDSearchUserAndPosts = props => {
                 const responseData = await fetchUserForSearch(loggedInUser.loginDetails.token);
                 searchList.users = responseData.users;
                 setBackgroundColorsForList(searchList, screens.USERS_TAB);
+                setUserFollowerFollowing(responseData);
             }
             setSearchList({ ...searchList });
             setLoaderCallback(false);
@@ -64,10 +68,8 @@ export const SDSearchUserAndPosts = props => {
                 <Text style={[SDGenericStyles.ft18, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.placeHolderTextColor,
                 SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop40]}>
                     {
-                        index == numericConstants.ZERO && alertTextMessages.NO_POSTS
-                    }
-                    {
-                        index == numericConstants.ONE && alertTextMessages.NO_USERS_AVAILABLE
+                        index == numericConstants.ZERO && alertTextMessages.NO_POSTS || !loggedInUser.isLoggedIn &&
+                        alertTextMessages.PLEASE_LOGIN_TO_VIEW_USERS || alertTextMessages.NO_USERS_AVAILABLE
                     }
                 </Text>
             </View>
@@ -139,19 +141,20 @@ export const SDSearchUserAndPosts = props => {
 
     return (
         <PostUsersTabbedView searchList={searchList} setSearchList={setSearchList} index={index} routes={routes} renderScene={renderScene}
-            setIndex={setIndex} renderTabBar={renderTabBar} setIndexCallBack={setIndexCallBack} setLoaderCallback={setLoaderCallback} />
+            setIndex={setIndex} renderTabBar={renderTabBar} setIndexCallBack={setIndexCallBack} setLoaderCallback={setLoaderCallback} userPosts={userPosts}
+            userFollowerFollowing={userFollowerFollowing} />
     )
 }
 
 const PostUsersTabbedView = React.memo(({ searchList, setSearchList, index, routes, renderScene, setIndexCallBack, renderTabBar,
-    setLoaderCallback }) => {
+    setLoaderCallback, userFollowerFollowing, userPosts }) => {
     return <Animated.View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
         <Animated.View style={SDGenericStyles.padding20}>
             <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.paddingStart10]}>
                 <SDSearchInput extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
-                    state={searchList} setState={setSearchList} inputName={fieldControllerName.SEARCH_USERS} items={index == numericConstants.ZERO &&
-                        searchList.posts || searchList.users} placeHolderText={index == numericConstants.ZERO && placeHolderText.SEARCH_POSTS ||
-                            placeHolderText.SEARCH_USERS} />
+                    state={searchList} setState={setSearchList} inputName={index == numericConstants.ZERO && fieldControllerName.SEARCH_POSTS ||
+                        fieldControllerName.SEARCH_USERS} items={index == numericConstants.ZERO && userPosts || userFollowerFollowing.users}
+                    placeHolderText={index == numericConstants.ZERO && placeHolderText.SEARCH_POSTS || placeHolderText.SEARCH_USERS} />
             </Animated.View>
         </Animated.View>
         <TabView navigationState={{ index, routes }} renderScene={renderScene} onIndexChange={setIndexCallBack}
