@@ -103,6 +103,7 @@ export const urlConstants = {
     fetchUsersFollowers: `${BASE_URI}/user/followers/fetch`,
     fetchUsersFollowings: `${BASE_URI}/user/following/fetch`,
     fetchAllUsers: `${BASE_URI}/user/allusers/fetch`,
+    updateDeviceToken: `${BASE_URI}/auth/updatedeviceid`
 }
 
 export const fieldControllerName = {
@@ -600,6 +601,7 @@ export const errorMessages = {
     POST_IMAGE_LOAD_ERROR: `Image failed to load!`,
     COULD_NOT_PERFORM_ACTION: `Could not perform action`,
     CANNOT_REQUEST_PERMISSION_TO_USER: `Could not provide permission to user`,
+    COULD_NOT_UPDATE_DEVICE_ID: `Could not update device id for`,
     USER_DENIED_NOTIFICATION: `Permission denied by user`,
     FAILED_TO_UPDATE_REGISTRATION_DETAILS: `Failed to update Registration Details`,
     CANNOT_REGISITER_USER: `Could not register user`,
@@ -732,6 +734,7 @@ export const miscMessage = {
     NOT_AVAILABLE: `Not Available`,
     ALWAYS: `always`,
     CENTER: `center`,
+    DEVICE_TOKEN: `device_id`,
     ATTEMPT_REMAINING: `Attempts remaining`,
     SMALL: `small`,
     RECTANGLE: `rectangle`,
@@ -1050,3 +1053,18 @@ export const CAMERA_IMAGE_FILTERS = [
         filterComponent: BrannanCompat,
     }
 ];
+
+export const notificationConsts = {
+    CHANNEL_ID: `com.stardom`,
+    HIGH_PRIORITY: `high`,
+    VIEW_POST_ACTION: `View post`,
+    VIEW_PROFILE_ACTION: `View profile`,
+    SMALL_ICON: `ic_stat_name`,
+    GROUP: `SDNotificationGroup`,
+    CREATE_CHANNEL_CREATE: `createChannel returned`,
+    NOTIFICATION_CANCELLED: `Notification Cancelled`,
+    USER_ACTION_ID: `userAction`,
+    VIEW_POST_ID: `viewPost`,
+    VIEW_PROFILE_ID: `viewProfile`,
+    NOTIFICATION_TICKER: `Stardom notification`
+}

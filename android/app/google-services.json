@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "889718412166-6prgve9pionbqm1a0s2ppiebmldml3qi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stardom",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "889718412166-0jbiv582nernvlkkn2t8komgrh063dr3.apps.googleusercontent.com",
           "client_type": 3
         }

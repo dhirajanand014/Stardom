@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-
 import {
   jsonConstants, numericConstants,
   screens, stringConstants, requestConstants,
@@ -13,11 +12,21 @@ import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';
 import { ScreenNavigator } from '.';
 import { SDLoaderView } from './components/modals/SDLoaderView';
 import { useSharedValue } from 'react-native-reanimated';
+import messaging from '@react-native-firebase/messaging';
 import { FlashMessageRenderer } from './components/modals/FlashMessageRenderer';
+import { Alert } from 'react-native';
 
 export const CategoryContext = React.createContext();
 
 export default function App({ navigationRef }) {
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    return unsubscribe;
+  }, jsonConstants.EMPTY);
+
   const [loggedInUser, setLoggedInUser] = useState({
     loginDetails: stringConstants.EMPTY,
     isLoggedIn: false

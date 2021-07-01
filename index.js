@@ -11,7 +11,7 @@ import {
     headerLessStackOptions, numericConstants, profileScreenOptions,
     screenOptions, screens, tabBarOptions, width
 } from './constants/Constants';
-import { authorizationHeader, categoryHeader } from './helper/Helper';
+import { authorizationHeader, categoryHeader, getNotificationConfiguration } from './helper/Helper';
 import { Category } from './screens/category/Category';
 import { Intro } from './screens/Intro';
 import { AddPostDetails } from './screens/post/AddPostDetails';
@@ -34,11 +34,17 @@ import { userMenuStyles } from './styles/Styles';
 import { ViewUserPost } from './screens/post/ViewUserPost';
 import { FollowerFollowingProfile } from './screens/user/FollowerFollowingProfile';
 import { SDSearchUserAndPosts } from './screens/user/SDSearchUserAndPosts';
+import messaging from '@react-native-firebase/messaging';
+import PushNotification from 'react-native-push-notification';
 
 LogBox.ignoreLogs(['Remote debugger is in a background tab which may cause apps to perform slowly',
     'Require cycle: node_modules/rn-fetch-blob/index.js',
     'Require cycle: node_modules/react-native/Libraries/Network/fetch.js']);
 LogBox.ignoreAllLogs(true);
+
+messaging().setBackgroundMessageHandler(async remoteMessage => console.log(remoteMessage));
+
+const navigationRef = React.createRef();
 
 const Stack = createStackNavigator();
 const TabNavigator = createMaterialTopTabNavigator();
@@ -91,4 +97,14 @@ export const ScreenNavigator = () => {
         </NavigationContainer>
     )
 }
-AppRegistry.registerComponent(appName, () => App);
+
+const HeadlessCheck = ({ isHeadless }) => {
+    if (isHeadless) {
+        // App has been launched in the background by iOS, ignore
+        return null;
+    }
+    return <App navigationRef={navigationRef} />;
+}
+
+PushNotification.configure(getNotificationConfiguration(navigationRef));
+AppRegistry.registerComponent(appName, () => HeadlessCheck);

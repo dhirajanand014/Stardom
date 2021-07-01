@@ -5,12 +5,12 @@ import {
     urlConstants, keyChainConstansts, permissionsButtons,
     postCountTypes, savePostCountKeys, permissionMessages,
     stringConstants, alertTextMessages, userSearchColors,
-    responseStringData, PRIVATE_FOLLOW_UNFOLLOW,
+    responseStringData, PRIVATE_FOLLOW_UNFOLLOW, keyBoardTypeConst,
     actionButtonTextConstants, colorConstants, getDefaultProfilePostsCounts,
     miscMessage, width, height, numericConstants, placeHolderText,
-    screens, headerStrings, fieldControllerName, isAndroid,
-    isIOS, OTP_INPUTS, errorMessages, requestConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions, modalTextConstants
+    screens, headerStrings, fieldControllerName, isAndroid, notificationConsts,
+    isIOS, OTP_INPUTS, errorMessages, requestConstants, modalTextConstants,
+    jsonConstants, defaultProfilesValue, SDMenuOptions
 } from '../constants/Constants';
 import {
     InteractionManager, NativeModules,
@@ -29,10 +29,11 @@ import { showMessage } from "react-native-flash-message";
 import moment from 'moment';
 import RNFetchBlob from 'rn-fetch-blob';
 import CameraRoll from '@react-native-community/cameraroll';
+import { handleCancelNotification, createChannel } from '../notification/notification';
 
 export const fetchCategoryData = async () => {
     try {
-        const responseData = await axios.get(urlConstants.fetchCategories);
+        const responseData = await axiosGetWithHeaders(urlConstants.fetchCategories);
         return responseData.data.categories;
     } catch (error) {
         console.error(errorMessages.COULD_NOT_FETCH_CATEGORIES, error);
@@ -886,13 +887,7 @@ export const handleUserSignUpOtp = async (phoneNumber, isFrom, navigation, isRes
         // Math.random() returns float between 0 and 1, 
         // so minimum number will be 100000, max - 999999. 
         const random6Digit = Math.floor(Math.random() * 899999 + 100000);
-        const hashValue = isAndroid && await RNOtpVerify.getHash() || "RaZGrAI03n4";
 
-        const otpRequestData = {
-            phoneNumber: phoneNumber,
-            rand_number: random6Digit,
-            hash_value: hashValue[numericConstants.ZERO]
-        }
 
         //const response = await axiosPostWithHeaders(urlConstants.triggerSmsOtp, otpRequestDataJSON)
         // const responseData = processResponseData(response);
@@ -930,7 +925,7 @@ export const getSignUpParams = (random6Digit, isFrom) => {
     return returnValue;
 }
 
-export const handleUserLogin = async (data, loggedInUser, setLoggedInUser) => {
+export const handleUserLogin = async (data, loggedInUser, setLoggedInUser, messaging) => {
     try {
         const loginRequest = {
             [requestConstants.PHONE_NUMBER]: data.phoneNumber,
@@ -940,6 +935,9 @@ export const handleUserLogin = async (data, loggedInUser, setLoggedInUser) => {
         const response = await axiosPostWithHeaders(urlConstants.login, loginJson);
         const responseData = processResponseData(response);
         if (responseData && responseData.user.block == numericConstants.ZERO) {
+            const currentToken = responseData.user.device_id;
+            await updateDeviceToken(messaging, currentToken, responseData.access_token, data.phoneNumber);
+
             const userName = `${data.phoneNumber}${stringConstants.SEMI_COLON}${responseData.access_token}`;
             const userDetailsJSON = JSON.stringify(responseData.user);
 
@@ -1779,5 +1777,76 @@ export const handleForgotPassword = async (watchMobileNumber, navigation, trigge
         }
     } catch (error) {
         console.error(errorMessages.COULD_NOT_REQUEST_FORGOT_PASSWORD, error);
+    }
+}
+
+export const getAndroidLocalNotificationDetails = (remoteMessage) => {
+    return {
+        channelId: notificationConsts.CHANNEL_ID,
+        autoCancel: true,
+        ticker: notificationConsts.NOTIFICATION_TICKER,
+        message: remoteMessage.notification.body,
+        bigText: remoteMessage.notification.body,
+        title: remoteMessage.notification.title,
+        data: remoteMessage.data,
+        priority: notificationConsts.HIGH_PRIORITY,
+        color: colors.YELLOW,
+        allowWhileIdle: true,
+        group: notificationConsts.GROUP,
+        actions: [notificationConsts.VIEW_POST_ACTION],
+        smallIcon: notificationConsts.SMALL_ICON
+    }
+}
+
+export const getNotificationChannelCreation = () => {
+    return {
+        channelId: notificationConsts.CHANNEL_ID,
+        channelName: notificationConsts.CHANNEL_ID,
+        soundName: keyBoardTypeConst.DEFAULT,
+        importance: numericConstants.FOUR,
+        vibrate: true,
+    }
+}
+
+export const updateDeviceToken = async (messaging, currentDeviceToken, apiAccessToken, phoneNumber) => {
+    try {
+        const deviceToken = await messaging().getToken();
+        if (!currentDeviceToken || (null != currentDeviceToken && deviceToken !== currentDeviceToken)) {
+            const payLoadRequest = {
+                [requestConstants.PHONE_NUMBER]: phoneNumber,
+                [miscMessage.DEVICE_TOKEN]: deviceToken
+            }
+            const response = await axiosPostWithHeadersAndToken(urlConstants.updateDeviceToken, JSON.stringify(payLoadRequest),
+                apiAccessToken);
+            return response && response.data;
+        }
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_UPDATE_DEVICE_ID, ` ${phoneNumber} `, error);
+    }
+}
+
+export const getNotificationConfiguration = (navigation) => {
+    return {
+        onRegister: () => {
+            createChannel();
+        }, onNotification: async (notification) => {
+            (async () => {
+                await notificationAction(notification, navigation);
+            })();
+        }, onAction: (notification) => {
+            (async () => {
+                await notificationAction(notification, navigation);
+            })();
+        },
+        onRegistrationError: (err) => {
+            console.error(err.message, err);
+        },
+        permissions: {
+            alert: true,
+            badge: true,
+            sound: true,
+        },
+        popInitialNotification: true,
+        requestPermissions: !isIOS,
     }
 }
