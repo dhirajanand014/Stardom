@@ -1790,8 +1790,7 @@ export const getAndroidLocalNotificationDetails = (remoteMessage) => {
         title: remoteMessage.notification.title,
         data: remoteMessage.data,
         priority: notificationConsts.HIGH_PRIORITY,
-        color: colors.YELLOW,
-        allowWhileIdle: true,
+        color: colors.SDOM_YELLOW,
         group: notificationConsts.GROUP,
         actions: [notificationConsts.VIEW_POST_ACTION],
         smallIcon: notificationConsts.SMALL_ICON

@@ -1,4 +1,5 @@
 
+import 'react-native-gesture-handler';
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useContext } from 'react'
 import { TextInput, Image, TouchableOpacity, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { onChangeByValueType, togglePostSearchBox } from '../../helper/Helper'
@@ -6,7 +6,6 @@ import { keyBoardTypeConst, miscMessage, numericConstants, placeHolderText, scre
 import { colors, glancePostStyles } from '../../styles/Styles'
 import { PostSearchContent } from './PostSearchContent';
 import { useNavigation } from '@react-navigation/native';
-import { useContext } from 'react/cjs/react.development';
 import { CategoryContext } from '../../App';
 
 const post_search_input_close = require('../../assets/post_search_input_close_icon.png');

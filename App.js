@@ -1,4 +1,3 @@
-import 'react-native-gesture-handler';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   jsonConstants, numericConstants,
@@ -14,7 +13,7 @@ import { SDLoaderView } from './components/modals/SDLoaderView';
 import { useSharedValue } from 'react-native-reanimated';
 import messaging from '@react-native-firebase/messaging';
 import { FlashMessageRenderer } from './components/modals/FlashMessageRenderer';
-import { Alert } from 'react-native';
+import { showNotification } from './notification/notification';
 
 export const CategoryContext = React.createContext();
 
@@ -22,7 +21,7 @@ export default function App({ navigationRef }) {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      showNotification(remoteMessage);
     });
     return unsubscribe;
   }, jsonConstants.EMPTY);
