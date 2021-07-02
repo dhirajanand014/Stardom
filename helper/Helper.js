@@ -500,14 +500,14 @@ export const setAnimationVisible = (postDetailsState, setPostDetailsState, isVis
     });
 }
 
-export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, viewPagerRef,
-    postDetailsRef) => {
+export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, viewPagerRef, postDetailsRef) => {
     try {
         if (!postDetailsRef?.current?.newPostViewed && postIdFromNotification?.current && viewPagerRef?.current) {
-            const index = posts.findIndex(post => post.id == postIdFromNotification)
+            const index = posts.findIndex(post => post.id == postIdFromNotification.current)
             viewPagerRef.current.scrollBy(index);
             postDetailsRef?.current?.setPostIndex(index);
             postDetailsRef?.current?.setNewPostViewed(true);
+            postIdFromNotification.current = null;
         }
     } catch (error) {
         console.error(error);

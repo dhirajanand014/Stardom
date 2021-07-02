@@ -5,13 +5,15 @@ import Shimmer from "react-native-shimmer";
 import { fieldControllerName, height, miscMessage, numericConstants, screens, width } from "../../constants/Constants"
 import { flatListItemStyles, SDGenericStyles } from "../../styles/Styles";
 
-export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isSameUser, navigation }) => {
+export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isSameUser, navigation, postIdRef }) => {
 
     const allowPrivate = hasPrivateAccess && item.postType == fieldControllerName.POST_TYPE_PRIVATE;
     return (
         <View key={index} style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
-            <TouchableOpacity activeOpacity={.7} onPress={() => navigation.navigate(screens.VIEW_USER_POSTS,
-                { userId: item.user.id, postId: item.id })}>
+            <TouchableOpacity activeOpacity={.7} onPress={() => {
+                postIdRef.current = item.id;
+                navigation.navigate(screens.VIEW_USER_POSTS, { userId: item.user.id, postId: postIdRef })
+            }}>
                 <View key={index} style={[{
                     height: height / numericConstants.FOUR, width: width / numericConstants.THREE
                 }, flatListItemStyles.userProfileCardSurface]}>
@@ -68,6 +70,6 @@ export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isS
                     }
                 </View>
             </TouchableOpacity>
-        </View>
+        </View >
     )
 })
