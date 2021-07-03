@@ -41,7 +41,7 @@ export function PostSearch(props) {
                 <TouchableOpacity onPress={() => {
                     viewPagerPostsRef.current = viewPagerRef.current;
                     navigation.navigate(screens.POSTS_USERS_SEARCH,
-                        { toIndex: numericConstants.ZERO, userPosts: searchValues.posts, postDetailsRef: postDetailsRef });
+                        { toIndex: numericConstants.ZERO, userPosts: sdomDatastate.posts, postDetailsRef: postDetailsRef });
                 }/*togglePostSearchBox(searchValues, setSearchValues, post,
                     input_search_box_translate_x_shared, content_translate_y_shared, content_opacity_shared, screenWidth, screenHeight,
                 true, inputTextRef, viewPagerRef)*/}>

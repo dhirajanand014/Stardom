@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { ActivityIndicator, SafeAreaView, Text, ImageBackground } from 'react-native';
 import { colors, SDGenericStyles } from '../styles/Styles';
-import { getCategoryButtonType, getSelectedCategoryIdsFromStorage } from '../helper/Helper';
+import { getCategoryButtonType, getSelectedCategoryIdsFromStorage, notificationAction } from '../helper/Helper';
 import { height, jsonConstants, miscMessage, numericConstants, screens, width } from '../constants/Constants';
 import { useNavigation } from '@react-navigation/native';
-//import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 
 export const SDSplashScreen = () => {
 
@@ -28,15 +28,18 @@ export const SDSplashScreen = () => {
     }, jsonConstants.EMPTY);
 
     useEffect(() => {
-        // messaging().onTokenRefresh(async tokenRefresh =>
-        //     console.log('Token refresh!', tokenRefresh)
-        // );
-        // messaging().onNotificationOpenedApp(async () => {
-        //     console.log('Token refresh!', tokenRefresh)
-        // });
-        // messaging().getInitialNotification(async () => {
-        //     console.log('Token refresh!', tokenRefresh)
-        // });
+        messaging().onTokenRefresh(async tokenRefresh =>
+            console.log('Token refresh!', tokenRefresh)
+        );
+        messaging().onNotificationOpenedApp(async remoteMessage => {
+            (async () => {
+                remoteMessage.foreground = true;
+                await notificationAction(remoteMessage, navigation);
+            })();
+        });
+        messaging().getInitialNotification(async () => {
+            console.log('Token refresh!', "initial notofication")
+        });
     }, [])
     return (
         <SafeAreaView style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter,

@@ -29,7 +29,8 @@ import { showMessage } from "react-native-flash-message";
 import moment from 'moment';
 import RNFetchBlob from 'rn-fetch-blob';
 import CameraRoll from '@react-native-community/cameraroll';
-import { handleCancelNotification, createChannel } from '../notification/notification';
+import { createChannel } from '../notification/notification';
+import { Importance } from 'react-native-push-notification';
 
 export const fetchCategoryData = async () => {
     try {
@@ -500,17 +501,20 @@ export const setAnimationVisible = (postDetailsState, setPostDetailsState, isVis
     });
 }
 
-export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, viewPagerRef, postDetailsRef) => {
+export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, viewPagerRef, postDetailsRef, isFromNotification) => {
     try {
-        if (!postDetailsRef?.current?.newPostViewed && postIdFromNotification?.current && viewPagerRef?.current) {
-            const index = posts.findIndex(post => post.id == postIdFromNotification.current)
-            viewPagerRef.current.scrollBy(index);
-            postDetailsRef?.current?.setPostIndex(index);
+        if ((isFromNotification && isFromNotification.current) || (!postDetailsRef?.current?.newPostViewed
+            && postIdFromNotification?.current && viewPagerRef?.current)) {
+            const index = posts.findIndex(post => post.id == postIdFromNotification.current) || numericConstants.ZERO;
+            isFromNotification && isFromNotification.current ** viewPagerRef.current.scrollTo(numericConstants.ONE)
+                || viewPagerRef.current.scrollBy(index);
+            postDetailsRef?.current?.setPostIndex(isFromNotification && numericConstants.ZERO || index);
             postDetailsRef?.current?.setNewPostViewed(true);
             postIdFromNotification.current = null;
+            if (isFromNotification) isFromNotification.current = false;
         }
     } catch (error) {
-        console.error(error);
+        console.error(errorMessages.COULD_NOT_PERFORM_SCROLL_POST, error);
     }
 }
 
@@ -1781,6 +1785,9 @@ export const handleForgotPassword = async (watchMobileNumber, navigation, trigge
 }
 
 export const getAndroidLocalNotificationDetails = (remoteMessage) => {
+
+    const actionButtons = getNotificationActionButtons(remoteMessage.data.actionType);
+
     return {
         channelId: notificationConsts.CHANNEL_ID,
         autoCancel: true,
@@ -1789,11 +1796,21 @@ export const getAndroidLocalNotificationDetails = (remoteMessage) => {
         bigText: remoteMessage.notification.body,
         title: remoteMessage.notification.title,
         data: remoteMessage.data,
-        priority: notificationConsts.HIGH_PRIORITY,
         color: colors.SDOM_YELLOW,
-        group: notificationConsts.GROUP,
-        actions: [notificationConsts.VIEW_POST_ACTION],
-        smallIcon: notificationConsts.SMALL_ICON
+        vibrate: true,
+        group: notificationConsts.CHANNEL_ID,
+        actions: actionButtons,
+        smallIcon: notificationConsts.SMALL_ICON,
+        largeIconUrl: remoteMessage.data.user_icon,
+        bigPictureUrl: remoteMessage.data.post_url
+    }
+}
+
+const getNotificationActionButtons = (actionType) => {
+    switch (actionType) {
+        case notificationConsts.VIEW_POST_ACTION:
+            return [notificationConsts.VIEW_POST_ACTION]
+        default: return jsonConstants.EMPTY;
     }
 }
 
@@ -1802,7 +1819,7 @@ export const getNotificationChannelCreation = () => {
         channelId: notificationConsts.CHANNEL_ID,
         channelName: notificationConsts.CHANNEL_ID,
         soundName: keyBoardTypeConst.DEFAULT,
-        importance: numericConstants.FOUR,
+        importance: Importance.HIGH,
         vibrate: true,
     }
 }
@@ -1830,11 +1847,11 @@ export const getNotificationConfiguration = (navigation) => {
             createChannel();
         }, onNotification: async (notification) => {
             (async () => {
-                await notificationAction(notification, navigation);
+                await notificationAction(notification, navigation.current);
             })();
         }, onAction: (notification) => {
             (async () => {
-                await notificationAction(notification, navigation);
+                await notificationAction(notification, navigation.current);
             })();
         },
         onRegistrationError: (err) => {
@@ -1847,5 +1864,29 @@ export const getNotificationConfiguration = (navigation) => {
         },
         popInitialNotification: true,
         requestPermissions: !isIOS,
+    }
+}
+
+export const notificationAction = async (notification, navigation) => {
+    try {
+        switch (notification.data.actionType) {
+            case notificationConsts.VIEW_POST_ACTION:
+                if (notification.foreground) {
+                    navigation.reset({
+                        index: numericConstants.ZERO, routes: [{
+                            name: screens.GLANCE,
+                            params: {
+                                isFromNotification: true,
+                                postIdFromNotification: { current: parseInt(notification.data.post_id) }
+                            }
+                        }]
+                    });
+                }
+                break;
+            default:
+                break;
+        }
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_HANDLE_NOTIFICATION_ACTION, error);
     }
 }

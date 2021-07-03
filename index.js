@@ -73,7 +73,7 @@ export const DrawerNavigation = () => {
 
 export const ScreenNavigator = () => {
     return (
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
             <Stack.Navigator initialRouteName={screens.SPLASH_SCREEN} screenOptions={screenOptions}
                 headerMode={`float`} animation={`fade`}>
                 <Stack.Screen name={screens.SPLASH_SCREEN} component={SDSplashScreen} options={headerLessStackOptions} />

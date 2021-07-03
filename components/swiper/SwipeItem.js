@@ -12,7 +12,7 @@ import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackCompo
 export const SwipeItem = (props) => {
 
     const { width, height, item, index, posts, postIdFromNotification, viewPagerRef,
-        postDetailsRef, optionsState, setOptionsState } = props;
+        postDetailsRef, optionsState, setOptionsState, isFromNotification } = props;
 
     const imageScale = useSharedValue(numericConstants.ONE);
     const focalX = useSharedValue(numericConstants.ZERO);
@@ -59,7 +59,7 @@ export const SwipeItem = (props) => {
                             cache: FastImage.cacheControl.immutable
                         }} fallback={optionsState.isImageLoadError} onLoadEnd={() =>
                             scrollWhenPostIdFromNotification(posts, postIdFromNotification, viewPagerRef,
-                                postDetailsRef)} onError={() => setImageLoadError(optionsState, setOptionsState, true)} />
+                                postDetailsRef, isFromNotification)} onError={() => setImageLoadError(optionsState, setOptionsState, true)} />
                     </Animated.View>
                 </PinchGestureHandler>
             </Animated.View>

@@ -634,7 +634,6 @@ export const glancePostStyles = StyleSheet.create({
         alignItems: 'center',
         width: 29,
         height: 29,
-        backgroundColor: 'rgba(0,0,0,0.25)',
         borderRadius: 16,
     },
     backgroundRoundColor_report_abuse: {
@@ -643,7 +642,6 @@ export const glancePostStyles = StyleSheet.create({
         alignItems: 'center',
         width: 29,
         height: 29,
-        backgroundColor: 'rgba(0,0,0,0.25)',
         borderRadius: 16,
     },
     likesBackgroundRoundColor: {
@@ -651,7 +649,6 @@ export const glancePostStyles = StyleSheet.create({
         alignItems: 'center',
         width: 27,
         height: 27,
-        backgroundColor: 'rgba(0,0,0,0.25)',
         borderRadius: 16,
     },
     setWallPaperBackgroundRoundColor: {
@@ -659,7 +656,6 @@ export const glancePostStyles = StyleSheet.create({
         alignItems: 'center',
         width: 29,
         height: 29,
-        backgroundColor: 'rgba(0,0,0,0.25)',
         borderRadius: 16,
     },
     backgroundRoundColor: {
@@ -668,7 +664,6 @@ export const glancePostStyles = StyleSheet.create({
         alignItems: 'center',
         width: 27,
         height: 27,
-        backgroundColor: 'rgba(0,0,0,0.25)',
         borderRadius: 16,
     },
     postProfileName: {

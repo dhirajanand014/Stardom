@@ -17,6 +17,7 @@ import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import { SwipeItem } from '../../components/swiper/SwipeItem';
 import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
+import { useRoute } from '@react-navigation/native';
 
 const category_selection = require('../../assets/category_selection_icon.png');
 
@@ -26,10 +27,17 @@ export const Glance = ({ navigation }) => {
         optionsState, setOptionsState, loggedInUser } = useContext(CategoryContext);
     const viewPagerRef = useRef(null);
     const postDetailsRef = useRef(null);
+    const isFromNotification = useRef(false);
+
+    const route = useRoute();
+    isFromNotification.current = route.params?.isFromNotification || false;
+    const postId = route.params?.postIdFromNotification || postIdFromNotification;
 
     useEffect(() => {
-        fetchPostsAndSaveToState(sdomDatastate, setSdomDatastate, optionsState, setOptionsState,
-            categoryIdFromNotification, loggedInUser);
+        (async () => {
+            await fetchPostsAndSaveToState(sdomDatastate, setSdomDatastate, optionsState, setOptionsState,
+                categoryIdFromNotification, loggedInUser);
+        })();
     }, jsonConstants.EMPTY);
 
     let { height } = Dimensions.get(miscMessage.WINDOW);
@@ -49,13 +57,13 @@ export const Glance = ({ navigation }) => {
     return (
         <GlanceComponent sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
-            currentPostIndexForProfileRef={currentPostIndexForProfileRef} height={height} postIdFromNotification={postIdFromNotification} navigation={navigation}
-            setSdomDatastate={setSdomDatastate} />
+            currentPostIndexForProfileRef={currentPostIndexForProfileRef} height={height} postIdFromNotification={postId} navigation={navigation}
+            setSdomDatastate={setSdomDatastate} isFromNotification={isFromNotification} />
     )
 }
 
 const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRef, optionsState, setOptionsState, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x, currentPostIndexForProfileRef, height,
-    postIdFromNotification, navigation }) => {
+    postIdFromNotification, navigation, isFromNotification }) => {
     return <View style={SDGenericStyles.fill}>
         {
             sdomDatastate.posts && sdomDatastate.posts.length &&
@@ -80,7 +88,7 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                         sdomDatastate.posts.map((item, index) => {
                             return <Animated.View key={index} style={glancePostStyles.overlayImage}>
                                 <SwipeItem width={width} height={height} item={item} index={index} posts={sdomDatastate.posts}
-                                    postIdFromNotification={postIdFromNotification} viewPagerRef={viewPagerRef}
+                                    postIdFromNotification={postIdFromNotification} viewPagerRef={viewPagerRef} isFromNotification={isFromNotification}
                                     postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState} />
                             </Animated.View>;
                         })}
