@@ -21,6 +21,10 @@ export const SDGenericStyles = StyleSheet.create({
         width: numericConstants.TWENTY_EIGHT,
         height: numericConstants.TWENTY_EIGHT
     },
+    menuEditIcon: {
+        width: numericConstants.TWENTY_SIX,
+        height: numericConstants.TWENTY_SIX
+    },
     lockUnlockIconStyle: {
         width: numericConstants.TWENTY,
         height: numericConstants.TWENTY
@@ -309,6 +313,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     padding8: {
         padding: 8
+    },
+    padding9: {
+        padding: 9
     },
     padding20: {
         padding: 20

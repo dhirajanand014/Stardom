@@ -488,6 +488,7 @@ export const numericConstants = {
     TWENTY_ONE: 21,
     TWENTY_TWO: 22,
     TWENTY_FOUR: 24,
+    TWENTY_SIX: 26,
     TWENTY_EIGHT: 28,
     THIRTY: 30,
     THIRTY_EIGHT: 38,
