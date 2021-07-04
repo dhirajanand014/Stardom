@@ -109,7 +109,6 @@ export const SDUserMenus = (drawerProps) => {
                 profileMenu.followersCount = numericConstants.ZERO;
                 profileMenu.followingCount = numericConstants.ZERO;
             }
-            play.value = true;
             setProfileMenu({ ...profileMenu });
         })();
     }, [loggedInUser.loginDetails, isFocused]);
