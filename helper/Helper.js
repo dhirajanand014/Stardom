@@ -1786,7 +1786,7 @@ export const handleForgotPassword = async (watchMobileNumber, navigation, trigge
 
 export const getAndroidLocalNotificationDetails = (remoteMessage) => {
 
-    const actionButtons = getNotificationActionButtons(remoteMessage.data.actionType);
+    const actionButtons = getNotificationActionButtons(remoteMessage);
 
     return {
         channelId: notificationConsts.CHANNEL_ID,
@@ -1806,10 +1806,16 @@ export const getAndroidLocalNotificationDetails = (remoteMessage) => {
     }
 }
 
-const getNotificationActionButtons = (actionType) => {
-    switch (actionType) {
+const getNotificationActionButtons = (remoteMessage) => {
+    switch (remoteMessage.data.actionType) {
         case notificationConsts.VIEW_POST_ACTION:
-            return [notificationConsts.VIEW_POST_ACTION]
+            return [notificationConsts.VIEW_POST_ACTION];
+        case notificationConsts.PUBLIC_FOLLOWING:
+            return [notificationConsts.VIEW_FOLLOWERS_ACTION]
+        case notificationConsts.PRIVATE_FOLLOWING_ACCESS:
+            remoteMessage.notification.body =
+                `${alertTextMessages.USER}${stringConstants.SPACE}${remoteMessage.data.follower_user_id}${stringConstants.SPACE}${alertTextMessages.REQUESTED_PRIVATE_ACCESS}`
+            return [actionButtonTextConstants.APPROVE, actionButtonTextConstants.REJECT];
         default: return jsonConstants.EMPTY;
     }
 }
@@ -1882,6 +1888,15 @@ export const notificationAction = async (notification, navigation) => {
                         }]
                     });
                 }
+                break;
+            case notificationConsts.PUBLIC_FOLLOWING:
+            case notificationConsts.PRIVATE_FOLLOWING_ACCESS:
+                const loggedInUserDetails = await getLoggedInUserDetails();
+                const loggedInUserJSON = { isLoggedIn: true, loginDetails: loggedInUserDetails };
+                navigation.navigate(screens.USER_FOLLOWERS_FOLLOWING, {
+                    loggedInUser: loggedInUserJSON, listFor: notification.data.actionType == notificationConsts.PUBLIC_FOLLOWING
+                        && miscMessage.FOLLOWERS_TEXT || miscMessage.PRIVATE_REQUEST_ACCESS
+                });
                 break;
             default:
                 break;

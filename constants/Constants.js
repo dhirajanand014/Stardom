@@ -554,6 +554,8 @@ export const alertTextMessages = {
     UNFOLLOWING_USER: `Unfollowing user`,
     APPROVING_VERIFICATION_REQUEST: `Approving verification request`,
     REJECTING_VERIFICATION_REQUEST: `Rejecting verification request`,
+    USER: `User`,
+    REQUESTED_PRIVATE_ACCESS: `has requested for private access`,
     SUCCESSFULLY_LOGGED_OUT: `Logout successful`,
     LOADING_USERS_POSTS: `Loading users posts`,
     MAX_THREE_CATEGORIES_1: `You can add your wallpaper to `,
@@ -918,7 +920,7 @@ export const SDMenuOptions = [
         icon: require(`../assets/menu/following_icon.png`)
     }, {
         label: fieldControllerName.SEARCH_USERS,
-        key: screens.USER_FOLLOWERS_FOLLOWING,
+        key: screens.POSTS_USERS_SEARCH,
         loggedIn: true,
         icon: require(`../assets/post_search_icon.png`)
     }, {
@@ -1061,13 +1063,17 @@ export const notificationConsts = {
     CHANNEL_ID: `com.stardom`,
     HIGH_PRIORITY: `high`,
     VIEW_POST_ACTION: `View post`,
+    PUBLIC_FOLLOWING: `Public following`,
+    VIEW_FOLLOWERS_ACTION: `View followers`,
+    PRIVATE_FOLLOWING_ACCESS: `Private access following`,
     VIEW_PROFILE_ACTION: `View profile`,
     SMALL_ICON: `ic_stat_name`,
     GROUP: `SDNotificationGroup`,
     CREATE_CHANNEL_CREATE: `createChannel returned`,
     NOTIFICATION_CANCELLED: `Notification Cancelled`,
     USER_ACTION_ID: `userAction`,
-    VIEW_POST_ID: `viewPost`,
+    PUBLIC_FOLLOWING_ID: `publicFollowing`,
+    PRIVATE_FOLLOWING_ACCESS_ID: `privateAccessFollowing`,
     VIEW_PROFILE_ID: `viewProfile`,
     NOTIFICATION_TICKER: `Stardom notification`
 }

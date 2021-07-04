@@ -71,6 +71,9 @@ export const SDUserMenus = (drawerProps) => {
             case screens.USER_FOLLOWERS_FOLLOWING:
                 navigation.navigate(screens.USER_FOLLOWERS_FOLLOWING, { listFor: item.label });
                 break;
+            case screens.POSTS_USERS_SEARCH:
+                navigation.navigate(screens.POSTS_USERS_SEARCH, { toIndex: numericConstants.ONE });
+                break;
             case screens.CATEGORY:
                 navigation.navigate(screens.CATEGORY);
                 break;

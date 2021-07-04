@@ -3,31 +3,22 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FlatList, StatusBar, View, Text } from "react-native"
 import { CategoryContext } from '../../App';
 import {
-    actionButtonTextConstants, alertTextMessages, fieldControllerName, jsonConstants,
+    actionButtonTextConstants, alertTextMessages, jsonConstants,
     miscMessage, modalTextConstants, numericConstants, PRIVATE_FOLLOW_UNFOLLOW,
     requestConstants, responseStringData, screens, stringConstants
 } from '../../constants/Constants';
 import {
-    fetchUserFollowersFollowing, handleUserFollowUnfollowAction, setBackgroundColorsForList,
-    showSnackBar, userPostAction
+    fetchUserFollowersFollowing, showSnackBar, setBackgroundColorsForList,
+    userPostAction, handleUserFollowUnfollowAction,
 } from '../../helper/Helper';
-import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
+import { SDGenericStyles } from '../../styles/Styles';
 import Animated, {
     Extrapolate, interpolate, useAnimatedScrollHandler,
     useAnimatedStyle, useSharedValue
 } from 'react-native-reanimated';
 import { UserFollowFollowingRenderer } from '../../views/menus/UserFollowFollowingRenderer';
-import { SDSearchInput } from '../../components/input/SDSearchInput';
 
 export const UserFollowFollowing = () => {
-
-    const [userFollowerFollowing, setUserFollowerFollowing] = useState({
-        users: jsonConstants.EMPTY
-    });
-
-    const [searchList, setSearchList] = useState({
-        users: jsonConstants.EMPTY
-    });
 
     const navigation = useNavigation();
     const scrollYValue = useSharedValue(numericConstants.ZERO);
@@ -42,9 +33,14 @@ export const UserFollowFollowing = () => {
 
     const route = useRoute();
     const listFor = route.params?.listFor || stringConstants.EMPTY;
+    const userLoggedIn = route.params?.loggedInUser || loggedInUser;
+
+    const [userFollowerFollowing, setUserFollowerFollowing] = useState({
+        users: jsonConstants.EMPTY
+    });
 
     const filterPrivateAccessUsers = (responseData) => {
-        const user = JSON.parse(loggedInUser.loginDetails.details);
+        const user = JSON.parse(userLoggedIn.loginDetails.details);
         const followerIds = user.followers.filter(follower => follower.pvtaccess == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED)
             .map(follower => follower.follower_id);
         responseData.users && responseData.users.filter(user => followerIds.some(followerId => followerId == user.id));
@@ -53,13 +49,11 @@ export const UserFollowFollowing = () => {
     useEffect(() => {
         (async () => {
             setLoaderCallback(true, alertTextMessages.LOADING_USER_DETAILS);
-            const responseData = await fetchUserFollowersFollowing(listFor, loggedInUser.loginDetails.token);
+            const responseData = await fetchUserFollowersFollowing(listFor, userLoggedIn.loginDetails.token);
             if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS) {
                 filterPrivateAccessUsers(responseData);
-            } else if (listFor == fieldControllerName.SEARCH_USERS) {
-                setSearchList(responseData);
             }
-            setBackgroundColorsForList(searchList, screens.USERS_TAB);
+            setBackgroundColorsForList(responseData, screens.USERS_TAB);
             setUserFollowerFollowing(responseData);
             setLoaderCallback(false);
         })();
@@ -89,15 +83,15 @@ export const UserFollowFollowing = () => {
         if (action == actionButtonTextConstants.REMOVE) {
             const responseData = await handleUserFollowUnfollowAction(actionButtonTextConstants.REMOVE, id, false);
             if (responseData && responseData.message.includes(responseStringData.SUCCESS)) {
-                const userDetails = JSON.parse(loggedInUser.loginDetails.details);
+                const userDetails = JSON.parse(userLoggedIn.loginDetails.details);
                 const followerIndex = userDetails.followers.findIndex(follower => follower.follower_id = id);
 
                 userDetails.followers.splice(followerIndex, numericConstants.ONE);
                 userFollowerFollowing.users.splice(index, numericConstants.ONE);
 
-                loggedInUser.loginDetails.details = JSON.stringify(userDetails);
+                userLoggedIn.loginDetails.details = JSON.stringify(userDetails);
 
-                setLoggedInUser({ ...loggedInUser });
+                setLoggedInUser({ ...userLoggedIn });
                 setUserFollowerFollowing({ ...userFollowerFollowing });
             }
         } else if (action == actionButtonTextConstants.APPROVE || action == actionButtonTextConstants.REJECT) {
@@ -105,17 +99,17 @@ export const UserFollowFollowing = () => {
             const requestJSON = JSON.stringify(requestData);
 
             const responseData = await userPostAction(requestConstants.PRIVATE_ACCESS_ACTION, requestJSON,
-                loggedInUser.loginDetails.token);
+                userLoggedIn.loginDetails.token);
             if (responseData.message == responseStringData.SUCCESSFULLY_UPDATED) {
-                const userDetails = JSON.parse(loggedInUser.loginDetails.details);
+                const userDetails = JSON.parse(userLoggedIn.loginDetails.details);
                 userDetails.followers.filter(follower => follower.follower_id == id)
                     .map(follower => follower.pvtaccess = action == actionButtonTextConstants.APPROVE && PRIVATE_FOLLOW_UNFOLLOW.APPROVED ||
                         PRIVATE_FOLLOW_UNFOLLOW.REJECTED);
-                loggedInUser.loginDetails.details = JSON.stringify(userDetails);
+                userLoggedIn.loginDetails.details = JSON.stringify(userDetails);
                 userFollowerFollowing.users.splice(index, numericConstants.ONE);
                 showSnackBar(action == actionButtonTextConstants.APPROVE && alertTextMessages.YOU_HAVE_SUCCESSFULLY_APPROVED ||
                     alertTextMessages.YOU_HAVE_SUCCESSFULLY_REJECTED, true);
-                setLoggedInUser({ ...loggedInUser });
+                setLoggedInUser({ ...userLoggedIn });
                 setUserFollowerFollowing({ ...userFollowerFollowing });
             }
         }
@@ -133,9 +127,6 @@ export const UserFollowFollowing = () => {
                     }
                     {
                         listFor == miscMessage.FOLLOWING_TEXT && alertTextMessages.NO_ONE_FOLLOWING
-                    }
-                    {
-                        listFor == fieldControllerName.SEARCH_USERS && alertTextMessages.NO_USERS_AVAILABLE
                     }
                 </Text>
             </View>
@@ -173,17 +164,8 @@ export const UserFollowFollowing = () => {
 
     return (
         <Animated.View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
-            {
-                listFor == fieldControllerName.SEARCH_USERS &&
-                <Animated.View style={SDGenericStyles.padding20}>
-                    <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.paddingStart10]}>
-                        <SDSearchInput extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
-                            state={searchList} setState={setSearchList} inputName={fieldControllerName.SEARCH_USERS} items={userFollowerFollowing.users} />
-                    </Animated.View>
-                </Animated.View>
-            }
-            <AnimatedFlatlist data={listFor == fieldControllerName.SEARCH_USERS && searchList.users || userFollowerFollowing.users}
-                keyExtractor={(item) => item.id} key={`1_${numericConstants.ONE}`} renderItem={({ item, index }) => {
+            <AnimatedFlatlist data={userFollowerFollowing.users} keyExtractor={(item) => item.id} key={`1_${numericConstants.ONE}`}
+                renderItem={({ item, index }) => {
                     return <RenderFollowingFollower item={item} scrollYValue={scrollYValue} index={index} listFor={listFor}
                         actionCallBack={actionCallBack} viewFollowerFollowingProfile={viewFollowerFollowingProfile} />
                 }} contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
