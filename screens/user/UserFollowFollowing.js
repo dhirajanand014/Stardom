@@ -53,7 +53,7 @@ export const UserFollowFollowing = () => {
             if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS) {
                 filterPrivateAccessUsers(responseData);
             }
-            setBackgroundColorsForList(responseData, screens.USERS_TAB);
+            //  setBackgroundColorsForList(responseData, screens.USERS_TAB);
             setUserFollowerFollowing(responseData);
             setLoaderCallback(false);
         })();

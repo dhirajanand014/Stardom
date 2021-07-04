@@ -74,6 +74,9 @@ export const SDGenericStyles = StyleSheet.create({
     fontFamilyNormal: {
         fontFamily: isAndroid && `normal` || `System`
     },
+    fontFamilyItalicRegular: {
+        fontFamily: `stardom_italic_regular`
+    },
     fontFamilyRobotoRegular: {
         fontFamily: `stardom_roboto_regular`
     },
@@ -709,8 +712,8 @@ export const glancePostStyles = StyleSheet.create({
         color: 'black',
     },
     icon_post_like: {
-        width: 18,
-        height: 18
+        width: 20,
+        height: 20
     },
     icon_post_search: {
         width: 18,
@@ -771,24 +774,24 @@ export const glancePostStyles = StyleSheet.create({
         fontSize: 15
     },
     icon_post_description: {
-        width: 16,
-        height: 16
+        width: 18,
+        height: 18
     },
     icon_post_report_abuse: {
-        width: 18,
-        height: 18
+        width: 20,
+        height: 20
     },
     icon_post_details: {
-        width: 18,
-        height: 18,
+        width: 20,
+        height: 20,
     },
     icon_post_share: {
-        width: 18,
-        height: 18
+        width: 20,
+        height: 20
     },
     icon_external_link: {
-        width: 23,
-        height: 23
+        width: 25,
+        height: 25
     },
     smallButtonsContainer: {
         flexDirection: 'row',
@@ -1360,6 +1363,13 @@ export const userAuthStyles = StyleSheet.create({
         top: 0,
         bottom: 0
     },
+    menuRightImageIconView: {
+        padding: 6.5,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        bottom: 0
+    },
     menu_close_icon_style: {
         width: 22,
         height: 22,
@@ -1524,12 +1534,6 @@ export const errorBoundaryStyles = StyleSheet.create({
         width: 290,
         height: 1,
         backgroundColor: "lightgray"
-    },
-    errorModalContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        margin: 45
     },
     modalTitleTextStyle: {
         fontSize: 20,

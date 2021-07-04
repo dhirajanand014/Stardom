@@ -20,6 +20,7 @@
 		53E33FB3A3B54CACABB6E3BB /* stardom_roboto_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8595FC184F594040943F22C7 /* stardom_roboto_bold.ttf */; };
 		694EDE4D796B5B499C2F318C /* libPods-Stardom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A62511ECEC863AAD078E6CF5 /* libPods-Stardom.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		C5C003093C6A4A1A913C07EA /* stardom_italic_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8BA04830AAD8418996417B72 /* stardom_italic_regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		73E3CE79106748F1A996A48A /* stardom_roboto_regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = stardom_roboto_regular.ttf; path = ../assets/fonts/stardom_roboto_regular.ttf; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Stardom/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8595FC184F594040943F22C7 /* stardom_roboto_bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = stardom_roboto_bold.ttf; path = ../assets/fonts/stardom_roboto_bold.ttf; sourceTree = "<group>"; };
+		8BA04830AAD8418996417B72 /* stardom_italic_regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = stardom_italic_regular.ttf; path = ../assets/fonts/stardom_italic_regular.ttf; sourceTree = "<group>"; };
 		A62511ECEC863AAD078E6CF5 /* libPods-Stardom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Stardom.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAFC15290F1E433CBA2B2FFB /* wallpiper_roman_font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = wallpiper_roman_font.ttf; path = ../assets/fonts/wallpiper_roman_font.ttf; sourceTree = "<group>"; };
 		E62CBC2CA13C71EB22A0830A /* Pods-Stardom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stardom.release.xcconfig"; path = "Target Support Files/Pods-Stardom/Pods-Stardom.release.xcconfig"; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				1F0C3FF6801F42319E04FF5C /* Roboto-Bold.ttf */,
 				253FE6AE9AE9408599D010FC /* stardom_roboto_medium.ttf */,
 				8595FC184F594040943F22C7 /* stardom_roboto_bold.ttf */,
+				8BA04830AAD8418996417B72 /* stardom_italic_regular.ttf */,
 			);
 			name = Resources;
 			path = "";
@@ -278,6 +281,7 @@
 				40AEF1DB8235481B9D449FFB /* Roboto-Bold.ttf in Resources */,
 				3C57BF61FA9547309B67A997 /* stardom_roboto_medium.ttf in Resources */,
 				53E33FB3A3B54CACABB6E3BB /* stardom_roboto_bold.ttf in Resources */,
+				C5C003093C6A4A1A913C07EA /* stardom_italic_regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

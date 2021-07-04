@@ -50,11 +50,11 @@ export const SDSearchUserAndPosts = props => {
             setLoaderCallback(true, index == numericConstants.ZERO && alertTextMessages.LOADING_USERS_POSTS ||
                 alertTextMessages.LOADING_USERS);
             searchList.posts = userPosts;
-            setBackgroundColorsForList(searchList, screens.POSTS_TAB);
+            //setBackgroundColorsForList(searchList, screens.POSTS_TAB);
             if (loggedInUser.isLoggedIn) {
                 const responseData = await fetchUserForSearch(loggedInUser.loginDetails.token);
                 searchList.users = responseData.users;
-                setBackgroundColorsForList(searchList, screens.USERS_TAB);
+                //  setBackgroundColorsForList(searchList, screens.USERS_TAB);
                 setUserFollowerFollowing(responseData);
             }
             setSearchList({ ...searchList });
@@ -99,7 +99,7 @@ export const SDSearchUserAndPosts = props => {
     });
 
     const RenderPostSearchContent = props => {
-        return <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.rowFlexDirection, { backgroundColor: props.item.backgroundColor },
+        return <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.backGroundColorGray,
         SDGenericStyles.padding20, SDGenericStyles.marginBottom15, SDGenericStyles.borderRadius5]} onPress={() =>
             props.actionCallBack(screens.POSTS_TAB, props.index)}>
             <FastImage source={{

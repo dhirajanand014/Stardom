@@ -1020,8 +1020,6 @@ export const resetTokens = async () => {
         return true;
     } catch (error_response) {
         console.error(errorMessages.COULD_NOT_RESET_KEYCHAIN_VALUES, error_response);
-        setErrorModal(error, setError, errorModalMessageConstants.UNEXPECTED_ERROR,
-            errorModalMessageConstants.SOMETHING_WENT_WRONG, true);
     }
     return false;
 }
@@ -1036,10 +1034,6 @@ export const requestNotificationPermission = async (messaging) => {
     }
     console.warn(errorMessages.USER_DENIED_NOTIFICATION);
     return false;
-}
-
-export const setErrorModal = (error, setError, title, message, showModal) => {
-    setError({ ...error, title: title, message: message, showModal: showModal });
 }
 
 export const processResponseData = (response, errorText) => {
@@ -1796,7 +1790,7 @@ export const getAndroidLocalNotificationDetails = (remoteMessage) => {
         bigText: remoteMessage.notification.body,
         title: remoteMessage.notification.title,
         data: remoteMessage.data,
-        color: colors.SDOM_YELLOW,
+        color: colors.SDOM_BLACK,
         vibrate: true,
         group: notificationConsts.CHANNEL_ID,
         actions: actionButtons,
@@ -1816,6 +1810,8 @@ const getNotificationActionButtons = (remoteMessage) => {
             remoteMessage.notification.body =
                 `${alertTextMessages.USER}${stringConstants.SPACE}${remoteMessage.data.follower_user_id}${stringConstants.SPACE}${alertTextMessages.REQUESTED_PRIVATE_ACCESS}`
             return [actionButtonTextConstants.APPROVE, actionButtonTextConstants.REJECT];
+        case notificationConsts.PRIVATE_ACCESS_APPROVED:
+            return [notificationConsts.VIEW_POST_ACTION];
         default: return jsonConstants.EMPTY;
     }
 }
@@ -1888,6 +1884,9 @@ export const notificationAction = async (notification, navigation) => {
                         }]
                     });
                 }
+                break;
+            case notificationConsts.PRIVATE_ACCESS_APPROVED:
+                navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
                 break;
             case notificationConsts.PUBLIC_FOLLOWING:
             case notificationConsts.PRIVATE_FOLLOWING_ACCESS:

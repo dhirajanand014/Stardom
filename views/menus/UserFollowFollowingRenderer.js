@@ -9,7 +9,7 @@ export const UserFollowFollowingRenderer = (props) => {
     return (
         <TouchableOpacity activeOpacity={.7} onPress={() => props.isSearchUser && props.actionCallBack(screens.USERS_TAB, props.index, props.item) ||
             props.viewFollowerFollowingProfile(props.item)}>
-            <Animated.View key={`1_${props.index}`} style={[props.animationStyle, SDGenericStyles.rowFlexDirection, { backgroundColor: props.item.backgroundColor },
+            <Animated.View key={`1_${props.index}`} style={[props.animationStyle, SDGenericStyles.rowFlexDirection, SDGenericStyles.backGroundColorGray,
             SDGenericStyles.padding20, SDGenericStyles.marginBottom15, SDGenericStyles.borderRadius5]}>
                 <FastImage source={{
                     uri: props.item.profile_picture, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable

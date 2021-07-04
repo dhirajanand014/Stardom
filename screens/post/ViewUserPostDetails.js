@@ -116,11 +116,11 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
             </View>
 
             <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10, SDGenericStyles.paddingTop40]}>
-                <TouchableOpacity style={[glancePostStyles.backgroundRoundColor, SDGenericStyles.mv15]} activeOpacity={.7} onPress={async () =>
+                {/* <TouchableOpacity style={[glancePostStyles.backgroundRoundColor, SDGenericStyles.mv15]} activeOpacity={.7} onPress={async () =>
                     await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback,
                         resetFlashMessage)}>
                     <Image style={glancePostStyles.icon_post_details} source={post_download} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage)}
                     activeOpacity={.7}>
                     <Image style={glancePostStyles.icon_post_share} source={post_share} />

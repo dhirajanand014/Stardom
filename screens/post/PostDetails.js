@@ -133,11 +133,11 @@ export const PostDetails = forwardRef((props, ref) => {
                         <View>
                             <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter]}>
                                 <Text style={[postDetailsState.currentPost.user.name && glancePostStyles.postProfileNameBy, SDGenericStyles.textColorWhite,
-                                SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
-                                    {`by`}
+                                SDGenericStyles.fontFamilyItalicRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft14]}>
+                                    {miscMessage.BY_TEXT}
                                 </Text>
                                 <Text style={[postDetailsState.currentPost.user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
-                                SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
+                                SDGenericStyles.fontFamilyRobotoBold, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
                                     {postDetailsState.currentPost.user.name && postDetailsState.currentPost.user.name}
                                 </Text>
                                 {
@@ -188,7 +188,7 @@ export const PostDetails = forwardRef((props, ref) => {
                         <Image style={glancePostStyles.icon_post_like} source={postDetailsState.currentPost.likeAdded &&
                             post_like_selected || post_like} />
                     </View>
-                    <Text style={[SDGenericStyles.ft10, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    <Text style={[SDGenericStyles.ft12, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
                     SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{postDetailsState.currentPost.postLikes}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={() =>
@@ -196,10 +196,10 @@ export const PostDetails = forwardRef((props, ref) => {
                     <View style={glancePostStyles.setWallPaperBackgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
                     </View>
-                    <Text style={[SDGenericStyles.ft10, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{postDetailsState.currentPost.postWallpapers}</Text>
+                    <Text style={[SDGenericStyles.ft12, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1, SDGenericStyles.marginRight4]}>{postDetailsState.currentPost.postWallpapers}</Text>
                 </ActionButton.Item>
-                <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
+                {/* <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
                     await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback,
                         resetFlashMessage)}>
                     <View style={glancePostStyles.backgroundRoundColor}>
@@ -207,7 +207,7 @@ export const PostDetails = forwardRef((props, ref) => {
                     </View>
                     <Text style={[SDGenericStyles.ft10, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
                     SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{postDetailsState.currentPost.postDownloads}</Text>
-                </ActionButton.Item>
+                </ActionButton.Item> */}
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
                     onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage)}>
                     <View style={glancePostStyles.backgroundRoundColor}>

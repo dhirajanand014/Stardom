@@ -20,7 +20,7 @@ export const MenuRenderer = React.memo(({ item, index, profileMenu, handleMenuCl
                             </Text>
                         </View>
                     }
-                    <View style={[userAuthStyles.menuRightCountView, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter]}>
+                    <View style={[userAuthStyles.menuRightImageIconView, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter]}>
                         <Image style={SDGenericStyles.menuIconStyle} source={item.actionIcon} />
                     </View>
                     {
