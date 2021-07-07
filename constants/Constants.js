@@ -135,8 +135,10 @@ export const fieldControllerName = {
     FOLLOWING_ID: `following_id`,
     VERIFY_USER: `verifyUserDetails`,
     ADD_USER_BIO: `bio`,
-    SEARCH_USERS: `Search Users`,
-    SEARCH_POSTS: `Search Posts`
+    SEARCH_USERS: `searchUsers`,
+    SEARCH_POSTS: `searchPosts`,
+    SEARCH_FOLLOWERS: `searchFollowers`,
+    SEARCH_FOLLOWINGS: `searchFollowings`
 }
 
 export const keyBoardTypeConst = {
@@ -448,6 +450,8 @@ export const placeHolderText = {
     SELECT_A_GENDER: `Select a gender`,
     SELECT_A_PROFILE: `Select a profile`,
     SELECT_CATEGORIES: 'Select Categories',
+    SEARCH_FOLLOWERS: `Search Followers`,
+    SEARCH_FOLLOWINGS: `Search Followings`,
     ADD_TITLE: `Title`,
     ADD_URL: `URL`,
     POSTS: `Posts`,
@@ -724,6 +728,7 @@ export const miscMessage = {
     SELECT_ALL: `Select All`,
     BY_TEXT: `by`,
     UNSELECT_ALL: `Unselect All`,
+    FROM_ON_NOTIFICATION: `fromOnNotification`,
     REPORT_ABUSE_TEXT: `REPORT\nABUSE`,
     CREATE: `create`,
     UPDATE: `update`,
@@ -919,11 +924,6 @@ export const SDMenuOptions = [
         key: screens.USER_FOLLOWERS_FOLLOWING,
         loggedIn: true,
         icon: require(`../assets/menu/following_icon.png`)
-    }, {
-        label: fieldControllerName.SEARCH_USERS,
-        key: screens.POSTS_USERS_SEARCH,
-        loggedIn: true,
-        icon: require(`../assets/post_search_icon.png`)
     }, {
         label: miscMessage.PRIVATE_REQUEST_ACCESS,
         key: screens.USER_FOLLOWERS_FOLLOWING,

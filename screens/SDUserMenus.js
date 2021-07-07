@@ -44,9 +44,6 @@ export const SDUserMenus = (drawerProps) => {
             case screens.USER_FOLLOWERS_FOLLOWING:
                 navigation.navigate(screens.USER_FOLLOWERS_FOLLOWING, { listFor: item.label });
                 break;
-            case screens.POSTS_USERS_SEARCH:
-                navigation.navigate(screens.POSTS_USERS_SEARCH, { toIndex: numericConstants.ONE });
-                break;
             case screens.CATEGORY:
                 navigation.navigate(screens.CATEGORY);
                 break;
@@ -149,23 +146,23 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                     </Text>
                 </View>
                 <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.positionAbsolute, glancePostStyles.editProfileAbsolute, SDGenericStyles.justifyContentCenter]}>
-                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical5, SDGenericStyles.paddingHorizontal10]}
+                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical20, SDGenericStyles.paddingHorizontal10]}
                         onPress={() => handleMenuClickAction({ key: modalTextConstants.VIEW_PROFILE })}>
-                        <RegisterUserIcon style={SDGenericStyles.justifyContentCenter} height={numericConstants.THIRTY}
-                            width={numericConstants.THIRTY} stroke={colors.WHITE} />
-                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                        <RegisterUserIcon style={SDGenericStyles.justifyContentCenter} height={numericConstants.TWENTY_TWO}
+                            width={numericConstants.TWENTY_TWO} stroke={colors.WHITE} />
+                        <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                             {miscMessage.VIEW.toUpperCase()}
                         </Text>
-                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                        <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                             {fieldControllerName.PROFILE.toUpperCase()}
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.padding9]} onPress={() => handleMenuClickAction({ key: screens.EDIT_USER_PROFILE })}>
+                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical25, SDGenericStyles.paddingHorizontal10]} onPress={() => handleMenuClickAction({ key: screens.EDIT_USER_PROFILE })}>
                         <Image style={[SDGenericStyles.menuEditIcon, SDGenericStyles.justifyContentCenter, SDGenericStyles.ml_3]} source={require(`../assets/menu/edit_icon.png`)} />
-                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                        <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                             {requestConstants.EDIT.toUpperCase()}
                         </Text>
-                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                        <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                             {fieldControllerName.PROFILE.toUpperCase()}
                         </Text>
                     </TouchableOpacity>

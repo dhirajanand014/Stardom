@@ -36,7 +36,7 @@ export const SDSplashScreen = () => {
         messaging().onNotificationOpenedApp(async remoteMessage => {
             (async () => {
                 remoteMessage.foreground = true;
-                await notificationAction(remoteMessage, navigation);
+                await notificationAction(remoteMessage, navigation, miscMessage.FROM_ON_NOTIFICATION);
             })();
         });
     }, jsonConstants.EMPTY);

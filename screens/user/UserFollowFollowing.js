@@ -3,15 +3,15 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FlatList, StatusBar, View, Text } from "react-native"
 import { CategoryContext } from '../../App';
 import {
-    actionButtonTextConstants, alertTextMessages, jsonConstants,
-    miscMessage, modalTextConstants, numericConstants, PRIVATE_FOLLOW_UNFOLLOW,
+    actionButtonTextConstants, alertTextMessages, fieldControllerName, jsonConstants,
+    miscMessage, modalTextConstants, numericConstants, placeHolderText, PRIVATE_FOLLOW_UNFOLLOW,
     requestConstants, responseStringData, screens, stringConstants
 } from '../../constants/Constants';
 import {
-    fetchUserFollowersFollowing, showSnackBar, setBackgroundColorsForList,
-    userPostAction, handleUserFollowUnfollowAction,
+    fetchUserFollowersFollowing, showSnackBar, userPostAction, handleUserFollowUnfollowAction,
 } from '../../helper/Helper';
-import { SDGenericStyles } from '../../styles/Styles';
+import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
+import { SDSearchInput } from '../../components/input/SDSearchInput';
 import Animated, {
     Extrapolate, interpolate, useAnimatedScrollHandler,
     useAnimatedStyle, useSharedValue
@@ -38,6 +38,9 @@ export const UserFollowFollowing = () => {
     const [userFollowerFollowing, setUserFollowerFollowing] = useState({
         users: jsonConstants.EMPTY
     });
+    const [searchList, setSearchList] = useState({
+        users: jsonConstants.EMPTY,
+    });
 
     const filterPrivateAccessUsers = (responseData) => {
         const user = JSON.parse(userLoggedIn.loginDetails.details);
@@ -53,7 +56,7 @@ export const UserFollowFollowing = () => {
             if (listFor == miscMessage.PRIVATE_REQUEST_ACCESS) {
                 filterPrivateAccessUsers(responseData);
             }
-            //  setBackgroundColorsForList(responseData, screens.USERS_TAB);
+            setSearchList({ ...searchList, users: responseData.users });
             setUserFollowerFollowing(responseData);
             setLoaderCallback(false);
         })();
@@ -164,7 +167,18 @@ export const UserFollowFollowing = () => {
 
     return (
         <Animated.View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
-            <AnimatedFlatlist data={userFollowerFollowing.users} keyExtractor={(item) => item.id} key={`1_${numericConstants.ONE}`}
+            {
+                (listFor == miscMessage.FOLLOWERS_TEXT || listFor == miscMessage.FOLLOWING_TEXT) &&
+                <Animated.View style={SDGenericStyles.padding20}>
+                    <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.paddingStart10]}>
+                        <SDSearchInput extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
+                            state={searchList} setState={setSearchList} inputName={listFor == miscMessage.FOLLOWERS_TEXT && fieldControllerName.SEARCH_FOLLOWERS ||
+                                fieldControllerName.SEARCH_FOLLOWINGS} items={userFollowerFollowing.users} placeHolderText={listFor == miscMessage.FOLLOWERS_TEXT
+                                    && placeHolderText.SEARCH_FOLLOWERS || placeHolderText.SEARCH_FOLLOWINGS} />
+                    </Animated.View>
+                </Animated.View>
+            }
+            <AnimatedFlatlist data={searchList.users} keyExtractor={(item) => item.id} key={`1_${numericConstants.ONE}`}
                 renderItem={({ item, index }) => {
                     return <RenderFollowingFollower item={item} scrollYValue={scrollYValue} index={index} listFor={listFor}
                         actionCallBack={actionCallBack} viewFollowerFollowingProfile={viewFollowerFollowingProfile} />

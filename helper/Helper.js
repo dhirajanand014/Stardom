@@ -4,8 +4,7 @@ import AddPostConstant from '../constants/AddPostConstant.json';
 import {
     urlConstants, keyChainConstansts, permissionsButtons,
     postCountTypes, savePostCountKeys, permissionMessages,
-    stringConstants, alertTextMessages, userSearchColors,
-    responseStringData, PRIVATE_FOLLOW_UNFOLLOW, keyBoardTypeConst,
+    stringConstants, alertTextMessages, responseStringData, PRIVATE_FOLLOW_UNFOLLOW, keyBoardTypeConst,
     actionButtonTextConstants, colorConstants, getDefaultProfilePostsCounts,
     miscMessage, width, height, numericConstants, placeHolderText,
     screens, headerStrings, fieldControllerName, isAndroid, notificationConsts,
@@ -13,7 +12,7 @@ import {
     jsonConstants, defaultProfilesValue, SDMenuOptions
 } from '../constants/Constants';
 import {
-    InteractionManager, NativeModules,
+    NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
 import * as Keychain from 'react-native-keychain';
@@ -367,50 +366,6 @@ export const saveReportAbuseOptions = async (postDetailsState) => {
     }
 }
 
-export const togglePostSearchBox = (searchValues, setSearchValues, post,
-    input_search_box_translate_x, content_translate_y, content_opacity, width,
-    height, isShowInputBox, inputTextRef, viewPagerRef, posts) => {
-    try {
-        const input_text_translate_x_config = {
-            damping: 20
-        }
-        const content_translate_y_config = {
-            damping: 20
-        }
-        const content_opacity_config = {
-            damping: 20
-        }
-        viewPagerRef.current.scrollView.setNativeProps({ scrollEnabled: !isShowInputBox });
-        input_search_box_translate_x.value = withSpring(isShowInputBox && numericConstants.ONE || width, input_text_translate_x_config)
-
-        content_translate_y.value = withSpring(isShowInputBox && numericConstants.ONE || height + numericConstants.FIVE_HUNDRED, content_translate_y_config);
-
-        content_opacity.value = withSpring(isShowInputBox && numericConstants.ONE || numericConstants.ZERO, content_opacity_config);
-
-        InteractionManager.runAfterInteractions(() => {
-            if (!isShowInputBox) {
-                inputTextRef.current.clear();
-                inputTextRef.current.blur();
-                searchValues.searchForPostId = stringConstants.EMPTY;
-                searchValues.searchText = stringConstants.EMPTY;
-                searchValues.posts = posts;
-                setSearchValues({ ...searchValues });
-            } else {
-                setTimeout(() => {
-                    inputTextRef.current.focus();
-                    setSearchValues({
-                        ...searchValues,
-                        searchForPostId: post.id
-                    });
-                }, numericConstants.TWO_HUNDRED);
-            }
-        });
-    }
-    catch (error) {
-        console.error(error);
-    }
-}
-
 export const fetchReportAbuseValues = async (postDetailsState, setPostDetailsState) => {
     try {
         const savedReportAbusesJSON = await fetchSavedReportAbuseOptions();
@@ -633,15 +588,18 @@ export const onChangeByValueType = async (inputProps, value, props) => {
         case fieldControllerName.SEARCH_POSTS:
             const filteredPosts = value && props.items.filter(postFilter => postFilter.postTitle.toLowerCase().
                 includes(value.toLowerCase())) || props.items;
-            // props.state.searchText = value;
-            // props.state.posts = filteredPosts;
-            // props.setState({ ...props.state });
             props.setState({ ...props.state, posts: filteredPosts });
             break;
         case fieldControllerName.SEARCH_USERS:
-            const filteredUsers = value && props.items.filter(user => user.name && user.name.toLowerCase().includes(value.toString().toLowerCase()) ||
-                user.user_id && user.user_id.toString().toLowerCase().includes(value.toString().toLowerCase())) || props.items;
+            const filteredUsers = value && props.items.filter(user => user.name && user.name.toLowerCase().includes(value.toString().toLowerCase())
+                || user.user_id && user.user_id.toString().toLowerCase().includes(value.toString().toLowerCase())) || props.items;
             props.setState({ ...props.state, users: filteredUsers });
+            break;
+        case fieldControllerName.SEARCH_FOLLOWERS:
+        case fieldControllerName.SEARCH_FOLLOWINGS:
+            const filteredFollowersFollowings = value && props.items.filter(user => user.name && user.name.toLowerCase().includes(value.toString().toLowerCase()))
+                || props.items;
+            props.setState({ ...props.state, users: filteredFollowersFollowings });
             break;
         default:
             inputProps.onChange(value);
@@ -1714,19 +1672,6 @@ export const fetchUserProfilePosts = async (userId, setPosts, postDetailsRef) =>
     setPosts(postData);
 }
 
-export const setBackgroundColorsForList = (data, value) => {
-    try {
-        let counterPoint = numericConstants.ZERO;
-        data[value].map((user, index) => {
-            user.backgroundColor = userSearchColors[Math.abs(counterPoint - index)];
-            if (Math.abs(counterPoint - (index + numericConstants.ONE)) == numericConstants.THREE)
-                counterPoint += numericConstants.THREE;
-        });
-    } catch (error) {
-        console.error(errorMessages.COULD_NOT_SET_COLORS, error);
-    }
-}
-
 export const fetchGalleryImages = async (cameraState, setCameraState) => {
     try {
         const photos = await CameraRoll.getPhotos({
@@ -1849,7 +1794,7 @@ export const getNotificationConfiguration = (navigation) => {
             createChannel();
         }, onNotification: async (notification) => {
             (async () => {
-                await notificationAction(notification, navigation.current);
+                await notificationAction(notification, navigation.current, miscMessage.FROM_ON_NOTIFICATION);
             })();
         }, onAction: (notification) => {
             (async () => {
@@ -1869,11 +1814,11 @@ export const getNotificationConfiguration = (navigation) => {
     }
 }
 
-export const notificationAction = async (notification, navigation) => {
+export const notificationAction = async (notification, navigation, from) => {
     try {
         switch (notification.data.actionType) {
             case notificationConsts.VIEW_POST_ACTION:
-                if (notification.foreground) {
+                from && from == miscMessage.FROM_ON_NOTIFICATION &&
                     navigation.reset({
                         index: numericConstants.ZERO, routes: [{
                             name: screens.GLANCE,
@@ -1883,7 +1828,6 @@ export const notificationAction = async (notification, navigation) => {
                             }
                         }]
                     });
-                }
                 break;
             case notificationConsts.PRIVATE_ACCESS_APPROVED:
                 navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });

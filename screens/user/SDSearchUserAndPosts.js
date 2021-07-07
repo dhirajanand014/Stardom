@@ -8,7 +8,7 @@ import {
     modalTextConstants,
     numericConstants, placeHolderText, screens, stringConstants
 } from '../../constants/Constants';
-import { fetchUserForSearch, setBackgroundColorsForList } from '../../helper/Helper';
+import { fetchUserForSearch } from '../../helper/Helper';
 import { UserFollowFollowingRenderer } from '../../views/menus/UserFollowFollowingRenderer';
 import { SDSearchInput } from '../../components/input/SDSearchInput';
 import { SDGenericStyles, userAuthStyles, userMenuStyles } from '../../styles/Styles';
@@ -50,11 +50,9 @@ export const SDSearchUserAndPosts = props => {
             setLoaderCallback(true, index == numericConstants.ZERO && alertTextMessages.LOADING_USERS_POSTS ||
                 alertTextMessages.LOADING_USERS);
             searchList.posts = userPosts;
-            //setBackgroundColorsForList(searchList, screens.POSTS_TAB);
             if (loggedInUser.isLoggedIn) {
                 const responseData = await fetchUserForSearch(loggedInUser.loginDetails.token);
                 searchList.users = responseData.users;
-                //  setBackgroundColorsForList(searchList, screens.USERS_TAB);
                 setUserFollowerFollowing(responseData);
             }
             setSearchList({ ...searchList });

@@ -22,8 +22,8 @@ export const SDGenericStyles = StyleSheet.create({
         height: numericConstants.TWENTY_EIGHT
     },
     menuEditIcon: {
-        width: numericConstants.TWENTY_SIX,
-        height: numericConstants.TWENTY_SIX
+        width: numericConstants.EIGHTEEN,
+        height: numericConstants.EIGHTEEN
     },
     lockUnlockIconStyle: {
         width: numericConstants.TWENTY,
@@ -455,6 +455,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingVertical20: {
         paddingVertical: 20
     },
+    paddingVertical25: {
+        paddingVertical: 25
+    },
     paddingVertical12: {
         paddingVertical: 12
     },
@@ -719,50 +722,9 @@ export const glancePostStyles = StyleSheet.create({
         width: 18,
         height: 18
     },
-    searchInputBox: {
-        flex: 1,
-        flexDirection: 'row',
-        height: height / 25,
-        alignItems: 'center',
-        position: 'absolute',
-        justifyContent: 'center',
-        top: 0,
-        width: width - 80,
-        right: width - 410,
-        bottom: -20,
-    },
-    close_button_search_input: {
-        justifyContent: 'center',
-        backgroundColor: '#e4e6eb',
-        alignItems: 'center',
-        flexDirection: 'row',
-        right: 30,
-    },
     search_input_close_input_icon: {
         width: 20,
         height: 20
-    },
-    search_content: {
-        height: height / 3.4,
-        position: 'absolute',
-        width: width / 2,
-        top: 25,
-        right: 0,
-        zIndex: 999,
-        elevation: 4
-    },
-    search_content_view: {
-        flex: 1,
-        backgroundColor: 'white',
-        borderRadius: 16
-    },
-    search_content_post_selection: {
-        paddingRight: 50,
-        borderBottomStartRadius: 16,
-        borderBottomEndRadius: 16
-    },
-    search_content_post_title: {
-        fontFamily: 'stardom_roboto_regular'
     },
     search_input_text: {
         flex: 1,
@@ -900,7 +862,7 @@ export const glancePostStyles = StyleSheet.create({
     editProfileAbsolute: {
         top: 0,
         bottom: 0,
-        right: 5
+        right: 8
     },
     modalHideText: {
         color: "white",
@@ -950,8 +912,8 @@ export const glancePostStyles = StyleSheet.create({
         paddingRight: 2
     },
     postDescriptionModalButton: {
-        top: 20,
-        right: 40,
+        top: 15,
+        right: width - 360,
         elevation: 3,
     },
     postWallpaperModalButton: {
