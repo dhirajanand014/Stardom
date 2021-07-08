@@ -849,12 +849,19 @@ export const handleUserSignUpOtp = async (phoneNumber, isFrom, navigation, isRes
         // Math.random() returns float between 0 and 1, 
         // so minimum number will be 100000, max - 999999. 
         const random6Digit = Math.floor(Math.random() * 899999 + 100000);
+        const hashValue = isAndroid && await RNOtpVerify.getHash() || "RaZGrAI03n4";
+        const otpRequestData = {
+            phoneNumber: phoneNumber,
+            rand_number: random6Digit,
+            hash_value: hashValue[numericConstants.ZERO],
+            isFrom: isFrom
+        }
+        const otpRequestDataJSON = JSON.stringify(otpRequestData);
 
+        const response = await axiosPostWithHeaders(urlConstants.triggerSmsOtp, otpRequestDataJSON);
+        const responseData = processResponseData(response);
 
-        //const response = await axiosPostWithHeaders(urlConstants.triggerSmsOtp, otpRequestDataJSON)
-        // const responseData = processResponseData(response);
-
-        if (true && !isResendOtp) {
+        if (responseData && !isResendOtp) {
             const params = getSignUpParams(random6Digit, isFrom);
             navigation.navigate(screens.OTP_VERIFICATION, params);
             return true;
@@ -1712,7 +1719,7 @@ export const handleForgotPassword = async (watchMobileNumber, navigation, trigge
             } else {
                 clearErrors(fieldControllerName.PHONE_NUMBER);
                 const phone = { phoneNumber: watchMobileNumber };
-                await handleUserSignUpOtp(phone, miscMessage.FORGOT_PASSWORD, navigation, false);
+                await handleUserSignUpOtp(phone.phoneNumber, miscMessage.FORGOT_PASSWORD, navigation, false);
                 setSignUpDetails({ ...signUpDetails, phoneNumber: watchMobileNumber });
             }
         } else {
@@ -1846,5 +1853,29 @@ export const notificationAction = async (notification, navigation, from) => {
         }
     } catch (error) {
         console.error(errorMessages.COULD_NOT_HANDLE_NOTIFICATION_ACTION, error);
+    }
+}
+
+export const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    const paddingToBottom = numericConstants.TWENTY;
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+};
+
+export const getAcceptedEULA = async () => {
+    try {
+        const savedEULA = await Keychain.getGenericPassword({ service: miscMessage.ACCEPTED_EULA });
+        return savedEULA && JSON.parse(savedEULA.password) || false;
+    } catch (error) {
+        console.error(errorMessages.CANNOT_FETCH_SAVED_EULA, error);
+    }
+    return false;
+}
+
+export const saveEULA = async (acceptedEULA) => {
+    try {
+        await Keychain.setGenericPassword(miscMessage.ACCEPTED, JSON.stringify(acceptedEULA),
+            { service: miscMessage.ACCEPTED_EULA });
+    } catch (error) {
+        console.error(errorMessages.CANNOT_SAVE_EULA, error);
     }
 }

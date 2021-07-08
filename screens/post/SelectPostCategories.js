@@ -5,13 +5,14 @@ import { TouchableOpacity, View, Text } from 'react-native';
 import { CategoryContext } from '../../App';
 import {
     actionButtonTextConstants, alertTextMessages, errorMessages, fieldControllerName,
-    formRequiredRules, jsonConstants, miscMessage, numericConstants, width
+    formRequiredRules, jsonConstants, miscMessage, numericConstants, screens, width
 } from '../../constants/Constants';
-import { fetchCategoryData, handleAddPostDetails, showSnackBar, checkTokenStatus } from '../../helper/Helper';
+import { fetchCategoryData, handleAddPostDetails, showSnackBar, checkTokenStatus, getAcceptedEULA } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
+import { BackButton } from '../../components/button/BackButton';
 import { SDPostCategorySelector } from '../../views/imagePost/SDPostCategorySelector';
 
-export const SelectPostCategories = props => {
+export const SelectPostCategories = () => {
     const { userPosts, setLoaderCallback } = useContext(CategoryContext);
 
     const route = useRoute();
@@ -34,7 +35,16 @@ export const SelectPostCategories = props => {
 
     const [categories, setCategories] = useState(jsonConstants.EMPTY);
 
-    const onSubmit = async (data) => {
+    const onSubmit = useCallback(async (data) => {
+        if (await getAcceptedEULA()) {
+            await submitPost(setLoaderCallback, toAction, data, postDetails, userPosts, selectedItem,
+                uploadCallback, navigateUser, loginCallback);
+        } else {
+            navigation.navigate(screens.EULA_ACCEPTANCE, { onSubmit: onSubmit, data: data })
+        }
+    })
+
+    const submitPost = useCallback(async (setLoaderCallback, toAction, data, postDetails, userPosts, selectedItem, uploadCallback, navigateUser, loginCallback) => {
         setLoaderCallback(true, toAction == miscMessage.UPDATE && alertTextMessages.UPDATING_POST_DETAILS ||
             alertTextMessages.ADDING_NEW_POST);
         const requestData = { ...data, ...postDetails };
@@ -49,7 +59,7 @@ export const SelectPostCategories = props => {
                 setLoaderCallback(false);
             }
         }
-    }
+    });
 
     useEffect(() => {
         (async () => {
@@ -66,6 +76,8 @@ export const SelectPostCategories = props => {
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
+
+            <BackButton goBack leftStyle={numericConstants.TEN} />
             <SDPostCategorySelector inputName={fieldControllerName.POST_CATEGORIES} formState={formState} maxLength={numericConstants.THREE} setError={setError}
                 categories={categories} setCategories={setCategories} postCategories={postCategories} setValue={setValue} />
 

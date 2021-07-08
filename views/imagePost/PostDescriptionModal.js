@@ -31,7 +31,7 @@ export const PostDescriptionModal = React.memo(({ postDetailsState, setPostDetai
                                 </View>
                             </View>
                         }
-                        <TouchableOpacity style={glancePostStyles.postDescriptionModalButton}
+                        <TouchableOpacity style={glancePostStyles.postDescriptionModalButton} activeOpacity={.7}
                             onPress={() => resetModalState(postDetailsState, setPostDetailsState, miscMessage.POST_DESCRIPTION_MODAL_NAME)} >
                             <Image style={glancePostStyles.icon_modal_close} source={post_modal_close_icon} />
                         </TouchableOpacity>

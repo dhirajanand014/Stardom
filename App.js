@@ -2,19 +2,21 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   jsonConstants, numericConstants,
   screens, stringConstants, requestConstants,
-  PRIVATE_FOLLOW_UNFOLLOW
+  PRIVATE_FOLLOW_UNFOLLOW,
+  miscMessage
 } from './constants/Constants';
-import { fetchAndUpdateCategoryState, fetchUpdateLoggedInUserProfile, getAllProfiles } from './helper/Helper.js';
+import { fetchAndUpdateCategoryState, fetchUpdateLoggedInUserProfile, getAllProfiles, showSnackBar } from './helper/Helper.js';
 import { TourGuideProvider } from 'rn-tourguide';
 import AddPostConstant from './constants/AddPostConstant.json';
 import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';
 import { ScreenNavigator } from '.';
 import { SDLoaderView } from './components/modals/SDLoaderView';
+import NetInfo from "@react-native-community/netinfo";
 import { useSharedValue } from 'react-native-reanimated';
 import messaging from '@react-native-firebase/messaging';
 import { FlashMessageRenderer } from './components/modals/FlashMessageRenderer';
 import { showNotification } from './notification/notification';
-
+import { DisconnectedNetModal } from './components/modals/DisconnectedNetModal';
 export const CategoryContext = React.createContext();
 
 export default function App({ navigationRef }) {
@@ -38,7 +40,9 @@ export default function App({ navigationRef }) {
   const [downloadProgressState, setDownloadProgressState] = useState({
     progressValue: useSharedValue(numericConstants.ZERO),
     isDownloading: useSharedValue(false)
-  })
+  });
+
+  const [netConnection, setNetConnection] = useState({ isConnected: stringConstants.EMPTY });
 
   const [sdomDatastate, setSdomDatastate] = useState(jsonConstants.EMPTY);
   const [optionsState, setOptionsState] = useState({
@@ -92,17 +96,18 @@ export default function App({ navigationRef }) {
   });
 
   useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      showSnackBar(state.isConnected && miscMessage.CONNECTED || miscMessage.DISCONNECTED, state.isConnected);
+      setNetConnection({ ...netConnection, isConnected: state.isConnected });
+    });
     (async () => {
       await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
-    })();
-  }, jsonConstants.EMPTY);
-
-
-  useEffect(() => {
-    (async () => {
       const allProfiles = await getAllProfiles();
       allProfiles && setProfiles(allProfiles);
     })();
+    return () => {
+      unsubscribe();
+    }
   }, jsonConstants.EMPTY);
 
   const setLoaderCallback = useCallback((isLoading, loadingText, progressValue) => {
@@ -136,6 +141,7 @@ export default function App({ navigationRef }) {
           loader && <SDLoaderView loader={loader} />
         }
         <FlashMessageRenderer />
+        <DisconnectedNetModal isConnected={netConnection.isConnected} />
       </CategoryContext.Provider>
     </SDErrorBoundary>
   )

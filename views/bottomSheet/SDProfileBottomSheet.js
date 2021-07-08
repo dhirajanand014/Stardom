@@ -87,7 +87,7 @@ export const SDProfileBottomSheet = props => {
     }
     return (
         <React.Fragment>
-            <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10, SDGenericStyles.paddingTop40]}>
+            <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10, SDGenericStyles.paddingTop10]}>
                 <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () => await shareImage({ postImage: props.profile.profile_image, postTitle: props.profile.name },
                     downloadCallback, resetFlashMessage)} activeOpacity={.7}>
                     <Image style={glancePostStyles.icon_post_share} source={post_share} />

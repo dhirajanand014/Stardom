@@ -37,6 +37,7 @@ import { FollowerFollowingProfile } from './screens/user/FollowerFollowingProfil
 import { SDSearchUserAndPosts } from './screens/user/SDSearchUserAndPosts';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
+import { EULAAcceptance } from './screens/EULAAcceptance';
 
 LogBox.ignoreLogs(['Remote debugger is in a background tab which may cause apps to perform slowly',
     'Require cycle: node_modules/rn-fetch-blob/index.js',
@@ -91,6 +92,7 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.EDIT_USER_PROFILE} component={EditUserProfile} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.FOLLOWER_FOLLOWING_PROFILE} component={FollowerFollowingProfile} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.VIEW_USER_POSTS} component={ViewUserPost} options={headerLessStackOptions} />
+                <Stack.Screen name={screens.EULA_ACCEPTANCE} component={EULAAcceptance} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.USER_FOLLOWERS_FOLLOWING} component={UserFollowFollowing} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.POSTS_USERS_SEARCH} component={SDSearchUserAndPosts} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.IMAGE_PREVIEW_FILTERS} component={SDCameraImagePreview} options={headerLessStackOptions} />

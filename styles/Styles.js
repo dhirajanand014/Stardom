@@ -167,6 +167,9 @@ export const SDGenericStyles = StyleSheet.create({
     ft12: {
         fontSize: 12
     },
+    ft13: {
+        fontSize: 13
+    },
     ft14: {
         fontSize: 14
     },
@@ -196,6 +199,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     ftWeight100: {
         fontWeight: '100'
+    },
+    marginBottom1: {
+        marginBottom: 1
     },
     marginBottom4: {
         marginBottom: 4
@@ -295,6 +301,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     marginTop8: {
         marginTop: 8
+    },
+    marginTop20: {
+        marginTop: 20
     },
     borderRadius5: {
         borderRadius: 5
@@ -457,6 +466,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingVertical20: {
         paddingVertical: 20
+    },
+    paddingVertical23: {
+        paddingVertical: 23
     },
     paddingVertical25: {
         paddingVertical: 25
@@ -806,6 +818,11 @@ export const glancePostStyles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
+    EULAModalTitleDivider: {
+        width: width / 1.05,
+        marginTop: 5,
+        height: 1
+    },
     wallpaperModalView: {
         marginRight: 20,
         backgroundColor: "white",
@@ -905,6 +922,11 @@ export const glancePostStyles = StyleSheet.create({
     icon_modal_close: {
         height: 22,
         width: 22
+    },
+    EULAContainer: {
+        height: height / 1.26,
+        marginTop: 10,
+        marginBottom: 10
     },
     icon_wallpaper_modal_close: {
         height: 20,
@@ -1075,6 +1097,22 @@ export const glancePostStyles = StyleSheet.create({
         borderBottomColor: `#fcc200`,
         fontSize: 16,
         color: '#05375a'
+    },
+    eulaButton: {
+        backgroundColor: '#eabe05',
+        borderRadius: 28,
+        alignItems: 'center',
+        padding: 15,
+        width: width / 1.2,
+        elevation: 3
+    },
+    eulaButtonDisabled: {
+        backgroundColor: '#999',
+        alignItems: 'center',
+        borderRadius: 28,
+        padding: 15,
+        width: width / 1.2,
+        elevation: 3
     },
     addPostDetailsStyle: {
         borderWidth: 0.5,
@@ -1435,6 +1473,13 @@ export const userAuthStyles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 12,
         paddingLeft: 3,
+        textAlign: 'left'
+    },
+    searchTextInputStyle: {
+        flex: 1,
+        paddingHorizontal: 12,
+        paddingVertical: 12,
+        paddingLeft: 15,
         textAlign: 'left'
     },
     signInCreateAccount: {

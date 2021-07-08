@@ -79,31 +79,33 @@ export const SDCameraImagePreview = () => {
         );
     });
     return (
-        <View style={SDGenericStyles.backGroundColorBlack} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
-            <SafeAreaView />
-            <BackButton goBack leftStyle={numericConstants.TEN} />
-            <View>
-                {
-                    selectedFilterIndex === numericConstants.ZERO &&
-                    <Image style={[cameraStyles.imageStyles, SDGenericStyles.alignItemsCenter]} resizeMode={FastImage.resizeMode.contain}
-                        source={{ uri: imageFilterURI }} /> ||
-                    <SelectedFilterComponent onExtractImage={onExtractImage} extractImageEnabled={true}
-                        image={<Image resizeMode={FastImage.resizeMode.contain} style={[cameraStyles.imageStyles, SDGenericStyles.alignSelfStart]}
-                            source={{ uri: imageFilterURI }} />} />
-                }
-            </View>
-            <View style={SDGenericStyles.elevation3}>
-                <FlatList data={CAMERA_IMAGE_FILTERS} keyExtractor={item => item.title} horizontal renderItem={({ item, index }) =>
-                    <SDFilterComponent item={item} index={index} />} contentContainerStyle={[SDGenericStyles.paddingVertical10, SDGenericStyles.elevation8]} />
-            </View>
-            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.marginVertical2, SDGenericStyles.justifyContentCenter,
-            SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingBottom10]}>
-                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonImagePreviewText, SDGenericStyles.backgroundColorYellow, { width: width / 1.8 }]}
-                    onPress={() => proceedAction()}>
-                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>
-                        {actionButtonTextConstants.PROCEED}</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+        <ImagePreview loader={loader} selectedFilterIndex={selectedFilterIndex} imageFilterURI={imageFilterURI} SelectedFilterComponent={SelectedFilterComponent}
+            onExtractImage={onExtractImage} SDFilterComponent={SDFilterComponent} proceedAction={proceedAction} />
     );
 };
+
+const ImagePreview = React.memo(({ loader, selectedFilterIndex, imageFilterURI, SelectedFilterComponent, onExtractImage, SDFilterComponent, proceedAction }) => {
+    return <View style={SDGenericStyles.backGroundColorBlack} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
+        <SafeAreaView />
+        <BackButton goBack leftStyle={numericConstants.TEN} />
+        <View>
+            {selectedFilterIndex === numericConstants.ZERO &&
+                <Image style={[cameraStyles.imageStyles, SDGenericStyles.alignItemsCenter]} resizeMode={FastImage.resizeMode.contain}
+                    source={{ uri: imageFilterURI }} /> ||
+                <SelectedFilterComponent onExtractImage={onExtractImage} extractImageEnabled={true}
+                    image={<Image resizeMode={FastImage.resizeMode.contain} style={[cameraStyles.imageStyles, SDGenericStyles.alignSelfStart]}
+                        source={{ uri: imageFilterURI }} />} />}
+        </View>
+        <View style={SDGenericStyles.elevation3}>
+            <FlatList data={CAMERA_IMAGE_FILTERS} keyExtractor={item => item.title} horizontal renderItem={({ item, index }) => <SDFilterComponent item={item} index={index} />} contentContainerStyle={[SDGenericStyles.paddingVertical10, SDGenericStyles.elevation8]} />
+        </View>
+        <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.marginVertical2, SDGenericStyles.justifyContentCenter,
+        SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingBottom10]}>
+            <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonImagePreviewText, SDGenericStyles.backgroundColorYellow, { width: width / 1.8 }]}
+                onPress={() => proceedAction()}>
+                <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>
+                    {actionButtonTextConstants.PROCEED}</Text>
+            </TouchableOpacity>
+        </View>
+    </View>;
+});

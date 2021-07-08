@@ -10,6 +10,7 @@ import {
 } from '../../constants/Constants';
 import { fetchUserForSearch } from '../../helper/Helper';
 import { UserFollowFollowingRenderer } from '../../views/menus/UserFollowFollowingRenderer';
+import { BackButton } from '../../components/button/BackButton';
 import { SDSearchInput } from '../../components/input/SDSearchInput';
 import { SDGenericStyles, userAuthStyles, userMenuStyles } from '../../styles/Styles';
 import { TabView, TabBar } from 'react-native-tab-view';
@@ -147,8 +148,9 @@ export const SDSearchUserAndPosts = props => {
 const PostUsersTabbedView = React.memo(({ searchList, setSearchList, index, routes, renderScene, setIndexCallBack, renderTabBar,
     setLoaderCallback, userFollowerFollowing, userPosts }) => {
     return <Animated.View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
+        <BackButton leftStyle={numericConstants.ONE} isWithSearch />
         <Animated.View style={SDGenericStyles.padding20}>
-            <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.paddingStart10]}>
+            <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.marginStart20]}>
                 <SDSearchInput extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
                     state={searchList} setState={setSearchList} inputName={index == numericConstants.ZERO && fieldControllerName.SEARCH_POSTS ||
                         fieldControllerName.SEARCH_USERS} items={index == numericConstants.ZERO && userPosts || userFollowerFollowing.users}

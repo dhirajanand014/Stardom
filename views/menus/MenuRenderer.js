@@ -8,7 +8,7 @@ export const MenuRenderer = React.memo(({ item, index, profileMenu, handleMenuCl
         <View key={index}>
             <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(colors.WHITE, false)} useForeground={true}
                 onPress={async () => await handleMenuClickAction(item)}>
-                <View style={SDGenericStyles.rowFlexDirection}>
+                <View key={`1-${index}`} style={SDGenericStyles.rowFlexDirection}>
                     <View style={[SDGenericStyles.paddingStart10, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter]}>
                         <Image style={SDGenericStyles.menuIconStyle} source={item.icon} />
                     </View>
