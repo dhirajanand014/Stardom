@@ -151,9 +151,10 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                             {fieldControllerName.PROFILE.toUpperCase()}
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical25, SDGenericStyles.paddingHorizontal10]}
+                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical23, SDGenericStyles.paddingHorizontal10]}
                         onPress={() => handleMenuClickAction({ key: screens.EDIT_USER_PROFILE })} activeOpacity={.7}>
-                        <Image style={[SDGenericStyles.menuEditIcon, SDGenericStyles.justifyContentCenter, SDGenericStyles.ml_3]} source={require(`../assets/menu/edit_icon.png`)} />
+                        <Image style={[SDGenericStyles.menuEditIcon, SDGenericStyles.justifyContentCenter, SDGenericStyles.ml_3, SDGenericStyles.marginBottom1]}
+                            source={require(`../assets/menu/edit_icon.png`)} />
                         <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                             {requestConstants.EDIT.toUpperCase()}
                         </Text>

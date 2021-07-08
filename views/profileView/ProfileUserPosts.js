@@ -11,8 +11,10 @@ export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isS
     return (
         <View key={index} style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
             <TouchableOpacity activeOpacity={.7} onPress={() => {
-                postIdRef.current = item.id;
-                navigation.navigate(screens.VIEW_USER_POSTS, { userId: item.user.id, postId: postIdRef })
+                if (item.postType == fieldControllerName.POST_TYPE_PUBLIC) {
+                    postIdRef.current = item.id;
+                    navigation.navigate(screens.VIEW_USER_POSTS, { userId: item.user.id, postId: postIdRef });
+                }
             }}>
                 <View key={index} style={[{
                     height: height / numericConstants.FOUR, width: width / numericConstants.THREE
@@ -57,7 +59,7 @@ export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isS
                                                     SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop10]}>
                                                         {miscMessage.REQUEST_FOR_PRIVATE_ACCESS}
                                                     </Text> || <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular,
-                                                    SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop40]}>
+                                                    SDGenericStyles.textCenterAlign, !isSameUser && SDGenericStyles.paddingTop20 || SDGenericStyles.paddingTop50]}>
                                                         {miscMessage.PRIVATE_POST}
                                                     </Text>
                                                 }

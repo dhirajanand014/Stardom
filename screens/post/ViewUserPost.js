@@ -15,6 +15,7 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 import { ViewUserPostDetails } from './ViewUserPostDetails';
 import Shimmer from 'react-native-shimmer';
 import FastImage from 'react-native-fast-image';
+import { BackButton } from '../../components/button/BackButton';
 
 export const ViewUserPost = () => {
 
@@ -61,6 +62,7 @@ export const ViewUserPost = () => {
 const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOptions, setPostOptions, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x, height,
     navigation, postIdFromNotification }) => {
     return <View style={SDGenericStyles.fill}>
+        <BackButton goBack leftStyle={numericConstants.TEN} />
         {
             posts && posts.length &&
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
