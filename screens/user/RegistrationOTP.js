@@ -142,7 +142,7 @@ export const RegistrationOTP = props => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE ||
                 miscMessage.AUTO}>
-                <AuthHeaderText titleText={modalTextConstants.OTP_VERIFICATION} paddingTopNeeded />
+                <AuthHeaderText titleText={modalTextConstants.OTP_VERIFICATION} paddingTopNeeded showBackIcon goBack leftStyle={numericConstants.TEN} />
                 <View style={[userAuthStyles.otpFieldRows, SDGenericStyles.mt12]}>
                     {
                         [firstTextInputRef, secondTextInputRef, thirdTextInputRef, fourthTextInputRef, fifthTextInputRef,

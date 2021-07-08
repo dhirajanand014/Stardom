@@ -113,41 +113,48 @@ export const RegistrationConfirmation = () => {
     }, jsonConstants.EMPTY);
 
     return (
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}
-                pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
-                <AuthHeaderText titleText={modalTextConstants.CONFIRM_REGISTRATION} paddingTopNeeded />
-                <ScrollView>
-                    <SDImageFormInput inputName={fieldControllerName.USER_ID} control={control} rules={formRequiredRules.usedIdFormRule} clearErrors={clearError} isUserIdEntry
-                        defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.USER_ID} autofocus={true} icon={<RegisterUserIcon width={numericConstants.EIGHTEEN}
-                            height={numericConstants.EIGHTEEN} stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || isUserIdAvailable?.current && colors.LIGHT_GREEN ||
-                                colors.SDOM_PLACEHOLDER} />} userIdValue={userIdValue} formState={formState} keyboardType={keyBoardTypeConst.DEFAULT} validateUserId={validateUserId}
-                        isUserIdAvailable={isUserIdAvailable} isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
-                        editable={isFrom && isFrom != miscMessage.FORGOT_PASSWORD} caretHidden={isFrom && isFrom == miscMessage.FORGOT_PASSWORD} />
-
-                    <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule} setIsSecureTextEntry={setIsSecureTextEntry}
-                        defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.PASSWORD} minLength={numericConstants.SIX}
-                        keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
-                            colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} onSubmitEditing={() => focusOnInputIfFormInvalid(formState, confirmSecretRef)}
-                        isSecureTextEntry={isSecureTextEntry} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]} isPasswordInput={true} />
-
-                    <SDImageFormInput inputName={fieldControllerName.CONFIRM_SECRET} control={control} rules={formRequiredRules.passwordFormRule} isPasswordInput={true}
-                        defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.CONFIRM_PASSWORD} textContentType={keyBoardTypeConst.NEW_PASSWORD}
-                        keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.CONFIRM_SECRET]?.message &&
-                            colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} refCallback={refCallback} minLength={numericConstants.SIX}
-                        extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]} isSecureTextEntry={isSecureTextEntry}
-                        setIsSecureTextEntry={setIsSecureTextEntry} />
-                </ScrollView>
-
-                <View style={userAuthStyles.registrationConfirmationView}>
-                    <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
-                        onPress={handleSubmit(onSubmit)}>
-                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoRegular]}>{actionButtonTextConstants.PROCEED.toUpperCase()}</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </TouchableWithoutFeedback>
+        <RegConfirmation loader={loader} control={control} clearError={clearError} formState={formState} isUserIdAvailable={isUserIdAvailable}
+            userIdValue={userIdValue} validateUserId={validateUserId} isFrom={isFrom} setIsSecureTextEntry={setIsSecureTextEntry} onSubmit={onSubmit}
+            confirmSecretRef={confirmSecretRef} isSecureTextEntry={isSecureTextEntry} refCallback={refCallback} handleSubmit={handleSubmit} />
     )
 }
 
+
+const RegConfirmation = React.memo(({ loader, control, clearError, formState, isUserIdAvailable, userIdValue, validateUserId, isFrom, setIsSecureTextEntry,
+    confirmSecretRef, isSecureTextEntry, refCallback, handleSubmit, onSubmit }) => {
+    return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}
+            pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
+            <AuthHeaderText titleText={modalTextConstants.CONFIRM_REGISTRATION} paddingTopNeeded showBackIcon />
+            <ScrollView>
+                <SDImageFormInput inputName={fieldControllerName.USER_ID} control={control} rules={formRequiredRules.usedIdFormRule} clearErrors={clearError} isUserIdEntry
+                    defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.USER_ID} autofocus={true} icon={<RegisterUserIcon width={numericConstants.EIGHTEEN}
+                        height={numericConstants.EIGHTEEN} stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || isUserIdAvailable?.current && colors.LIGHT_GREEN ||
+                            colors.SDOM_PLACEHOLDER} />} userIdValue={userIdValue} formState={formState} keyboardType={keyBoardTypeConst.DEFAULT} validateUserId={validateUserId}
+                    isUserIdAvailable={isUserIdAvailable} isUserId={true} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
+                    editable={isFrom && isFrom != miscMessage.FORGOT_PASSWORD} caretHidden={isFrom && isFrom == miscMessage.FORGOT_PASSWORD} />
+
+                <SDImageFormInput inputName={fieldControllerName.SECRET} control={control} rules={formRequiredRules.passwordFormRule} setIsSecureTextEntry={setIsSecureTextEntry}
+                    defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.SECRET} textContentType={keyBoardTypeConst.PASSWORD} minLength={numericConstants.SIX}
+                    keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.SECRET]?.message &&
+                        colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} onSubmitEditing={() => focusOnInputIfFormInvalid(formState, confirmSecretRef)}
+                    isSecureTextEntry={isSecureTextEntry} extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]} isPasswordInput={true} />
+
+                <SDImageFormInput inputName={fieldControllerName.CONFIRM_SECRET} control={control} rules={formRequiredRules.passwordFormRule} isPasswordInput={true}
+                    defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.CONFIRM_PASSWORD} textContentType={keyBoardTypeConst.NEW_PASSWORD}
+                    keyboardType={keyBoardTypeConst.DEFAULT} icon={<LoginSecretIcon stroke={formState.errors[fieldControllerName.CONFIRM_SECRET]?.message &&
+                        colors.RED || colors.SDOM_PLACEHOLDER} />} formState={formState} refCallback={refCallback} minLength={numericConstants.SIX}
+                    extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]} isSecureTextEntry={isSecureTextEntry}
+                    setIsSecureTextEntry={setIsSecureTextEntry} />
+            </ScrollView>
+
+            <View style={userAuthStyles.registrationConfirmationView}>
+                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
+                    onPress={handleSubmit(onSubmit)}>
+                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoRegular]}>{actionButtonTextConstants.PROCEED.toUpperCase()}</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    </TouchableWithoutFeedback>;
+});
 

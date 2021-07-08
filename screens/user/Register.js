@@ -38,7 +38,7 @@ export const Register = () => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]} pointerEvents={loader.isLoading && miscMessage.NONE ||
                 miscMessage.AUTO}>
-                <AuthHeaderText titleTextHeader={modalTextConstants.REGISTER_TITLE_HEADER} titleText={modalTextConstants.REGISTER_TITLE_TEXT} isFrom={screens.REGISTER} />
+                <AuthHeaderText titleTextHeader={modalTextConstants.REGISTER_TITLE_HEADER} titleText={modalTextConstants.REGISTER_TITLE_TEXT} isFrom={screens.REGISTER} showBackIcon goBack />
                 <SDImageFormInput inputName={fieldControllerName.PHONE_NUMBER} control={control} rules={formRequiredRules.mobileInputFormRule}
                     defaultValue={stringConstants.EMPTY} isPhoneNumberEntry={true} maxLength={numericConstants.TEN} placeHolderText={placeHolderText.PHONE_NUMBER}
                     keyboardType={isAndroid && keyBoardTypeConst.ANDROID_NUMERIC || keyBoardTypeConst.IOS_NUMERIC} textContentType={keyBoardTypeConst.TELPHONETYPE}

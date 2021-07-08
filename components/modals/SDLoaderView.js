@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { Image, Modal, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { alertTextMessages, jsonConstants, miscMessage, numericConstants } from "../../constants/Constants";
 import { colors, glancePostStyles, SDGenericStyles } from "../../styles/Styles";
@@ -24,32 +24,32 @@ export const SDLoaderView = props => {
     });
 
     return (
-        <Modal animationType={miscMessage.NONE} transparent visible={props.loader.isLoading}>
-            <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, , SDGenericStyles.paddingVertical5
-            ]} pointerEvents={miscMessage.NONE}>
-                <View style={[glancePostStyles.loaderModalView, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter,
-                SDGenericStyles.backgroundColorWhite, SDGenericStyles.paddingHorizontal10]}>
-                    <FastImage source={{
-                        uri: Image.resolveAssetSource(require(`../../assets/stardom_loader.gif`)).uri,
-                        priority: FastImage.priority.normal
-                    }} style={{ width: numericConstants.THIRTY, height: numericConstants.THIRTY }} resizeMode={FastImage.resizeMode.contain} />
-                    {
-                        props.loader.loadingText && <View>
-                            <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop10,
-                            SDGenericStyles.placeHolderTextColor]}>
-                                {props.loader.loadingText}
-                            </Text>
-                        </View> || <View />
-                    }
-                    {
-                        props.loader.loadingText == alertTextMessages.UPDATING_DETAILS || props.loader.loadingText == alertTextMessages.ADDING_NEW_POST
-                        || props.loader.loadingText == alertTextMessages.UPDATING_POST_DETAILS || props.loader.loadingText == alertTextMessages.DOWNLOADING_IMAGE &&
-                        <View style={[{ width: numericConstants.ONE_HUNDRED, height: numericConstants.FIVE }, { backgroundColor }, SDGenericStyles.marginVertical10]}>
-                            <Animated.View style={[progressStyle, { backgroundColor: foregroundColor }]} />
-                        </View>
-                    }
-                </View>
+        props.loader.isLoading &&
+        <View style={[SDGenericStyles.fill, SDGenericStyles.positionAbsolute, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter,
+        SDGenericStyles.loaderCentre]}
+            pointerEvents={miscMessage.NONE}>
+            <View style={[glancePostStyles.loaderModalView, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter,
+            SDGenericStyles.backgroundColorWhite, SDGenericStyles.paddingHorizontal10]}>
+                <FastImage source={{
+                    uri: Image.resolveAssetSource(require(`../../assets/stardom_loader.gif`)).uri,
+                    priority: FastImage.priority.normal
+                }} style={{ width: numericConstants.THIRTY, height: numericConstants.THIRTY }} resizeMode={FastImage.resizeMode.contain} />
+                {
+                    props.loader.loadingText && <View>
+                        <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop10,
+                        SDGenericStyles.placeHolderTextColor]}>
+                            {props.loader.loadingText}
+                        </Text>
+                    </View> || <View />
+                }
+                {
+                    props.loader.loadingText == alertTextMessages.UPDATING_DETAILS || props.loader.loadingText == alertTextMessages.ADDING_NEW_POST
+                    || props.loader.loadingText == alertTextMessages.UPDATING_POST_DETAILS || props.loader.loadingText == alertTextMessages.DOWNLOADING_IMAGE &&
+                    <View style={[{ width: numericConstants.ONE_HUNDRED, height: numericConstants.FIVE }, { backgroundColor }, SDGenericStyles.marginVertical10]}>
+                        <Animated.View style={[progressStyle, { backgroundColor: foregroundColor }]} />
+                    </View>
+                }
             </View>
-        </Modal>
+        </View>
     );
 };

@@ -305,6 +305,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingStart10: {
         paddingStart: 10
     },
+    marginStart20: {
+        marginStart: 20
+    },
     paddingEnd10: {
         paddingEnd: 10
     },
@@ -587,6 +590,12 @@ export const SDGenericStyles = StyleSheet.create({
     },
     borderRadius20: {
         borderRadius: 20
+    },
+    loaderCentre: {
+        top: 0,
+        right: 0,
+        left: 0,
+        bottom: 0
     },
     borderRadius28: {
         borderRadius: 28
@@ -1071,6 +1080,16 @@ export const glancePostStyles = StyleSheet.create({
         borderWidth: 0.5,
         borderColor: '#969696'
     },
+    headerBackButton: {
+        position: 'absolute',
+        alignItems: 'center',
+        zIndex: 1,
+        justifyContent: 'center',
+        width: 40,
+        height: 40,
+        borderRadius: 50,
+        elevation: 3
+    },
     addPostCategoriesStyle: {
         borderWidth: 1,
         borderColor: '#fafafa',
@@ -1347,13 +1366,20 @@ export const userAuthStyles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 8,
         width: width / 2,
-        paddingBottom: 8
+        paddingBottom: 12
     },
     primaryActionButtonButtonText: {
         fontSize: 18,
         textAlign: 'center',
         borderRadius: 10,
         paddingVertical: 8,
+        color: '#1b1f2b'
+    },
+    primaryActionButtonImagePreviewText: {
+        fontSize: 18,
+        textAlign: 'center',
+        borderRadius: 10,
+        paddingVertical: 5,
         color: '#1b1f2b'
     },
     signUpFooter: {
@@ -1380,7 +1406,7 @@ export const userAuthStyles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: `#343642`,
-        borderRadius: 8,
+        borderRadius: 28,
     },
     errorInputBorder: {
         borderWidth: 2,

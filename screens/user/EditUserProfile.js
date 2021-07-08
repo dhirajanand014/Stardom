@@ -18,6 +18,7 @@ import { CategoryContext } from '../../App';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
 import FastImage from 'react-native-fast-image';
 import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView';
+import { BackButton } from '../../components/button/BackButton';
 import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextInputLengthText';
 
 export const EditUserProfile = () => {
@@ -96,6 +97,7 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
     return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.alignItemsCenter]}
             pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
+            <BackButton goBack leftStyle={numericConstants.TEN} />
             <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingTop10]}>
                 <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.elevation8} onPress={() => { Keyboard.dismiss(); bottomSheetRef?.current?.snapTo(numericConstants.ZERO) }}>
                     <FastImage source={{
@@ -108,7 +110,7 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
                     </View>
                 </TouchableOpacity>
             </View>
-            <AuthHeaderText titleText={modalTextConstants.EDIT_PROFILE} />
+            <AuthHeaderText titleText={modalTextConstants.EDIT_PROFILE} goBack />
             <Animated.ScrollView>
                 <SDImageFormInput inputName={fieldControllerName.NAME} control={control}
                     defaultValue={profileDetails.name} placeHolderText={placeHolderText.FULL_NAME} autofocus={true}

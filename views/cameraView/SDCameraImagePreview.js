@@ -8,6 +8,7 @@ import {
     miscMessage, numericConstants, screens, stringConstants, width
 } from '../../constants/Constants';
 import { cropImage } from '../../helper/Helper';
+import { BackButton } from '../../components/button/BackButton';
 import { SDGenericStyles, cameraStyles, userAuthStyles } from '../../styles/Styles';
 export const SDCameraImagePreview = () => {
 
@@ -80,6 +81,7 @@ export const SDCameraImagePreview = () => {
     return (
         <View style={SDGenericStyles.backGroundColorBlack} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
             <SafeAreaView />
+            <BackButton goBack leftStyle={numericConstants.TEN} />
             <View>
                 {
                     selectedFilterIndex === numericConstants.ZERO &&
@@ -96,7 +98,7 @@ export const SDCameraImagePreview = () => {
             </View>
             <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.marginVertical2, SDGenericStyles.justifyContentCenter,
             SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingBottom10]}>
-                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow, { width: width / 1.8 }]}
+                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonImagePreviewText, SDGenericStyles.backgroundColorYellow, { width: width / 1.8 }]}
                     onPress={() => proceedAction()}>
                     <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>
                         {actionButtonTextConstants.PROCEED}</Text>

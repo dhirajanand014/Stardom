@@ -68,24 +68,18 @@ export const SDUserMenus = (drawerProps) => {
     const filterOutLoginMenus = (menu, details) => {
         switch (menu.key) {
             case actionButtonTextConstants.VERIFY_USER:
-                if ((details.user_type == miscMessage.AUTHOR && details.verification && details.verification.user == details.id) ||
-                    (details.user_type == miscMessage.VERIFIED_AUTHOR)) {
+                if (details.user_type == miscMessage.VERIFIED_AUTHOR || details.user_type == miscMessage.AUTHOR_UNAPPROVED) {
                     return false;
                 }
                 return true;
             case screens.USER_FOLLOWERS_FOLLOWING:
-                if (menu.label == miscMessage.FOLLOWERS_TEXT) {
-                } else if (menu.label == miscMessage.FOLLOWING_TEXT) {
-                } else if (menu.label === fieldControllerName.SEARCH_USERS) {
-                }
-                else if (menu.label == miscMessage.PRIVATE_REQUEST_ACCESS) {
+                if (menu.label == miscMessage.PRIVATE_REQUEST_ACCESS) {
                     const followers = details.followers;
                     profileMenu.privateRequestCount = followers.filter(follower => follower.pvtaccess == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED).length;
                     return profileMenu.privateRequestCount > numericConstants.ZERO;
                 }
                 return true;
-            default:
-                return true;
+            default: return true;
         }
     }
 
@@ -147,7 +141,7 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                 </View>
                 <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.positionAbsolute, glancePostStyles.editProfileAbsolute, SDGenericStyles.justifyContentCenter]}>
                     <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical20, SDGenericStyles.paddingHorizontal10]}
-                        onPress={() => handleMenuClickAction({ key: modalTextConstants.VIEW_PROFILE })}>
+                        onPress={() => handleMenuClickAction({ key: modalTextConstants.VIEW_PROFILE })} activeOpacity={.7}>
                         <RegisterUserIcon style={SDGenericStyles.justifyContentCenter} height={numericConstants.TWENTY_TWO}
                             width={numericConstants.TWENTY_TWO} stroke={colors.WHITE} />
                         <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
@@ -157,7 +151,8 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                             {fieldControllerName.PROFILE.toUpperCase()}
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical25, SDGenericStyles.paddingHorizontal10]} onPress={() => handleMenuClickAction({ key: screens.EDIT_USER_PROFILE })}>
+                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical25, SDGenericStyles.paddingHorizontal10]}
+                        onPress={() => handleMenuClickAction({ key: screens.EDIT_USER_PROFILE })} activeOpacity={.7}>
                         <Image style={[SDGenericStyles.menuEditIcon, SDGenericStyles.justifyContentCenter, SDGenericStyles.ml_3]} source={require(`../assets/menu/edit_icon.png`)} />
                         <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                             {requestConstants.EDIT.toUpperCase()}

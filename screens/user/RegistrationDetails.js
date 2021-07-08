@@ -63,7 +63,7 @@ export const RegistrationDetails = () => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}
                 pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
-                <AuthHeaderText titleText={modalTextConstants.ACCOUNT_DETAILS} paddingTopNeeded />
+                <AuthHeaderText titleText={modalTextConstants.ACCOUNT_DETAILS} paddingTopNeeded showBackIcon />
                 <Animated.ScrollView>
                     <SDImageFormInput inputName={fieldControllerName.NAME} control={control} rules={formRequiredRules.nameFormRule}
                         defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.FULL_NAME} autofocus={true}

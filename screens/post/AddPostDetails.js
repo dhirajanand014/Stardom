@@ -18,6 +18,7 @@ import { checkTokenStatus, handlePostDelete, showSnackBar } from '../../helper/H
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles'
 import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView'
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput'
+import { BackButton } from '../../components/button/BackButton';
 import { SDPostTypeOptionsView } from '../../views/fromInputView/SDPostTypeOptionView'
 import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextInputLengthText'
 
@@ -81,6 +82,7 @@ export const AddPostDetails = () => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
+                <BackButton goBack leftStyle={numericConstants.TEN} />
                 <View style={[glancePostStyles.addPostDetailsStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingTop10]}>
                     <FastImage source={{ uri: userPosts.details.capturedImage }} resizeMode={FastImage.resizeMode.contain}
                         style={{ width: width, height: height / numericConstants.THREE }} />

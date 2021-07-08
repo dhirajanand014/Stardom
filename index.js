@@ -22,7 +22,7 @@ import { Profile } from './screens/user/Profile';
 import { Register } from './screens/user/Register';
 import { RegistrationConfirmation } from './screens/user/RegisterConfirmation';
 import { RegistrationDetails } from './screens/user/RegistrationDetails';
-import { RegistrationOTP } from './screens/user/RegitrationOTP';
+import { RegistrationOTP } from './screens/user/RegistrationOTP';
 import { Posts } from './views/imagePost/Posts';
 import { SDCameraView } from './views/cameraView/SDCameraView';
 import { Glance } from './screens/post/Glance';
