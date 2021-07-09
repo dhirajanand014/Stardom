@@ -22,7 +22,9 @@ export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isS
                     {
                         (allowPrivate || item.postType == fieldControllerName.POST_TYPE_PUBLIC) &&
                         (
-                            <FastImage source={{ uri: item.postImage, priority: FastImage.priority.normal }}
+                            <FastImage source={{
+                                uri: item.postImage, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
+                            }}
                                 style={flatListItemStyles.imageBackGround}>
                                 <View style={flatListItemStyles.textsView}>
                                     <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>

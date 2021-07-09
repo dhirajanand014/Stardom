@@ -77,7 +77,7 @@ const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDa
             profile.id !== numericConstants.MINUS_ONE &&
             <React.Fragment>
                 {
-                    profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
+                    profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high, cache: FastImage.cacheControl.immutable }}
                         style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback /> || <FastImage source={{
                             uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
                             priority: FastImage.priority.high

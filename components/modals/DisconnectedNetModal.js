@@ -7,7 +7,7 @@ import FastImage from 'react-native-fast-image';
 
 export const DisconnectedNetModal = (props) => {
     return (
-        <Modal animationType={`slide`} visible={!props.isConnected}>
+        <Modal animationType={`slide`} visible={!props.isConnected && props.renderModal}>
             <View style={[errorBoundaryStyles.container, SDGenericStyles.justifyContentCenter]}>
                 <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingHorizontal10]}>
                     <View animation={`fadeIn`} iterationCount={miscMessage.INFINITE}

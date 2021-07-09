@@ -95,7 +95,7 @@ const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, bottomS
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
             <BackButton goBack leftStyle={numericConstants.TEN} />
             <View style={[glancePostStyles.addPostDetailsStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingTop10]}>
-                <FastImage source={{ uri: userPosts.details.capturedImage }} resizeMode={FastImage.resizeMode.contain}
+                <FastImage source={{ uri: userPosts.details.capturedImage, cache: FastImage.cacheControl.immutable }} resizeMode={FastImage.resizeMode.contain}
                     style={{ width: width, height: height / numericConstants.THREE }} />
                 {toAction == miscMessage.UPDATE &&
                     <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right8, glancePostStyles.addPostEditIconsStyle]}>

@@ -87,7 +87,6 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
             <View key={`1_${postDetailsState.currentPostIndex}_${postDetailsState.currentPost.categoryId}_post_details`}>
                 <View style={glancePostStyles.innerContainer} colors={[colors.TRANSPARENT, colors.BLACK]}>
                     <Animated.View style={[glancePostStyles.smallButtonsContainer, postDetailsState.animationVisible && postTypeSpringStyle]}>
-                        <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
                         {
                             postDetailsState.currentPost.postLink &&
                             <TouchableOpacity activeOpacity={.5} onPress={() => Linking.openURL(postDetailsState.currentPost.postLink)}>

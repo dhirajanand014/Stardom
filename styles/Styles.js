@@ -949,7 +949,7 @@ export const glancePostStyles = StyleSheet.create({
     },
     postWallpaperModalButton: {
         top: 10,
-        right: 30,
+        right: 33,
         elevation: 3,
     },
     reportAbuseSubmitButton: {
@@ -1126,7 +1126,6 @@ export const glancePostStyles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 50,
-        elevation: 3
     },
     addPostCategoriesStyle: {
         borderWidth: 1,

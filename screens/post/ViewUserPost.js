@@ -35,7 +35,9 @@ export const ViewUserPost = () => {
     const postDetailsRef = useRef(null);
 
     useEffect(() => {
-        fetchUserProfilePosts(userId, setPosts, postDetailsRef);
+        (async () => {
+            await fetchUserProfilePosts(userId, setPosts, postDetailsRef);
+        })();
     }, jsonConstants.EMPTY);
 
     let { height } = Dimensions.get(miscMessage.WINDOW);

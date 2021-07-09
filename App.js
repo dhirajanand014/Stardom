@@ -42,7 +42,10 @@ export default function App({ navigationRef }) {
     isDownloading: useSharedValue(false)
   });
 
-  const [netConnection, setNetConnection] = useState({ isConnected: stringConstants.EMPTY });
+  const [netConnection, setNetConnection] = useState({
+    isConnected: false,
+    renderModal: false
+  });
 
   const [sdomDatastate, setSdomDatastate] = useState(jsonConstants.EMPTY);
   const [optionsState, setOptionsState] = useState({
@@ -98,7 +101,9 @@ export default function App({ navigationRef }) {
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       showSnackBar(state.isConnected && miscMessage.CONNECTED || miscMessage.DISCONNECTED, state.isConnected);
-      setNetConnection({ ...netConnection, isConnected: state.isConnected });
+      netConnection.isConnected = state.isConnected;
+      netConnection.renderModal = !state.isConnected && true || false;
+      setNetConnection({ ...netConnection });
     });
     (async () => {
       await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
@@ -141,7 +146,8 @@ export default function App({ navigationRef }) {
           loader && <SDLoaderView loader={loader} />
         }
         <FlashMessageRenderer />
-        <DisconnectedNetModal isConnected={netConnection.isConnected} />
+        <DisconnectedNetModal isConnected={netConnection.isConnected}
+          renderModal={netConnection.renderModal} />
       </CategoryContext.Provider>
     </SDErrorBoundary>
   )

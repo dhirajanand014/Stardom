@@ -9,7 +9,7 @@ export const SDCameraGalleryImagesView = React.memo(({ item, index, selectImageC
         <TouchableOpacity key={index} activeOpacity={.7} onPress={async () => await selectImageCallback(item, index)}>
             <FastImage resizeMode={FastImage.resizeMode.center} source={{
                 uri: item.image.uri,
-                priority: FastImage.priority.normal
+                priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
             }} style={[{ width: numericConstants.EIGHTY, height: numericConstants.EIGHTY }, SDGenericStyles.borderRadius10,
             SDGenericStyles.backGroundColorBlack, SDGenericStyles.marginRight15]} />
         </TouchableOpacity>

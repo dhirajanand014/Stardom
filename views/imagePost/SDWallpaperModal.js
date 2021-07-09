@@ -40,7 +40,7 @@ export const SDWallpaperModal = React.memo(({ postDetailsState, setPostDetailsSt
                             onPress={async () => await setWallPaperCallback(requestConstants.WALLPAPER_HOME_SCREEN)}>
                             <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical5]}>
                                 <Image source={require(`../../assets/wallpaper_home_screen_icon.png`)} style={[glancePostStyles.icon_wallpaper_modal, SDGenericStyles.alignItemsCenter]} />
-                                <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.paddingHorizontal10]}>
+                                <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.paddingHorizontal12]}>
                                     {actionButtonTextConstants.WALLPAPER_HOME_SCREEN}
                                 </Text>
                             </View>
@@ -49,7 +49,7 @@ export const SDWallpaperModal = React.memo(({ postDetailsState, setPostDetailsSt
                             onPress={async () => await setWallPaperCallback(requestConstants.WALLPAPER_LOCK_SCREEN)}>
                             <View style={[SDGenericStyles.paddingHorizontal2, SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical5]}>
                                 <Image source={require(`../../assets/wallpaper_lock_screen_icon.png`)} style={[glancePostStyles.icon_wallpaper_modal, SDGenericStyles.alignItemsCenter]} />
-                                <Text style={[SDGenericStyles.marginHorizontalNeg2, SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.paddingHorizontal10]}>
+                                <Text style={[SDGenericStyles.marginHorizontalNeg2, SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.paddingHorizontal12]}>
                                     {actionButtonTextConstants.WALLPAPER_LOCK_SCREEN}
                                 </Text>
                             </View>
@@ -58,7 +58,7 @@ export const SDWallpaperModal = React.memo(({ postDetailsState, setPostDetailsSt
                             onPress={async () => await setWallPaperCallback(requestConstants.WALLPAPER_BOTH_SCREENS)}>
                             <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical5]}>
                                 <Image source={require(`../../assets/wallpaper_both_screen_icon.png`)} style={[glancePostStyles.icon_wallpaper_modal, SDGenericStyles.alignItemsCenter]} />
-                                <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.paddingHorizontal10]}>
+                                <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.paddingHorizontal12]}>
                                     {actionButtonTextConstants.WALLPAPER_BOTH_SCREENS}
                                 </Text>
                             </View>
