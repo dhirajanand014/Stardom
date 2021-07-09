@@ -120,7 +120,7 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
         </View>
         {
             loggedInUser.isLoggedIn &&
-            <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.mb15]}>
+            <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.mb60]}>
                 <View style={userMenuStyles.profileImageView}>
                     <TouchableOpacity activeOpacity={.7}>
                         {profileMenu.profileImage && <FastImage source={{ uri: profileMenu.profileImage, priority: FastImage.priority.normal }}
@@ -130,7 +130,7 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                     </TouchableOpacity>
                 </View>
                 <View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.justifyContentCenter]}>
-                    <Text style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.ft18, SDGenericStyles.textColorWhite,
+                    <Text style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.ft20, SDGenericStyles.textColorWhite,
                     SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.alignItemsStart]}>
                         {profileMenu.profileName}
                     </Text>
@@ -142,12 +142,12 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                 <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.positionAbsolute, glancePostStyles.editProfileAbsolute, SDGenericStyles.justifyContentCenter]}>
                     <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical20, SDGenericStyles.paddingHorizontal10]}
                         onPress={() => handleMenuClickAction({ key: modalTextConstants.VIEW_PROFILE })} activeOpacity={.7}>
-                        <RegisterUserIcon style={SDGenericStyles.justifyContentCenter} height={numericConstants.TWENTY_TWO}
-                            width={numericConstants.TWENTY_TWO} stroke={colors.WHITE} />
-                        <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                        <RegisterUserIcon style={SDGenericStyles.justifyContentCenter} height={numericConstants.TWENTY_FIVE}
+                            width={numericConstants.TWENTY_FIVE} stroke={colors.WHITE} />
+                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                             {miscMessage.VIEW.toUpperCase()}
                         </Text>
-                        <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                             {fieldControllerName.PROFILE.toUpperCase()}
                         </Text>
                     </TouchableOpacity>
@@ -155,10 +155,10 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                         onPress={() => handleMenuClickAction({ key: screens.EDIT_USER_PROFILE })} activeOpacity={.7}>
                         <Image style={[SDGenericStyles.menuEditIcon, SDGenericStyles.justifyContentCenter, SDGenericStyles.ml_3, SDGenericStyles.marginBottom1]}
                             source={require(`../assets/menu/edit_icon.png`)} />
-                        <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                             {requestConstants.EDIT.toUpperCase()}
                         </Text>
-                        <Text style={[SDGenericStyles.ft9, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                             {fieldControllerName.PROFILE.toUpperCase()}
                         </Text>
                     </TouchableOpacity>

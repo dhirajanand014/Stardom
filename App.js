@@ -2,10 +2,9 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   jsonConstants, numericConstants,
   screens, stringConstants, requestConstants,
-  PRIVATE_FOLLOW_UNFOLLOW,
-  miscMessage
+  PRIVATE_FOLLOW_UNFOLLOW
 } from './constants/Constants';
-import { fetchAndUpdateCategoryState, fetchUpdateLoggedInUserProfile, getAllProfiles, showSnackBar } from './helper/Helper.js';
+import { fetchAndUpdateCategoryState, fetchUpdateLoggedInUserProfile, getAllProfiles } from './helper/Helper.js';
 import { TourGuideProvider } from 'rn-tourguide';
 import AddPostConstant from './constants/AddPostConstant.json';
 import SDErrorBoundary from './exceptionhandlers/SDErrorBoundary';
@@ -100,7 +99,6 @@ export default function App({ navigationRef }) {
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
-      showSnackBar(state.isConnected && miscMessage.CONNECTED || miscMessage.DISCONNECTED, state.isConnected);
       netConnection.isConnected = state.isConnected;
       netConnection.renderModal = !state.isConnected && true || false;
       setNetConnection({ ...netConnection });

@@ -22,8 +22,8 @@ export const SDGenericStyles = StyleSheet.create({
         height: numericConstants.TWENTY_EIGHT
     },
     menuEditIcon: {
-        width: numericConstants.EIGHTEEN,
-        height: numericConstants.EIGHTEEN
+        width: numericConstants.TWENTY_ONE,
+        height: numericConstants.TWENTY_ONE
     },
     lockUnlockIconStyle: {
         width: numericConstants.TWENTY,
@@ -47,8 +47,8 @@ export const SDGenericStyles = StyleSheet.create({
         height: 50
     },
     menuIconStyle: {
-        width: numericConstants.EIGHTEEN,
-        height: numericConstants.EIGHTEEN
+        width: numericConstants.TWENTY_TWO,
+        height: numericConstants.TWENTY_TWO
     },
     right0: {
         right: 0
@@ -142,6 +142,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     mb40: {
         marginBottom: 40,
+    },
+    mb60: {
+        marginBottom: 60,
     },
     width100: {
         width: 100
@@ -888,7 +891,7 @@ export const glancePostStyles = StyleSheet.create({
     editProfileAbsolute: {
         top: 0,
         bottom: 0,
-        right: 8
+        right: 4
     },
     modalHideText: {
         color: "white",
@@ -1377,14 +1380,14 @@ export const userAuthStyles = StyleSheet.create({
     menuRightCountView: {
         padding: 10,
         position: 'absolute',
-        right: 0,
+        right: 22,
         top: 0,
         bottom: 0
     },
     menuRightImageIconView: {
         padding: 6.5,
         position: 'absolute',
-        right: 0,
+        right: 20,
         top: 0,
         bottom: 0
     },
@@ -1645,8 +1648,8 @@ export const userMenuStyles = {
         paddingLeft: 20
     },
     profileImageStyle: {
-        width: 80,
-        height: 80,
+        width: 90,
+        height: 90,
         borderRadius: 58,
     },
     menuBackgroundColor: {
