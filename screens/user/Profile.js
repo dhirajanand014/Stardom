@@ -10,6 +10,7 @@ import {
 import { checkLoggedInUserMappedWithUserProfile, checkProfileFrom, fetchUpdateLoggedInUserProfile } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from "../../styles/Styles"
 import { SDProfileBottomSheet } from '../../views/bottomSheet/SDProfileBottomSheet';
+import { BackButton } from '../../components/button/BackButton';
 import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
 
 export const Profile = () => {
@@ -76,6 +77,7 @@ const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDa
         {
             profile.id !== numericConstants.MINUS_ONE &&
             <React.Fragment>
+                <BackButton goBack leftStyle={numericConstants.TEN} />
                 {
                     profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high, cache: FastImage.cacheControl.immutable }}
                         style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback /> || <FastImage source={{

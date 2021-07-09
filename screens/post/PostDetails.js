@@ -114,7 +114,7 @@ export const PostDetails = forwardRef((props, ref) => {
 
     return (
         <React.Fragment>
-            <View key={`1_${postDetailsState.currentPostIndex}_${postDetailsState.currentPost.categoryId}_post_details`}>
+            <View key={`1_${postDetailsState.currentPostIndex}_post_details`}>
                 <View style={glancePostStyles.innerContainer}>
                     <Animated.View style={[glancePostStyles.smallButtonsContainer, postDetailsState.animationVisible && postTypeSpringStyle]}>
                         {

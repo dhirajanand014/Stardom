@@ -556,6 +556,9 @@ const filterLoggedInUsersPosts = async (allPosts, isForPostWallpaper) => {
                     const privateAccess = postFollowers.find(follower => follower.follower_id == user.id).pvtaccess ||
                         PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
                     return privateAccess == PRIVATE_FOLLOW_UNFOLLOW.APPROVED;
+                } else if (post.user.id == user.id) {
+                    return post.postType == fieldControllerName.POST_TYPE_PUBLIC ||
+                        post.postType == fieldControllerName.POST_TYPE_PRIVATE;
                 }
                 return post.postType == fieldControllerName.POST_TYPE_PUBLIC;
             });

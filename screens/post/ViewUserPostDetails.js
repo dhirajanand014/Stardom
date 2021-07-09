@@ -84,7 +84,7 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
 
     return (
         <React.Fragment>
-            <View key={`1_${postDetailsState.currentPostIndex}_${postDetailsState.currentPost.categoryId}_post_details`}>
+            <View key={`1_${postDetailsState.currentPostIndex}_post_details`}>
                 <View style={glancePostStyles.innerContainer} colors={[colors.TRANSPARENT, colors.BLACK]}>
                     <Animated.View style={[glancePostStyles.smallButtonsContainer, postDetailsState.animationVisible && postTypeSpringStyle]}>
                         {
@@ -114,7 +114,7 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                 </View>
             </View>
 
-            <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10, SDGenericStyles.paddingTop10]}>
+            <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10, SDGenericStyles.paddingTop20]}>
                 {/* <TouchableOpacity style={[glancePostStyles.backgroundRoundColor, SDGenericStyles.mv15]} activeOpacity={.7} onPress={async () =>
                     await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback,
                         resetFlashMessage)}>
