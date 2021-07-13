@@ -77,7 +77,7 @@ export const SelectPostCategories = () => {
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
 
-            <BackButton goBack leftStyle={numericConstants.TEN} />
+            <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
             <SDPostCategorySelector inputName={fieldControllerName.POST_CATEGORIES} formState={formState} maxLength={numericConstants.THREE} setError={setError}
                 categories={categories} setCategories={setCategories} postCategories={postCategories} setValue={setValue} />
 

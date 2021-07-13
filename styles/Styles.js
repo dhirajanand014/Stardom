@@ -308,6 +308,9 @@ export const SDGenericStyles = StyleSheet.create({
     marginTop20: {
         marginTop: 20
     },
+    marginTop33: {
+        marginTop: 33
+    },
     borderRadius5: {
         borderRadius: 5
     },
@@ -880,7 +883,7 @@ export const glancePostStyles = StyleSheet.create({
         alignItems: "flex-end",
         position: "absolute",
         zIndex: 100,
-        top: 10,
+        top: 35,
         left: 5,
         padding: 10
     },
@@ -940,7 +943,7 @@ export const glancePostStyles = StyleSheet.create({
         width: 25
     },
     glanceTopIcons: {
-        paddingTop: 4,
+        paddingTop: 55,
         paddingLeft: 2,
         paddingBottom: 1,
         paddingRight: 2
@@ -1116,10 +1119,6 @@ export const glancePostStyles = StyleSheet.create({
         padding: 15,
         width: width / 1.2,
         elevation: 3
-    },
-    addPostDetailsStyle: {
-        borderWidth: 0.5,
-        borderColor: '#969696'
     },
     headerBackButton: {
         position: 'absolute',

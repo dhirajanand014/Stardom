@@ -9,7 +9,7 @@ import {
     miscMessage, width, height, numericConstants, placeHolderText,
     screens, headerStrings, fieldControllerName, isAndroid, notificationConsts,
     isIOS, OTP_INPUTS, errorMessages, requestConstants, modalTextConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions
+    jsonConstants, defaultProfilesValue, SDMenuOptions, AUTO_SUBMIT_OTP_TIME_LIMIT, formRequiredRules
 } from '../constants/Constants';
 import {
     NativeModules,
@@ -810,13 +810,13 @@ export const verifyOtpRequest = async (otpString, randomNumber) => {
     }
 }
 
-export const verifyOtpReceived = async (setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp) => {
+export const verifyOtpReceived = async (setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp, isFrom) => {
     try {
         // docs: https://github.com/faizalshap/react-native-otp-verify
         if (isAndroid) {
             const otpMessage = await RNOtpVerify.getOtp();
             otpMessage && RNOtpVerify.addListener((message) =>
-                listenOtp(message, setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp));
+                listenOtp(message, setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp, isFrom));
         }
         // remove listener on unmount
         return () => isAndroid && RNOtpVerify.removeListener();
@@ -825,12 +825,17 @@ export const verifyOtpReceived = async (setOtpArray, setAutoSubmitOtpTime, start
     }
 }
 
-const listenOtp = (message, setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp) => {
+const listenOtp = (message, setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp, isFrom) => {
     try {
         if (message) {
-            const messageArray = message.split(stringConstants.NEW_LINE);
+            const messageArray = message.split(stringConstants.OTP_SPLIT_CHARS);
             if (messageArray[numericConstants.ZERO]) {
-                const otp = messageArray[numericConstants.ZERO].split(stringConstants.SPACE)[numericConstants.EIGHT];
+                let otp;
+                if (isFrom == miscMessage.SIGN_UP) {
+                    otp = messageArray[numericConstants.ZERO].split(stringConstants.SPACE)[numericConstants.EIGHT]
+                } else if (isFrom == miscMessage.FORGOT_PASSWORD) {
+                    otp = messageArray[numericConstants.ZERO].split(stringConstants.SPACE)[numericConstants.NINE]
+                }
                 if (otp.length === numericConstants.SIX) {
                     setOtpArray(otp.split(stringConstants.EMPTY));
                     setAutoSubmitOtpTime(AUTO_SUBMIT_OTP_TIME_LIMIT);
@@ -1715,10 +1720,7 @@ export const handleForgotPassword = async (watchMobileNumber, navigation, trigge
         if (watchMobileNumber && watchMobileNumber.length >= numericConstants.TEN) {
             const response = await validateUserAction(fieldControllerName.PHONE_NUMBER, watchMobileNumber);
             if (!response) {
-                setError(fieldControllerName.PHONE_NUMBER, {
-                    type: "mismatch",
-                    message: "Phone Number does not exist",
-                });
+                setError(fieldControllerName.PHONE_NUMBER, formRequiredRules.forgotPasswordRule);
             } else {
                 clearErrors(fieldControllerName.PHONE_NUMBER);
                 const phone = { phoneNumber: watchMobileNumber };

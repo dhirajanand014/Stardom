@@ -72,7 +72,7 @@ export const RegistrationOTP = props => {
 
     useEffect(() => {
         (async () => {
-            await verifyOtpReceived(setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp);
+            await verifyOtpReceived(setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp, isFrom);
             if (isIOS) {
                 isIOSOtpAutoFilled = await checkPinCodeFromClipBoardIOS(setOtpArray, setAutoSubmitOtpTime, startAutoSubmitOtpTimer, setAutoSubmittingOtp);
                 if (!isIOSOtpAutoFilled) {
@@ -104,7 +104,7 @@ export const RegistrationOTP = props => {
         if (autoSubmitOtpTime <= numericConstants.ZERO) {
             clearInterval(autoSubmitOtpTimerInterval);
             await onSubmit();
-            setLoaderCallback(true);
+            setLoaderCallback(false);
             setAutoSubmittingOtp(false);
         }
         setAutoSubmitOtpTime(autoSubmitOtpTime - numericConstants.ONE);
@@ -142,7 +142,8 @@ export const RegistrationOTP = props => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE ||
                 miscMessage.AUTO}>
-                <AuthHeaderText titleText={modalTextConstants.OTP_VERIFICATION} paddingTopNeeded showBackIcon goBack leftStyle={numericConstants.TEN} />
+                <AuthHeaderText titleText={modalTextConstants.OTP_VERIFICATION} paddingTopNeeded showBackIcon goBack leftStyle={numericConstants.TEN}
+                    extraStyles={SDGenericStyles.marginTop20} />
                 <View style={[userAuthStyles.otpFieldRows, SDGenericStyles.mt12]}>
                     {
                         [firstTextInputRef, secondTextInputRef, thirdTextInputRef, fourthTextInputRef, fifthTextInputRef,

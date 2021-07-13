@@ -5,11 +5,11 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { AppRegistry, LogBox } from 'react-native';
+import { AppRegistry, LogBox, StatusBar } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
 import {
-    headerLessStackOptions, numericConstants, profileScreenOptions,
+    headerLessStackOptions, isAndroid, numericConstants, profileScreenOptions,
     screenOptions, screens, tabBarOptions, width
 } from './constants/Constants';
 import { authorizationHeader, categoryHeader, getNotificationConfiguration } from './helper/Helper';
@@ -31,7 +31,7 @@ import { UserFollowFollowing } from './screens/user/UserFollowFollowing';
 import { EditUserProfile } from './screens/user/EditUserProfile';
 import { SDCameraImagePreview } from './views/cameraView/SDCameraImagePreview';
 import { SDSplashScreen } from './screens/SDSplashScreen';
-import { userMenuStyles } from './styles/Styles';
+import { colors, userMenuStyles } from './styles/Styles';
 import { ViewUserPost } from './screens/post/ViewUserPost';
 import { FollowerFollowingProfile } from './screens/user/FollowerFollowingProfile';
 import { SDSearchUserAndPosts } from './screens/user/SDSearchUserAndPosts';
@@ -75,6 +75,10 @@ export const DrawerNavigation = () => {
 export const ScreenNavigator = () => {
     return (
         <NavigationContainer ref={navigationRef}>
+            {
+                isAndroid &&
+                <StatusBar backgroundColor={colors.TRANSPARENT} translucent />
+            }
             <Stack.Navigator initialRouteName={screens.SPLASH_SCREEN} screenOptions={screenOptions}
                 headerMode={`float`} animation={`fade`}>
                 <Stack.Screen name={screens.SPLASH_SCREEN} component={SDSplashScreen} options={headerLessStackOptions} />

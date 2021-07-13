@@ -114,13 +114,13 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
     return <SafeAreaView style={SDGenericStyles.fill}>
         <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.justifyContentCenter]}>
             <TouchableOpacity activeOpacity={.7} onPress={() => drawerProps.navigation.closeDrawer()}
-                style={[SDGenericStyles.paddingRight10, SDGenericStyles.paddingBottom5, SDGenericStyles.paddingTop16, SDGenericStyles.justifyContentCenter]}>
+                style={[SDGenericStyles.paddingRight10, SDGenericStyles.paddingTop40, SDGenericStyles.justifyContentCenter]}>
                 <Image style={userAuthStyles.menu_close_icon_style} source={require(`../assets/menu/close_icon.png`)} />
             </TouchableOpacity>
         </View>
         {
             loggedInUser.isLoggedIn &&
-            <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.mb60]}>
+            <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.mb25]}>
                 <View style={userMenuStyles.profileImageView}>
                     <TouchableOpacity activeOpacity={.7}>
                         {profileMenu.profileImage && <FastImage source={{ uri: profileMenu.profileImage, priority: FastImage.priority.normal }}
@@ -163,12 +163,11 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                         </Text>
                     </TouchableOpacity>
                 </View>
-            </View> || <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb40]} />
+            </View> || <View style={[userMenuStyles.profileImageView, SDGenericStyles.rowFlexDirection, SDGenericStyles.m30]} />
         }
 
         <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => item.label}
-            renderItem={({ item, index }) => <MenuRenderer item={item} index={index} profileMenu={profileMenu} handleMenuClickAction={handleMenuClickAction} />}
-            ItemSeparatorComponent={() => { return (<View style={SDGenericStyles.paddingVertical2} />); }} />
+            renderItem={({ item, index }) => <MenuRenderer item={item} index={index} profileMenu={profileMenu} handleMenuClickAction={handleMenuClickAction} />} />
 
         {
             !loggedInUser.isLoggedIn &&

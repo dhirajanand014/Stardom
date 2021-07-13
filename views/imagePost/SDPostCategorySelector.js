@@ -8,7 +8,7 @@ import Animated from 'react-native-reanimated'
 export const SDPostCategorySelector = props => {
     return (
         <View style={[{ maxHeight: height / numericConstants.ONEPTONE }, SDGenericStyles.alignItemsCenter]}>
-            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingTop20]}>
+            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingTop40]}>
                 <Text style={[SDGenericStyles.ft20, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.alignItemsStart,
                 SDGenericStyles.paddingBottom5]}>
                     {headerStrings.SELECT_CATEGORY}

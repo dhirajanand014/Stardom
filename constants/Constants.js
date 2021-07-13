@@ -33,7 +33,7 @@ export const tabBarOptions = {
 
 export const headerLessStackOptions = {
     animation: true,
-    headerShown: false
+    headerShown: false,
 }
 
 export const profileScreenOptions = {
@@ -269,6 +269,10 @@ export const formRequiredRules = {
             message: `Entered value does not match email format`
         }
     },
+    forgotPasswordRule: {
+        type: "mismatch",
+        message: "Phone Number does not exist"
+    },
     dobRule: {
         required: {
             value: true,
@@ -409,7 +413,8 @@ export const stringConstants = {
     SPACE: ` `,
     SEMI_COLON: `:`,
     PIPELINE_JOIN: ` | `,
-    SLASH: `/`
+    SLASH: `/`,
+    OTP_SPLIT_CHARS: `. `
 }
 
 export const modalTextConstants = {

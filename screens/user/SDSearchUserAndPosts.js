@@ -148,9 +148,9 @@ export const SDSearchUserAndPosts = props => {
 const PostUsersTabbedView = React.memo(({ searchList, setSearchList, index, routes, renderScene, setIndexCallBack, renderTabBar,
     setLoaderCallback, userFollowerFollowing, userPosts }) => {
     return <Animated.View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
-        <BackButton leftStyle={numericConstants.ONE} isWithSearch />
+        <BackButton leftStyle={numericConstants.ONE} isWithSearch extraStyles={SDGenericStyles.marginTop20} />
         <Animated.View style={SDGenericStyles.padding20}>
-            <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.marginStart20]}>
+            <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.marginStart20, SDGenericStyles.marginTop20]}>
                 <SDSearchInput extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
                     state={searchList} setState={setSearchList} inputName={index == numericConstants.ZERO && fieldControllerName.SEARCH_POSTS ||
                         fieldControllerName.SEARCH_USERS} items={index == numericConstants.ZERO && userPosts || userFollowerFollowing.users}

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useContext } from 'react';
-import { View, Image, StatusBar, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Image, StatusBar, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
     width, miscMessage, numericConstants, jsonConstants
@@ -64,7 +64,7 @@ export const Glance = ({ navigation }) => {
 
 const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRef, optionsState, setOptionsState, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x, currentPostIndexForProfileRef, height,
     postIdFromNotification, navigation, isFromNotification }) => {
-    return <View style={SDGenericStyles.fill}>
+    return <SafeAreaView style={SDGenericStyles.fill}>
         {
             sdomDatastate.posts && sdomDatastate.posts.length &&
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
@@ -93,8 +93,8 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                             </Animated.View>;
                         })}
                 </Swiper>
-                <PostDetails ref={postDetailsRef} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x} width={width} height={height}
-                    navigation={navigation} viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
+                <PostDetails ref={postDetailsRef} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x} viewPagerRef={viewPagerRef}
+                    navigation={navigation} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
             </View> || sdomDatastate.posts && !sdomDatastate.posts.length &&
             <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.CATEGORY_WITHOUT_POST}
                 descriptionText={errorMessages.SELECT_OTHER_CATEGORIES} navigation={navigation} /> || <View>
@@ -110,5 +110,5 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
         <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => navigation.openDrawer()}>
             <Image source={category_selection} style={glancePostStyles.category_selection_image} />
         </TouchableOpacity>
-    </View>;
+    </SafeAreaView>;
 });

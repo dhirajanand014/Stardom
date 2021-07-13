@@ -23,15 +23,15 @@ export const EULAAcceptance = () => {
     }
 
     return (
-        <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack]}>
-            <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right8, SDGenericStyles.padding8]}
+        <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingTop20]}>
+            <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right8, SDGenericStyles.padding8, SDGenericStyles.paddingTop30]}
                 onPress={() => navigation.goBack()} >
                 <Image style={[glancePostStyles.icon_modal_close, SDGenericStyles.tintColorWhite]} source={require('../assets/post_modal_close_icon.png')} />
             </TouchableOpacity>
             <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.marginTop20, {
                 paddingTop: isIOS && numericConstants.TWENTY || numericConstants.ZERO
             }]}>
-                <Text style={[SDGenericStyles.ft20, SDGenericStyles.textColorPink]}>{miscMessage.DISCLAIMER_PRIVACY_POLICY}</Text>
+                <Text style={[SDGenericStyles.ft20, SDGenericStyles.textColorPink, SDGenericStyles.fontFamilyRobotoMedium]}>{miscMessage.DISCLAIMER_PRIVACY_POLICY}</Text>
                 <View style={[glancePostStyles.EULAModalTitleDivider, SDGenericStyles.backgroundColorWhite]} />
             </View>
             <ScrollView style={[glancePostStyles.EULAContainer, SDGenericStyles.marginHorizontal10, SDGenericStyles.backGroundColorGray,

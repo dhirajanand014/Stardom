@@ -97,8 +97,8 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
     return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.alignItemsCenter]}
             pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
-            <BackButton goBack leftStyle={numericConstants.TEN} />
-            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingTop10]}>
+            <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
+            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingTop80]}>
                 <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.elevation8} onPress={() => { Keyboard.dismiss(); bottomSheetRef?.current?.snapTo(numericConstants.ZERO) }}>
                     <FastImage source={{
                         uri: profileDetails.profile_picture, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable

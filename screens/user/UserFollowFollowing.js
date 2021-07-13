@@ -171,8 +171,8 @@ export const UserFollowFollowing = () => {
             {
                 (listFor == miscMessage.FOLLOWERS_TEXT || listFor == miscMessage.FOLLOWING_TEXT) &&
                 <Animated.View style={SDGenericStyles.padding20}>
-                    <BackButton goBack leftStyle={numericConstants.ONE} isWithSearch />
-                    <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.marginStart20]}>
+                    <BackButton goBack leftStyle={numericConstants.ONE} isWithSearch extraStyles={SDGenericStyles.marginTop20} />
+                    <Animated.View style={[userAuthStyles.searchUserInput, SDGenericStyles.marginStart20, SDGenericStyles.marginTop20]}>
                         <SDSearchInput extraStyles={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular]}
                             state={searchList} setState={setSearchList} inputName={listFor == miscMessage.FOLLOWERS_TEXT && fieldControllerName.SEARCH_FOLLOWERS ||
                                 fieldControllerName.SEARCH_FOLLOWINGS} items={userFollowerFollowing.users} placeHolderText={listFor == miscMessage.FOLLOWERS_TEXT

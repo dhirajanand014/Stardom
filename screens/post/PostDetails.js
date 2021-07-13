@@ -27,9 +27,9 @@ const post_share = require(`../../assets/post_share_icon.png`);
 
 export const PostDetails = forwardRef((props, ref) => {
 
-    const { textPostTypeAnimationValue, viewPagerRef, width, height, textPostDescriptionAnimationValue } = props;
+    const { textPostTypeAnimationValue, viewPagerRef, textPostDescriptionAnimationValue } = props;
 
-    const { downloadProgressState, setDownloadProgressState, sdomDatastate, optionsState, setOptionsState } = useContext(CategoryContext);
+    const { downloadProgressState, setDownloadProgressState, sdomDatastate, optionsState } = useContext(CategoryContext);
 
     const [postDetailsState, setPostDetailsState] = useState({
         currentPostIndex: numericConstants.ZERO,
@@ -118,7 +118,7 @@ export const PostDetails = forwardRef((props, ref) => {
                 <View style={glancePostStyles.innerContainer}>
                     <Animated.View style={[glancePostStyles.smallButtonsContainer, postDetailsState.animationVisible && postTypeSpringStyle]}>
                         {
-                            postDetailsState.currentPost.postLink &&
+                            postDetailsState.currentPost && postDetailsState.currentPost.postLink &&
                             <TouchableOpacity activeOpacity={.5} onPress={() => Linking.openURL(postDetailsState.currentPost.postLink)}>
                                 <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
                             </TouchableOpacity> || <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
@@ -162,13 +162,11 @@ export const PostDetails = forwardRef((props, ref) => {
             <View style={glancePostStyles.searchIconContainer}>
                 {
                     optionsState.showSearch &&
-                    <PostSearch sdomDatastate={sdomDatastate} screenWidth={width} screenHeight={height}
-                        optionsState={optionsState} setOptionsState={setOptionsState} viewPagerRef={viewPagerRef}
-                        post={postDetailsState.currentPost} postDetailsRef={ref} inputName={fieldControllerName.SEARCH_POSTS} />
+                    <PostSearch sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={ref} />
                 }
             </View>
             <ActionButton buttonColor={colorConstants.TRANSPARENT_BUTTON} backgroundTappable={true} size={numericConstants.TWENTY_EIGHT} useNativeFeedback={false} degrees={numericConstants.ZERO}
-                verticalOrientation={postitionStringConstants.DOWN} position={postitionStringConstants.RIGHT} offsetX={numericConstants.TEN} offsetY={numericConstants.THIRTEEN} hideShadow={true}
+                verticalOrientation={postitionStringConstants.DOWN} position={postitionStringConstants.RIGHT} offsetX={numericConstants.TEN} offsetY={numericConstants.THIRTY_EIGHT} hideShadow={true}
                 autoInactive={false} active={postDetailsState.switchEnabled} renderIcon={(isActive) =>
                     <Switch trackColor={{ false: colorConstants.GREY, true: colorConstants.YELLOW }}
                         thumbColor={isActive ? colorConstants.WHITE : colorConstants.WHITE}

@@ -125,7 +125,7 @@ const RegConfirmation = React.memo(({ loader, control, clearError, formState, is
     return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.paddingHorizontal25]}
             pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
-            <AuthHeaderText titleText={modalTextConstants.CONFIRM_REGISTRATION} paddingTopNeeded showBackIcon />
+            <AuthHeaderText titleText={modalTextConstants.CONFIRM_REGISTRATION} paddingTopNeeded showBackIcon extraStyles={SDGenericStyles.marginTop20} />
             <ScrollView>
                 <SDImageFormInput inputName={fieldControllerName.USER_ID} control={control} rules={formRequiredRules.usedIdFormRule} clearErrors={clearError} isUserIdEntry
                     defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.USER_ID} autofocus={true} icon={<RegisterUserIcon width={numericConstants.EIGHTEEN}

@@ -14,16 +14,12 @@ export function PostSearch(props) {
     const navigation = useNavigation();
 
     return (
-        <View>
-            <View style={glancePostStyles.glanceTopIcons}>
-                <TouchableOpacity onPress={() => {
-                    viewPagerPostsRef.current = viewPagerRef.current;
-                    navigation.navigate(screens.POSTS_USERS_SEARCH,
-                        { toIndex: numericConstants.ZERO, userPosts: sdomDatastate.posts, postDetailsRef: postDetailsRef });
-                }}>
-                    <Image style={glancePostStyles.icon_post_search} source={post_search} />
-                </TouchableOpacity>
-            </View>
-        </View>
+        <TouchableOpacity activeOpacity={.7} style={glancePostStyles.glanceTopIcons} onPress={() => {
+            viewPagerPostsRef.current = viewPagerRef.current;
+            navigation.navigate(screens.POSTS_USERS_SEARCH,
+                { toIndex: numericConstants.ZERO, userPosts: sdomDatastate.posts, postDetailsRef: postDetailsRef });
+        }}>
+            <Image style={glancePostStyles.icon_post_search} source={post_search} />
+        </TouchableOpacity>
     )
 }

@@ -11,6 +11,7 @@ import {
     checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile
 } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from "../../styles/Styles"
+import { BackButton } from '../../components/button/BackButton';
 import { SDProfileBottomSheet } from '../../views/bottomSheet/SDProfileBottomSheet';
 
 export const FollowerFollowingProfile = () => {
@@ -71,6 +72,7 @@ export const FollowerFollowingProfile = () => {
 const FollowerFollowingProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, setSdomDatastate, loggedInUser, setLoaderCallback,
     setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess }) => {
     return <View style={SDGenericStyles.fill}>
+        <BackButton leftStyle={numericConstants.ONE} isWithSearch extraStyles={SDGenericStyles.marginTop20} />
         {
             profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
                 style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback /> || <FastImage source={{

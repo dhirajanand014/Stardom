@@ -21,7 +21,7 @@ export const BackButton = props => {
             <View style={[glancePostStyles.headerBackButton, {
                 top: isIOS && numericConstants.FIFTY_FIVE || (props.isWithSearch && numericConstants.TWENTY_SIX || numericConstants.FIFTEEN),
                 left: isIOS && numericConstants.TWENTY_FIVE || (props.leftStyle && props.leftStyle || -numericConstants.TWELVE)
-            }]}>
+            }, props.extraStyles]}>
                 <ArrowLeftIcon stroke={colors.WHITE} />
             </View>
         </TouchableNativeFeedback >

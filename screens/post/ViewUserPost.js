@@ -7,7 +7,7 @@ import {
     fetchUserProfilePosts, onSwiperScrollEnd,
     resetAnimatePostTextDetails, setImageLoadError
 } from '../../helper/Helper';
-import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
+import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import Animated, { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import Swiper from 'react-native-swiper';
 import { SwipeItem } from '../../components/swiper/SwipeItem';
@@ -64,7 +64,7 @@ export const ViewUserPost = () => {
 const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOptions, setPostOptions, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x, height,
     navigation, postIdFromNotification }) => {
     return <View style={SDGenericStyles.fill}>
-        <BackButton goBack leftStyle={numericConstants.TEN} />
+        <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
         {
             posts && posts.length &&
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>

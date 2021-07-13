@@ -85,10 +85,10 @@ export const SDCameraImagePreview = () => {
 };
 
 const ImagePreview = React.memo(({ loader, selectedFilterIndex, imageFilterURI, SelectedFilterComponent, onExtractImage, SDFilterComponent, proceedAction }) => {
-    return <View style={SDGenericStyles.backGroundColorBlack} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
+    return <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
         <SafeAreaView />
-        <BackButton goBack leftStyle={numericConstants.TEN} />
-        <View>
+        <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
+        <View style={SDGenericStyles.marginTop33}>
             {selectedFilterIndex === numericConstants.ZERO &&
                 <Image style={[cameraStyles.imageStyles, SDGenericStyles.alignItemsCenter]} resizeMode={FastImage.resizeMode.contain}
                     source={{ uri: imageFilterURI }} /> ||
@@ -97,10 +97,11 @@ const ImagePreview = React.memo(({ loader, selectedFilterIndex, imageFilterURI, 
                         source={{ uri: imageFilterURI }} />} />}
         </View>
         <View style={SDGenericStyles.elevation3}>
-            <FlatList data={CAMERA_IMAGE_FILTERS} keyExtractor={item => item.title} horizontal renderItem={({ item, index }) => <SDFilterComponent item={item} index={index} />} contentContainerStyle={[SDGenericStyles.paddingVertical10, SDGenericStyles.elevation8]} />
+            <FlatList data={CAMERA_IMAGE_FILTERS} keyExtractor={item => item.title} horizontal renderItem={({ item, index }) => <SDFilterComponent item={item} index={index} />}
+                contentContainerStyle={SDGenericStyles.elevation8} />
         </View>
         <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.marginVertical2, SDGenericStyles.justifyContentCenter,
-        SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingBottom10]}>
+        SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingTop20]}>
             <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonImagePreviewText, SDGenericStyles.backgroundColorYellow, { width: width / 1.8 }]}
                 onPress={() => proceedAction()}>
                 <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>
