@@ -48,7 +48,6 @@ export const SelectPostCategories = () => {
         setLoaderCallback(true, toAction == miscMessage.UPDATE && alertTextMessages.UPDATING_POST_DETAILS ||
             alertTextMessages.ADDING_NEW_POST);
         const requestData = { ...data, ...postDetails };
-
         const responseData = await handleAddPostDetails(requestData, userPosts.details.capturedImage, toAction, selectedItem, setLoaderCallback, uploadCallback);
         if (responseData) {
             if (responseData.message == alertTextMessages.POST_ADDED_SUCCESSFULLY || responseData.message == alertTextMessages.POST_UPDATED_SUCCESSFULLY) {
@@ -68,8 +67,8 @@ export const SelectPostCategories = () => {
             postCategories && setCategories(postCategories);
             postCategories.map(category => category.isSelected = userPosts.details.postCategories.some(selectedCategory =>
                 selectedCategory == category.categoryId));
-            setValue(fieldControllerName.POST_CATEGORIES, userPosts.details.postCategories);
             setLoaderCallback(false);
+            setValue(fieldControllerName.POST_CATEGORIES, userPosts.details.postCategories);
         })();
         register(fieldControllerName.POST_CATEGORIES, formRequiredRules.postCategoryRule);
     }, jsonConstants.EMPTY);

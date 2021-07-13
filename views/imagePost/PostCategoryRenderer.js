@@ -3,6 +3,7 @@ import { TouchableOpacity, View, Text, Image } from 'react-native';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import FastImage from 'react-native-fast-image';
 import { alertTextMessages, miscMessage, numericConstants } from '../../constants/Constants';
+import { categoryHeader } from '../../helper/Helper';
 
 export const PostCategoryRenderer = React.memo(({ item, index, inputName, postCategories, categories,
     setCategories, setValue, setError, formState }) => {
@@ -12,8 +13,8 @@ export const PostCategoryRenderer = React.memo(({ item, index, inputName, postCa
         const selectedCategory = categories[index];
         const count = categories.filter(category => category.isSelected).length ||
             numericConstants.ZERO;
-        const containsId = postCategories.some(selectedCategoryId =>
-            selectedCategoryId == selectedCategory.categoryId) || false;
+        const containsId = postCategories.map(categoryId => parseInt(categoryId))
+            .some(selectedCategoryId => selectedCategoryId == selectedCategory.categoryId) || false;
         if (count < numericConstants.THREE && !containsId) {
             selectedCategory.isSelected = !selectedCategory.isSelected;
             postCategories.push(selectedCategory.categoryId);
@@ -21,9 +22,9 @@ export const PostCategoryRenderer = React.memo(({ item, index, inputName, postCa
             setCategories(categories);
         } else if (count <= numericConstants.THREE && containsId) {
             selectedCategory.isSelected = !selectedCategory.isSelected;
-            postCategories.splice(postCategories.indexOf(selectedCategory.categoryId),
-                numericConstants.ONE);
-            setValue(inputName, postCategories);
+            const postCats = postCategories.map(categoryId => parseInt(categoryId))
+            postCats.splice(postCats.indexOf(selectedCategory.categoryId), numericConstants.ONE);
+            setValue(inputName, postCats);
             setCategories(categories);
             formState.errors[inputName] && setError(inputName, null);
         } else {

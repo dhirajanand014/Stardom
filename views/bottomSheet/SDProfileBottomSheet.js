@@ -107,7 +107,7 @@ export const SDProfileBottomSheet = props => {
 
 const RenderProfileDetails = ({ profile, profileDetail, isDisabled, setLoaderCallback, sdomDatastate, setSdomDatastate, loggedInUser,
     setProfileDetail, navigation }) => {
-    return <View style={{ bottom: height - (height / 1.4) }}>
+    return <View style={{ bottom: height - (height / 1.37) }}>
         <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10]}>
             <Animated.View style={SDGenericStyles.alignItemsStart}>
                 <View style={SDGenericStyles.rowFlexDirection}>
@@ -131,7 +131,7 @@ const RenderProfileDetails = ({ profile, profileDetail, isDisabled, setLoaderCal
             </Animated.View>
         </View>
         {!profileDetail.isSameUser &&
-            <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.bottom18, SDGenericStyles.paddingRight5]}>
+            <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.paddingRight5]}>
                 <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
                     <SDEntryAnimation index={numericConstants.ONE}>
                         <SDScaleAnimation disabled={false} scaleTo={numericConstants.ZEROPTNINETY}>
