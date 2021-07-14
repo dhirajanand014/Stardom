@@ -1703,6 +1703,15 @@ export const fetchGalleryImages = async (cameraState, setCameraState) => {
     }
 }
 
+export const openGalleryFromCamera = async (selectImageCallback) => {
+    try {
+        const imageValue = await ImagePicker.openPicker({ width: width, height: height });
+        if (imageValue) selectImageCallback(imageValue);
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_PHOTOS_FROM_GALLERY, error);
+    }
+}
+
 export const fetchUserIdByPhoneNumber = async (phoneNumber) => {
     try {
         const url = urlConstants.getUserIdByPhoneNumber + stringConstants.SLASH + phoneNumber;

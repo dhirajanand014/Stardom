@@ -560,6 +560,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingLeft10: {
         paddingLeft: 10
     },
+    paddingLeft20: {
+        paddingLeft: 20
+    },
     alignItemsStart: {
         alignItems: 'flex-start'
     },
@@ -1674,10 +1677,9 @@ export const userMenuStyles = {
         borderRadius: 20,
         paddingTop: 20,
         paddingEnd: 45,
-        paddingBottom: 20,
         paddingStart: 45,
         width: width / 1.05,
-        height: 285,
+        height: 275,
         elevation: 5
     },
     verifyUserTextHeight: {
@@ -1696,7 +1698,7 @@ export const userMenuStyles = {
     verifyUserSubmitButton: {
         borderRadius: 25,
         paddingHorizontal: 20,
-        paddingVertical: 15,
+        paddingVertical: 10,
         width: 120,
         elevation: 3,
         backgroundColor: '#eabe05'

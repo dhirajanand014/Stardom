@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AppIntro from 'rn-falcon-app-intro';
-import { View, Image } from 'react-native';
+import { View, Image, Dimensions, StatusBar } from 'react-native';
 import { introStyles } from '../styles/Styles';
-import { colorConstants } from '../constants/Constants';
+import { colorConstants, miscMessage } from '../constants/Constants';
 import FastImage from 'react-native-fast-image';
-import { height, numericConstants, screens, width } from '../constants/Constants';
+import { numericConstants, screens, width } from '../constants/Constants';
 export const Intro = () => {
 
     const navigation = useNavigation();
@@ -22,6 +22,9 @@ export const Intro = () => {
     const uris = preLoadIntroImages.map(image => ({
         uri: Image.resolveAssetSource(image).uri
     }));
+
+    let { height } = Dimensions.get(miscMessage.WINDOW);
+    height += StatusBar.currentHeight;
 
     FastImage.preload(uris);
 

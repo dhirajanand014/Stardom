@@ -6,7 +6,7 @@ import { SDGenericStyles } from '../../styles/Styles';
 
 export const SDCameraGalleryImagesView = React.memo(({ item, index, selectImageCallback }) => {
     return (
-        <TouchableOpacity key={index} activeOpacity={.7} onPress={async () => await selectImageCallback(item, index)}>
+        <TouchableOpacity key={index} activeOpacity={.7} onPress={async () => await selectImageCallback(item.image, index)}>
             <FastImage resizeMode={FastImage.resizeMode.center} source={{
                 uri: item.image.uri,
                 priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import { ActivityIndicator, SafeAreaView, Text, ImageBackground } from 'react-native';
+import { ActivityIndicator, SafeAreaView, Text, ImageBackground, Dimensions, StatusBar } from 'react-native';
 import { colors, SDGenericStyles } from '../styles/Styles';
 import { getCategoryButtonType, getSelectedCategoryIdsFromStorage, notificationAction } from '../helper/Helper';
-import { height, jsonConstants, miscMessage, notificationConsts, numericConstants, screens, width } from '../constants/Constants';
+import { jsonConstants, miscMessage, numericConstants, screens, width } from '../constants/Constants';
 import { useNavigation } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 
@@ -41,9 +41,11 @@ export const SDSplashScreen = () => {
         });
     }, jsonConstants.EMPTY);
 
+    let { height } = Dimensions.get(miscMessage.WINDOW);
+    height += StatusBar.currentHeight;
+
     return (
-        <SafeAreaView style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter,
-        SDGenericStyles.backGroundColorBlack]}>
+        <SafeAreaView style={[SDGenericStyles.fill, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack]}>
             <ImageBackground style={[SDGenericStyles.justifyItemsEnd, SDGenericStyles.paddingBottom150,
             { height: height, width: width }]} source={require(`../assets/splash_screen_image.gif`)} >
                 <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRobotoRegular,

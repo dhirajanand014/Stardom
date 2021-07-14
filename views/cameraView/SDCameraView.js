@@ -9,7 +9,7 @@ import {
 } from '../../constants/Constants';
 import { RotateCameraIcon } from '../../components/icons/RotateCameraIcon';
 import { SDCameraGalleryImagesView } from '../../components/swiper/SDCameraGalleryImagesView';
-import { fetchGalleryImages } from '../../helper/Helper';
+import { fetchGalleryImages, openGalleryFromCamera } from '../../helper/Helper';
 export const SDCameraView = () => {
 
     const navigation = useNavigation();
@@ -36,7 +36,7 @@ export const SDCameraView = () => {
     const navigateToFilter = (navigation, isFrom, picture) => {
         navigation.navigate(screens.IMAGE_PREVIEW_FILTERS, {
             isFrom: isFrom,
-            imageValue: picture.uri
+            imageValue: picture.uri || picture.path
         });
     }
 
@@ -56,9 +56,8 @@ export const SDCameraView = () => {
         setCameraState({ ...cameraState });
     }
 
-    const selectImageCallback = useCallback(async (item, index) => {
-        const picture = item.image;
-        setCameraState({ ...cameraState, selectedImageFromGalleryInde: index });
+    const selectImageCallback = useCallback(async (picture, index) => {
+        setCameraState({ ...cameraState, selectedImageFromGalleryIndex: index });
         navigateToFilter(navigation, isFrom, picture);
     });
 
@@ -67,7 +66,7 @@ export const SDCameraView = () => {
             <RNCamera ref={ref => { camera = ref; }} autoFocus={true} type={cameraState.type} flashMode={cameraState.flashMode}
                 style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyItemsEnd]} shouldRasterizeIOS
                 androidCameraPermissionOptions={cameraConstants.CAMERA_PERMISSIONS} androidRecordAudioPermissionOptions={cameraConstants.ADD_POST_DETAILS}>
-                <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right8, { top: numericConstants.TEN }]}>
+                <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right8, { top: numericConstants.THIRTY_THREE }]}>
                     <View style={[SDGenericStyles.alignItemsEnd, SDGenericStyles.marginVertical10]} autoFocus={RNCamera.Constants.AutoFocus.on}>
                         <TouchableOpacity activeOpacity={.7} onPress={() => setCameraActions(miscMessage.TYPE)}>
                             <RotateCameraIcon width={numericConstants.THIRTY} height={numericConstants.THIRTY} />
@@ -82,13 +81,18 @@ export const SDCameraView = () => {
                             }
                         </TouchableOpacity>
                     </View>
+                    <View style={[SDGenericStyles.alignItemsEnd, SDGenericStyles.marginVertical10]}>
+                        <TouchableOpacity activeOpacity={.7} onPress={() => openGalleryFromCamera(selectImageCallback)}>
+                            <Image style={SDGenericStyles.iconStyle} source={require(`../../assets/menu/add_wallpaper_icon.png`)} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 {
                     cameraState.uploadFromGallery &&
                     <React.Fragment>
                         <FlatList data={cameraState.galleryImages} showsHorizontalScrollIndicator={false} horizontal keyExtractor={(item, index) => { item.timestamp.toString() + index }} nestedScrollEnabled
                             renderItem={({ item, index }) => <SDCameraGalleryImagesView item={item} index={index} setCameraState={setCameraState} cameraState={cameraState}
-                                selectImageCallback={selectImageCallback} />} style={[SDGenericStyles.positionAbsolute, SDGenericStyles.bottom80]} contentContainerStyle={SDGenericStyles.paddingHorizontal10} />
+                                selectImageCallback={selectImageCallback} />} style={[SDGenericStyles.positionAbsolute, SDGenericStyles.bottom80]} contentContainerStyle={SDGenericStyles.paddingHorizontal7} />
                         <TouchableOpacity style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.right8,
                         SDGenericStyles.paddingVertical5, SDGenericStyles.paddingHorizontal10, SDGenericStyles.bottom15, SDGenericStyles.positionAbsolute, SDGenericStyles.borderRadius20,
                         SDGenericStyles.backgroundColorWhite]}

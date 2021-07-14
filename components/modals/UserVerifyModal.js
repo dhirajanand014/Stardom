@@ -21,7 +21,7 @@ export const UserVerifyModal = props => {
         <Modal animationType="slide" transparent visible={profileMenu.showSubmitVerifyModal} onRequestClose={() =>
             setProfileMenu({ ...profileMenu, showSubmitVerifyModal: false })}>
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                <View style={SDGenericStyles.alignItemsCenter}>
+                <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter]}>
                     <View style={[userMenuStyles.userVerifyModalView, SDGenericStyles.alignItemsCenter, SDGenericStyles.textBoxGray]}>
 
                         <SDMultiTextInputLengthText value={verifyInputValue} maxLength={numericConstants.TWO_HUNDRED} />
@@ -33,9 +33,9 @@ export const UserVerifyModal = props => {
                             SDGenericStyles.justifyContentCenter, SDGenericStyles.backGroundColorGray, SDGenericStyles.textColorWhite, userMenuStyles.verifyUserTextHeight,
                             SDGenericStyles.textALignVerticalTop, SDGenericStyles.paddingLeft5]} maxLength={numericConstants.TWO_HUNDRED} keyboardType={keyBoardTypeConst.DEFAULT} />
 
-                        <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
+                        <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentCenter]}>
                             <View>
-                                <TouchableOpacity activeOpacity={.2} style={[{ width: width / 2 }, SDGenericStyles.mv10]}
+                                <TouchableOpacity activeOpacity={.2} style={[{ width: width / numericConstants.TWO }, SDGenericStyles.mv10]}
                                     onPress={() => setProfileMenu({ ...profileMenu, showSubmitVerifyModal: false })}>
                                     <Text style={[userMenuStyles.verifyUserCancelText, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft16,
                                     SDGenericStyles.placeHolderTextColor]}>

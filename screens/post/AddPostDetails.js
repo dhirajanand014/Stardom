@@ -94,7 +94,7 @@ const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, bottomS
     return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
             <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
-            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingTop10]}>
+            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.mt36]}>
                 <FastImage source={{ uri: userPosts.details.capturedImage, cache: FastImage.cacheControl.immutable }} resizeMode={FastImage.resizeMode.contain}
                     style={{ width: width, height: height / numericConstants.THREE }} />
                 {toAction == miscMessage.UPDATE &&
@@ -137,24 +137,27 @@ const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, bottomS
 
                         <SDImageFormInput inputName={fieldControllerName.POST_DESCRIPTION} control={control} rules={formRequiredRules.addPostDescription}
                             defaultValue={userPosts.details.postDescription} maxLength={numericConstants.TWO_HUNDRED} placeHolderText={placeHolderText.ADD_DESCRIPTION}
-                            keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} isMultiline={true} numberOfLines={numericConstants.FOUR} textContentType={keyBoardTypeConst.NONE}
-                            extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.height150, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite,
+                            keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} isMultiline={true} numberOfLines={numericConstants.THREE} textContentType={keyBoardTypeConst.NONE}
+                            extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.height100, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite,
                             SDGenericStyles.ft16, SDGenericStyles.textALignVerticalTop]} maxLength={numericConstants.TWO_HUNDRED} />
                     </Animated.ScrollView>
                     <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentSpaceBetween,
-                    SDGenericStyles.paddingHorizontal65, SDGenericStyles.paddingVertical20]}>
-                        <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR }]}>
-                            <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.colorBlack,
-                            SDGenericStyles.textCenterAlign]} onPress={() => navigation.goBack()}>
-                                {actionButtonTextConstants.CANCEL_POST.toUpperCase()}
-                            </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR }]} onPress={handleSubmit(onSubmit)}>
-                            <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft14, SDGenericStyles.colorBlack, SDGenericStyles.textCenterAlign]}>
-                                {actionButtonTextConstants.NEXT.toUpperCase()}
-                            </Text>
-                        </TouchableOpacity>
+                    SDGenericStyles.paddingHorizontal65, SDGenericStyles.bottom8]}>
+                        <View>
+                            <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR },
+                            SDGenericStyles.paddingHorizontal10]}>
+                                <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.colorBlack, SDGenericStyles.textCenterAlign]} onPress={() => navigation.goBack()}>
+                                    {actionButtonTextConstants.CANCEL_POST.toUpperCase()}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={SDGenericStyles.paddingLeft20}>
+                            <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR }]} onPress={handleSubmit(onSubmit)}>
+                                <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft14, SDGenericStyles.colorBlack, SDGenericStyles.textCenterAlign]}>
+                                    {actionButtonTextConstants.NEXT.toUpperCase()}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </KeyboardAvoidingView>
             </View>
