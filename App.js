@@ -119,8 +119,8 @@ export default function App({ navigationRef }) {
     });
   });
 
-  const fetchCategories = (category, setCategory, categoryIdFromNotification) => {
-    fetchAndUpdateCategoryState(category, setCategory, categoryIdFromNotification);
+  const fetchCategories = async (category, setCategory, categoryIdFromNotification) => {
+    await fetchAndUpdateCategoryState(category, setCategory, categoryIdFromNotification);
   }
   const initialCategorySelection = navigationRef && navigationRef.initialCategorySelection || false;
   const categoryIdFromNotification = navigationRef && navigationRef.categoryIdFromNotification || false;
