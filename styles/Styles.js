@@ -119,6 +119,9 @@ export const SDGenericStyles = StyleSheet.create({
     mt36: {
         marginTop: 36,
     },
+    mt40: {
+        marginTop: 40,
+    },
     ht36: {
         height: 36,
     },
@@ -1393,6 +1396,13 @@ export const userAuthStyles = StyleSheet.create({
         top: 0,
         bottom: 0
     },
+    makeInIndiaRightImageIconView: {
+        padding: 6.5,
+        position: 'absolute',
+        right: 10,
+        top: 0,
+        bottom: 0
+    },
     menu_close_icon_style: {
         width: 22,
         height: 22,
@@ -1653,6 +1663,10 @@ export const userMenuStyles = {
         width: 90,
         height: 90,
         borderRadius: 58,
+    },
+    makeInIndiaImage: {
+        width: 70,
+        height: 70
     },
     menuBackgroundColor: {
         backgroundColor: `rgba(27,31,43,.3)`

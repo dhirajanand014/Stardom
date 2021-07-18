@@ -8,7 +8,7 @@ import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
     actionButtonTextConstants, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
-    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, screens, stringConstants
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, screens, stringConstants, width
 } from '../constants/Constants';
 import { prepareSDOMMenu, fetchProfilePostsCounts, logoutUser, fetchUpdateLoggedInUserProfile } from '../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';
@@ -83,6 +83,25 @@ export const SDUserMenus = (drawerProps) => {
         }
     }
 
+    const makeInIndia = () => {
+        return <View style={[SDGenericStyles.fill, SDGenericStyles.rowFlexDirection, SDGenericStyles.mt40]}>
+            <View style={[SDGenericStyles.paddingHorizontal12, SDGenericStyles.alignItemsStart,
+            SDGenericStyles.justifyContentCenter]}>
+                <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.colorYellow]}>
+                    {miscMessage.MAKE_IN_INDIA.toUpperCase()}
+                </Text>
+                <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.colorWhite]}>
+                    {miscMessage.INITIATIVE}
+                </Text>
+            </View>
+            <View style={[userAuthStyles.makeInIndiaRightImageIconView, SDGenericStyles.justifyContentCenter,
+            SDGenericStyles.alignItemsCenter]}>
+                <Image style={userMenuStyles.makeInIndiaImage} resizeMode={FastImage.resizeMode.contain}
+                    source={require(`../assets/menu/make_in_india.png`)} />
+            </View>
+        </View>;
+    }
+
     useEffect(() => {
         (async () => {
             if (loggedInUser.loginDetails.details && loggedInUser.isLoggedIn) {
@@ -106,11 +125,11 @@ export const SDUserMenus = (drawerProps) => {
 
     return (
         <SDMenuRenderer loggedInUser={loggedInUser} profileMenu={profileMenu} navigation={navigation} handleMenuClickAction={handleMenuClickAction} setLoaderCallback={setLoaderCallback}
-            drawerProps={drawerProps} setLoggedInUser={setLoggedInUser} setProfileMenu={setProfileMenu} />
+            drawerProps={drawerProps} setLoggedInUser={setLoggedInUser} setProfileMenu={setProfileMenu} makeInIndia={makeInIndia} />
     )
 }
 
-const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, setProfileMenu, setLoaderCallback, drawerProps }) => {
+const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, setProfileMenu, setLoaderCallback, drawerProps, makeInIndia }) => {
     return <SafeAreaView style={SDGenericStyles.fill}>
         <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.justifyContentCenter]}>
             <TouchableOpacity activeOpacity={.7} onPress={() => drawerProps.navigation.closeDrawer()}
@@ -138,20 +157,15 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                     SDGenericStyles.placeHolderTextColor, SDGenericStyles.alignItemsStart]}>
                         {profileMenu.profileUserId}
                     </Text>
-                </View>
-                <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.positionAbsolute, glancePostStyles.editProfileAbsolute, SDGenericStyles.justifyContentCenter]}>
-                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical20, SDGenericStyles.paddingHorizontal10]}
+                    <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal15, SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical5]}
                         onPress={() => handleMenuClickAction({ key: modalTextConstants.VIEW_PROFILE })} activeOpacity={.7}>
-                        <RegisterUserIcon style={SDGenericStyles.justifyContentCenter} height={numericConstants.TWENTY_FIVE}
-                            width={numericConstants.TWENTY_FIVE} stroke={colors.WHITE} />
-                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
-                            {miscMessage.VIEW.toUpperCase()}
-                        </Text>
-                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
-                            {fieldControllerName.PROFILE.toUpperCase()}
+                        <Text style={[SDGenericStyles.ft12, SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                            {miscMessage.VIEW.toUpperCase()}{stringConstants.SPACE}{fieldControllerName.PROFILE.toUpperCase()}
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical23, SDGenericStyles.paddingHorizontal10]}
+                </View>
+                <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.positionAbsolute, glancePostStyles.editProfileAbsolute, SDGenericStyles.justifyContentCenter]}>
+                    <TouchableOpacity style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical23, SDGenericStyles.paddingHorizontal12]}
                         onPress={() => handleMenuClickAction({ key: screens.EDIT_USER_PROFILE })} activeOpacity={.7}>
                         <Image style={[SDGenericStyles.menuEditIcon, SDGenericStyles.justifyContentCenter, SDGenericStyles.ml_3, SDGenericStyles.marginBottom1]}
                             source={require(`../assets/menu/edit_icon.png`)} />
@@ -167,7 +181,8 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
         }
 
         <FlatList data={profileMenu.userMenus} numColumns={numericConstants.ONE} keyExtractor={(item) => item.label}
-            renderItem={({ item, index }) => <MenuRenderer item={item} index={index} profileMenu={profileMenu} handleMenuClickAction={handleMenuClickAction} />} />
+            renderItem={({ item, index }) => <MenuRenderer item={item} index={index} profileMenu={profileMenu} handleMenuClickAction={handleMenuClickAction} />}
+            ListFooterComponent={makeInIndia} />
 
         {
             !loggedInUser.isLoggedIn &&
