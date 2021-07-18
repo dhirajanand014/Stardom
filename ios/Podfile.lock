@@ -11,12 +11,12 @@ PODS:
     - React-Core (= 0.64.2)
     - React-jsi (= 0.64.2)
     - ReactCommon/turbomodule/core (= 0.64.2)
-  - Firebase/CoreOnly (8.1.1):
-    - FirebaseCore (= 8.1.0)
-  - Firebase/Messaging (8.1.1):
+  - Firebase/CoreOnly (8.3.0):
+    - FirebaseCore (= 8.3.0)
+  - Firebase/Messaging (8.3.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 8.1.0)
-  - FirebaseCore (8.1.0):
+    - FirebaseMessaging (~> 8.3.0)
+  - FirebaseCore (8.3.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
@@ -30,7 +30,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/UserDefaults (~> 7.4)
     - PromisesObjC (~> 1.2)
-  - FirebaseMessaging (8.1.0):
+  - FirebaseMessaging (8.3.0):
     - FirebaseCore (~> 8.0)
     - FirebaseInstallations (~> 8.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
@@ -415,11 +415,11 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.8)
     - SDWebImageWebPCoder (~> 0.6.1)
-  - RNFBApp (12.1.0):
-    - Firebase/CoreOnly (= 8.1.1)
+  - RNFBApp (12.2.0):
+    - Firebase/CoreOnly (= 8.3.0)
     - React-Core
-  - RNFBMessaging (12.1.0):
-    - Firebase/Messaging (= 8.1.1)
+  - RNFBMessaging (12.2.0):
+    - Firebase/Messaging (= 8.3.0)
     - React-Core
     - RNFBApp
   - RNGestureHandler (1.10.3):
@@ -466,7 +466,7 @@ PODS:
     - Yoga
   - RNScreens (2.18.1):
     - React-Core
-  - RNShare (6.2.3):
+  - RNShare (6.3.0):
     - React-Core
   - RNSVG (12.1.1):
     - React
@@ -694,11 +694,11 @@ SPEC CHECKSUMS:
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
   FBReactNativeSpec: 4f7f21e895c30b888e0d905909396d2ac915e2ef
-  Firebase: 4bb49ae87756034cef870fa3c4006235eb46f475
-  FirebaseCore: 389c4ce9a7cce4a7e25eb22326b4bee0050557b2
+  Firebase: 817b9171d0d51dccc458b94a5e8edff6b1dd323d
+  FirebaseCore: a6dba751680d7033b9d3831e1cfc95ead0605118
   FirebaseCoreDiagnostics: 7e873baabcfaa9512f538554ae4fa0817aaafbdb
   FirebaseInstallations: b69db7680870dbac17bba7a51fc0b5c4b365baa7
-  FirebaseMessaging: c8871b0907dcf4e76de81241eb6a62be6d657d2f
+  FirebaseMessaging: 42252b79b860482021483748669ec32e22196462
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -750,14 +750,14 @@ SPEC CHECKSUMS:
   RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
   RNDateTimePicker: c9911be59b1f8670b9f244b85af3a7c295e175ed
   RNFastImage: 044259b52d726b183fa401f3521b2e5a864afc0a
-  RNFBApp: 406bc9586c70ccf20504b4d3b54ac4341c98993f
-  RNFBMessaging: 154dc7815e2b6c55941793630ffb3a55f03d77e6
+  RNFBApp: f83ab90f319f1a4b7f276e4703c6a0cdfce5abde
+  RNFBMessaging: 463bd1c052aae9bb78a07670645b82357b88952a
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 35a3ceb837446fa11547704709bb22b5fac6d584
   RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
   RNReanimated: 7d2b97cf2dd7c8c69956080fe911edc08cf0a8c7
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  RNShare: 16c78aeb7a78d19e8f5597e405e87f90d91f8eb9
+  RNShare: 8ff5f3819c8f2b4f76cd31fa1287315754afee01
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
