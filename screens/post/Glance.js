@@ -24,9 +24,8 @@ const category_selection = require('../../assets/category_selection_icon.png');
 export const Glance = ({ navigation }) => {
 
     const { postIdFromNotification, categoryIdFromNotification, sdomDatastate, setSdomDatastate, currentPostIndexForProfileRef,
-        optionsState, setOptionsState, loggedInUser } = useContext(CategoryContext);
+        optionsState, setOptionsState, loggedInUser, setDrawerOpen, postDetailsRef } = useContext(CategoryContext);
     const viewPagerRef = useRef(null);
-    const postDetailsRef = useRef(null);
     const isFromNotification = useRef(false);
 
     const route = useRoute();
@@ -58,12 +57,12 @@ export const Glance = ({ navigation }) => {
         <GlanceComponent sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
             currentPostIndexForProfileRef={currentPostIndexForProfileRef} height={height} postIdFromNotification={postId} navigation={navigation}
-            setSdomDatastate={setSdomDatastate} isFromNotification={isFromNotification} />
+            setSdomDatastate={setSdomDatastate} isFromNotification={isFromNotification} setDrawerOpen={setDrawerOpen} />
     )
 }
 
 const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRef, optionsState, setOptionsState, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x, currentPostIndexForProfileRef, height,
-    postIdFromNotification, navigation, isFromNotification }) => {
+    postIdFromNotification, navigation, isFromNotification, setDrawerOpen }) => {
     return <SafeAreaView style={SDGenericStyles.fill}>
         {
             sdomDatastate.posts && sdomDatastate.posts.length &&
@@ -107,7 +106,7 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                     </View>
                 </Shimmer>
             </View>}
-        <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => navigation.openDrawer()}>
+        <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => { setDrawerOpen(true); navigation.openDrawer(); }}>
             <Image source={category_selection} style={glancePostStyles.category_selection_image} />
         </TouchableOpacity>
     </SafeAreaView>;

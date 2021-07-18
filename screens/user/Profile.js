@@ -19,7 +19,7 @@ export const Profile = () => {
     const isFocused = useIsFocused();
 
     const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail, currentPostIndexForProfileRef,
-        setLoaderCallback } = useContext(CategoryContext);
+        setLoaderCallback, postDetailsRef } = useContext(CategoryContext);
 
     const [loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess] = useState(false);
 
@@ -29,6 +29,8 @@ export const Profile = () => {
 
     // variables
     const snapPoints = useMemo(() => [numericConstants.TWELVE_PCNT, numericConstants.HUNDRED_PCNT], jsonConstants.EMPTY);
+
+    postDetailsRef && postDetailsRef?.current && postDetailsRef?.current?.setPostAnimationVisible(false);
 
     useEffect(() => {
         (async () => {

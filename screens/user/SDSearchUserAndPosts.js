@@ -16,7 +16,7 @@ import { SDSearchInput } from '../../components/input/SDSearchInput';
 import { SDGenericStyles, userAuthStyles, userMenuStyles } from '../../styles/Styles';
 import { TabView, TabBar } from 'react-native-tab-view';
 import FastImage from 'react-native-fast-image';
-export const SDSearchUserAndPosts = props => {
+export const SDSearchUserAndPosts = () => {
 
     const { viewPagerPostsRef } = useContext(CategoryContext);
 

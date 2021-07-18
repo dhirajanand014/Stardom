@@ -10,7 +10,7 @@ import {
     actionButtonTextConstants, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, screens, stringConstants
 } from '../constants/Constants';
-import { prepareSDOMMenu, fetchProfilePostsCounts, logoutUser, fetchUpdateLoggedInUserProfile } from '../helper/Helper';
+import { prepareSDOMMenu, logoutUser, fetchUpdateLoggedInUserProfile, prepareLoggedInMenu } from '../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';
 import { MenuRenderer } from '../views/menus/MenuRenderer';
 
@@ -19,7 +19,7 @@ export const SDUserMenus = (drawerProps) => {
     const navigation = useNavigation();
     const isFocused = useIsFocused();
 
-    const { loggedInUser, setLoggedInUser, setLoaderCallback, currentPostIndexForProfileRef } = useContext(CategoryContext);
+    const { loggedInUser, setLoggedInUser, setLoaderCallback, currentPostIndexForProfileRef, drawerOpen, setDrawerOpen } = useContext(CategoryContext);
 
     const [profileMenu, setProfileMenu] = useState({
         userMenus: jsonConstants.EMPTY,
@@ -65,7 +65,7 @@ export const SDUserMenus = (drawerProps) => {
         setLoaderCallback(false);
     });
 
-    const filterOutLoginMenus = (menu, details) => {
+    const filterOutLoginMenus = useCallback((menu, details) => {
         switch (menu.key) {
             case actionButtonTextConstants.VERIFY_USER:
                 if (details.user_type == miscMessage.VERIFIED_AUTHOR || details.user_type == miscMessage.AUTHOR_UNAPPROVED) {
@@ -81,10 +81,10 @@ export const SDUserMenus = (drawerProps) => {
                 return true;
             default: return true;
         }
-    }
+    });
 
     const makeInIndia = () => {
-        return <View style={[SDGenericStyles.fill, SDGenericStyles.rowFlexDirection, SDGenericStyles.mt40]}>
+        return <View style={[SDGenericStyles.fill, SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingVertical10, SDGenericStyles.mt20]}>
             <View style={[SDGenericStyles.paddingHorizontal12, SDGenericStyles.alignItemsStart,
             SDGenericStyles.justifyContentCenter]}>
                 <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.colorYellow]}>
@@ -96,7 +96,7 @@ export const SDUserMenus = (drawerProps) => {
             </View>
             <View style={[userAuthStyles.makeInIndiaRightImageIconView, SDGenericStyles.justifyContentCenter,
             SDGenericStyles.alignItemsCenter]}>
-                <Image style={userMenuStyles.makeInIndiaImage} resizeMode={FastImage.resizeMode.contain}
+                <Image style={[SDGenericStyles.fill, userMenuStyles.makeInIndiaImage]}
                     source={require(`../assets/menu/make_in_india.png`)} />
             </View>
         </View>;
@@ -105,34 +105,26 @@ export const SDUserMenus = (drawerProps) => {
     useEffect(() => {
         (async () => {
             if (loggedInUser.loginDetails.details && loggedInUser.isLoggedIn) {
-                profileMenu.userMenus = prepareSDOMMenu();
-                const details = JSON.parse(loggedInUser.loginDetails.details);
-                const counts = await fetchProfilePostsCounts(details.id);
-                profileMenu.userMenus = profileMenu.userMenus.filter(menu => filterOutLoginMenus(menu, details));
-                profileMenu.profileImage = details.profile_picture;
-                profileMenu.profileName = details.name;
-                profileMenu.profileUserId = details.user_id;
-                profileMenu.followersCount = counts.followingCount;
-                profileMenu.followingCount = counts.followersCount;
+                await prepareLoggedInMenu(profileMenu, loggedInUser, setLoggedInUser, drawerOpen, filterOutLoginMenus);
             } else {
                 profileMenu.userMenus = prepareSDOMMenu().filter(menu => !menu.loggedIn);
-                profileMenu.followersCount = numericConstants.ZERO;
-                profileMenu.followingCount = numericConstants.ZERO;
+                profileMenu.followersCount = profileMenu.followingCount = numericConstants.ZERO;
             }
+            drawerOpen && setDrawerOpen(false);
             setProfileMenu({ ...profileMenu });
         })();
-    }, [loggedInUser.loginDetails, isFocused]);
+    }, [loggedInUser.loginDetails, isFocused, drawerOpen]);
 
     return (
         <SDMenuRenderer loggedInUser={loggedInUser} profileMenu={profileMenu} navigation={navigation} handleMenuClickAction={handleMenuClickAction} setLoaderCallback={setLoaderCallback}
-            drawerProps={drawerProps} setLoggedInUser={setLoggedInUser} setProfileMenu={setProfileMenu} makeInIndia={makeInIndia} />
+            drawerProps={drawerProps} setLoggedInUser={setLoggedInUser} setProfileMenu={setProfileMenu} makeInIndia={makeInIndia} setDrawerOpen={setDrawerOpen} />
     )
 }
 
-const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, setProfileMenu, setLoaderCallback, drawerProps, makeInIndia }) => {
+const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, setProfileMenu, setLoaderCallback, drawerProps, makeInIndia, setDrawerOpen }) => {
     return <SafeAreaView style={SDGenericStyles.fill}>
         <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.justifyContentCenter]}>
-            <TouchableOpacity activeOpacity={.7} onPress={() => drawerProps.navigation.closeDrawer()}
+            <TouchableOpacity activeOpacity={.7} onPress={() => { setDrawerOpen(false); drawerProps.navigation.closeDrawer(); }}
                 style={[SDGenericStyles.paddingRight10, SDGenericStyles.paddingTop40, SDGenericStyles.justifyContentCenter]}>
                 <Image style={userAuthStyles.menu_close_icon_style} source={require(`../assets/menu/close_icon.png`)} />
             </TouchableOpacity>
@@ -145,7 +137,7 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                         {profileMenu.profileImage && <FastImage source={{ uri: profileMenu.profileImage, priority: FastImage.priority.normal }}
                             style={[userMenuStyles.profileImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter,
                             SDGenericStyles.elevation8]} /> ||
-                            <RegisterUserIcon width={numericConstants.EIGHTY} height={numericConstants.EIGHTY} stroke={colors.SDOM_PLACEHOLDER} />}
+                            <RegisterUserIcon width={numericConstants.SIXTY} height={numericConstants.SIXTY} stroke={colors.SDOM_PLACEHOLDER} />}
                     </TouchableOpacity>
                 </View>
                 <View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.justifyContentCenter]}>

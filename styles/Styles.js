@@ -676,11 +676,9 @@ export const glancePostStyles = StyleSheet.create({
     },
     backgroundRoundColor_description: {
         paddingRight: 1,
-        paddingTop: 6,
         alignItems: 'center',
         width: 29,
-        height: 29,
-        borderRadius: 16,
+        height: 29
     },
     backgroundRoundColor_report_abuse: {
         paddingRight: 1,
@@ -688,14 +686,11 @@ export const glancePostStyles = StyleSheet.create({
         alignItems: 'center',
         width: 29,
         height: 29,
-        borderRadius: 16,
     },
     likesBackgroundRoundColor: {
-        paddingTop: 4,
         alignItems: 'center',
         width: 27,
         height: 27,
-        borderRadius: 16,
     },
     setWallPaperBackgroundRoundColor: {
         paddingTop: 6,
@@ -706,7 +701,7 @@ export const glancePostStyles = StyleSheet.create({
     },
     backgroundRoundColor: {
         paddingRight: 1,
-        paddingTop: 5,
+        paddingTop: 3,
         alignItems: 'center',
         width: 27,
         height: 27,
@@ -722,7 +717,7 @@ export const glancePostStyles = StyleSheet.create({
         textShadowColor: `#fafafa`
     },
     postProfileNameBy: {
-        marginRight: 4,
+        marginRight: 2,
         display: 'flex',
         textShadowOffset: {
             width: 2,
@@ -748,8 +743,8 @@ export const glancePostStyles = StyleSheet.create({
         color: 'black',
     },
     icon_post_like: {
-        width: 20,
-        height: 20
+        width: 22,
+        height: 22
     },
     icon_post_search: {
         width: 18,
@@ -769,20 +764,20 @@ export const glancePostStyles = StyleSheet.create({
         fontSize: 15
     },
     icon_post_description: {
-        width: 18,
-        height: 18
-    },
-    icon_post_report_abuse: {
         width: 20,
         height: 20
+    },
+    icon_post_report_abuse: {
+        width: 22,
+        height: 22
     },
     icon_post_details: {
         width: 20,
         height: 20,
     },
     icon_post_share: {
-        width: 20,
-        height: 20
+        width: 22,
+        height: 22
     },
     icon_external_link: {
         width: 25,

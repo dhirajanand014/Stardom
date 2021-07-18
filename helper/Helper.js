@@ -1893,3 +1893,16 @@ export const saveEULA = async (acceptedEULA) => {
         console.error(errorMessages.CANNOT_SAVE_EULA, error);
     }
 }
+
+export const prepareLoggedInMenu = async (profileMenu, loggedInUser, setLoggedInUser, drawerOpen, filterOutLoginMenus) => {
+    drawerOpen && fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
+    profileMenu.userMenus = prepareSDOMMenu();
+    const details = JSON.parse(loggedInUser.loginDetails.details);
+    const counts = await fetchProfilePostsCounts(details.id);
+    profileMenu.userMenus = profileMenu.userMenus.filter(menu => filterOutLoginMenus(menu, details));
+    profileMenu.profileImage = details.profile_picture;
+    profileMenu.profileName = details.name;
+    profileMenu.profileUserId = details.user_id;
+    profileMenu.followersCount = counts.followingCount;
+    profileMenu.followingCount = counts.followersCount;
+}
