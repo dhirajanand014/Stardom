@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from "react-native"
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
-import { actionButtonTextConstants, miscMessage, screens } from '../../constants/Constants';
+import { actionButtonTextConstants, miscMessage, screens, stringConstants } from '../../constants/Constants';
 import { SDGenericStyles, userMenuStyles } from '../../styles/Styles';
 
 export const UserFollowFollowingRenderer = (props) => {
@@ -17,8 +17,10 @@ export const UserFollowFollowingRenderer = (props) => {
                 SDGenericStyles.marginRight15]}>
                 </FastImage>
                 <View style={[SDGenericStyles.fill, SDGenericStyles.justifyItemsStart]}>
-                    <Text style={[SDGenericStyles.ft20, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.paddingBottom5]}>{props.item.name}</Text>
-                    <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>{props.item.user_id}</Text>
+                    <Text style={[SDGenericStyles.ft20, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>{props.item.name}</Text>
+                    <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.paddingVertical2]}>{props.item.user_id}</Text>
+                    <Text style={[SDGenericStyles.ft12, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>{props.item.profiles && props.item.profiles.profile_name
+                        || stringConstants.EMPTY}</Text>
                 </View>
                 {
                     props.listFor == miscMessage.PRIVATE_REQUEST_ACCESS &&
