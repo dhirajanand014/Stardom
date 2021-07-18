@@ -8,7 +8,7 @@ import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
     actionButtonTextConstants, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
-    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, screens, stringConstants, width
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, screens, stringConstants
 } from '../constants/Constants';
 import { prepareSDOMMenu, fetchProfilePostsCounts, logoutUser, fetchUpdateLoggedInUserProfile } from '../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';

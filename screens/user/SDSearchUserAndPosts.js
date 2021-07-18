@@ -5,6 +5,7 @@ import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native
 import { CategoryContext } from '../../App';
 import {
     alertTextMessages, errorMessages, fieldControllerName, jsonConstants,
+    miscMessage,
     modalTextConstants,
     numericConstants, placeHolderText, screens, stringConstants
 } from '../../constants/Constants';
@@ -106,9 +107,27 @@ export const SDSearchUserAndPosts = props => {
             }} style={[userMenuStyles.followerFollowingImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter,
             SDGenericStyles.marginRight15]}>
             </FastImage>
-            <Text style={[SDGenericStyles.ft20, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.paddingBottom5]}>
-                {props.item.postTitle}
-            </Text>
+            <View style={SDGenericStyles.paddingBottom5}>
+                <Text style={[SDGenericStyles.ft20, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
+                    {props.item.postTitle}
+                </Text>
+                <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsStart]}>
+                    <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyItalicRegular, SDGenericStyles.ft16,
+                    SDGenericStyles.justifyContentCenter]}>
+                        {miscMessage.BY_TEXT}
+                    </Text>
+                    <Text style={[SDGenericStyles.paddingLeft5, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    SDGenericStyles.ft12, SDGenericStyles.justifyContentCenter]}>
+                        {props.item.user.name}
+                    </Text>
+                </View>
+                <View>
+                    <Text style={[SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.justifyContentCenter,
+                    SDGenericStyles.ft12]}>
+                        {props.item.postCategoriesIn}
+                    </Text>
+                </View>
+            </View>
         </TouchableOpacity >
     }
 
