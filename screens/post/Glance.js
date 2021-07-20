@@ -10,7 +10,6 @@ import {
 } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import Animated, { useDerivedValue, useSharedValue } from 'react-native-reanimated';
-import Shimmer from 'react-native-shimmer';
 import Swiper from 'react-native-swiper';
 import { PostDetails } from './PostDetails';
 import FastImage from 'react-native-fast-image';
@@ -97,14 +96,14 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
             </View> || sdomDatastate.posts && !sdomDatastate.posts.length &&
             <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.CATEGORY_WITHOUT_POST}
                 descriptionText={errorMessages.SELECT_OTHER_CATEGORIES} navigation={navigation} /> || <View>
-                <Shimmer style={{ width: width, height: height }} duration={numericConstants.FIVE_HUNDRED} direction={miscMessage.UP} tilt={numericConstants.FORTY_FIVE}>
+                <View style={{ width: width, height: height }}>
                     <View style={glancePostStyles.shimmerViewInit}>
                         <FastImage style={glancePostStyles.preloaderStyle} source={{
                             uri: Image.resolveAssetSource(require(`../../assets/stardom_loader.gif`)).uri,
                             priority: FastImage.priority.normal
                         }} />
                     </View>
-                </Shimmer>
+                </View>
             </View>}
         <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => { setDrawerOpen(true); navigation.openDrawer(); }}>
             <Image source={category_selection} style={glancePostStyles.category_selection_image} />

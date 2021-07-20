@@ -7,13 +7,12 @@ import {
     fetchUserProfilePosts, onSwiperScrollEnd,
     resetAnimatePostTextDetails, setImageLoadError
 } from '../../helper/Helper';
-import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
+import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import Animated, { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import Swiper from 'react-native-swiper';
 import { SwipeItem } from '../../components/swiper/SwipeItem';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { ViewUserPostDetails } from './ViewUserPostDetails';
-import Shimmer from 'react-native-shimmer';
 import FastImage from 'react-native-fast-image';
 import { BackButton } from '../../components/button/BackButton';
 
@@ -94,14 +93,14 @@ const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOp
                 <ViewUserPostDetails ref={postDetailsRef} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x} width={width} height={height} posts={posts}
                     navigation={navigation} viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
             </View> || <View>
-                <Shimmer style={{ width: width, height: height }} duration={numericConstants.FIVE_HUNDRED} direction={miscMessage.UP} tilt={numericConstants.FORTY_FIVE}>
+                <View style={{ width: width, height: height }} >
                     <View style={glancePostStyles.shimmerViewInit}>
                         <FastImage style={glancePostStyles.preloaderStyle} source={{
                             uri: Image.resolveAssetSource(require(`../../assets/stardom_loader.gif`)).uri,
                             priority: FastImage.priority.normal
                         }} />
                     </View>
-                </Shimmer>
+                </View>
             </View>}
     </View>;
 });

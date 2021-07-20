@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import { ActivityIndicator, SafeAreaView, Text, ImageBackground, Dimensions, StatusBar } from 'react-native';
-import { colors, SDGenericStyles } from '../styles/Styles';
+import { SafeAreaView, Text, ImageBackground, Dimensions, StatusBar, Image, View } from 'react-native';
+import { SDGenericStyles } from '../styles/Styles';
 import { getCategoryButtonType, getSelectedCategoryIdsFromStorage, notificationAction } from '../helper/Helper';
 import { jsonConstants, miscMessage, numericConstants, screens, width } from '../constants/Constants';
 import { useNavigation } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
+import FastImage from 'react-native-fast-image';
 
 export const SDSplashScreen = () => {
 
@@ -50,7 +51,12 @@ export const SDSplashScreen = () => {
             { height: height, width: width }]} source={require(`../assets/splash_screen_image.gif`)} >
                 <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRobotoRegular,
                 SDGenericStyles.textColorWhite, SDGenericStyles.paddingVertical10]}>{miscMessage.LOADING}</Text>
-                <ActivityIndicator color={colors.SDOM_YELLOW} shouldRasterizeIOS hidesWhenStopped style={SDGenericStyles.mt5} />
+                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.mt5]}>
+                    <FastImage source={{
+                        uri: Image.resolveAssetSource(require(`../assets/stardom_loader.gif`)).uri,
+                        priority: FastImage.priority.normal
+                    }} style={{ width: numericConstants.FIFTY, height: numericConstants.FIFTY }} resizeMode={FastImage.resizeMode.contain} />
+                </View>
             </ImageBackground>
         </SafeAreaView>
     )

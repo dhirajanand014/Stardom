@@ -124,7 +124,7 @@ export const PostDetails = forwardRef((props, ref) => {
                             </TouchableOpacity> || <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
                         }
                     </Animated.View>
-                    <Animated.View style={[glancePostStyles.postTitleAndProfileStyle, SDGenericStyles.marginBottom8,
+                    <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.rowFlexDirection, SDGenericStyles.marginBottom8,
                     postDetailsState.animationVisible && postDescriptionSpringStyle]}>
                         <Text style={[postDetailsState.currentPost.profileName && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
                         SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft9]}>
@@ -147,7 +147,7 @@ export const PostDetails = forwardRef((props, ref) => {
                                     </View>
                                 }
                             </View>
-                            <View style={SDGenericStyles.marginTop8}>
+                            <View style={SDGenericStyles.mt2}>
                                 <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular,
                                 SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>{
                                         postDetailsState.currentPost.profileName && postDetailsState.currentPost.postCategoriesIn &&
@@ -167,7 +167,7 @@ export const PostDetails = forwardRef((props, ref) => {
             </View>
             <ActionButton buttonColor={colorConstants.TRANSPARENT_BUTTON} backgroundTappable={true} size={numericConstants.TWENTY_EIGHT} useNativeFeedback={false} degrees={numericConstants.ZERO}
                 verticalOrientation={postitionStringConstants.DOWN} position={postitionStringConstants.RIGHT} offsetX={numericConstants.TEN} offsetY={numericConstants.THIRTY_EIGHT} hideShadow={true}
-                autoInactive={false} active={postDetailsState.switchEnabled} renderIcon={(isActive) =>
+                autoInactive={false} spacing={numericConstants.FORTY_TWO} active={postDetailsState.switchEnabled} renderIcon={(isActive) =>
                     <Switch trackColor={{ false: colorConstants.GREY, true: colorConstants.YELLOW }}
                         thumbColor={isActive ? colorConstants.WHITE : colorConstants.WHITE}
                         style={{ transform: [{ scaleX: .85 }, { scaleY: .85 }] }} value={postDetailsState.switchEnabled}
@@ -186,16 +186,16 @@ export const PostDetails = forwardRef((props, ref) => {
                         <Image style={glancePostStyles.icon_post_like} source={postDetailsState.currentPost.likeAdded &&
                             post_like_selected || post_like} />
                     </View>
-                    <Text style={[SDGenericStyles.ft12, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{postDetailsState.currentPost.postLikes}</Text>
+                    <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top6]}>{postDetailsState.currentPost.postLikes}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={() =>
                     setPostDetailsState({ ...postDetailsState, wallpaperModal: true })}>
                     <View style={glancePostStyles.setWallPaperBackgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
                     </View>
-                    <Text style={[SDGenericStyles.ft12, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1, SDGenericStyles.marginRight4]}>{postDetailsState.currentPost.postWallpapers}</Text>
+                    <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top8, SDGenericStyles.marginRight4]}>{postDetailsState.currentPost.postWallpapers}</Text>
                 </ActionButton.Item>
                 {/* <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
                     await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback,
@@ -218,7 +218,7 @@ export const PostDetails = forwardRef((props, ref) => {
                         <Image style={glancePostStyles.icon_post_report_abuse} source={reportAbuseIcon} />
                     </View>
                     <Text style={[SDGenericStyles.ft7, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{miscMessage.REPORT_ABUSE_TEXT}</Text>
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top6]}>{miscMessage.REPORT_ABUSE_TEXT}</Text>
                 </ActionButton.Item>
             </ActionButton>
             <PostDescriptionModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}

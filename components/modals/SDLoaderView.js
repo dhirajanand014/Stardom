@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from "react";
 import { Image, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { alertTextMessages, jsonConstants, miscMessage, numericConstants } from "../../constants/Constants";
-import { colors, glancePostStyles, SDGenericStyles } from "../../styles/Styles";
+import { alertTextMessages, height, jsonConstants, miscMessage, numericConstants, width } from "../../constants/Constants";
+import { colors, SDGenericStyles } from "../../styles/Styles";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 export const SDLoaderView = props => {
@@ -28,12 +28,12 @@ export const SDLoaderView = props => {
         <View style={[SDGenericStyles.fill, SDGenericStyles.positionAbsolute, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter,
         SDGenericStyles.loaderCentre]}
             pointerEvents={miscMessage.NONE}>
-            <View style={[glancePostStyles.loaderModalView, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter,
-            SDGenericStyles.backgroundColorWhite, SDGenericStyles.paddingHorizontal10]}>
+            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.backGroundAppBlack,
+            SDGenericStyles.paddingHorizontal10, { width: width, height: height }]}>
                 <FastImage source={{
                     uri: Image.resolveAssetSource(require(`../../assets/stardom_loader.gif`)).uri,
                     priority: FastImage.priority.normal
-                }} style={{ width: numericConstants.THIRTY, height: numericConstants.THIRTY }} resizeMode={FastImage.resizeMode.contain} />
+                }} style={{ width: numericConstants.ONE_HUNDRED, height: numericConstants.ONE_HUNDRED }} resizeMode={FastImage.resizeMode.contain} />
                 {
                     props.loader.loadingText && <View>
                         <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop10,

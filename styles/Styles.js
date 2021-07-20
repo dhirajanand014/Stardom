@@ -56,6 +56,9 @@ export const SDGenericStyles = StyleSheet.create({
     top1: {
         top: 1
     },
+    top6: {
+        top: 6
+    },
     top8: {
         top: 8
     },
@@ -103,6 +106,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     mtMinus10: {
         marginTop: -10
+    },
+    mt2: {
+        marginTop: 2,
     },
     mt12: {
         marginTop: 12,
@@ -527,6 +533,9 @@ export const SDGenericStyles = StyleSheet.create({
     backGroundColorBlack: {
         backgroundColor: `#1b1f2b`
     },
+    backGroundAppBlack: {
+        backgroundColor: `rgb(0,0,0)`
+    },
     backGroundTextBoxGrey: {
         backgroundColor: `#969696`
     },
@@ -717,7 +726,7 @@ export const glancePostStyles = StyleSheet.create({
         textShadowColor: `#fafafa`
     },
     postProfileNameBy: {
-        marginRight: 2,
+        marginRight: 3,
         display: 'flex',
         textShadowOffset: {
             width: 2,
@@ -743,8 +752,8 @@ export const glancePostStyles = StyleSheet.create({
         color: 'black',
     },
     icon_post_like: {
-        width: 22,
-        height: 22
+        width: 30,
+        height: 30
     },
     icon_post_search: {
         width: 18,
@@ -764,20 +773,20 @@ export const glancePostStyles = StyleSheet.create({
         fontSize: 15
     },
     icon_post_description: {
-        width: 20,
-        height: 20
+        width: 30,
+        height: 30
     },
     icon_post_report_abuse: {
-        width: 22,
-        height: 22
+        width: 30,
+        height: 30
     },
     icon_post_details: {
-        width: 20,
-        height: 20,
+        width: 30,
+        height: 30,
     },
     icon_post_share: {
-        width: 22,
-        height: 22
+        width: 30,
+        height: 30
     },
     icon_external_link: {
         width: 25,
@@ -787,11 +796,7 @@ export const glancePostStyles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 10,
-        marginBottom: 6,
-    },
-    postTitleAndProfileStyle: {
-        alignItems: 'flex-start',
-        flexDirection: 'row',
+        marginBottom: 1,
     },
     searchIconContainer: {
         flex: 1,
@@ -916,7 +921,7 @@ export const glancePostStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "white"
+        backgroundColor: "rgb(0,0,0)"
     },
     closeReportAbuseModal: {
         position: 'absolute',
@@ -1038,8 +1043,8 @@ export const glancePostStyles = StyleSheet.create({
         width: 180,
     },
     preloaderStyle: {
-        width: 50,
-        height: 50
+        width: 100,
+        height: 100
     },
     addPostSelectText: {
         textAlign: 'center',
@@ -1158,13 +1163,6 @@ export const glancePostStyles = StyleSheet.create({
     addPostEditIconsStyle: {
         top: height / 4.4,
         right: 18
-    },
-    loaderModalView: {
-        height: 120,
-        width: 100,
-        borderRadius: 10,
-        width: width / 3,
-        elevation: 5
     },
     overlayImage: {
         ...StyleSheet.absoluteFillObject,
@@ -1679,6 +1677,8 @@ export const userMenuStyles = {
     followerFollowingImageStyle: {
         width: 70,
         height: 70,
+        borderWidth: 1.5,
+        borderColor: `#efefef`,
         borderRadius: 58
     },
     userVerifyModalView: {

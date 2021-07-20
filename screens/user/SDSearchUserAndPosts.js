@@ -99,8 +99,8 @@ export const SDSearchUserAndPosts = () => {
     });
 
     const RenderPostSearchContent = props => {
-        return <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.backGroundColorGray,
-        SDGenericStyles.padding20, SDGenericStyles.marginBottom15, SDGenericStyles.borderRadius5]} onPress={() =>
+        return <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.padding20,
+        SDGenericStyles.marginBottom15, SDGenericStyles.borderRadius5]} onPress={() =>
             props.actionCallBack(screens.POSTS_TAB, props.index)}>
             <FastImage source={{
                 uri: props.item.postImage, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable

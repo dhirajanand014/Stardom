@@ -1,13 +1,14 @@
 import React from 'react';
+import { Image, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { PinchGestureHandler, TapGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
     useAnimatedGestureHandler,
     useAnimatedStyle, useSharedValue, withTiming
 } from 'react-native-reanimated';
-import { componentErrorConsts, errorMessages, numericConstants } from '../../constants/Constants';
+import { numericConstants } from '../../constants/Constants';
 import { scrollWhenPostIdFromNotification, setImageLoadError } from '../../helper/Helper';
-import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
+import { SDGenericStyles } from '../../styles/Styles';
 
 export const SwipeItem = (props) => {
 
@@ -49,8 +50,12 @@ export const SwipeItem = (props) => {
                     <Animated.View key={`${index}_${item.categoryId}`} style={pinchZoomStyle}>
                         {
                             (optionsState.isImageLoadError &&
-                                <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.POST_IMAGE_LOAD_ERROR}
-                                    descriptionText={errorMessages.POST_IMAGE_LOAD_ERROR} />)
+                                <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.mt5]}>
+                                    <FastImage source={{
+                                        uri: Image.resolveAssetSource(require(`../../assets/stardom_loader.gif`)).uri,
+                                        priority: FastImage.priority.normal
+                                    }} style={{ width: numericConstants.FIFTY, height: numericConstants.FIFTY }} resizeMode={FastImage.resizeMode.contain} />
+                                </View>)
                         }
 
                         <FastImage style={[{ width: width, height: height }]} source={{

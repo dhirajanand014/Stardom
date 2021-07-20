@@ -94,14 +94,14 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                             </TouchableOpacity> || <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
                         }
                     </Animated.View>
-                    <Animated.View style={[glancePostStyles.postTitleAndProfileStyle, SDGenericStyles.marginBottom8,
+                    <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.rowFlexDirection, SDGenericStyles.marginBottom8,
                     postDetailsState.animationVisible && postDescriptionSpringStyle]}>
                         <Text style={[postDetailsState.currentPost.profileName && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
                         SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft9]}>
                             {postDetailsState.currentPost.profileName && postDetailsState.currentPost.profileName.toUpperCase()}
                         </Text>
                         <View>
-                            <View style={SDGenericStyles.mt3}>
+                            <View style={SDGenericStyles.mt2}>
                                 <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular,
                                 SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>{
                                         postDetailsState.currentPost.profileName && postDetailsState.currentPost.postCategoriesIn &&

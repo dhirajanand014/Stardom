@@ -12,7 +12,7 @@ import { isValidURL } from "../helper/Helper";
 export const isIOS = Platform.OS === `ios`;
 export const isAndroid = Platform.OS === `android`;
 
-export const { width, height } = Dimensions.get(`window`);
+export const { width, height } = Dimensions.get(`screen`);
 
 export const RESEND_OTP_TIME_LIMIT = 20; // 30 secs
 export const AUTO_SUBMIT_OTP_TIME_LIMIT = 1;
@@ -373,8 +373,7 @@ export const savePostCountKeys = {
 export const componentErrorConsts = {
     ERROR_BOUNDARY: 1,
     CATEGORY_WITHOUT_POST: 2,
-    POST_IMAGE_LOAD_ERROR: 3,
-    POSTS_WITHOUT_PROFILE: 4
+    POSTS_WITHOUT_PROFILE: 3
 }
 
 export const jsonConstants = {
@@ -613,7 +612,6 @@ export const errorMessages = {
     COULD_NOT_SET_COLORS: `Could not set colors`,
     COULD_NOT_FETCH_PHOTOS_FROM_GALLERY: `Could not fetch photos from gallery`,
     CONTACT_US_2: `, if this issue persists`,
-    POST_IMAGE_LOAD_ERROR: `Image failed to load!`,
     COULD_NOT_PERFORM_ACTION: `Could not perform action`,
     CANNOT_REQUEST_PERMISSION_TO_USER: `Could not provide permission to user`,
     COULD_NOT_UPDATE_DEVICE_ID: `Could not update device id for`,
