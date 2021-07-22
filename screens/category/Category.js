@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { FlatList, View, StatusBar, Text, TouchableOpacity, BackHandler, Dimensions, Image } from 'react-native';
+import { FlatList, View, Text, TouchableOpacity, BackHandler, Image } from 'react-native';
 import { CategoryContext } from '../../App';
 import { categoryViewStyles, SDGenericStyles } from '../../styles/Styles';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -63,8 +63,6 @@ export const Category = () => {
         }
     }, [canStart]);
 
-    let { height } = Dimensions.get(miscMessage.WINDOW);
-    height += StatusBar.currentHeight;
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>

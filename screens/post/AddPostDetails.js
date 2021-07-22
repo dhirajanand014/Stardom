@@ -142,7 +142,7 @@ const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, bottomS
                             SDGenericStyles.ft16, SDGenericStyles.textALignVerticalTop]} maxLength={numericConstants.TWO_HUNDRED} />
                     </Animated.ScrollView>
                     <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentSpaceBetween,
-                    SDGenericStyles.paddingHorizontal65, SDGenericStyles.bottom8]}>
+                    SDGenericStyles.paddingHorizontal65, SDGenericStyles.bottom65]}>
                         <View>
                             <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR },
                             SDGenericStyles.paddingHorizontal10]}>

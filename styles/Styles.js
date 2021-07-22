@@ -437,6 +437,9 @@ export const SDGenericStyles = StyleSheet.create({
     bottom30: {
         bottom: 30
     },
+    bottom65: {
+        bottom: 65
+    },
     padding1: {
         padding: 1
     },
@@ -508,6 +511,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     textRightAlign: {
         textAlign: 'right'
+    },
+    textJustifyAlign: {
+        textAlign: 'justify'
     },
     alignItemsCenter: {
         alignItems: 'center'
@@ -1039,7 +1045,8 @@ export const glancePostStyles = StyleSheet.create({
         backgroundColor: '#fafafa',
     },
     tourGuideStyle: {
-        height: 130,
+        marginLeft: 5,
+        height: 135,
         width: 180,
     },
     preloaderStyle: {
@@ -1717,7 +1724,7 @@ export const userMenuStyles = {
 export const cameraStyles = StyleSheet.create({
     imageStyles: {
         width: width,
-        height: height / 1.531,
+        height: height / 1.7,
     },
     filterSelector: {
         width: 120,
