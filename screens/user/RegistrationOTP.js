@@ -167,7 +167,6 @@ export const RegistrationOTP = props => {
                             attemptsRemaining, startResendOtpTimer, phoneNumber, isFrom, navigation, clearErrors, setLoaderCallback)} />
                 }
                 <View style={userAuthStyles.registerButtonView}>
-                    <Text style={SDGenericStyles.colorWhite}>OTP IS - {route.params.rand_number}</Text>
                     <OTPTextView style={[SDGenericStyles.centerAlignedText, SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.mt36]}>
                         {attemptsRemaining || numericConstants.ZERO} {miscMessage.ATTEMPT_REMAINING}
                     </OTPTextView>
