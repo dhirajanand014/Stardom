@@ -37,10 +37,8 @@ export const FollowerFollowingProfile = () => {
                 setLoaderCallback(false);
             }
         })();
-        BackHandler.addEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
-        return () => {
-            BackHandler.removeEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
-        };
+        const backHandler = BackHandler.addEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
+        return () => backHandler.remove();
     }, [isFocused]);
 
     const resetProfileState = () => {

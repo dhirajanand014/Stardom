@@ -1,5 +1,6 @@
-import React, { useCallback, useContext } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { useIsFocused } from '@react-navigation/core';
+import React, { useCallback, useContext, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Image, InteractionManager } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { CategoryContext } from '../../App';
 import { SDBottomSheet } from '../../components/bottomsheet/SDBottomSheet';
@@ -20,6 +21,7 @@ import { SDEntryAnimation } from '../animationView/SDEntryAnimation';
 export const SDProfileBottomSheet = props => {
     const post_share = require(`../../assets/post_share_icon.png`);
     const { downloadProgressState, setDownloadProgressState } = useContext(CategoryContext);
+    const isFocused = useIsFocused();
 
     const downloadCallback = useCallback((received, total) => {
         const value = received / total;
@@ -50,10 +52,12 @@ export const SDProfileBottomSheet = props => {
         props.setLoaderCallback(true, alertTextMessages.LOADING_USERS_POSTS);
         await fetchPostsOfUserProfile(props.profile, props.profileDetail, props.setProfileDetail, props.loggedInUser);
         props.profileDetail.userPosts && checkHasPrivateAccess();
-        props.setLoaderCallback(false, alertTextMessages.LOADING_USERS_POSTS);
+        props.setExpanded(true);
+        InteractionManager.runAfterInteractions(() => props.setLoaderCallback(false, alertTextMessages.LOADING_USERS_POSTS));
     }
 
     const hideUserPosts = async () => {
+        props.setExpanded(false);
     }
 
     const renderHeader = () => {
@@ -65,6 +69,13 @@ export const SDProfileBottomSheet = props => {
             </View>
         )
     }
+
+    useEffect(() => {
+        if (props.expanded) {
+            viewUserPosts();
+            props.setExpanded(false);
+        }
+    }, [isFocused]);
 
     const renderContent = () => {
         return (
@@ -107,7 +118,7 @@ export const SDProfileBottomSheet = props => {
 
 const RenderProfileDetails = ({ profile, profileDetail, isDisabled, setLoaderCallback, sdomDatastate, setSdomDatastate, loggedInUser,
     setProfileDetail, navigation }) => {
-    return <View style={{ bottom: height - (height / 1.37) }}>
+    return <View style={{ bottom: height - (height / 1.55) }}>
         <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10]}>
             <Animated.View style={SDGenericStyles.alignItemsStart}>
                 <View style={SDGenericStyles.rowFlexDirection}>
@@ -131,7 +142,7 @@ const RenderProfileDetails = ({ profile, profileDetail, isDisabled, setLoaderCal
             </Animated.View>
         </View>
         {!profileDetail.isSameUser &&
-            <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.paddingRight5]}>
+            <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.paddingRight5, SDGenericStyles.mt24]}>
                 <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
                     <SDEntryAnimation index={numericConstants.ONE}>
                         <SDScaleAnimation disabled={false} scaleTo={numericConstants.ZEROPTNINETY}>

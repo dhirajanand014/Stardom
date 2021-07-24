@@ -184,7 +184,7 @@ export const UserFollowFollowing = () => {
                 renderItem={({ item, index }) => {
                     return <RenderFollowingFollower item={item} scrollYValue={scrollYValue} index={index} listFor={listFor}
                         actionCallBack={actionCallBack} viewFollowerFollowingProfile={viewFollowerFollowingProfile} />
-                }} contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
+                }} contentContainerStyle={[SDGenericStyles.padding12, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
                 ListEmptyComponent={emptyListMessage} onScroll={listViewScrollHandler} scrollEventThrottle={numericConstants.SIXTEEN} />
         </Animated.View>
     )

@@ -12,6 +12,7 @@ import {
     jsonConstants, defaultProfilesValue, SDMenuOptions, AUTO_SUBMIT_OTP_TIME_LIMIT, formRequiredRules
 } from '../constants/Constants';
 import {
+    InteractionManager,
     NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
@@ -462,7 +463,7 @@ export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, 
             && postIdFromNotification?.current && viewPagerRef?.current)) {
             const index = posts.findIndex(post => post.id == postIdFromNotification.current) || numericConstants.ZERO;
             isFromNotification && isFromNotification.current ** viewPagerRef.current.scrollTo(numericConstants.ONE)
-                || viewPagerRef.current.scrollBy(index);
+                || viewPagerRef.current.scrollBy(index, false);
             postDetailsRef?.current?.setPostIndex(isFromNotification && numericConstants.ZERO || index);
             postDetailsRef?.current?.setNewPostViewed(true);
             postIdFromNotification.current = null;
@@ -1440,9 +1441,11 @@ export const updateProfileActionValueToState = async (responseData, action, prof
                 default:
                     break;
             }
-            profileDetail.isFollowing = profile.followers.some(follower => follower.follower_id == user.id);
-            setProfileDetail({ ...profileDetail });
-            setSdomDatastate({ ...sdomDatastate });
+            InteractionManager.runAfterInteractions(() => {
+                profileDetail.isFollowing = profile.followers.some(follower => follower.follower_id == user.id);
+                setProfileDetail({ ...profileDetail });
+                setSdomDatastate({ ...sdomDatastate });
+            });
         }
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);

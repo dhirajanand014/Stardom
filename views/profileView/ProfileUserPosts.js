@@ -9,7 +9,7 @@ export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isS
 
     const allowPrivate = hasPrivateAccess && item.postType == fieldControllerName.POST_TYPE_PRIVATE;
     return (
-        <View key={index} style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
+        <View key={index}>
             <TouchableOpacity activeOpacity={.7} onPress={() => {
                 if (item.postType == fieldControllerName.POST_TYPE_PUBLIC) {
                     postIdRef.current = item.id;

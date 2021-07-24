@@ -1,6 +1,6 @@
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Image, View, BackHandler } from "react-native"
+import { Image, View, BackHandler, InteractionManager } from "react-native"
 import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import {
@@ -22,6 +22,7 @@ export const Profile = () => {
         setLoaderCallback, postDetailsRef } = useContext(CategoryContext);
 
     const [loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess] = useState(false);
+    const [expanded, setExpanded] = useState(false);
 
     const route = useRoute();
     const isFrom = route.params?.isFrom || stringConstants.EMPTY;
@@ -34,17 +35,15 @@ export const Profile = () => {
 
     useEffect(() => {
         (async () => {
-            if (isFocused) {
+            if (!expanded && isFocused) {
                 setLoaderCallback(true, alertTextMessages.FETCHING_USER_PROFILE_DETAILS);
                 await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
                 await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
-                setLoaderCallback(false);
+                InteractionManager.runAfterInteractions(() => setLoaderCallback(false));
             }
         })();
-        BackHandler.addEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
-        return () => {
-            BackHandler.removeEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
-        };
+        const backHandler = BackHandler.addEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
+        return () => backHandler.remove();
     }, [isFocused]);
 
     const resetProfileState = () => {
@@ -67,13 +66,13 @@ export const Profile = () => {
         profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.APPROVED);
 
     return (
-        <ProfileRenderer profile={profile} profileDetail={profileDetail} isDisabled={isDisabled} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess}
+        <ProfileRenderer profile={profile} profileDetail={profileDetail} isDisabled={isDisabled} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} expanded={expanded}
             sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} loggedInUser={loggedInUser} setProfileDetail={setProfileDetail} setLoaderCallback={setLoaderCallback}
-            navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} />
+            navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setExpanded={setExpanded} />
     )
 }
 
-const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, setSdomDatastate, loggedInUser, setLoaderCallback,
+const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, setSdomDatastate, loggedInUser, setLoaderCallback, expanded, setExpanded,
     setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess }) => {
     return <View style={SDGenericStyles.fill}>
         {
@@ -87,9 +86,9 @@ const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDa
                             priority: FastImage.priority.high
                         }} style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} resizeMode={FastImage.resizeMode.center} />
                 }
-                <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser}
+                <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} expanded={expanded}
                     setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
-                    loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} isDisabled={isDisabled} />
+                    loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} isDisabled={isDisabled} setExpanded={setExpanded} />
             </React.Fragment> || <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.POSTS_WITHOUT_PROFILE}
                 descriptionText={errorMessages.NO_USER_PROFILE_FOR_POST} navigation={navigation} />
         }

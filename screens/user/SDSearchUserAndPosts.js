@@ -80,7 +80,7 @@ export const SDSearchUserAndPosts = () => {
         switch (action) {
             case screens.POSTS_TAB:
                 const currentViewPagerIndex = viewPagerPostsRef.current?.state.index;
-                viewPagerPostsRef.current?.scrollBy(index - currentViewPagerIndex);
+                viewPagerPostsRef.current?.scrollBy(index - currentViewPagerIndex, false);
                 postDetailsRef?.current?.setPostAnimationVisible(false);
                 navigation.navigate(screens.GLANCE);
                 break;
@@ -99,7 +99,7 @@ export const SDSearchUserAndPosts = () => {
     });
 
     const RenderPostSearchContent = props => {
-        return <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.padding20,
+        return <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingVertical12,
         SDGenericStyles.marginBottom15, SDGenericStyles.borderRadius5]} onPress={() =>
             props.actionCallBack(screens.POSTS_TAB, props.index)}>
             <FastImage source={{

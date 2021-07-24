@@ -199,5 +199,5 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
         }
         <UserVerifyModal profileMenu={profileMenu} setProfileMenu={setProfileMenu} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
             setLoggedInUser={setLoggedInUser} fetchUpdateLoggedInUserProfile={fetchUpdateLoggedInUserProfile} />
-    </SafeAreaView >;
+    </SafeAreaView>;
 });

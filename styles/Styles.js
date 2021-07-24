@@ -1669,7 +1669,7 @@ export const userMenuStyles = {
         height: 70
     },
     menuBackgroundColor: {
-        backgroundColor: `rgba(27,31,43,.3)`
+        backgroundColor: `rgba(27,31,43,.6)`
     },
     editProfileImageStyle: {
         width: 100,
