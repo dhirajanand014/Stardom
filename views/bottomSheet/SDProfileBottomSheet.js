@@ -7,7 +7,7 @@ import { SDBottomSheet } from '../../components/bottomsheet/SDBottomSheet';
 import { SDScaleAnimation } from '../../components/button/SDScaleAnimation';
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
-    actionButtonTextConstants, alertTextMessages, height, miscMessage,
+    actionButtonTextConstants, alertTextMessages, height, jsonConstants, miscMessage,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, width
 } from '../../constants/Constants';
 import {
@@ -58,6 +58,7 @@ export const SDProfileBottomSheet = props => {
 
     const hideUserPosts = async () => {
         props.setExpanded(false);
+        props.setProfileDetail({ ...props.profileDetail, userPosts: jsonConstants.EMPTY });
     }
 
     const renderHeader = () => {

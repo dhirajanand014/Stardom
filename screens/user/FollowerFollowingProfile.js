@@ -22,6 +22,7 @@ export const FollowerFollowingProfile = () => {
     const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail, setLoaderCallback } = useContext(CategoryContext);
 
     const [loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess] = useState(false);
+    const [expanded, setExpanded] = useState(false);
 
     const route = useRoute();
     const profile = route.params?.followerFollowingProfile;
@@ -30,7 +31,7 @@ export const FollowerFollowingProfile = () => {
 
     useEffect(() => {
         (async () => {
-            if (isFocused) {
+            if (!expanded && isFocused) {
                 setLoaderCallback(true, alertTextMessages.FETCHING_USER_PROFILE_DETAILS);
                 await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
                 await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
@@ -63,11 +64,12 @@ export const FollowerFollowingProfile = () => {
     return (
         <FollowerFollowingProfileRenderer profile={profile} profileDetail={profileDetail} isDisabled={isDisabled} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess}
             sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} loggedInUser={loggedInUser} setProfileDetail={setProfileDetail} setLoaderCallback={setLoaderCallback}
-            navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} />
+            navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} expanded={expanded}
+            setExpanded={setExpanded} />
     )
 }
 
-const FollowerFollowingProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, setSdomDatastate, loggedInUser, setLoaderCallback,
+const FollowerFollowingProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, loggedInUser, setLoaderCallback, expanded, setExpanded,
     setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess }) => {
     return <View style={SDGenericStyles.fill}>
         <BackButton leftStyle={numericConstants.ONE} isWithSearch extraStyles={SDGenericStyles.marginTop20} />
@@ -78,8 +80,8 @@ const FollowerFollowingProfileRenderer = React.memo(({ profile, profileDetail, i
                     priority: FastImage.priority.high
                 }} style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} resizeMode={FastImage.resizeMode.center} />
         }
-        <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser}
+        <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} expanded={expanded}
             setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
-            loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} isDisabled={isDisabled} />
+            loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} isDisabled={isDisabled} setExpanded={setExpanded} />
     </View>;
 });

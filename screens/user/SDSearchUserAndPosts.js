@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { FlatList, StatusBar, View, Text, TouchableOpacity } from 'react-native';
+import { FlatList, StatusBar, View, Text, TouchableOpacity, InteractionManager } from 'react-native';
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 import { CategoryContext } from '../../App';
 import {
@@ -57,8 +57,10 @@ export const SDSearchUserAndPosts = () => {
                 searchList.users = responseData.users;
                 setUserFollowerFollowing(responseData);
             }
-            setSearchList({ ...searchList });
-            setLoaderCallback(false);
+            InteractionManager.runAfterInteractions(() => {
+                setSearchList({ ...searchList });
+                setLoaderCallback(false);
+            });
         })();
     }, jsonConstants.EMPTY);
 

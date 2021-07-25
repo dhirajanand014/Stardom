@@ -89,13 +89,14 @@ export const Login = () => {
                         colors.RED || colors.SDOM_PLACEHOLDER} />} textContentType={keyBoardTypeConst.PASSWORD} formState={formState}
                     extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]} />
 
-                <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.justifyContentCenter, SDGenericStyles.mtMinus10, SDGenericStyles.mb15]}
-                    onPress={async () => await handleForgotPassword(watchMobileNumber, navigation, trigger, setError, clearErrors, signUpDetails, setSignUpDetails)}>
-                    <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textColorPink]}>
-                        {miscMessage.FORGOT_PASSWORD}
-                    </Text>
-                </TouchableOpacity>
-
+                <View style={[SDGenericStyles.alignItemsEnd, SDGenericStyles.justifyContentCenter, SDGenericStyles.mtMinus10, SDGenericStyles.mb15]}>
+                    <TouchableOpacity activeOpacity={.7}
+                        onPress={async () => await handleForgotPassword(watchMobileNumber, navigation, trigger, setError, clearErrors, signUpDetails, setSignUpDetails)}>
+                        <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textColorPink]}>
+                            {miscMessage.FORGOT_PASSWORD}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
                 <View activeOpacity={.7} style={userAuthStyles.signInCreateAccount}>
                     <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                         {miscMessage.DONT_HAVE_ACCOUNT}{stringConstants.SPACE}
