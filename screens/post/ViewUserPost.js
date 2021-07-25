@@ -24,6 +24,7 @@ export const ViewUserPost = () => {
     const postId = route.params?.postId;
 
     const [posts, setPosts] = useState(jsonConstants.EMPTY);
+
     const [postsOptions, setPostOptions] = useState({
         currentPostIndex: numericConstants.ZERO,
         selectedPost: stringConstants.EMPTY,
@@ -33,14 +34,15 @@ export const ViewUserPost = () => {
     const viewPagerRef = useRef(null);
     const postDetailsRef = useRef(null);
 
+    let { height } = Dimensions.get(miscMessage.WINDOW);
+    height += StatusBar.currentHeight;
+
     useEffect(() => {
         (async () => {
             await fetchUserProfilePosts(userId, setPosts, postDetailsRef);
+            setTimeout(() => postDetailsRef?.current?.setScrollOffset(height), numericConstants.FIVE_HUNDRED);
         })();
     }, jsonConstants.EMPTY);
-
-    let { height } = Dimensions.get(miscMessage.WINDOW);
-    height += StatusBar.currentHeight;
 
     const textPostDescriptionAnimationValue = useSharedValue(-numericConstants.TEN);
     const textPostTypeAnimationValue = useSharedValue(-numericConstants.TEN);
@@ -68,7 +70,13 @@ const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOp
             posts && posts.length &&
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
                 <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
-                    bounces={true} onMomentumScrollBegin={() => {
+                    bounces={true} onMomentumScrollBegin={(event) => {
+                        const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
+                        if ((index == numericConstants.ZERO && ((postDetailsRef?.current?.scrollOffset == height && postDetailsRef?.current?.scrollOffset > event.nativeEvent.contentOffset.y)
+                            || postDetailsRef?.current?.scrollOffset > event.nativeEvent.contentOffset.y)) || index == posts.length - numericConstants.ONE
+                            && postDetailsRef?.current?.scrollOffset < event.nativeEvent.contentOffset.y) {
+                            postDetailsRef?.current?.setRenderLoaderScroll(true);
+                        }
                         if (postsOptions.isImageLoadError) {
                             setImageLoadError(postsOptions, postsOptions, false);
                         }

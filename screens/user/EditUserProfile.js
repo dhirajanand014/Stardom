@@ -1,5 +1,5 @@
 
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Image } from 'react-native';
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput';
@@ -17,15 +17,17 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 import { CategoryContext } from '../../App';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
 import FastImage from 'react-native-fast-image';
-import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView';
 import { BackButton } from '../../components/button/BackButton';
 import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextInputLengthText';
+import { AddPostSelectionModal } from '../../components/modals/AddPostSelectionModal';
 
 export const EditUserProfile = () => {
     const { control, formState, handleSubmit, reset, watch } = useForm();
 
     const { loggedInUser, setLoggedInUser, loader, setLoaderCallback } = useContext(CategoryContext);
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
+
+    const [showSelection, setShowSelection] = useState(false);
     const route = useRoute();
     const imageValue = route.params?.imageValue;
 
@@ -36,13 +38,6 @@ export const EditUserProfile = () => {
         secret: stringConstants.EMPTY,
         bio: stringConstants.EMPTY
     });
-
-    const snapPoints = useMemo(() => [numericConstants.TWO_HUNDRED_NINETY, numericConstants.ZERO],
-        jsonConstants.EMPTY);
-
-    const bottomSheetRef = useRef(null);
-
-    const fallValue = new Animated.Value(numericConstants.ONE);
     /**
      * Notify progress upload to loader.
      */
@@ -83,23 +78,22 @@ export const EditUserProfile = () => {
     }, [jsonConstants.EMPTY, imageValue]);
 
     const bioInput = watch(fieldControllerName.ADD_USER_BIO);
-    const detailsCallback = useCallback(() => bottomSheetRef?.current?.snapTo(numericConstants.ONE));
 
     return (
-        <EditProfile loader={loader} profileDetails={profileDetails} bottomSheetRef={bottomSheetRef} control={control} formState={formState}
-            setIsSecureTextEntry={setIsSecureTextEntry} isSecureTextEntry={isSecureTextEntry} bioInput={bioInput} handleSubmit={handleSubmit}
-            onSubmit={onSubmit} detailsCallback={detailsCallback} snapPoints={snapPoints} fallValue={fallValue} navigation={navigation} />
+        <EditProfile loader={loader} profileDetails={profileDetails} control={control} formState={formState} setShowSelection={setShowSelection}
+            setIsSecureTextEntry={setIsSecureTextEntry} isSecureTextEntry={isSecureTextEntry} bioInput={bioInput} showSelection={showSelection}
+            onSubmit={onSubmit} navigation={navigation} handleSubmit={handleSubmit} />
     )
 }
 
-const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, control, formState, setIsSecureTextEntry, isSecureTextEntry, bioInput,
-    handleSubmit, onSubmit, detailsCallback, snapPoints, fallValue, navigation }) => {
+const EditProfile = React.memo(({ loader, profileDetails, control, formState, setIsSecureTextEntry, isSecureTextEntry, bioInput, showSelection,
+    handleSubmit, onSubmit, navigation, setShowSelection }) => {
     return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack, SDGenericStyles.alignItemsCenter]}
             pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
             <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
             <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingTop80]}>
-                <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.elevation8} onPress={() => { Keyboard.dismiss(); bottomSheetRef?.current?.snapTo(numericConstants.ZERO) }}>
+                <TouchableOpacity activeOpacity={.7} style={SDGenericStyles.elevation8} onPress={() => { Keyboard.dismiss(); setShowSelection(true); }}>
                     <FastImage source={{
                         uri: profileDetails.profile_picture, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
                     }} style={[userMenuStyles.editProfileImageStyle, SDGenericStyles.paddingHorizontal25]}>
@@ -150,8 +144,8 @@ const EditProfile = React.memo(({ loader, profileDetails, bottomSheetRef, contro
                         {actionButtonTextConstants.UPDATE}</Text>
                 </TouchableOpacity>
             </View>
-            <BottomSheetView bottomSheetRef={bottomSheetRef} detailsCallback={detailsCallback}
-                snapPoints={snapPoints} fall={fallValue} navigation={navigation} isFrom={screens.EDIT_USER_PROFILE} />
+            <AddPostSelectionModal isFrom={screens.EDIT_USER_PROFILE} navigation={navigation} setShowSelection={setShowSelection}
+                showSelection={showSelection} />
         </View>
     </TouchableWithoutFeedback >;
 });

@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/core'
-import React, { useCallback, useContext, useMemo, useRef } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
     Keyboard, KeyboardAvoidingView, Text,
@@ -15,26 +15,21 @@ import {
     modalTextConstants, numericConstants, errorMessages,
     width, placeHolderText, keyBoardTypeConst,
     actionButtonTextConstants, miscMessage, isAndroid,
-    jsonConstants, alertTextMessages, screens, stringConstants
+    alertTextMessages, screens, stringConstants
 } from '../../constants/Constants'
 import { checkTokenStatus, handlePostDelete, showSnackBar } from '../../helper/Helper'
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles'
-import { BottomSheetView } from '../../views/bottomSheet/BottomSheetView'
 import { SDImageFormInput } from '../../views/fromInputView/SDImageFormInput'
 import { BackButton } from '../../components/button/BackButton';
 import { SDPostTypeOptionsView } from '../../views/fromInputView/SDPostTypeOptionView'
 import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextInputLengthText'
+import { AddPostSelectionModal } from '../../components/modals/AddPostSelectionModal'
 
 export const AddPostDetails = () => {
 
     const { userPosts, loggedInUser, loader, setLoaderCallback } = useContext(CategoryContext);
 
-    const bottomSheetRef = useRef(null);
-
-    const snapPoints = useMemo(() => [numericConstants.TWO_HUNDRED_NINETY, numericConstants.ZERO],
-        jsonConstants.EMPTY);
-
-    const fallValue = new Animated.Value(numericConstants.ONE);
+    const [showSelection, setShowSelection] = useState(false);
 
     const route = useRoute();
     const toAction = route.params?.toAction;
@@ -78,19 +73,15 @@ export const AddPostDetails = () => {
     const postValueType = watch(fieldControllerName.POST_TYPE,
         toAction == miscMessage.UPDATE && userPosts.details.postType || stringConstants.EMPTY);
 
-    const detailsCallback = useCallback(() => {
-        bottomSheetRef?.current?.snapTo(numericConstants.ONE)
-    });
-
     return (
-        <NewPost loader={loader} userPosts={userPosts} toAction={toAction} handleDelete={handleDelete} bottomSheetRef={bottomSheetRef}
+        <NewPost loader={loader} userPosts={userPosts} toAction={toAction} handleDelete={handleDelete} showSelection={showSelection} setShowSelection={setShowSelection}
             control={control} formState={formState} postValueType={postValueType} postDescriptionValue={postDescriptionValue} navigation={navigation}
-            handleSubmit={handleSubmit} onSubmit={onSubmit} detailsCallback={detailsCallback} snapPoints={snapPoints} fallValue={fallValue} />
+            handleSubmit={handleSubmit} onSubmit={onSubmit} />
     )
 }
 
-const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, bottomSheetRef, control, formState, postValueType, postDescriptionValue,
-    navigation, handleSubmit, onSubmit, detailsCallback, snapPoints, fallValue }) => {
+const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, control, formState, postValueType, postDescriptionValue, showSelection, setShowSelection,
+    navigation, handleSubmit, onSubmit }) => {
     return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
             <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
@@ -105,7 +96,7 @@ const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, bottomS
                             </TouchableOpacity>
                         </View>
                         <View style={[SDGenericStyles.alignItemsEnd, SDGenericStyles.marginVertical10]}>
-                            <TouchableOpacity activeOpacity={.7} onPress={() => bottomSheetRef?.current?.snapTo(numericConstants.ZERO)}>
+                            <TouchableOpacity activeOpacity={.7} onPress={() => setShowSelection(true)}>
                                 <EditIcon width={numericConstants.TWENTY_EIGHT} height={numericConstants.TWENTY_EIGHT} stroke={colors.WHITE} />
                             </TouchableOpacity>
                         </View>
@@ -116,7 +107,7 @@ const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, bottomS
                         {modalTextConstants.ADD_WALLPAPER_DETAILS}</Text>
                     <View style={[glancePostStyles.addPostDetailsTitleDivider, SDGenericStyles.backgroundColorWhite]} />
                 </View>
-                <KeyboardAvoidingView style={SDGenericStyles.marginVertical2}>
+                <KeyboardAvoidingView style={SDGenericStyles.marginVertical2} enabled>
                     <Animated.ScrollView contentContainerStyle={SDGenericStyles.alignItemsCenter}
                         style={{ maxHeight: height / numericConstants.TWO }}>
 
@@ -141,28 +132,29 @@ const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, bottomS
                             extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.height100, SDGenericStyles.borderRadius20, SDGenericStyles.textColorWhite,
                             SDGenericStyles.ft16, SDGenericStyles.textALignVerticalTop]} maxLength={numericConstants.TWO_HUNDRED} />
                     </Animated.ScrollView>
-                    <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentSpaceBetween,
-                    SDGenericStyles.paddingHorizontal65, SDGenericStyles.bottom65]}>
-                        <View>
-                            <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR },
-                            SDGenericStyles.paddingHorizontal10]}>
-                                <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.colorBlack, SDGenericStyles.textCenterAlign]} onPress={() => navigation.goBack()}>
-                                    {actionButtonTextConstants.CANCEL_POST.toUpperCase()}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={SDGenericStyles.paddingLeft20}>
-                            <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR }]} onPress={handleSubmit(onSubmit)}>
-                                <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft14, SDGenericStyles.colorBlack, SDGenericStyles.textCenterAlign]}>
-                                    {actionButtonTextConstants.NEXT.toUpperCase()}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+
                 </KeyboardAvoidingView>
+                <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentSpaceBetween,
+                SDGenericStyles.paddingHorizontal65, SDGenericStyles.bottom65]}>
+                    <View>
+                        <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR },
+                        SDGenericStyles.paddingHorizontal10]}>
+                            <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.colorBlack, SDGenericStyles.textCenterAlign]} onPress={() => navigation.goBack()}>
+                                {actionButtonTextConstants.CANCEL_POST.toUpperCase()}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={SDGenericStyles.paddingLeft20}>
+                        <TouchableOpacity activeOpacity={.7} style={[glancePostStyles.postButtonStyle, SDGenericStyles.elevation8, { width: width / numericConstants.FOUR }]} onPress={handleSubmit(onSubmit)}>
+                            <Text style={[SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft14, SDGenericStyles.colorBlack, SDGenericStyles.textCenterAlign]}>
+                                {actionButtonTextConstants.NEXT.toUpperCase()}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
-            <BottomSheetView bottomSheetRef={bottomSheetRef} detailsCallback={detailsCallback}
-                snapPoints={snapPoints} fall={fallValue} navigation={navigation} isFrom={screens.EDIT_POST_DETAILS} />
+            <AddPostSelectionModal isFrom={screens.EDIT_POST_DETAILS} navigation={navigation} setShowSelection={setShowSelection}
+                showSelection={showSelection} />
         </View>
-    </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback >
 });

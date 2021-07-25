@@ -52,7 +52,7 @@ export const BottomSheetView = props => {
                     onPress={() => props.bottomSheetRef?.current?.snapTo(numericConstants.ONE)}>
                     <Text style={[SDGenericStyles.ft18, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>{actionButtonTextConstants.CANCEL}</Text>
                 </TouchableOpacity>
-            </View >
+            </View>
         )
     }
     return (

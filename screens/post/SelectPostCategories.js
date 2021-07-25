@@ -13,7 +13,7 @@ import { BackButton } from '../../components/button/BackButton';
 import { SDPostCategorySelector } from '../../views/imagePost/SDPostCategorySelector';
 
 export const SelectPostCategories = () => {
-    const { userPosts, setLoaderCallback } = useContext(CategoryContext);
+    const { userPosts, setLoaderCallback, sdomDatastate, setSdomDatastate } = useContext(CategoryContext);
 
     const route = useRoute();
     const postDetails = route.params?.postDetails;
@@ -37,6 +37,8 @@ export const SelectPostCategories = () => {
 
     const onSubmit = useCallback(async (data) => {
         if (await getAcceptedEULA()) {
+            delete sdomDatastate.posts;
+            setSdomDatastate({ ...sdomDatastate });
             await submitPost(setLoaderCallback, toAction, data, postDetails, userPosts, selectedItem,
                 uploadCallback, navigateUser, loginCallback);
         } else {

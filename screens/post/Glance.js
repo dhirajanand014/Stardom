@@ -16,7 +16,7 @@ import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import { SwipeItem } from '../../components/swiper/SwipeItem';
 import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
-import { useRoute } from '@react-navigation/native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 
 const category_selection = require('../../assets/category_selection_icon.png');
 
@@ -26,20 +26,26 @@ export const Glance = ({ navigation }) => {
         optionsState, setOptionsState, loggedInUser, setDrawerOpen, postDetailsRef } = useContext(CategoryContext);
     const viewPagerRef = useRef(null);
     const isFromNotification = useRef(false);
+    const isFocused = useIsFocused();
 
     const route = useRoute();
     isFromNotification.current = route.params?.isFromNotification || false;
     const postId = route.params?.postIdFromNotification || postIdFromNotification;
 
+    let { height } = Dimensions.get(miscMessage.WINDOW);
+    height += StatusBar.currentHeight;
+
+    useEffect(() => {
+        if (!isFocused) postDetailsRef?.current?.setPostAnimationVisible(false);
+    }, [!isFocused]);
+
     useEffect(() => {
         (async () => {
             await fetchPostsAndSaveToState(sdomDatastate, setSdomDatastate, optionsState, setOptionsState,
                 categoryIdFromNotification, loggedInUser);
+            postDetailsRef?.current?.setScrollOffset(height);
         })();
     }, jsonConstants.EMPTY);
-
-    let { height } = Dimensions.get(miscMessage.WINDOW);
-    height += StatusBar.currentHeight;
 
     const textPostDescriptionAnimationValue = useSharedValue(-numericConstants.TEN);
     const textPostTypeAnimationValue = useSharedValue(-numericConstants.TEN);
@@ -67,7 +73,13 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
             sdomDatastate.posts && sdomDatastate.posts.length &&
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
                 <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
-                    bounces={true} onMomentumScrollBegin={() => {
+                    bounces={true} onMomentumScrollBegin={(event) => {
+                        const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
+                        if ((index == numericConstants.ZERO && ((postDetailsRef?.current?.scrollOffset == height && postDetailsRef?.current?.scrollOffset > event.nativeEvent.contentOffset.y)
+                            || postDetailsRef?.current?.scrollOffset > event.nativeEvent.contentOffset.y)) || index == sdomDatastate.posts.length - numericConstants.ONE
+                            && postDetailsRef?.current?.scrollOffset < event.nativeEvent.contentOffset.y) {
+                            postDetailsRef?.current?.setRenderLoaderScroll(true);
+                        }
                         if (optionsState.isImageLoadError) {
                             setImageLoadError(optionsState, setOptionsState, false);
                         }

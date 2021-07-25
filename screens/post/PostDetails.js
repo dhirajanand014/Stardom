@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
     stringConstants, postCountTypes, numericConstants, miscMessage, jsonConstants,
-    postitionStringConstants, colorConstants, fieldControllerName
+    postitionStringConstants, colorConstants, fieldControllerName, width, height
 } from '../../constants/Constants';
 import {
     increaseAndSetPostCounts, setPostDetailsStateForModal,
@@ -16,6 +16,8 @@ import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal
 import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
 import { SDWallpaperModal } from '../../views/imagePost/SDWallpaperModal';
 import { CategoryContext } from '../../App';
+import FastImage from 'react-native-fast-image';
+import { RenderLoaderScroll } from '../../views/imagePost/RenderLoaderScroll';
 
 const post_like = require(`../../assets/post_likes_icon.png`);
 const post_like_selected = require(`../../assets/post_likes_selected_icon.png`);
@@ -43,6 +45,8 @@ export const PostDetails = forwardRef((props, ref) => {
         selectedReportAbuse: {},
         reportAbuses: jsonConstants.EMPTY,
         reportAbuseSubmitDisabled: false,
+        scrollOffset: numericConstants.ZERO,
+        renderLoaderScroll: false,
     });
 
     const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
@@ -52,6 +56,8 @@ export const PostDetails = forwardRef((props, ref) => {
             postIndex: postDetailsState.currentPostIndex,
             newPostViewed: postDetailsState.newPostViewed,
             currentPost: postDetailsState.currentPost,
+            scrollOffset: postDetailsState.scrollOffset,
+            renderLoaderScroll: postDetailsState.renderLoaderScroll,
 
             setNewPostViewed(bool) {
                 setPostDetailsState({ ...postDetailsState, newPostViewed: bool });
@@ -60,6 +66,16 @@ export const PostDetails = forwardRef((props, ref) => {
             setCurrentPost(index) {
                 postDetailsState.currentPostIndex = index;
                 postDetailsState.currentPost = sdomDatastate.posts[index];
+                setPostDetailsState({ ...postDetailsState });
+            },
+
+            setScrollOffset(value) {
+                postDetailsState.scrollOffset = value;
+                setPostDetailsState({ ...postDetailsState });
+            },
+
+            setRenderLoaderScroll(bool) {
+                postDetailsState.renderLoaderScroll = bool;
                 setPostDetailsState({ ...postDetailsState });
             },
 
@@ -120,28 +136,28 @@ export const PostDetails = forwardRef((props, ref) => {
                         {
                             postDetailsState.currentPost && postDetailsState.currentPost.postLink &&
                             <TouchableOpacity activeOpacity={.5} onPress={() => Linking.openURL(postDetailsState.currentPost.postLink)}>
-                                <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
-                            </TouchableOpacity> || <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost.postTitle}</Text>
+                                <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost && postDetailsState.currentPost.postTitle}</Text>
+                            </TouchableOpacity> || <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost && postDetailsState.currentPost.postTitle}</Text>
                         }
                     </Animated.View>
                     <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.rowFlexDirection, SDGenericStyles.marginBottom8,
                     postDetailsState.animationVisible && postDescriptionSpringStyle]}>
-                        <Text style={[postDetailsState.currentPost.profileName && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
+                        <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.profileName && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
                         SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft9]}>
-                            {postDetailsState.currentPost.profileName && postDetailsState.currentPost.profileName.toUpperCase()}
+                            {postDetailsState.currentPost && postDetailsState.currentPost.profileName && postDetailsState.currentPost.profileName.toUpperCase()}
                         </Text>
                         <View>
                             <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter]}>
-                                <Text style={[postDetailsState.currentPost.user.name && glancePostStyles.postProfileNameBy, SDGenericStyles.textColorWhite,
+                                <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.user.name && glancePostStyles.postProfileNameBy, SDGenericStyles.textColorWhite,
                                 SDGenericStyles.fontFamilyItalicRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft14]}>
                                     {miscMessage.BY_TEXT}
                                 </Text>
-                                <Text style={[postDetailsState.currentPost.user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
+                                <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
                                 SDGenericStyles.fontFamilyRobotoBold, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
-                                    {postDetailsState.currentPost.user.name && postDetailsState.currentPost.user.name}
+                                    {postDetailsState.currentPost && postDetailsState.currentPost.user.name && postDetailsState.currentPost.user.name}
                                 </Text>
                                 {
-                                    postDetailsState.currentPost.user.user_type == miscMessage.VERIFIED_AUTHOR &&
+                                    postDetailsState.currentPost && postDetailsState.currentPost.user.user_type == miscMessage.VERIFIED_AUTHOR &&
                                     <View>
                                         <Image style={glancePostStyles.verifiedIconStyle} source={require(`../../assets/verified_icon.gif`)} />
                                     </View>
@@ -150,9 +166,9 @@ export const PostDetails = forwardRef((props, ref) => {
                             <View style={SDGenericStyles.mt2}>
                                 <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular,
                                 SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>{
-                                        postDetailsState.currentPost.profileName && postDetailsState.currentPost.postCategoriesIn &&
-                                        stringConstants.PIPELINE_JOIN.concat(postDetailsState.currentPost.postCategoriesIn) ||
-                                        postDetailsState.currentPost.postCategoriesIn}
+                                        postDetailsState.currentPost && postDetailsState.currentPost.profileName && postDetailsState.currentPost.postCategoriesIn &&
+                                        stringConstants.PIPELINE_JOIN.concat(postDetailsState.currentPost && postDetailsState.currentPost.postCategoriesIn) ||
+                                        postDetailsState.currentPost && postDetailsState.currentPost.postCategoriesIn}
                                 </Text>
                             </View>
                         </View>
@@ -187,7 +203,7 @@ export const PostDetails = forwardRef((props, ref) => {
                             post_like_selected || post_like} />
                     </View>
                     <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                    SDGenericStyles.textCenterAlign, SDGenericStyles.top6]}>{postDetailsState.currentPost.postLikes}</Text>
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top6]}>{postDetailsState.currentPost && postDetailsState.currentPost.postLikes}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={() =>
                     setPostDetailsState({ ...postDetailsState, wallpaperModal: true })}>
@@ -195,7 +211,8 @@ export const PostDetails = forwardRef((props, ref) => {
                         <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
                     </View>
                     <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                    SDGenericStyles.textCenterAlign, SDGenericStyles.top8, SDGenericStyles.marginRight4]}>{postDetailsState.currentPost.postWallpapers}</Text>
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top8, SDGenericStyles.marginRight4]}>
+                        {postDetailsState.currentPost && postDetailsState.currentPost.postWallpapers}</Text>
                 </ActionButton.Item>
                 {/* <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
                     await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback,
@@ -227,6 +244,9 @@ export const PostDetails = forwardRef((props, ref) => {
                 setPostDetailsState={setPostDetailsState} />
             <SDWallpaperModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
                 setPostDetailsState={setPostDetailsState} />
+            {
+                postDetailsState.renderLoaderScroll && <RenderLoaderScroll />
+            }
         </React.Fragment>
     )
 });

@@ -3,7 +3,6 @@ import { TouchableOpacity, View, Text, Image } from 'react-native';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import FastImage from 'react-native-fast-image';
 import { alertTextMessages, miscMessage, numericConstants } from '../../constants/Constants';
-import { categoryHeader } from '../../helper/Helper';
 
 export const PostCategoryRenderer = React.memo(({ item, index, inputName, postCategories, categories,
     setCategories, setValue, setError, formState }) => {

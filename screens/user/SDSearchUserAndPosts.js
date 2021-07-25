@@ -49,8 +49,7 @@ export const SDSearchUserAndPosts = () => {
 
     useEffect(() => {
         (async () => {
-            setLoaderCallback(true, index == numericConstants.ZERO && alertTextMessages.LOADING_USERS_POSTS ||
-                alertTextMessages.LOADING_USERS);
+            setLoaderCallback(true);
             searchList.posts = userPosts;
             if (loggedInUser.isLoggedIn) {
                 const responseData = await fetchUserForSearch(loggedInUser.loginDetails.token);
@@ -150,10 +149,7 @@ export const SDSearchUserAndPosts = () => {
     };
 
     const setIndexCallBack = useCallback((index) => {
-        setLoaderCallback(true, index == numericConstants.ZERO && alertTextMessages.LOADING_USERS_POSTS ||
-            alertTextMessages.LOADING_USERS);
         setIndex(index);
-        setLoaderCallback(false);
     });
     const renderTabBar = props => (
         <TabBar {...props} indicatorStyle={SDGenericStyles.colorYellow} style={SDGenericStyles.backGroundColorBlack} />
@@ -179,7 +175,7 @@ const PostUsersTabbedView = React.memo(({ searchList, setSearchList, index, rout
             </Animated.View>
         </Animated.View>
         <TabView navigationState={{ index, routes }} renderScene={renderScene} onIndexChange={setIndexCallBack}
-            renderTabBar={renderTabBar} onSwipeStart={() => setLoaderCallback(true, index == numericConstants.ZERO && alertTextMessages.LOADING_USERS_POSTS ||
+            renderTabBar={renderTabBar} onSwipeStart={() => setLoaderCallback(true, index == numericConstants.ONE && alertTextMessages.LOADING_USERS_POSTS ||
                 alertTextMessages.LOADING_USERS)} onSwipeEnd={() => setLoaderCallback(false)} />
     </Animated.View>;
 });

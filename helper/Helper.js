@@ -444,10 +444,14 @@ export const onSwiperScrollEnd = (event, postDetailsRef, textPostDescriptionAnim
     } else if (event.nativeEvent.layoutMeasurement) {
         index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
     }
+    postDetailsRef?.current?.setScrollOffset(event.nativeEvent.contentOffset.y);
     postDetailsRef?.current?.setCurrentPost(index);
     if (currentPostIndexForProfileRef)
         currentPostIndexForProfileRef.current = index;
     animateFinishedPostTextDetails(textPostDescriptionAnimationValue, textPostTypeAnimationValue);
+    postDetailsRef?.current?.renderLoaderScroll && setTimeout(() => {
+        postDetailsRef?.current?.setRenderLoaderScroll(false);
+    }, numericConstants.THREE_HUNDRED);
 }
 
 export const setAnimationVisible = (postDetailsState, setPostDetailsState, isVisible) => {
@@ -462,8 +466,8 @@ export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, 
         if ((isFromNotification && isFromNotification.current) || (!postDetailsRef?.current?.newPostViewed
             && postIdFromNotification?.current && viewPagerRef?.current)) {
             const index = posts.findIndex(post => post.id == postIdFromNotification.current) || numericConstants.ZERO;
-            isFromNotification && isFromNotification.current ** viewPagerRef.current.scrollTo(numericConstants.ONE)
-                || viewPagerRef.current.scrollBy(index, false);
+            isFromNotification && isFromNotification.current && viewPagerRef.current.scrollTo(numericConstants.ONE)
+                || setTimeout(() => viewPagerRef.current.scrollBy(index, false), numericConstants.FOUR_HUNDRED_ONE);
             postDetailsRef?.current?.setPostIndex(isFromNotification && numericConstants.ZERO || index);
             postDetailsRef?.current?.setNewPostViewed(true);
             postIdFromNotification.current = null;
@@ -564,8 +568,12 @@ const filterLoggedInUsersPosts = async (allPosts, isForPostWallpaper) => {
                 return post.postType == fieldControllerName.POST_TYPE_PUBLIC;
             });
         } else {
-            allPosts = isForPostWallpaper && allPosts.filter(post => post.postType == fieldControllerName.POST_TYPE_PUBLIC &&
-                post.postLikes >= numericConstants.ONE_HUNDRED) || allPosts.filter(post => post.postType == fieldControllerName.POST_TYPE_PUBLIC);
+            allPosts = isForPostWallpaper && allPosts.filter(post => {
+                if (post.user.user_type == miscMessage.VERIFIED_AUTHOR) {
+                    return post.postType == fieldControllerName.POST_TYPE_PUBLIC;
+                }
+                return post.postType == fieldControllerName.POST_TYPE_PUBLIC && post.postLikes >= numericConstants.ONE_HUNDRED
+            }) || allPosts.filter(post => post.postType == fieldControllerName.POST_TYPE_PUBLIC);
         }
         return allPosts;
     } catch (error) {

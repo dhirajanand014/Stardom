@@ -63,8 +63,8 @@ export const SwipeItem = (props) => {
                             priority: FastImage.priority.high,
                             cache: FastImage.cacheControl.immutable
                         }} fallback={optionsState.isImageLoadError} onLoadEnd={() =>
-                            scrollWhenPostIdFromNotification(posts, postIdFromNotification, viewPagerRef,
-                                postDetailsRef, isFromNotification)} onError={() => setImageLoadError(optionsState, setOptionsState, true)} />
+                            scrollWhenPostIdFromNotification(posts, postIdFromNotification, viewPagerRef, postDetailsRef, isFromNotification)}
+                            onError={() => setImageLoadError(optionsState, setOptionsState, true)} />
                     </Animated.View>
                 </PinchGestureHandler>
             </Animated.View>

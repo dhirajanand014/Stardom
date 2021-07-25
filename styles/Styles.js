@@ -71,6 +71,9 @@ export const SDGenericStyles = StyleSheet.create({
     bottom80: {
         bottom: 80
     },
+    height100pcnt: {
+        height: '100%',
+    },
     positionAbsolute: {
         position: 'absolute'
     },

@@ -19,7 +19,7 @@ export const Profile = () => {
     const isFocused = useIsFocused();
 
     const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail, currentPostIndexForProfileRef,
-        setLoaderCallback, postDetailsRef } = useContext(CategoryContext);
+        setLoaderCallback } = useContext(CategoryContext);
 
     const [loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess] = useState(false);
     const [expanded, setExpanded] = useState(false);
@@ -31,15 +31,13 @@ export const Profile = () => {
     // variables
     const snapPoints = useMemo(() => [numericConstants.TWELVE_PCNT, numericConstants.HUNDRED_PCNT], jsonConstants.EMPTY);
 
-    postDetailsRef && postDetailsRef?.current && postDetailsRef?.current?.setPostAnimationVisible(false);
-
     useEffect(() => {
         (async () => {
             if (!expanded && isFocused) {
-                setLoaderCallback(true, alertTextMessages.FETCHING_USER_PROFILE_DETAILS);
+                // setLoaderCallback(true, alertTextMessages.FETCHING_USER_PROFILE_DETAILS);
                 await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
                 await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
-                InteractionManager.runAfterInteractions(() => setLoaderCallback(false));
+                // InteractionManager.runAfterInteractions(() => setLoaderCallback(false));
             }
         })();
         const backHandler = BackHandler.addEventListener(backHandlerConstants.HARDWAREBACKPRESS, resetProfileState);
