@@ -299,10 +299,6 @@ export const formRequiredRules = {
         validate: value => !value || isValidURL(value) && true || `Please enter a valid URL`
     },
     addPostDescription: {
-        required: {
-            value: true,
-            message: `Please enter a description`
-        },
         maxLength: {
             value: 200,
             message: `Maximum 200 characters only allowed`
@@ -421,7 +417,7 @@ export const modalTextConstants = {
     ADD_WALLPAPER_DETAILS: `Add Wallpaper details`,
     CANCEL_BUTTON: `Cancel`,
     CLOSE_BUTTON: `Close`,
-    ADD_WALLPAPER: `Add WallPaper`,
+    MANAGE_WALLPAPER: `Manage WallPaper`,
     REGISTER_TITLE_HEADER: `Create New`,
     REGISTER_TITLE_TEXT: `Account`,
     LOGIN_TITLE_HEADER: `Welcome Back`,
@@ -749,6 +745,7 @@ export const miscMessage = {
     SHARE_FILE_TYPE: `.png`,
     ACCEPTED: `accepted`,
     HEY: `Hey`,
+    WORDS: 'words',
     TOP: `top`,
     RELOAD: `Reload`,
     SELECT_CATEGORIES: `Select other categories`,
@@ -927,7 +924,7 @@ export const PRIVATE_FOLLOW_UNFOLLOW = {
 
 export const SDMenuOptions = [
     {
-        label: modalTextConstants.ADD_WALLPAPER,
+        label: modalTextConstants.MANAGE_WALLPAPER,
         key: screens.POSTS,
         loggedIn: true,
         icon: require(`../assets/menu/add_wallpaper_icon.png`),

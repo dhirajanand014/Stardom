@@ -20,12 +20,12 @@ PODS:
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
-  - FirebaseCoreDiagnostics (8.4.0):
+  - FirebaseCoreDiagnostics (8.5.0):
     - GoogleDataTransport (~> 9.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
     - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (8.4.0):
+  - FirebaseInstallations (8.5.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/UserDefaults (~> 7.4)
@@ -332,7 +332,7 @@ PODS:
     - React-Core
   - react-native-restart (0.0.20):
     - React-Core
-  - react-native-safe-area-context (3.2.0):
+  - react-native-safe-area-context (3.3.0):
     - React-Core
   - react-native-shimmer (0.6.0):
     - React (>= 0.45.1)
@@ -413,10 +413,10 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.8)
     - SDWebImageWebPCoder (~> 0.6.1)
-  - RNFBApp (12.3.0):
+  - RNFBApp (12.4.0):
     - Firebase/CoreOnly (= 8.4.0)
     - React-Core
-  - RNFBMessaging (12.3.0):
+  - RNFBMessaging (12.4.0):
     - Firebase/Messaging (= 8.4.0)
     - React-Core
     - RNFBApp
@@ -464,7 +464,7 @@ PODS:
     - Yoga
   - RNScreens (2.18.1):
     - React-Core
-  - RNShare (6.4.0):
+  - RNShare (6.5.0):
     - React-Core
   - RNSVG (12.1.1):
     - React
@@ -691,8 +691,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 4f7f21e895c30b888e0d905909396d2ac915e2ef
   Firebase: 54cdc8bc9c9b3de54f43dab86e62f5a76b47034f
   FirebaseCore: 31f389c37ac1ea52454a53d3081f2d7019485a4a
-  FirebaseCoreDiagnostics: cad03be1904b975f845e632f2720c3337da27faf
-  FirebaseInstallations: 1585729afc787877763208c2088ed84221161f77
+  FirebaseCoreDiagnostics: 7bf55d386f9fc690d971b70a582142321a390eb8
+  FirebaseInstallations: f2bc590b291d25fb40a9a05b8281c02a881b5117
   FirebaseMessaging: 78025c56654f05c7ebd6f7f87f9d4b12c5231207
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
@@ -725,7 +725,7 @@ SPEC CHECKSUMS:
   react-native-image-filter-kit: b9eca5dfedde622e3801c4657bcdead62896cf00
   react-native-netinfo: 34f4d7a42f49157f3b45c14217d256bce7dc9682
   react-native-restart: 6cc683e208c080581c147d0875609e64572a9443
-  react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
+  react-native-safe-area-context: 8465df05de8106c584b117f0e027e17174d6e02e
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a
   react-native-viewpager: d054b58bf3d377e6b99558da6766463ff7e9b220
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
@@ -744,14 +744,14 @@ SPEC CHECKSUMS:
   RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
   RNDateTimePicker: c9911be59b1f8670b9f244b85af3a7c295e175ed
   RNFastImage: a7384db75df352500261e8e8f1ac2026def26102
-  RNFBApp: 64c90ab78b6010ed5c3ade026dfe5ff6442c21fd
-  RNFBMessaging: 35a027803f202ecaf911e66a940ca0c5690cb6a0
+  RNFBApp: 97b2da195d4606716b284a7c8a988dd8ed5cec41
+  RNFBMessaging: ee81245484ef7e835975d09c2cd4000dfa2ae5e7
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 35a3ceb837446fa11547704709bb22b5fac6d584
   RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
   RNReanimated: 7d2b97cf2dd7c8c69956080fe911edc08cf0a8c7
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  RNShare: 129b187a54301c9f32ec7249fb4431e30a8d6ab8
+  RNShare: 047d42214f875d731bde73a2b67418638af85ad9
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21

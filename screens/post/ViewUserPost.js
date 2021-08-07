@@ -55,22 +55,33 @@ export const ViewUserPost = () => {
         return textPostTypeAnimationValue.value * numericConstants.ONE_HUNDRED;
     });
 
+    const loadMinimalLoaderView = height => {
+        return <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.backGroundAppBlack,
+        SDGenericStyles.paddingHorizontal10, { width: width, height: height }]}>
+            <FastImage source={{
+                uri: Image.resolveAssetSource(require(`../../assets/stardom_loader.gif`)).uri,
+                priority: FastImage.priority.normal
+            }} style={{ width: numericConstants.ONE_HUNDRED, height: numericConstants.ONE_HUNDRED }} resizeMode={FastImage.resizeMode.contain} />
+        </View>;
+    }
+
     return (
         <UserPostsView posts={posts} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} postsOptions={postsOptions} setPostOptions={setPostOptions}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
-            height={height} navigation={navigation} postIdFromNotification={postId} />
+            height={height} navigation={navigation} postIdFromNotification={postId} loadMinimalLoaderView={loadMinimalLoaderView} />
     )
 }
 
-const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOptions, setPostOptions, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x, height,
-    navigation, postIdFromNotification }) => {
+const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOptions, setPostOptions, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x,
+    height, navigation, postIdFromNotification, loadMinimalLoaderView }) => {
     return <View style={SDGenericStyles.fill}>
         <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
         {
             posts && posts.length &&
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
                 <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
-                    bounces={true} onMomentumScrollBegin={(event) => {
+                    bounces loadMinimal loadMinimalSize={numericConstants.TWENTY_FIVE} loadMinimalLoader={loadMinimalLoaderView(height)}
+                    onMomentumScrollBegin={(event) => {
                         const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
                         if ((index == numericConstants.ZERO && ((postDetailsRef?.current?.scrollOffset == height && postDetailsRef?.current?.scrollOffset > event.nativeEvent.contentOffset.y)
                             || postDetailsRef?.current?.scrollOffset > event.nativeEvent.contentOffset.y)) || index == posts.length - numericConstants.ONE

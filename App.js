@@ -53,8 +53,7 @@ export default function App({ navigationRef }) {
   const [optionsState, setOptionsState] = useState({
     currentPostIndex: numericConstants.ZERO,
     showSearch: false,
-    selectedPost: stringConstants.EMPTY,
-    isImageLoadError: false
+    selectedPost: stringConstants.EMPTY
   });
 
   const [signUpDetails, setSignUpDetails] = useState({

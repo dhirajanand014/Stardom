@@ -66,7 +66,7 @@ export const SelectPostCategories = () => {
         (async () => {
             setLoaderCallback(true, alertTextMessages.LOADING_CATEGORIES);
             const postCategories = await fetchCategoryData();
-            postCategories && setCategories(postCategories);
+            postCategories && setCategories(postCategories.sort((cat1, cat2) => cat1.categoryTitle.localeCompare(cat2.categoryTitle)));
             postCategories.map(category => category.isSelected = userPosts.details.postCategories.some(selectedCategory =>
                 selectedCategory == category.categoryId));
             setLoaderCallback(false);

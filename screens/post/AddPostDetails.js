@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/core'
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
     Keyboard, KeyboardAvoidingView, Text,
@@ -15,7 +15,7 @@ import {
     modalTextConstants, numericConstants, errorMessages,
     width, placeHolderText, keyBoardTypeConst,
     actionButtonTextConstants, miscMessage, isAndroid,
-    alertTextMessages, screens, stringConstants
+    alertTextMessages, screens, stringConstants, jsonConstants
 } from '../../constants/Constants'
 import { checkTokenStatus, handlePostDelete, showSnackBar } from '../../helper/Helper'
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles'
@@ -35,7 +35,7 @@ export const AddPostDetails = () => {
     const toAction = route.params?.toAction;
     const selectedItem = route.params?.selectedItem;
 
-    const { control, formState, handleSubmit, watch } = useForm();
+    const { control, formState, handleSubmit, watch, setValue } = useForm();
 
     const navigation = useNavigation();
 
@@ -72,6 +72,8 @@ export const AddPostDetails = () => {
     const postDescriptionValue = watch(fieldControllerName.POST_DESCRIPTION);
     const postValueType = watch(fieldControllerName.POST_TYPE,
         toAction == miscMessage.UPDATE && userPosts.details.postType || stringConstants.EMPTY);
+
+    useEffect(() => toAction == miscMessage.CREATE && setValue(fieldControllerName.POST_TYPE, fieldControllerName.POST_TYPE_PUBLIC), jsonConstants.EMPTY);
 
     return (
         <NewPost loader={loader} userPosts={userPosts} toAction={toAction} handleDelete={handleDelete} showSelection={showSelection} setShowSelection={setShowSelection}
@@ -115,10 +117,10 @@ const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, control
                             defaultValue={userPosts.details.postType} checkValue={postValueType} />
 
                         <SDImageFormInput inputName={fieldControllerName.POST_TITLE} control={control} rules={formRequiredRules.addPostTitleRule}
-                            defaultValue={userPosts.details.postTitle} maxLength={numericConstants.FIFTEEN} placeHolderText={placeHolderText.ADD_TITLE}
+                            defaultValue={userPosts.details.postTitle} maxLength={numericConstants.TWENTY_FIVE} placeHolderText={placeHolderText.ADD_TITLE}
                             keyboardType={keyBoardTypeConst.DEFAULT} formState={formState} autoFocus={true} textContentType={keyBoardTypeConst.TITLE}
                             extraStyles={[SDGenericStyles.textBoxGray, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.borderRadius20,
-                            SDGenericStyles.textColorWhite, SDGenericStyles.ft16]} />
+                            SDGenericStyles.textColorWhite, SDGenericStyles.ft16]} autoCapitalize={miscMessage.WORDS} />
 
                         <SDImageFormInput inputName={fieldControllerName.POST_LINK} control={control} formState={formState} keyboardType={isAndroid && keyBoardTypeConst.DEFAULT || keyBoardTypeConst.IOS_URL}
                             defaultValue={userPosts.details.postLink} placeHolderText={placeHolderText.ADD_URL} textContentType={keyBoardTypeConst.URL} rules={formRequiredRules.addPostLinkRule}

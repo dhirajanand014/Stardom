@@ -28,7 +28,7 @@ export const SDFormInput = props => {
                             </Text>
                         }
                         <TextInput {...inputProps} maxLength={props.maxLength} value={inputProps.value} textContentType={props.textContentType}
-                            autoCapitalize={miscMessage.NONE} placeholder={props.placeHolderText} secureTextEntry={props.isSecureTextEntry}
+                            autoCapitalize={props.autoCapitalize || miscMessage.NONE} placeholder={props.placeHolderText} secureTextEntry={props.isSecureTextEntry}
                             keyboardType={props.keyboardType} placeholderTextColor={colors.SDOM_PLACEHOLDER} autoFocus={props.autofocus} caretHidden={props.caretHidden}
                             style={[userAuthStyles.textInputStyle, props.extraStyles]} onSubmitEditing={props.onSubmitEditing} editable={props.editable}
                             onChangeText={value => onChangeByValueType(inputProps, value, props)} ref={props.refCallback} multiline={props.isMultiline}

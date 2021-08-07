@@ -40,7 +40,8 @@ export const CategoryRenderer = React.memo(({ item, index, category, toggleSelec
                                 {
                                     category.categories[index].isSelected &&
                                     <View style={SDGenericStyles.padding10}>
-                                        <Image style={[categoryViewStyles.category_selected_check]} source={require(`../../assets/category_selected.png`)} />
+                                        <Image style={categoryViewStyles.category_selected_check} source={require(`../../assets/category_selected.png`)}
+                                            resizeMode={FastImage.resizeMode.contain} />
                                     </View>
                                 }
                             </FastImage>

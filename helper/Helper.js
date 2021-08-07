@@ -505,10 +505,6 @@ export const checkAndAddCategoriesFromFCMNotification = async (selectedCategorie
     }
 }
 
-export const setImageLoadError = async (optionsState, setOptionsState, bool) => {
-    setOptionsState({ ...optionsState, isImageLoadError: bool });
-}
-
 /**
  * 
  * @param {*} categoryIdFromNotification 
@@ -1268,7 +1264,7 @@ export const setAddPostStateValues = (action, userPosts, setUserPosts, item) => 
     setUserPosts({ ...userPosts });
 }
 
-export const cropImage = async (imagePath, setLoaderCallback) => {
+export const cropImage = async (imagePath) => {
     try {
         return await ImagePicker.openCropper({
             path: imagePath, width: numericConstants.MAX_RESOLUTION_WIDTH, height: numericConstants.MAX_RESOLUTION_HEIGHT,
@@ -1282,7 +1278,6 @@ export const cropImage = async (imagePath, setLoaderCallback) => {
             console.error(errorMessages.COULD_NOT_CROP_IMAGE, error);
             showSnackBar(errorMessages.COULD_NOT_CROP_IMAGE, false);
         }
-        setLoaderCallback(false, stringConstants.EMPTY);
     }
 }
 

@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
 import React, { useContext, useRef, useState } from 'react';
-import { FlatList, Text, TouchableOpacity, Image, SafeAreaView, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, SafeAreaView, View, InteractionManager } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import {
@@ -16,12 +16,10 @@ export const SDCameraImagePreview = () => {
     const navigation = useNavigation();
     const imageFilterURI = route.params?.imageValue;
     const isFrom = route.params?.isFrom;
-
     const extractedUri = useRef(imageFilterURI);
     const { userPosts, setUserPosts, loader, setLoaderCallback } = useContext(CategoryContext);
 
     const proceedAction = async () => {
-        setLoaderCallback(true, alertTextMessages.LOADING_IMAGE);
         const croppedImage = await cropImage(extractedUri.current, setLoaderCallback);
         switch (isFrom) {
             case screens.EDIT_USER_PROFILE:
@@ -43,7 +41,6 @@ export const SDCameraImagePreview = () => {
                 }
                 break;
         }
-        setLoaderCallback(false);
     }
 
     const [selectedFilterIndex, setSelectedFilterIndex] = useState(numericConstants.ZERO);
@@ -52,19 +49,23 @@ export const SDCameraImagePreview = () => {
 
     const onExtractImage = ({ nativeEvent }) => {
         extractedUri.current = nativeEvent.uri;
-        setLoaderCallback(false);
+        InteractionManager.runAfterInteractions(() => setLoaderCallback(false));
     };
     const onSelectFilter = selectedIndex => {
-        selectedFilterIndex != selectedIndex &&
-            setLoaderCallback(true, alertTextMessages.LOADING_IMAGE);
+        if (selectedIndex == numericConstants.ZERO) {
+            extractedUri.current = imageFilterURI;
+        } else {
+            selectedFilterIndex != selectedIndex &&
+                setLoaderCallback(true, alertTextMessages.LOADING_IMAGE);
+        }
         setSelectedFilterIndex(selectedIndex);
     };
 
     const SDFilterComponent = React.memo(({ item, index }) => {
         const FilterComponent = item.filterComponent;
         const image = (
-            <Image style={[cameraStyles.filterSelector, SDGenericStyles.alignItemsEnd, SDGenericStyles.borderRadius5, SDGenericStyles.marginHorizontal10]}
-                resizeMode={FastImage.resizeMode.cover} source={{ uri: imageFilterURI }} />
+            <FastImage style={[cameraStyles.filterSelector, SDGenericStyles.alignItemsEnd, SDGenericStyles.borderRadius5, SDGenericStyles.marginHorizontal10]}
+                resizeMode={FastImage.resizeMode.cover} source={{ uri: imageFilterURI }} fallback />
         );
         return (
             <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.paddingVertical10]}>
@@ -90,11 +91,11 @@ const ImagePreview = React.memo(({ loader, selectedFilterIndex, imageFilterURI, 
         <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
         <View style={SDGenericStyles.marginTop33}>
             {selectedFilterIndex === numericConstants.ZERO &&
-                <Image style={[cameraStyles.imageStyles, SDGenericStyles.alignItemsCenter]} resizeMode={FastImage.resizeMode.contain}
-                    source={{ uri: imageFilterURI }} /> ||
+                <FastImage style={[cameraStyles.imageStyles, SDGenericStyles.alignItemsCenter]} resizeMode={FastImage.resizeMode.contain}
+                    source={{ uri: imageFilterURI }} fallback /> ||
                 <SelectedFilterComponent onExtractImage={onExtractImage} extractImageEnabled={true}
-                    image={<Image resizeMode={FastImage.resizeMode.contain} style={[cameraStyles.imageStyles, SDGenericStyles.alignSelfStart]}
-                        source={{ uri: imageFilterURI }} />} />}
+                    image={<FastImage resizeMode={FastImage.resizeMode.contain} style={[cameraStyles.imageStyles, SDGenericStyles.alignSelfStart]}
+                        source={{ uri: imageFilterURI }} fallback />} />}
         </View>
         <View style={SDGenericStyles.elevation3}>
             <FlatList data={CAMERA_IMAGE_FILTERS} keyExtractor={item => item.title} horizontal renderItem={({ item, index }) => <SDFilterComponent item={item} index={index} />}

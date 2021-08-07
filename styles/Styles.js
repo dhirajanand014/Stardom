@@ -1204,8 +1204,7 @@ export const categoryViewStyles = StyleSheet.create({
     },
     category_selected_check: {
         height: 24,
-        width: 24,
-        tintColor: `rgba(0,0,0,255)`
+        width: 24
     },
     buttonBottom: {
         top: 0,
