@@ -1,13 +1,11 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { FlatList, StatusBar, View, Text, TouchableOpacity, InteractionManager } from 'react-native';
+import { FlatList, StatusBar, View, Text, TouchableOpacity, InteractionManager, Image } from 'react-native';
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 import { CategoryContext } from '../../App';
 import {
     alertTextMessages, errorMessages, fieldControllerName, jsonConstants,
-    miscMessage,
-    modalTextConstants,
-    numericConstants, placeHolderText, screens, stringConstants
+    miscMessage, modalTextConstants, numericConstants, placeHolderText, screens, stringConstants
 } from '../../constants/Constants';
 import { fetchUserForSearch } from '../../helper/Helper';
 import { UserFollowFollowingRenderer } from '../../views/menus/UserFollowFollowingRenderer';
@@ -25,7 +23,9 @@ export const SDSearchUserAndPosts = () => {
     });
     const [searchList, setSearchList] = useState({
         users: jsonConstants.EMPTY,
-        posts: jsonConstants.EMPTY
+        posts: jsonConstants.EMPTY,
+        postText: stringConstants.EMPTY,
+        userText: stringConstants.EMPTY
     });
 
     const route = useRoute();
@@ -51,11 +51,16 @@ export const SDSearchUserAndPosts = () => {
         (async () => {
             setLoaderCallback(true);
             searchList.posts = userPosts;
+            if (!searchList.posts.length) searchList.postText = alertTextMessages.NO_POSTS;
+
             if (loggedInUser.isLoggedIn) {
                 const responseData = await fetchUserForSearch(loggedInUser.loginDetails.token);
                 searchList.users = responseData.users;
                 setUserFollowerFollowing(responseData);
             }
+            else if (!loggedInUser.isLoggedIn) searchList.userText = alertTextMessages.PLEASE_LOGIN_TO_VIEW_USERS;
+            else if (!searchList.users.length) searchList.userText = alertTextMessages.NO_POSTS;
+
             InteractionManager.runAfterInteractions(() => {
                 setSearchList({ ...searchList });
                 setLoaderCallback(false);
@@ -69,10 +74,21 @@ export const SDSearchUserAndPosts = () => {
                 <Text style={[SDGenericStyles.ft18, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.placeHolderTextColor,
                 SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop40]}>
                     {
-                        index == numericConstants.ZERO && alertTextMessages.NO_POSTS || !loggedInUser.isLoggedIn &&
-                        alertTextMessages.PLEASE_LOGIN_TO_VIEW_USERS || alertTextMessages.NO_USERS_AVAILABLE
+                        index == numericConstants.ZERO && searchList.postText || searchList.userText
                     }
                 </Text>
+            </View>
+        )
+    }
+    const loaderFooter = () => {
+        return (
+            <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyItemsStart, SDGenericStyles.backGroundColorBlack]}>
+                {
+                    <FastImage resizeMode={FastImage.resizeMode.contain} source={{
+                        uri: Image.resolveAssetSource(require(`../../assets/stardom_loader.gif`)).uri,
+                        priority: FastImage.priority.normal
+                    }} style={{ width: numericConstants.FIFTY, height: numericConstants.FIFTY }} />
+                }
             </View>
         )
     }
@@ -101,12 +117,12 @@ export const SDSearchUserAndPosts = () => {
 
     const RenderPostSearchContent = props => {
         return <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingVertical12,
-        SDGenericStyles.marginBottom15, SDGenericStyles.borderRadius5]} onPress={() =>
+        SDGenericStyles.marginBottom15]} onPress={() =>
             props.actionCallBack(screens.POSTS_TAB, props.index)}>
             <FastImage source={{
                 uri: props.item.postImage, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
             }} style={[userMenuStyles.followerFollowingImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter,
-            SDGenericStyles.marginRight15]}>
+            SDGenericStyles.marginRight15]} >
             </FastImage>
             <View style={SDGenericStyles.paddingBottom5}>
                 <Text style={[SDGenericStyles.ft20, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
@@ -137,13 +153,13 @@ export const SDSearchUserAndPosts = () => {
             case screens.POSTS_TAB:
                 return <AnimatedFlatlist data={searchList.posts} keyExtractor={(item) => item.id} key={`1_${numericConstants.ONE}`} renderItem={({ item, index }) => {
                     return <RenderPostSearchContent item={item} index={index} actionCallBack={actionCallBack} />
-                }} contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
-                    ListEmptyComponent={emptyListMessage} onScroll={listViewScrollHandler} scrollEventThrottle={numericConstants.SIXTEEN} />
+                }} contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]} maxToRenderPerBatch={numericConstants.TEN}
+                    ListEmptyComponent={emptyListMessage} onScroll={listViewScrollHandler} scrollEventThrottle={numericConstants.SIXTEEN} initialNumToRender={numericConstants.FIFTY} />
             case screens.USERS_TAB:
                 return <AnimatedFlatlist data={searchList.users} keyExtractor={(item) => item.id} key={`1_${numericConstants.ONE}`} renderItem={({ item, index }) => {
                     return <UserFollowFollowingRenderer item={item} index={index} actionCallBack={actionCallBack} isSearchUser />
-                }} contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
-                    ListEmptyComponent={emptyListMessage} onScroll={listViewScrollHandler} scrollEventThrottle={numericConstants.SIXTEEN} />
+                }} contentContainerStyle={[SDGenericStyles.padding20, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]} maxToRenderPerBatch={numericConstants.TEN}
+                    ListEmptyComponent={emptyListMessage} onScroll={listViewScrollHandler} scrollEventThrottle={numericConstants.SIXTEEN} initialNumToRender={numericConstants.THIRTY} />
             default: return <View />;
         }
     };
@@ -163,7 +179,7 @@ export const SDSearchUserAndPosts = () => {
 }
 
 const PostUsersTabbedView = React.memo(({ searchList, setSearchList, index, routes, renderScene, setIndexCallBack, renderTabBar,
-    setLoaderCallback, userFollowerFollowing, userPosts }) => {
+    userFollowerFollowing, userPosts, setLoaderCallback }) => {
     return <Animated.View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
         <BackButton leftStyle={numericConstants.ONE} isWithSearch extraStyles={SDGenericStyles.marginTop20} />
         <Animated.View style={SDGenericStyles.padding20}>
@@ -175,7 +191,6 @@ const PostUsersTabbedView = React.memo(({ searchList, setSearchList, index, rout
             </Animated.View>
         </Animated.View>
         <TabView navigationState={{ index, routes }} renderScene={renderScene} onIndexChange={setIndexCallBack}
-            renderTabBar={renderTabBar} onSwipeStart={() => setLoaderCallback(true, index == numericConstants.ONE && alertTextMessages.LOADING_USERS_POSTS ||
-                alertTextMessages.LOADING_USERS)} onSwipeEnd={() => setLoaderCallback(false)} />
+            renderTabBar={renderTabBar} onSwipeStart={() => setLoaderCallback(true)} onSwipeEnd={() => setLoaderCallback(false)} />
     </Animated.View>;
 });

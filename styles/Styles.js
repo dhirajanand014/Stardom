@@ -365,6 +365,9 @@ export const SDGenericStyles = StyleSheet.create({
     marginHorizontal10: {
         marginHorizontal: 10
     },
+    paddingRight60: {
+        paddingEnd: 60
+    },
     padding10: {
         padding: 10
     },
@@ -1629,31 +1632,32 @@ export const errorBoundaryStyles = StyleSheet.create({
 });
 
 export const colors = {
-    BLUE: '#3543bf',
-    ORANGE: '#fe7d32',
-    GREEN: '#30a960',
-    LIGHT_GREEN: '#7FFF00',
-    RED: '#ff4e4e',
-    BLACK: '#0b0b0b',
-    SILVER: '#efefef',
-    WHITE: '#fff',
-    GREY: '#7e7e7e',
+    BLUE: `#3543bf`,
+    ORANGE: `#fe7d32`,
+    GREEN: `#30a960`,
+    LIGHT_GREEN: `#7FFF00`,
+    RED: `#ff4e4e`,
+    BLACK: `#0b0b0b`,
+    SILVER: `#efefef`,
+    WHITE: `#fff`,
+    GREY: `#7e7e7e`,
     SDOM_BLACK: `#1b1f2b`,
     SDOM_TEXT_BOX: `#343642`,
-    WHITE_GREY: '#d4d4d4',
-    DARK_GREY: '#555555',
-    LIGHT_BLACK: '#212121',
-    DARK_RED: '#c04d47',
+    WHITE_GREY: `#d4d4d4`,
+    DARK_GREY: `#555555`,
+    LIGHT_BLACK: `#212121`,
+    DARK_RED: `#c04d47`,
     TRANSPARENT: `transparent`,
-    SEMI_TRANSPARENT: 'rgba(0,0,0,0.5)',
-    LIGHT_RED: '#fef3ec',
-    YELLOW: '#fec72e',
+    SEMI_TRANSPARENT: `rgba(0,0,0,0.5)`,
+    LIGHT_RED: `#fef3ec`,
+    YELLOW: `#fec72e`,
     SDOM_YELLOW: `#eabe05`,
     SDOM_PLACEHOLDER: `#969696`,
-    LIGHT_GREY: '#a9a9a9',
-    PALE_YELLOW: '#fff6ef',
-    DARK_BLUE: '#2e68b2',
-    LIGHT_BLUE: '#EEEFF9',
+    LIGHT_GREY: `#a9a9a9`,
+    PALE_YELLOW: `#fff6ef`,
+    DARK_CONTENT: `dark-content`,
+    DARK_BLUE: `#2e68b2`,
+    LIGHT_BLUE: `#EEEFF9`,
 };
 
 export const userMenuStyles = {
@@ -1700,6 +1704,16 @@ export const userMenuStyles = {
         height: 275,
         elevation: 5
     },
+    userSelectionOptionModalView: {
+        margin: 250,
+        borderRadius: 20,
+        paddingTop: 20,
+        paddingEnd: 25,
+        paddingStart: 25,
+        width: width / 1.35,
+        height: 180,
+        elevation: 5
+    },
     verifyUserTextHeight: {
         justifyContent: 'center',
         maxHeight: 150
@@ -1718,6 +1732,22 @@ export const userMenuStyles = {
         paddingHorizontal: 20,
         paddingVertical: 10,
         width: 120,
+        elevation: 3,
+        backgroundColor: '#eabe05'
+    },
+    userYesButton: {
+        borderRadius: 25,
+        paddingHorizontal: 20,
+        paddingVertical: 8,
+        width: 100,
+        elevation: 3,
+        backgroundColor: '#eabe05'
+    },
+    userNoButton: {
+        borderRadius: 25,
+        paddingHorizontal: 20,
+        paddingVertical: 8,
+        width: 80,
         elevation: 3,
         backgroundColor: '#eabe05'
     },

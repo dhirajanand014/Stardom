@@ -76,7 +76,7 @@ export const ScreenNavigator = () => {
     return (
         <NavigationContainer ref={navigationRef}>
             {
-                isAndroid && <StatusBar backgroundColor={colors.TRANSPARENT} translucent />
+                isAndroid && <StatusBar backgroundColor={colors.TRANSPARENT} translucent barStyle={colors.DARK_CONTENT} />
             }
             <Stack.Navigator initialRouteName={screens.SPLASH_SCREEN} screenOptions={screenOptions}
                 headerMode={`float`} animation={`fade`}>

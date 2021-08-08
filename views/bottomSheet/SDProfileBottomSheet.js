@@ -1,27 +1,34 @@
+import ActionButton from '@logvinme/react-native-action-button';
 import { useIsFocused } from '@react-navigation/core';
-import React, { useCallback, useContext, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, InteractionManager } from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, Image, InteractionManager, Switch } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { CategoryContext } from '../../App';
 import { SDBottomSheet } from '../../components/bottomsheet/SDBottomSheet';
 import { SDScaleAnimation } from '../../components/button/SDScaleAnimation';
+import { DeleteIcon } from '../../components/icons/DeleteIcon';
+import { UserSelectionOptionModal } from '../../components/modals/UserSelectionOptionModal';
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
-    actionButtonTextConstants, alertTextMessages, height, jsonConstants, miscMessage,
-    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, width
+    actionButtonTextConstants, alertTextMessages, colorConstants, height, jsonConstants, miscMessage,
+    numericConstants, postitionStringConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, width
 } from '../../constants/Constants';
 import {
-    checkLoggedInUserMappedWithUserProfile, fetchPostsOfUserProfile, handleUserPostAction,
+    checkLoggedInUserMappedWithUserProfile, fetchPostsOfUserProfile, handleProfileImageDelete, handleUserPostAction,
     shareImage, showProgressSnackbar
 } from '../../helper/Helper';
 import { ProfilePosts } from '../../screens/user/ProfilePosts';
-import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
+import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import { SDEntryAnimation } from '../animationView/SDEntryAnimation';
 
 export const SDProfileBottomSheet = props => {
     const post_share = require(`../../assets/post_share_icon.png`);
-    const { downloadProgressState, setDownloadProgressState } = useContext(CategoryContext);
+    const { downloadProgressState, setDownloadProgressState, setLoaderCallback } = useContext(CategoryContext);
     const isFocused = useIsFocused();
+    const [bottomSheetState, setBottomSheetState] = useState({
+        iconsSwitchEnabled: true,
+        showUserOptionModal: false
+    });
 
     const downloadCallback = useCallback((received, total) => {
         const value = received / total;
@@ -78,6 +85,15 @@ export const SDProfileBottomSheet = props => {
         }
     }, [isFocused]);
 
+    const handleDelete = useCallback(async () => {
+        if (props.loggedInUser && props.loggedInUser.loginDetails) {
+            setBottomSheetState({ ...bottomSheetState, showUserOptionModal: false });
+            setLoaderCallback(true);
+            await handleProfileImageDelete(props.profile, props.loggedInUser, props.setLoggedInUser);
+            setLoaderCallback(false);
+        }
+    });
+
     const renderContent = () => {
         return (
             <React.Fragment>
@@ -97,15 +113,30 @@ export const SDProfileBottomSheet = props => {
             </React.Fragment>
         )
     }
+
     return (
         <React.Fragment>
-            <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10, SDGenericStyles.marginTop33]}>
-                <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () => await shareImage({ postImage: props.profile.profile_image, postTitle: props.profile.name },
-                    downloadCallback, resetFlashMessage)} activeOpacity={.7}>
-                    <Image style={glancePostStyles.icon_post_share} source={post_share} />
-                </TouchableOpacity>
-            </View>
-
+            <ActionButton buttonColor={colorConstants.TRANSPARENT_BUTTON} backgroundTappable={true} size={numericConstants.TWENTY_EIGHT} useNativeFeedback={false} degrees={numericConstants.ZERO}
+                verticalOrientation={postitionStringConstants.DOWN} position={postitionStringConstants.RIGHT} offsetX={numericConstants.TEN} offsetY={numericConstants.THIRTY_EIGHT} hideShadow={true}
+                autoInactive={false} spacing={numericConstants.TWENTY_FIVE} active={bottomSheetState.iconsSwitchEnabled} renderIcon={(isActive) => <Switch trackColor={{ false: colorConstants.GREY, true: colorConstants.YELLOW }}
+                    thumbColor={isActive ? colorConstants.WHITE : colorConstants.WHITE} onValueChange={() => setBottomSheetState({ ...bottomSheetState, iconsSwitchEnabled: !isActive })}
+                    style={{ transform: [{ scaleX: .85 }, { scaleY: .85 }] }} value={bottomSheetState.iconsSwitchEnabled} />}>
+                <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
+                    onPress={async () => await shareImage({ postImage: props.profile.profile_image, postTitle: props.profile.name }, downloadCallback, resetFlashMessage)}>
+                    <View style={glancePostStyles.backgroundRoundColor}>
+                        <Image style={glancePostStyles.icon_post_share} source={post_share} />
+                    </View>
+                </ActionButton.Item>
+                {
+                    props.loggedInUser.loginDetails.details && props.profileDetail.isSameUser && props.profile.profile_image &&
+                    <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
+                        onPress={() => setBottomSheetState({ ...bottomSheetState, showUserOptionModal: true })}>
+                        <View style={glancePostStyles.backgroundRoundColor}>
+                            <DeleteIcon width={numericConstants.TWENTY_EIGHT} height={numericConstants.TWENTY_EIGHT} stroke={colors.WHITE} />
+                        </View>
+                    </ActionButton.Item>
+                }
+            </ActionButton>
             <RenderProfileDetails profile={props.profile} profileDetail={props.profileDetail} isDisabled={props.isDisabled} setLoaderCallback={props.setLoaderCallback}
                 sdomDatastate={props.sdomDatastate} setSdomDatastate={props.setSdomDatastate} loggedInUser={props.loggedInUser} setProfileDetail={props.setProfileDetail}
                 navigation={props.navigation} />
@@ -113,11 +144,14 @@ export const SDProfileBottomSheet = props => {
             <SDBottomSheet refCallback={props.refCallback} snapPoints={props.snapPoints} initialSnap={numericConstants.ZERO}
                 callbackMode={props.fall} renderHeader={renderHeader} renderContent={renderContent} onOpenEnd={() => viewUserPosts()}
                 onCloseEnd={() => hideUserPosts()} />
+
+            <UserSelectionOptionModal bottomSheetState={bottomSheetState} setBottomSheetState={setBottomSheetState} textMessage={alertTextMessages.DELETE_USER_PROFILE_IMAGE}
+                successButton={actionButtonTextConstants.YES.toUpperCase()} loginDetails={props.loggedInUser.loginDetails} handleSubmit={handleDelete} />
         </React.Fragment>
-    );
+    )
 }
 
-const RenderProfileDetails = ({ profile, profileDetail, isDisabled, setLoaderCallback, sdomDatastate, setSdomDatastate, loggedInUser,
+const RenderProfileDetails = React.memo(({ profile, profileDetail, isDisabled, setLoaderCallback, sdomDatastate, setSdomDatastate, loggedInUser,
     setProfileDetail, navigation }) => {
     return <View style={{ bottom: height - (height / 1.55) }}>
         <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10]}>
@@ -142,7 +176,8 @@ const RenderProfileDetails = ({ profile, profileDetail, isDisabled, setLoaderCal
                 SDGenericStyles.textColorWhite]}>{profile.bio || stringConstants.EMPTY}</Text>
             </Animated.View>
         </View>
-        {!profileDetail.isSameUser &&
+        {
+            !profileDetail.isSameUser &&
             <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.paddingRight5, SDGenericStyles.mt24]}>
                 <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
                     <SDEntryAnimation index={numericConstants.ONE}>
@@ -196,4 +231,4 @@ const RenderProfileDetails = ({ profile, profileDetail, isDisabled, setLoaderCal
             </View>
         }
     </View >;
-}
+});

@@ -65,21 +65,26 @@ export const SDUserMenus = (drawerProps) => {
         setLoaderCallback(false);
     });
 
-    const filterOutLoginMenus = useCallback((menu, details) => {
-        switch (menu.key) {
-            case actionButtonTextConstants.VERIFY_USER:
-                if (details.user_type == miscMessage.VERIFIED_AUTHOR || details.user_type == miscMessage.AUTHOR_UNAPPROVED) {
-                    return false;
-                }
-                return true;
-            case screens.USER_FOLLOWERS_FOLLOWING:
-                if (menu.label == miscMessage.PRIVATE_REQUEST_ACCESS) {
-                    const followers = details.followers;
-                    profileMenu.privateRequestCount = followers.filter(follower => follower.pvtaccess == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED).length;
-                    return profileMenu.privateRequestCount > numericConstants.ZERO;
-                }
-                return true;
-            default: return true;
+    const injectMenuOptions = (index, allMenuOptions, numberOfDeletes, label, key, isLoggedIn, icon) => {
+        index += numericConstants.ONE;
+        allMenuOptions.splice(index, numberOfDeletes, { label: label, key: key, loggedIn: isLoggedIn, icon: icon });
+    }
+
+    const filterOutLoginMenus = useCallback((allMenuOptions, details) => {
+        let index = allMenuOptions.findIndex(menu => menu.label == miscMessage.FOLLOWING_TEXT)
+        if (details) {
+            const followers = details.followers;
+            profileMenu.privateRequestCount = followers.filter(follower => follower.pvtaccess == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED).length;
+            if (!allMenuOptions.some(menu => menu.label == miscMessage.PRIVATE_REQUEST_ACCESS) && profileMenu.privateRequestCount > numericConstants.ZERO) {
+                injectMenuOptions(index, allMenuOptions, numericConstants.ZERO, miscMessage.PRIVATE_REQUEST_ACCESS, screens.USER_FOLLOWERS_FOLLOWING,
+                    true, require(`../assets/menu/get_verified_icon.gif`));
+            }
+
+            if (!allMenuOptions.some(menu => menu.label == miscMessage.GET_VERIFIED) && (details.user_type !== miscMessage.VERIFIED_AUTHOR
+                || details.user_type !== miscMessage.AUTHOR_UNAPPROVED)) {
+                injectMenuOptions(index, allMenuOptions, numericConstants.ZERO, miscMessage.GET_VERIFIED, actionButtonTextConstants.VERIFY_USER,
+                    true, require(`../assets/menu/get_verified_icon.gif`));
+            }
         }
     });
 

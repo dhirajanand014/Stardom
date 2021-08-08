@@ -1175,7 +1175,8 @@ export const axiosGetWithAuthorization = async (url, token) => {
 }
 
 export const deleteWithAuthorization = async (url, id, token) => {
-    return await axios.delete(`${url}${stringConstants.SLASH}${id}`, {
+    const urlDelete = id && `${url}${stringConstants.SLASH}${id}` || url;
+    return await axios.delete(urlDelete, {
         headers: {
             [miscMessage.AUTHORIZATION]: `${miscMessage.BEARER}${stringConstants.SPACE}${token}`
         }
@@ -1206,7 +1207,7 @@ export const fetchUpdateLoggedInUserProfile = async (loggedInUser, setLoggedInUs
                 const JSONDetails = JSON.stringify(responseData);
                 await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER,
                     `${user.phoneNumber}${stringConstants.SEMI_COLON}${user.token}`, JSONDetails);
-                fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, false);
+                await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, false);
             } else {
                 console.error(errorMessages.COULD_NOT_FETCH_UPDATED_USER_PROFILE, error);
             }
@@ -1324,6 +1325,23 @@ export const handlePostDelete = async (postId, token) => {
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
         showSnackBar(errorMessages.COULD_NOT_DELETE_POST, false);
+    }
+}
+
+export const handleProfileImageDelete = async (profile, loggedInUser, setLoggedInUser) => {
+    try {
+        const response = await deleteWithAuthorization(urlConstants.deleteProfileImage, stringConstants.EMPTY,
+            loggedInUser.loginDetails.token);
+        if (response.status == numericConstants.TWO_HUNDRED) {
+            let details = JSON.parse(loggedInUser.loginDetails.details);
+            profile.profile_image = null;
+            details.profile_picture = null;
+            loggedInUser.loginDetails.details = JSON.stringify(details);
+            setLoggedInUser({ ...loggedInUser });
+        }
+    } catch (error) {
+        processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);
+        showSnackBar(errorMessages.COULD_NOT_DELETE_PROFILE_IMAGE, false);
     }
 }
 
@@ -1905,7 +1923,7 @@ export const prepareLoggedInMenu = async (profileMenu, loggedInUser, setLoggedIn
     profileMenu.userMenus = prepareSDOMMenu();
     const details = JSON.parse(loggedInUser.loginDetails.details);
     const counts = await fetchProfilePostsCounts(details.id);
-    profileMenu.userMenus = profileMenu.userMenus.filter(menu => filterOutLoginMenus(menu, details));
+    filterOutLoginMenus(profileMenu.userMenus, details);
     profileMenu.profileImage = details.profile_picture;
     profileMenu.profileName = details.name;
     profileMenu.profileUserId = details.user_id;

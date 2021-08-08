@@ -1,10 +1,10 @@
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/core';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Image, View, BackHandler, InteractionManager } from "react-native"
+import { Image, View, BackHandler } from "react-native"
 import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import {
-    alertTextMessages, backHandlerConstants, componentErrorConsts, errorMessages, height, jsonConstants,
+    backHandlerConstants, componentErrorConsts, errorMessages, height, jsonConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, width
 } from '../../constants/Constants';
 import { checkLoggedInUserMappedWithUserProfile, checkProfileFrom, fetchUpdateLoggedInUserProfile } from '../../helper/Helper';

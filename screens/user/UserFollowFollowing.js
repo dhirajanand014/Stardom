@@ -181,7 +181,7 @@ export const UserFollowFollowing = () => {
                 </Animated.View>
             }
             <AnimatedFlatlist data={searchList.users} keyExtractor={(item) => item.id} key={`1_${numericConstants.ONE}`}
-                renderItem={({ item, index }) => {
+                maxToRenderPerBatch={numericConstants.TEN} initialNumToRender={numericConstants.THIRTY} renderItem={({ item, index }) => {
                     return <RenderFollowingFollower item={item} scrollYValue={scrollYValue} index={index} listFor={listFor}
                         actionCallBack={actionCallBack} viewFollowerFollowingProfile={viewFollowerFollowingProfile} />
                 }} contentContainerStyle={[SDGenericStyles.padding12, { paddingTop: StatusBar.currentHeight || numericConstants.FORTY_TWO }]}
