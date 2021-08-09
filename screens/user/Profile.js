@@ -5,7 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import {
     backHandlerConstants, componentErrorConsts, errorMessages, height, jsonConstants,
-    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, width
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, urlConstants, width
 } from '../../constants/Constants';
 import { checkLoggedInUserMappedWithUserProfile, checkProfileFrom, fetchUpdateLoggedInUserProfile } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from "../../styles/Styles"
@@ -78,11 +78,13 @@ const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDa
             <React.Fragment>
                 <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
                 {
-                    profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high, cache: FastImage.cacheControl.immutable }}
-                        style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback /> || <FastImage source={{
-                            uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
-                            priority: FastImage.priority.high
-                        }} style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} resizeMode={FastImage.resizeMode.center} />
+                    profile.profile_image && profile.profile_image !== urlConstants.profileStorageUrl &&
+                    <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high, cache: FastImage.cacheControl.immutable }}
+                        style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback onError={() => profile.profile_image = stringConstants.EMPTY} />
+                    || <FastImage source={{
+                        uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
+                        priority: FastImage.priority.high
+                    }} style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} resizeMode={FastImage.resizeMode.center} />
                 }
                 <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} expanded={expanded}
                     setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}

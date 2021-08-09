@@ -1334,8 +1334,7 @@ export const handleProfileImageDelete = async (profile, loggedInUser, setLoggedI
             loggedInUser.loginDetails.token);
         if (response.status == numericConstants.TWO_HUNDRED) {
             let details = JSON.parse(loggedInUser.loginDetails.details);
-            profile.profile_image = null;
-            details.profile_picture = null;
+            details.profile_picture = details.profile_image = profile.profile_image = urlConstants.profileStorageUrl;
             loggedInUser.loginDetails.details = JSON.stringify(details);
             setLoggedInUser({ ...loggedInUser });
         }

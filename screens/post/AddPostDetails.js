@@ -24,12 +24,16 @@ import { BackButton } from '../../components/button/BackButton';
 import { SDPostTypeOptionsView } from '../../views/fromInputView/SDPostTypeOptionView'
 import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextInputLengthText'
 import { AddPostSelectionModal } from '../../components/modals/AddPostSelectionModal'
+import { UserSelectionOptionModal } from '../../components/modals/UserSelectionOptionModal'
 
 export const AddPostDetails = () => {
 
     const { userPosts, loggedInUser, loader, setLoaderCallback } = useContext(CategoryContext);
 
     const [showSelection, setShowSelection] = useState(false);
+    const [bottomSheetState, setBottomSheetState] = useState({
+        showUserOptionModal: false
+    });
 
     const route = useRoute();
     const toAction = route.params?.toAction;
@@ -57,7 +61,8 @@ export const AddPostDetails = () => {
         });
     }
 
-    const handleDelete = async () => {
+    const handleDelete = useCallback(async () => {
+        setBottomSheetState({ ...bottomSheetState, showUserOptionModal: false });
         setLoaderCallback(true, alertTextMessages.DELETING_POST);
         const responseData = await handlePostDelete(selectedItem.id, loggedInUser.loginDetails.token);
         if (responseData && responseData.message == alertTextMessages.POST_DELETED_SUCCESSFULLY) {
@@ -67,7 +72,7 @@ export const AddPostDetails = () => {
             showSnackBar(errorMessages.YOUR_SESSION_IS_EXPIRED_PLEASE_LOGIN, false, true, loginCallback);
         }
         setLoaderCallback(false);
-    }
+    });
 
     const postDescriptionValue = watch(fieldControllerName.POST_DESCRIPTION);
     const postValueType = watch(fieldControllerName.POST_TYPE,
@@ -78,12 +83,12 @@ export const AddPostDetails = () => {
     return (
         <NewPost loader={loader} userPosts={userPosts} toAction={toAction} handleDelete={handleDelete} showSelection={showSelection} setShowSelection={setShowSelection}
             control={control} formState={formState} postValueType={postValueType} postDescriptionValue={postDescriptionValue} navigation={navigation}
-            handleSubmit={handleSubmit} onSubmit={onSubmit} />
+            handleSubmit={handleSubmit} onSubmit={onSubmit} bottomSheetState={bottomSheetState} setBottomSheetState={setBottomSheetState} />
     )
 }
 
 const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, control, formState, postValueType, postDescriptionValue, showSelection, setShowSelection,
-    navigation, handleSubmit, onSubmit }) => {
+    navigation, handleSubmit, onSubmit, bottomSheetState, setBottomSheetState }) => {
     return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>
             <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
@@ -93,15 +98,15 @@ const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, control
                 {toAction == miscMessage.UPDATE &&
                     <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right8, glancePostStyles.addPostEditIconsStyle]}>
                         <View style={[SDGenericStyles.alignItemsEnd, SDGenericStyles.marginVertical10]}>
-                            <TouchableOpacity activeOpacity={.7} onPress={() => handleDelete()}>
+                            <TouchableOpacity activeOpacity={.7} onPress={() => setBottomSheetState({ ...bottomSheetState, showUserOptionModal: true })}>
                                 <DeleteIcon width={numericConstants.TWENTY_EIGHT} height={numericConstants.TWENTY_EIGHT} stroke={colors.RED} />
                             </TouchableOpacity>
                         </View>
-                        <View style={[SDGenericStyles.alignItemsEnd, SDGenericStyles.marginVertical10]}>
+                        {/* <View style={[SDGenericStyles.alignItemsEnd, SDGenericStyles.marginVertical10]}>
                             <TouchableOpacity activeOpacity={.7} onPress={() => setShowSelection(true)}>
                                 <EditIcon width={numericConstants.TWENTY_EIGHT} height={numericConstants.TWENTY_EIGHT} stroke={colors.WHITE} />
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
                     </View>}
                 <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.paddingVertical20]}>
                     <Text style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.placeHolderTextColor, SDGenericStyles.ft18,
@@ -157,6 +162,8 @@ const NewPost = React.memo(({ loader, userPosts, toAction, handleDelete, control
             </View>
             <AddPostSelectionModal isFrom={screens.EDIT_POST_DETAILS} navigation={navigation} setShowSelection={setShowSelection}
                 showSelection={showSelection} />
+            <UserSelectionOptionModal bottomSheetState={bottomSheetState} setBottomSheetState={setBottomSheetState} textMessage={alertTextMessages.DELETE_USER_POST_IMAGE}
+                successButton={actionButtonTextConstants.YES.toUpperCase()} handleSubmit={handleDelete} />
         </View>
-    </TouchableWithoutFeedback >
+    </TouchableWithoutFeedback>
 });

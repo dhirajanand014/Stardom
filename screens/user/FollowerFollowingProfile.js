@@ -5,7 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import {
     alertTextMessages, backHandlerConstants, height, jsonConstants,
-    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, width
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, urlConstants, width
 } from '../../constants/Constants';
 import {
     checkLoggedInUserMappedWithUserProfile, fetchUpdateLoggedInUserProfile
@@ -74,11 +74,13 @@ const FollowerFollowingProfileRenderer = React.memo(({ profile, profileDetail, i
     return <View style={SDGenericStyles.fill}>
         <BackButton leftStyle={numericConstants.ONE} isWithSearch extraStyles={SDGenericStyles.marginTop20} />
         {
-            profile.profile_image && <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
-                style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback /> || <FastImage source={{
-                    uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
-                    priority: FastImage.priority.high
-                }} style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} resizeMode={FastImage.resizeMode.center} />
+            profile.profile_image && profile.profile_image !== urlConstants.profileStorageUrl &&
+            <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high }}
+                style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} fallback onError={() => profile.profile_image = stringConstants.EMPTY} />
+            || <FastImage source={{
+                uri: Image.resolveAssetSource(require(`../../assets/no_image_available.png`)).uri,
+                priority: FastImage.priority.high
+            }} style={[{ width: width, height: height }, glancePostStyles.overlayImageProfile]} resizeMode={FastImage.resizeMode.center} />
         }
         <SDProfileBottomSheet profile={profile} profileDetail={profileDetail} navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} expanded={expanded}
             setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={sdomDatastate} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}

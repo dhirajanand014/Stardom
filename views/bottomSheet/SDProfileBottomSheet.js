@@ -11,7 +11,7 @@ import { UserSelectionOptionModal } from '../../components/modals/UserSelectionO
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
     actionButtonTextConstants, alertTextMessages, colorConstants, height, jsonConstants, miscMessage,
-    numericConstants, postitionStringConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, width
+    numericConstants, postitionStringConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, urlConstants, width
 } from '../../constants/Constants';
 import {
     checkLoggedInUserMappedWithUserProfile, fetchPostsOfUserProfile, handleProfileImageDelete, handleUserPostAction,
@@ -128,7 +128,7 @@ export const SDProfileBottomSheet = props => {
                     </View>
                 </ActionButton.Item>
                 {
-                    props.loggedInUser.loginDetails.details && props.profileDetail.isSameUser && props.profile.profile_image &&
+                    props.loggedInUser.loginDetails.details && props.profileDetail.isSameUser && props.profile.profile_image !== urlConstants.profileStorageUrl &&
                     <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
                         onPress={() => setBottomSheetState({ ...bottomSheetState, showUserOptionModal: true })}>
                         <View style={glancePostStyles.backgroundRoundColor}>
@@ -146,7 +146,7 @@ export const SDProfileBottomSheet = props => {
                 onCloseEnd={() => hideUserPosts()} />
 
             <UserSelectionOptionModal bottomSheetState={bottomSheetState} setBottomSheetState={setBottomSheetState} textMessage={alertTextMessages.DELETE_USER_PROFILE_IMAGE}
-                successButton={actionButtonTextConstants.YES.toUpperCase()} loginDetails={props.loggedInUser.loginDetails} handleSubmit={handleDelete} />
+                successButton={actionButtonTextConstants.YES.toUpperCase()} handleSubmit={handleDelete} />
         </React.Fragment>
     )
 }

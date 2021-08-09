@@ -1,7 +1,7 @@
 
 import { useNavigation } from '@react-navigation/core';
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, View } from "react-native";
+import { FlatList, InteractionManager, View } from "react-native";
 import {
     alertTextMessages, miscMessage,
     numericConstants, screens, stringConstants
@@ -35,7 +35,9 @@ export const Posts = props => {
         } else if (action == miscMessage.UPDATE) {
             setLoaderCallback(true);
             setAddPostStateValues(miscMessage.UPDATE, userPosts, setUserPosts, item);
-            navigation.navigate(screens.ADD_POST_DETAILS, { toAction: miscMessage.UPDATE, selectedItem: item });
+            InteractionManager.runAfterInteractions(() =>
+                navigation.navigate(screens.ADD_POST_DETAILS, { toAction: miscMessage.UPDATE, selectedItem: item })
+            );
         }
         setLoaderCallback(false);
     });

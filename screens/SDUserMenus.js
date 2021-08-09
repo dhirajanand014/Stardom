@@ -7,12 +7,13 @@ import { CategoryContext } from '../App';
 import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
-    actionButtonTextConstants, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
+    actionButtonTextConstants, alertTextMessages, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, screens, stringConstants
 } from '../constants/Constants';
 import { prepareSDOMMenu, logoutUser, fetchUpdateLoggedInUserProfile, prepareLoggedInMenu } from '../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';
 import { MenuRenderer } from '../views/menus/MenuRenderer';
+import { UserSelectionOptionModal } from '../components/modals/UserSelectionOptionModal';
 
 export const SDUserMenus = (drawerProps) => {
 
@@ -31,7 +32,9 @@ export const SDUserMenus = (drawerProps) => {
         privateRequestCount: numericConstants.ZERO,
         showSubmitVerifyModal: false
     });
-
+    const [bottomSheetState, setBottomSheetState] = useState({
+        showUserOptionModal: false
+    });
     const handleMenuClickAction = useCallback(async (item) => {
         setLoaderCallback(true);
         switch (item.key) {
@@ -48,9 +51,7 @@ export const SDUserMenus = (drawerProps) => {
                 navigation.navigate(screens.CATEGORY);
                 break;
             case actionButtonTextConstants.LOGOUT:
-                await logoutUser(loggedInUser.loginDetails.token, loggedInUser, setLoggedInUser);
-                navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
-                currentPostIndexForProfileRef.current = numericConstants.ZERO;
+                setBottomSheetState({ ...bottomSheetState, showUserOptionModal: true });
                 break;
             case screens.POSTS:
                 navigation.navigate(screens.POSTS);
@@ -69,6 +70,13 @@ export const SDUserMenus = (drawerProps) => {
         index += numericConstants.ONE;
         allMenuOptions.splice(index, numberOfDeletes, { label: label, key: key, loggedIn: isLoggedIn, icon: icon });
     }
+
+    const logoutAction = useCallback(async () => {
+        setBottomSheetState({ ...bottomSheetState, showUserOptionModal: false });
+        await logoutUser(loggedInUser.loginDetails.token, loggedInUser, setLoggedInUser);
+        navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
+        currentPostIndexForProfileRef.current = numericConstants.ZERO;
+    });
 
     const filterOutLoginMenus = useCallback((allMenuOptions, details) => {
         let index = allMenuOptions.findIndex(menu => menu.label == miscMessage.FOLLOWING_TEXT)
@@ -122,11 +130,13 @@ export const SDUserMenus = (drawerProps) => {
 
     return (
         <SDMenuRenderer loggedInUser={loggedInUser} profileMenu={profileMenu} navigation={navigation} handleMenuClickAction={handleMenuClickAction} setLoaderCallback={setLoaderCallback}
-            drawerProps={drawerProps} setLoggedInUser={setLoggedInUser} setProfileMenu={setProfileMenu} makeInIndia={makeInIndia} setDrawerOpen={setDrawerOpen} />
+            drawerProps={drawerProps} setLoggedInUser={setLoggedInUser} setProfileMenu={setProfileMenu} makeInIndia={makeInIndia} setDrawerOpen={setDrawerOpen} bottomSheetState={bottomSheetState}
+            setBottomSheetState={setBottomSheetState} logoutAction={logoutAction} />
     )
 }
 
-const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, setProfileMenu, setLoaderCallback, drawerProps, makeInIndia, setDrawerOpen }) => {
+const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, setProfileMenu, setLoaderCallback, drawerProps, makeInIndia, setDrawerOpen,
+    bottomSheetState, setBottomSheetState, logoutAction }) => {
     return <SafeAreaView style={SDGenericStyles.fill}>
         <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.justifyContentCenter]}>
             <TouchableOpacity activeOpacity={.7} onPress={() => { setDrawerOpen(false); drawerProps.navigation.closeDrawer(); }}
@@ -204,5 +214,7 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
         }
         <UserVerifyModal profileMenu={profileMenu} setProfileMenu={setProfileMenu} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
             setLoggedInUser={setLoggedInUser} fetchUpdateLoggedInUserProfile={fetchUpdateLoggedInUserProfile} />
+        <UserSelectionOptionModal bottomSheetState={bottomSheetState} setBottomSheetState={setBottomSheetState} textMessage={alertTextMessages.CONFIRM_LOGOUT}
+            successButton={actionButtonTextConstants.YES.toUpperCase()} handleSubmit={logoutAction} />
     </SafeAreaView>;
 });

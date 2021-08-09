@@ -1174,7 +1174,7 @@ export const glancePostStyles = StyleSheet.create({
         borderColor: `#fafafa`
     },
     addPostEditIconsStyle: {
-        top: height / 4.4,
+        top: height / 3.5,
         right: 18
     },
     overlayImage: {

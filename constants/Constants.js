@@ -105,7 +105,8 @@ export const urlConstants = {
     fetchUsersFollowers: `${BASE_URI}/user/followers/fetch`,
     fetchUsersFollowings: `${BASE_URI}/user/following/fetch`,
     fetchAllUsers: `${BASE_URI}/user/allusers/fetch`,
-    updateDeviceToken: `${BASE_URI}/auth/updatedeviceid`
+    updateDeviceToken: `${BASE_URI}/auth/updatedeviceid`,
+    profileStorageUrl: `https://stardom.wallpiper.app/main/public/storage/profile/`
 }
 
 export const fieldControllerName = {
@@ -587,7 +588,9 @@ export const alertTextMessages = {
     SUBMITTED_FOR_VERIFICATION: `You have successfully submitted the details for verification`,
     YOU_HAVE_SUCCESSFULLY_APPROVED: `You have successfuly approved private access to this user`,
     YOU_HAVE_SUCCESSFULLY_REJECTED: `You have successfuly rejected private access to this user`,
+    DELETE_USER_POST_IMAGE: `Are you sure you want to delete the post?`,
     DELETE_USER_PROFILE_IMAGE: `Are you sure you want to delete your profile image?`,
+    CONFIRM_LOGOUT: `Are you sure you want to logout of Stardom?`,
     YOU_HAVE_NO_FOLLOWERS: `You have no followers.`,
     NO_POSTS: `No Posts`,
     NO_ONE_FOLLOWING: `Looks like no one is following you. Please post images to increase reach.`,
