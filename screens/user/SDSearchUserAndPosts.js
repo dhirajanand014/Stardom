@@ -96,10 +96,9 @@ export const SDSearchUserAndPosts = () => {
     const actionCallBack = useCallback(async (action, index, userItem) => {
         switch (action) {
             case screens.POSTS_TAB:
-                const currentViewPagerIndex = viewPagerPostsRef.current?.state.index;
-                viewPagerPostsRef.current?.scrollBy(index - currentViewPagerIndex, false);
                 postDetailsRef?.current?.setPostAnimationVisible(false);
                 navigation.navigate(screens.GLANCE);
+                InteractionManager.runAfterInteractions(() => viewPagerPostsRef.current?.scrollBy(index - viewPagerPostsRef.current?.state.index, false));
                 break;
             case screens.USERS_TAB:
                 let item = { ...userItem, profile_image: userItem.profile_picture };
