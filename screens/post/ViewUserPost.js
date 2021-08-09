@@ -15,6 +15,7 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 import { ViewUserPostDetails } from './ViewUserPostDetails';
 import FastImage from 'react-native-fast-image';
 import { BackButton } from '../../components/button/BackButton';
+import { SDLoaderLogo } from '../../views/absoluteView/SDLoaderLogo';
 
 export const ViewUserPost = () => {
 
@@ -119,6 +120,7 @@ const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOp
                             priority: FastImage.priority.normal
                         }} />
                     </View>
+                    <SDLoaderLogo />
                 </View>
             </View>}
     </View>;

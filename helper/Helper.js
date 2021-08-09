@@ -9,7 +9,7 @@ import {
     miscMessage, width, height, numericConstants, placeHolderText,
     screens, headerStrings, fieldControllerName, isAndroid, notificationConsts,
     isIOS, OTP_INPUTS, errorMessages, requestConstants, modalTextConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions, AUTO_SUBMIT_OTP_TIME_LIMIT, formRequiredRules
+    jsonConstants, defaultProfilesValue, SDMenuOptions, AUTO_SUBMIT_OTP_TIME_LIMIT, formRequiredRules, countRanges
 } from '../constants/Constants';
 import {
     InteractionManager,
@@ -1928,4 +1928,13 @@ export const prepareLoggedInMenu = async (profileMenu, loggedInUser, setLoggedIn
     profileMenu.profileUserId = details.user_id;
     profileMenu.followersCount = counts.followingCount;
     profileMenu.followingCount = counts.followersCount;
+}
+
+export const formatNumber = (inputNumber) => {
+    for (var index = numericConstants.ZERO; index < countRanges.length; index++) {
+        if (inputNumber >= countRanges[index].divider) {
+            return (inputNumber / countRanges[index].divider).toString() + countRanges[index].suffix;
+        }
+    }
+    return inputNumber.toString();
 }

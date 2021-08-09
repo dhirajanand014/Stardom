@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useContext } from 'react';
-import { View, Image, StatusBar, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Image, StatusBar, Dimensions, TouchableOpacity, SafeAreaView, Text } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
     width, miscMessage, numericConstants, jsonConstants
@@ -17,6 +17,7 @@ import { CategoryContext } from '../../App';
 import { SwipeItem } from '../../components/swiper/SwipeItem';
 import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
 import { useIsFocused, useRoute } from '@react-navigation/native';
+import { SDLoaderLogo } from '../../views/absoluteView/SDLoaderLogo';
 
 const category_selection = require('../../assets/category_selection_icon.png');
 
@@ -126,6 +127,7 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                             priority: FastImage.priority.normal
                         }} />
                     </View>
+                    <SDLoaderLogo />
                 </View>
             </View>}
         <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => { setDrawerOpen(true); navigation.openDrawer(); }}>

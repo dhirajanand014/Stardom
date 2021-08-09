@@ -812,6 +812,7 @@ export const miscMessage = {
     SET: `set`,
     IMAGE_TYPE: `image/*`,
     DETAILS: `details`,
+    STARDOM_LOGO_TEXT: `2021 Stardom`,
     CONFIRM_SECRET: `OTP Confirmed`,
     CHECK_CONNECTION_DETAILS: `Please check your internet connection and try again.`,
     CATEGORY_BACK: `Go back to posts Anytime !!`,
@@ -1153,3 +1154,12 @@ export const EULATexts = {
     P19_T1: `For any complaints write to us at:`,
     P19_T2: `newyolkllp@gmail.com`
 }
+
+export const countRanges = [
+    { divider: 1e18, suffix: `E` },
+    { divider: 1e15, suffix: `P` },
+    { divider: 1e12, suffix: `T` },
+    { divider: 1e9, suffix: `G` },
+    { divider: 1e6, suffix: `M` },
+    { divider: 1e3, suffix: `k` }
+];

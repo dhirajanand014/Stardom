@@ -6,6 +6,7 @@ import { jsonConstants, miscMessage, numericConstants, screens, width } from '..
 import { useNavigation } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import FastImage from 'react-native-fast-image';
+import { SDLoaderLogo } from '../views/absoluteView/SDLoaderLogo';
 
 export const SDSplashScreen = () => {
 
@@ -57,6 +58,7 @@ export const SDSplashScreen = () => {
                         priority: FastImage.priority.normal
                     }} style={{ width: numericConstants.FIFTY, height: numericConstants.FIFTY }} resizeMode={FastImage.resizeMode.contain} />
                 </View>
+                <SDLoaderLogo />
             </ImageBackground>
         </SafeAreaView>
     )

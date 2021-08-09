@@ -50,6 +50,9 @@ export const SDGenericStyles = StyleSheet.create({
         width: numericConstants.TWENTY_TWO,
         height: numericConstants.TWENTY_TWO
     },
+    left0: {
+        left: 0
+    },
     right0: {
         right: 0
     },

@@ -4,6 +4,7 @@ import FastImage from "react-native-fast-image";
 import { alertTextMessages, height, jsonConstants, miscMessage, numericConstants, width } from "../../constants/Constants";
 import { colors, SDGenericStyles } from "../../styles/Styles";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { SDLoaderLogo } from "../../views/absoluteView/SDLoaderLogo";
 
 export const SDLoaderView = props => {
 
@@ -50,6 +51,7 @@ export const SDLoaderView = props => {
                     </View>
                 }
             </View>
+            <SDLoaderLogo />
         </View>
     );
 };
