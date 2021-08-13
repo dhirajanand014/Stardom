@@ -1,8 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Modal, Text, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
-import { useCallback } from "react/cjs/react.development";
 import {
     stringConstants, actionButtonTextConstants, fieldControllerName, formRequiredRules,
     placeHolderText, miscMessage, numericConstants, responseStringData, alertTextMessages,

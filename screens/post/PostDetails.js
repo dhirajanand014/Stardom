@@ -16,7 +16,6 @@ import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal
 import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
 import { SDWallpaperModal } from '../../views/imagePost/SDWallpaperModal';
 import { CategoryContext } from '../../App';
-import FastImage from 'react-native-fast-image';
 import { RenderLoaderScroll } from '../../views/imagePost/RenderLoaderScroll';
 
 const post_like = require(`../../assets/post_likes_icon.png`);

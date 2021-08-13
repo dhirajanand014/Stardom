@@ -1,4 +1,4 @@
-import { useIsFocused, useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Image, InteractionManager, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -18,8 +18,6 @@ import { MenuRenderer } from '../views/menus/MenuRenderer';
 export const SDUserMenus = (drawerProps) => {
 
     const navigation = useNavigation();
-    const isFocused = useIsFocused();
-
     const { setLoaderCallback, currentPostIndexForProfileRef, drawerOpenStatus } = useContext(CategoryContext);
 
     const [profileMenu, setProfileMenu] = useState({
@@ -124,7 +122,7 @@ export const SDUserMenus = (drawerProps) => {
     useEffect(() => {
         (async () => {
             const user = await getLoggedInUserDetails();
-            if (user.details || loggedInUser.isLoggedIn) {
+            if (user.details || menuLoggedInUser.isLoggedIn) {
                 menuLoggedInUser.loginDetails = { ...user };
                 menuLoggedInUser.isLoggedIn = true
                 await prepareLoggedInMenu(profileMenu, menuLoggedInUser, setMenuLoggedInUser, drawerOpenStatus, filterOutLoginMenus);

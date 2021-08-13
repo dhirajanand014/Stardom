@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useContext } from 'react';
-import { View, Image, StatusBar, Dimensions, TouchableOpacity, SafeAreaView, Text } from 'react-native';
+import { View, Image, StatusBar, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
     width, miscMessage, numericConstants, jsonConstants
