@@ -42,7 +42,7 @@ export const SelectPostCategories = () => {
             await submitPost(setLoaderCallback, toAction, data, postDetails, userPosts, selectedItem,
                 uploadCallback, navigateUser, loginCallback);
         } else {
-            navigation.navigate(screens.EULA_ACCEPTANCE, { onSubmit: onSubmit, data: data })
+            navigation.navigate(screens.EULA_ACCEPTANCE, { onSubmit: onSubmit, data: data, isFrom: miscMessage.ADD_POST })
         }
     })
 

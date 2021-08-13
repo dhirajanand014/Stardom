@@ -1,26 +1,26 @@
 import { useIsFocused, useNavigation } from '@react-navigation/core';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { Image, InteractionManager, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { FlatList } from 'react-native-gesture-handler';
 import { CategoryContext } from '../App';
 import { RegisterUserIcon } from '../components/icons/RegisterUserIcon';
+import { UserSelectionOptionModal } from '../components/modals/UserSelectionOptionModal';
 import { UserVerifyModal } from '../components/modals/UserVerifyModal';
 import {
     actionButtonTextConstants, alertTextMessages, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, screens, stringConstants
 } from '../constants/Constants';
-import { prepareSDOMMenu, logoutUser, fetchUpdateLoggedInUserProfile, prepareLoggedInMenu } from '../helper/Helper';
+import { fetchUpdateLoggedInUserProfile, getLoggedInUserDetails, logoutUser, prepareLoggedInMenu, prepareSDOMMenu } from '../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';
 import { MenuRenderer } from '../views/menus/MenuRenderer';
-import { UserSelectionOptionModal } from '../components/modals/UserSelectionOptionModal';
 
 export const SDUserMenus = (drawerProps) => {
 
     const navigation = useNavigation();
     const isFocused = useIsFocused();
 
-    const { loggedInUser, setLoggedInUser, setLoaderCallback, currentPostIndexForProfileRef, drawerOpen, setDrawerOpen } = useContext(CategoryContext);
+    const { setLoaderCallback, currentPostIndexForProfileRef, drawerOpenStatus } = useContext(CategoryContext);
 
     const [profileMenu, setProfileMenu] = useState({
         userMenus: jsonConstants.EMPTY,
@@ -32,14 +32,16 @@ export const SDUserMenus = (drawerProps) => {
         privateRequestCount: numericConstants.ZERO,
         showSubmitVerifyModal: false
     });
-    const [bottomSheetState, setBottomSheetState] = useState({
-        showUserOptionModal: false
+    const [bottomSheetState, setBottomSheetState] = useState({ showUserOptionModal: false });
+    const [menuLoggedInUser, setMenuLoggedInUser] = useState({
+        loginDetails: stringConstants.EMPTY,
+        isLoggedIn: false
     });
     const handleMenuClickAction = useCallback(async (item) => {
         setLoaderCallback(true);
         switch (item.key) {
             case screens.EDIT_USER_PROFILE:
-                navigation.navigate(screens.EDIT_USER_PROFILE, { loggedInUser: loggedInUser });
+                navigation.navigate(screens.EDIT_USER_PROFILE);
                 break;
             case modalTextConstants.VIEW_PROFILE:
                 navigation.navigate(screens.PROFILE, { isFrom: modalTextConstants.VIEW_PROFILE });
@@ -73,7 +75,7 @@ export const SDUserMenus = (drawerProps) => {
 
     const logoutAction = useCallback(async () => {
         setBottomSheetState({ ...bottomSheetState, showUserOptionModal: false });
-        await logoutUser(loggedInUser.loginDetails.token, loggedInUser, setLoggedInUser);
+        await logoutUser(menuLoggedInUser.loginDetails.token, menuLoggedInUser, setMenuLoggedInUser);
         navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
         currentPostIndexForProfileRef.current = numericConstants.ZERO;
     });
@@ -87,11 +89,15 @@ export const SDUserMenus = (drawerProps) => {
                 injectMenuOptions(index, allMenuOptions, numericConstants.ZERO, miscMessage.PRIVATE_REQUEST_ACCESS, screens.USER_FOLLOWERS_FOLLOWING,
                     true, require(`../assets/menu/get_verified_icon.gif`));
             }
-
-            if (!allMenuOptions.some(menu => menu.label == miscMessage.GET_VERIFIED) && (details.user_type !== miscMessage.VERIFIED_AUTHOR
-                || details.user_type !== miscMessage.AUTHOR_UNAPPROVED)) {
-                injectMenuOptions(index, allMenuOptions, numericConstants.ZERO, miscMessage.GET_VERIFIED, actionButtonTextConstants.VERIFY_USER,
-                    true, require(`../assets/menu/get_verified_icon.gif`));
+            if (!profileMenu.showSubmitVerifyModal) {
+                if ((details.verification && details.id == details.verification.user) && allMenuOptions.some(menu => menu.label == miscMessage.GET_VERIFIED)) {
+                    const index = allMenuOptions.findIndex(menu => menu.label == miscMessage.GET_VERIFIED);
+                    allMenuOptions.splice(index, numericConstants.ONE)
+                } else if (!allMenuOptions.some(menu => menu.label == miscMessage.GET_VERIFIED) && (details.user_type !== miscMessage.VERIFIED_AUTHOR
+                    || details.user_type !== miscMessage.AUTHOR_UNAPPROVED) && (!details.verification)) {
+                    injectMenuOptions(index, allMenuOptions, numericConstants.ZERO, miscMessage.GET_VERIFIED, actionButtonTextConstants.VERIFY_USER,
+                        true, require(`../assets/menu/get_verified_icon.gif`));
+                }
             }
         }
     });
@@ -117,35 +123,38 @@ export const SDUserMenus = (drawerProps) => {
 
     useEffect(() => {
         (async () => {
-            if (loggedInUser.loginDetails.details && loggedInUser.isLoggedIn) {
-                await prepareLoggedInMenu(profileMenu, loggedInUser, setLoggedInUser, drawerOpen, filterOutLoginMenus);
+            const user = await getLoggedInUserDetails();
+            if (user.details || loggedInUser.isLoggedIn) {
+                menuLoggedInUser.loginDetails = { ...user };
+                menuLoggedInUser.isLoggedIn = true
+                await prepareLoggedInMenu(profileMenu, menuLoggedInUser, setMenuLoggedInUser, drawerOpenStatus, filterOutLoginMenus);
             } else {
                 profileMenu.userMenus = prepareSDOMMenu().filter(menu => !menu.loggedIn);
                 profileMenu.followersCount = profileMenu.followingCount = numericConstants.ZERO;
             }
-            drawerOpen && setDrawerOpen(false);
-            setProfileMenu({ ...profileMenu });
+            drawerOpenStatus.current = false;
+            InteractionManager.runAfterInteractions(() => setProfileMenu({ ...profileMenu }));
         })();
-    }, [loggedInUser.loginDetails, isFocused, drawerOpen]);
+    }, [drawerOpenStatus.current]);
 
     return (
-        <SDMenuRenderer loggedInUser={loggedInUser} profileMenu={profileMenu} navigation={navigation} handleMenuClickAction={handleMenuClickAction} setLoaderCallback={setLoaderCallback}
-            drawerProps={drawerProps} setLoggedInUser={setLoggedInUser} setProfileMenu={setProfileMenu} makeInIndia={makeInIndia} setDrawerOpen={setDrawerOpen} bottomSheetState={bottomSheetState}
+        <SDMenuRenderer menuLoggedInUser={menuLoggedInUser} profileMenu={profileMenu} navigation={navigation} handleMenuClickAction={handleMenuClickAction} setLoaderCallback={setLoaderCallback}
+            drawerProps={drawerProps} setMenuLoggedInUser={setMenuLoggedInUser} setProfileMenu={setProfileMenu} makeInIndia={makeInIndia} drawerOpenStatus={drawerOpenStatus} bottomSheetState={bottomSheetState}
             setBottomSheetState={setBottomSheetState} logoutAction={logoutAction} />
     )
 }
 
-const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, handleMenuClickAction, setLoggedInUser, setProfileMenu, setLoaderCallback, drawerProps, makeInIndia, setDrawerOpen,
+const SDMenuRenderer = React.memo(({ menuLoggedInUser, profileMenu, navigation, handleMenuClickAction, setMenuLoggedInUser, setProfileMenu, setLoaderCallback, drawerProps, makeInIndia, drawerOpenStatus,
     bottomSheetState, setBottomSheetState, logoutAction }) => {
     return <SafeAreaView style={SDGenericStyles.fill}>
         <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.justifyContentCenter]}>
-            <TouchableOpacity activeOpacity={.7} onPress={() => { setDrawerOpen(false); drawerProps.navigation.closeDrawer(); }}
+            <TouchableOpacity activeOpacity={.7} onPress={() => { drawerOpenStatus.current = false; drawerProps.navigation.closeDrawer(); }}
                 style={[SDGenericStyles.paddingRight10, SDGenericStyles.paddingTop40, SDGenericStyles.justifyContentCenter]}>
                 <Image style={userAuthStyles.menu_close_icon_style} source={require(`../assets/menu/close_icon.png`)} />
             </TouchableOpacity>
         </View>
         {
-            loggedInUser.isLoggedIn &&
+            menuLoggedInUser.isLoggedIn &&
             <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.mb25]}>
                 <View style={userMenuStyles.profileImageView}>
                     <TouchableOpacity activeOpacity={.7}>
@@ -192,7 +201,7 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
             ListFooterComponent={makeInIndia} />
 
         {
-            !loggedInUser.isLoggedIn &&
+            !menuLoggedInUser.isLoggedIn &&
             <View>
                 <View style={userAuthStyles.menuLoginButton}>
                     <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingVertical12, SDGenericStyles.borderRadius28, SDGenericStyles.backgroundColorYellow]}
@@ -212,8 +221,8 @@ const SDMenuRenderer = React.memo(({ loggedInUser, profileMenu, navigation, hand
                 </View>
             </View>
         }
-        <UserVerifyModal profileMenu={profileMenu} setProfileMenu={setProfileMenu} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
-            setLoggedInUser={setLoggedInUser} fetchUpdateLoggedInUserProfile={fetchUpdateLoggedInUserProfile} />
+        <UserVerifyModal profileMenu={profileMenu} setProfileMenu={setProfileMenu} menuLoggedInUser={menuLoggedInUser} setLoaderCallback={setLoaderCallback}
+            setMenuLoggedInUser={setMenuLoggedInUser} fetchUpdateLoggedInUserProfile={fetchUpdateLoggedInUserProfile} />
         <UserSelectionOptionModal bottomSheetState={bottomSheetState} setBottomSheetState={setBottomSheetState} textMessage={alertTextMessages.CONFIRM_LOGOUT}
             successButton={actionButtonTextConstants.YES.toUpperCase()} handleSubmit={logoutAction} />
     </SafeAreaView>;

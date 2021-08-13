@@ -141,7 +141,9 @@ export const fieldControllerName = {
     SEARCH_USERS: `searchUsers`,
     SEARCH_POSTS: `searchPosts`,
     SEARCH_FOLLOWERS: `searchFollowers`,
-    SEARCH_FOLLOWINGS: `searchFollowings`
+    SEARCH_FOLLOWINGS: `searchFollowings`,
+    FACEBOOK_LINK: `facebookLink`,
+    INSTAGRAM_LINK: `instagramLink`
 }
 
 export const keyBoardTypeConst = {
@@ -464,7 +466,9 @@ export const placeHolderText = {
     ADD_DESCRIPTION: `Enter Description`,
     VERIFY_USER_DETAILS: `Enter your social media contact details`,
     SELECT_GENDER: `Select a gender`,
-    SEARCH_USERS: `Search Users`
+    SEARCH_USERS: `Search Users`,
+    FACEBOOK_LINK: `Enter your FaceBook Profile link`,
+    INSTAGRAM_LINK: `Enter your Instagram Profile link`
 }
 
 export const numericConstants = {
@@ -614,6 +618,7 @@ export const errorMessages = {
     COULD_NOT_FETCH_PHOTOS_FROM_GALLERY: `Could not fetch photos from gallery`,
     CONTACT_US_2: `, if this issue persists`,
     COULD_NOT_PERFORM_ACTION: `Could not perform action`,
+    COULD_NOT_RENDER_MENUS: `Could not render menus in useEffect`,
     CANNOT_REQUEST_PERMISSION_TO_USER: `Could not provide permission to user`,
     COULD_NOT_UPDATE_DEVICE_ID: `Could not update device id for`,
     USER_DENIED_NOTIFICATION: `Permission denied by user`,
@@ -674,6 +679,7 @@ export const errorMessages = {
     COULD_NOT_UPDATE_USER_BIO: `Could not update user bio`,
     COULD_NOT_SUBMIT_VERIFICATION: `Could not submit your request for verification.`,
     CANNOT_FETCH_CATEGORIES_FROM_STORAGE: 'Cannot fetch the categoryIds from the storage',
+    CANNOT_FETCH_POST_ID_VALUE: 'Cannot fetch post id value',
     CANNOT_SET_INCREASED_COUNT_TO_DATABASE: `Cannot set the increased count to the database`,
     COULD_NOT_FILTER_OUT_PRIVATE_POST_FOR_LOGGED_IN_USER: `Could not filter posts for logged in user in Glance screen`,
     CANNOT_FETCH_REPORT_ABUSES: `Cannot fetch report abuses`,
@@ -738,6 +744,7 @@ export const miscMessage = {
     ACCEPTED_EULA: `acceptedEULA`,
     SINGLE_SELECT: `Single select`,
     SELECT_ALL: `Select All`,
+    USER_VERIFY: `User Verification`,
     BY_TEXT: `by`,
     UNSELECT_ALL: `Unselect All`,
     FROM_ON_NOTIFICATION: `fromOnNotification`,
@@ -897,10 +904,12 @@ export const requestConstants = {
 export const keyChainConstansts = {
     LOGGED_IN_USER: `loggedInUser`,
     ACCOUNT_STATUS: `accountStatus`,
+    POST_ID_KEY: `postIdKey`,
     SAVE_CATEGORY_ID: `save_category_id`,
     SAVE_CATEGORY_BUTTON_TYPE: `save_category_button_type`,
     SAVE_POST_COUNTS: `save_post_counts`,
-    SAVE_SELECTED_REPORT: `save_selected_report`
+    SAVE_SELECTED_REPORT: `save_selected_report`,
+    POST_ID: `postId`
 }
 
 export const defaultPickerValue = {

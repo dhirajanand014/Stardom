@@ -12,7 +12,7 @@ import { SDGenericStyles, userAuthStyles, colors, glancePostStyles, userMenuStyl
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { RegisterUserIcon } from '../../components/icons/RegisterUserIcon';
 import Animated from 'react-native-reanimated';
-import { showSnackBar, redirectUserToGlance, saveRegistrationStatus, userPostAction, fetchUpdateLoggedInUserProfile } from '../../helper/Helper';
+import { showSnackBar, redirectUserToGlance, saveRegistrationStatus, userPostAction, fetchUpdateLoggedInUserProfile, getLoggedInUserDetails } from '../../helper/Helper';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { CategoryContext } from '../../App';
 import { LoginSecretIcon } from '../../components/icons/LoginSecretIcon';
@@ -20,12 +20,19 @@ import FastImage from 'react-native-fast-image';
 import { BackButton } from '../../components/button/BackButton';
 import { SDMultiTextInputLengthText } from '../../components/texts/SDMultiTextInputLengthText';
 import { AddPostSelectionModal } from '../../components/modals/AddPostSelectionModal';
+import { useIsFocused } from '@react-navigation/native';
 
 export const EditUserProfile = () => {
     const { control, formState, handleSubmit, reset, watch } = useForm();
 
-    const { loggedInUser, setLoggedInUser, loader, setLoaderCallback } = useContext(CategoryContext);
+    const { loader, setLoaderCallback } = useContext(CategoryContext);
+    const isFocused = useIsFocused();
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
+
+    const [editProfileLoggedInUser, setEditProfileLoggedInUser] = useState({
+        loginDetails: stringConstants.EMPTY,
+        isLoggedIn: false
+    })
 
     const [showSelection, setShowSelection] = useState(false);
     const route = useRoute();
@@ -51,10 +58,10 @@ export const EditUserProfile = () => {
     const onSubmit = async (data) => {
         setLoaderCallback(true, alertTextMessages.UPDATING_DETAILS);
         data.imagePath = profileDetails.profile_picture;
-        const registrationUpdated = await userPostAction(requestConstants.EDIT, data, loggedInUser.loginDetails.token,
+        const registrationUpdated = await userPostAction(requestConstants.EDIT, data, editProfileLoggedInUser.loginDetails.token,
             uploadCallback);
         if (registrationUpdated) {
-            await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
+            await fetchUpdateLoggedInUserProfile(editProfileLoggedInUser, setEditProfileLoggedInUser, true);
             const initialCategories = await redirectUserToGlance();
             showSnackBar(alertTextMessages.USER_DETAILS_ADDED_SUCCESSFULLY, true);
             setLoaderCallback(true, alertTextMessages.DETAILS_UPDATED_SUCCESSFULLY);
@@ -66,16 +73,23 @@ export const EditUserProfile = () => {
     }
 
     useEffect(() => {
-        setLoaderCallback(true);
-        const details = JSON.parse(loggedInUser.loginDetails.details);
-        if (imageValue) {
-            details.profile_picture = imageValue;
-        }
-        setProfileDetails(details);
-        reset({ ...details });
-
-        setLoaderCallback(false);
-    }, [jsonConstants.EMPTY, imageValue]);
+        (async () => {
+            setLoaderCallback(true);
+            const user = await getLoggedInUserDetails();
+            if (user.details || editProfileLoggedInUser.isLoggedIn) {
+                editProfileLoggedInUser.loginDetails = { ...user };
+                editProfileLoggedInUser.isLoggedIn = true
+                const details = JSON.parse(editProfileLoggedInUser.loginDetails.details);
+                if (imageValue) {
+                    details.profile_picture = imageValue;
+                }
+                setProfileDetails(details);
+                setEditProfileLoggedInUser({ ...editProfileLoggedInUser });
+                reset({ ...details });
+            }
+            setLoaderCallback(false);
+        })();
+    }, [isFocused, imageValue]);
 
     const bioInput = watch(fieldControllerName.ADD_USER_BIO);
 

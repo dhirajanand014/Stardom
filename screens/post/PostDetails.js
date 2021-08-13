@@ -50,6 +50,7 @@ export const PostDetails = forwardRef((props, ref) => {
     });
 
     const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
+    const post_external_link = require('../../assets/post_external_link_icon.png');
 
     useImperativeHandle(ref,
         () => ({
@@ -133,19 +134,16 @@ export const PostDetails = forwardRef((props, ref) => {
             <View key={`1_${postDetailsState.currentPostIndex}_post_details`}>
                 <View style={glancePostStyles.innerContainer}>
                     <Animated.View style={[glancePostStyles.smallButtonsContainer, postDetailsState.animationVisible && postTypeSpringStyle]}>
+                        <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost && postDetailsState.currentPost.postTitle}</Text>
                         {
                             postDetailsState.currentPost && postDetailsState.currentPost.postLink &&
                             <TouchableOpacity activeOpacity={.5} onPress={() => Linking.openURL(postDetailsState.currentPost.postLink)}>
-                                <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost && postDetailsState.currentPost.postTitle}</Text>
-                            </TouchableOpacity> || <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost && postDetailsState.currentPost.postTitle}</Text>
+                                <Animated.Image style={[glancePostStyles.icon_external_link]} source={post_external_link} />
+                            </TouchableOpacity>
                         }
                     </Animated.View>
                     <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.rowFlexDirection, SDGenericStyles.marginBottom8,
                     postDetailsState.animationVisible && postDescriptionSpringStyle]}>
-                        <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.profileName && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
-                        SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft9]}>
-                            {postDetailsState.currentPost && postDetailsState.currentPost.profileName && postDetailsState.currentPost.profileName.toUpperCase()}
-                        </Text>
                         <View>
                             <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter]}>
                                 <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.user.name && glancePostStyles.postProfileNameBy, SDGenericStyles.textColorWhite,
@@ -163,12 +161,15 @@ export const PostDetails = forwardRef((props, ref) => {
                                     </View>
                                 }
                             </View>
-                            <View style={SDGenericStyles.mt2}>
-                                <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoRegular,
-                                SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>{
-                                        postDetailsState.currentPost && postDetailsState.currentPost.profileName && postDetailsState.currentPost.postCategoriesIn &&
-                                        stringConstants.PIPELINE_JOIN.concat(postDetailsState.currentPost && postDetailsState.currentPost.postCategoriesIn) ||
-                                        postDetailsState.currentPost && postDetailsState.currentPost.postCategoriesIn}
+                            <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.mt2]}>
+                                <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.profile.profile_name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
+                                SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft10]}>
+                                    {postDetailsState.currentPost && postDetailsState.currentPost.profile && postDetailsState.currentPost.profile.profile_name.toUpperCase()}
+                                </Text>
+                                <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft10]}>{
+                                    postDetailsState.currentPost && postDetailsState.currentPost.profile && postDetailsState.currentPost.postCategoriesIn &&
+                                    stringConstants.PIPELINE_JOIN.concat(postDetailsState.currentPost && postDetailsState.currentPost.postCategoriesIn) ||
+                                    postDetailsState.currentPost && postDetailsState.currentPost.postCategoriesIn}
                                 </Text>
                             </View>
                         </View>
@@ -183,7 +184,7 @@ export const PostDetails = forwardRef((props, ref) => {
             </View>
             <ActionButton buttonColor={colorConstants.TRANSPARENT_BUTTON} backgroundTappable={true} size={numericConstants.TWENTY_EIGHT} useNativeFeedback={false} degrees={numericConstants.ZERO}
                 verticalOrientation={postitionStringConstants.DOWN} position={postitionStringConstants.RIGHT} offsetX={numericConstants.TEN} offsetY={numericConstants.THIRTY_EIGHT} hideShadow={true}
-                autoInactive={false} spacing={numericConstants.FORTY_TWO} active={postDetailsState.switchEnabled} renderIcon={(isActive) =>
+                autoInactive={false} spacing={numericConstants.THIRTY_EIGHT} active={postDetailsState.switchEnabled} renderIcon={(isActive) =>
                     <Switch trackColor={{ false: colorConstants.GREY, true: colorConstants.YELLOW }}
                         thumbColor={isActive ? colorConstants.WHITE : colorConstants.WHITE}
                         style={{ transform: [{ scaleX: .85 }, { scaleY: .85 }] }} value={postDetailsState.switchEnabled}
@@ -202,7 +203,7 @@ export const PostDetails = forwardRef((props, ref) => {
                         <Image style={glancePostStyles.icon_post_like} source={postDetailsState.currentPost.likeAdded &&
                             post_like_selected || post_like} />
                     </View>
-                    <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
                     SDGenericStyles.textCenterAlign, SDGenericStyles.top6]}>{postDetailsState.currentPost && postDetailsState.currentPost.postLikes}</Text>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={() =>
@@ -210,7 +211,7 @@ export const PostDetails = forwardRef((props, ref) => {
                     <View style={glancePostStyles.setWallPaperBackgroundRoundColor}>
                         <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
                     </View>
-                    <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
+                    <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
                     SDGenericStyles.textCenterAlign, SDGenericStyles.top8, SDGenericStyles.marginRight4]}>
                         {postDetailsState.currentPost && postDetailsState.currentPost.postWallpapers}</Text>
                 </ActionButton.Item>
@@ -235,7 +236,7 @@ export const PostDetails = forwardRef((props, ref) => {
                         <Image style={glancePostStyles.icon_post_report_abuse} source={reportAbuseIcon} />
                     </View>
                     <Text style={[SDGenericStyles.ft7, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                    SDGenericStyles.textCenterAlign, SDGenericStyles.top6]}>{miscMessage.REPORT_ABUSE_TEXT}</Text>
+                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{miscMessage.REPORT_ABUSE_TEXT}</Text>
                 </ActionButton.Item>
             </ActionButton>
             <PostDescriptionModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}

@@ -21,6 +21,10 @@ export const SDGenericStyles = StyleSheet.create({
         width: numericConstants.TWENTY_EIGHT,
         height: numericConstants.TWENTY_EIGHT
     },
+    iconSocialMedia: {
+        width: numericConstants.FORTY_FIVE,
+        height: numericConstants.FORTY_FIVE
+    },
     menuEditIcon: {
         width: numericConstants.TWENTY_ONE,
         height: numericConstants.TWENTY_ONE
@@ -609,6 +613,9 @@ export const SDGenericStyles = StyleSheet.create({
     ml_3: {
         marginLeft: 3
     },
+    ml_6: {
+        marginLeft: 6
+    },
     ml_8: {
         marginLeft: 8
     },
@@ -694,7 +701,7 @@ export const glancePostStyles = StyleSheet.create({
     },
     titleName: {
         fontSize: 18,
-        fontFamily: 'stardom_roboto_regular',
+        fontFamily: 'wallpiper_roman_font',
         display: 'flex',
         color: 'white',
     },
@@ -788,20 +795,20 @@ export const glancePostStyles = StyleSheet.create({
         fontSize: 15
     },
     icon_post_description: {
-        width: 30,
-        height: 30
+        width: 26,
+        height: 26
     },
     icon_post_report_abuse: {
-        width: 30,
-        height: 30
+        width: 26,
+        height: 26
     },
     icon_post_details: {
-        width: 30,
-        height: 30,
+        width: 26,
+        height: 26,
     },
     icon_post_share: {
-        width: 30,
-        height: 30
+        width: 26,
+        height: 26
     },
     icon_external_link: {
         width: 25,
@@ -1492,7 +1499,6 @@ export const userAuthStyles = StyleSheet.create({
     },
     textInputStyle: {
         flex: 1,
-        paddingHorizontal: 12,
         paddingVertical: 12,
         paddingLeft: 3,
         textAlign: 'left'
@@ -1698,13 +1704,13 @@ export const userMenuStyles = {
         borderRadius: 58
     },
     userVerifyModalView: {
-        margin: 250,
+        margin: 150,
         borderRadius: 20,
         paddingTop: 20,
         paddingEnd: 45,
         paddingStart: 45,
         width: width / 1.05,
-        height: 275,
+        height: 450,
         elevation: 5
     },
     userSelectionOptionModalView: {
@@ -1726,15 +1732,19 @@ export const userMenuStyles = {
         fontSize: 16,
         color: '#05375a'
     },
-    verifyUserCancelText: {
-        textAlign: 'center',
-        textDecorationLine: 'underline',
-    },
     verifyUserSubmitButton: {
         borderRadius: 25,
         paddingHorizontal: 20,
         paddingVertical: 10,
         width: 120,
+        elevation: 3,
+        backgroundColor: '#eabe05'
+    },
+    verifyUserCancelButton: {
+        borderRadius: 25,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        width: 100,
         elevation: 3,
         backgroundColor: '#eabe05'
     },

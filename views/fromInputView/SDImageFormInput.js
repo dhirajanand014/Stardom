@@ -38,6 +38,6 @@ export const SDImageFormInput = props => {
                 </View> ||
                 <Text style={[userAuthStyles.formInputError, SDGenericStyles.fontFamilyRobotoMedium]}>{props.formState.errors[props.inputName]?.message}</Text>
             }
-        </KeyboardAvoidingView >
+        </KeyboardAvoidingView>
     );
 }

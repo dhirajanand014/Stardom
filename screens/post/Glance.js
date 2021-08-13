@@ -24,7 +24,7 @@ const category_selection = require('../../assets/category_selection_icon.png');
 export const Glance = ({ navigation }) => {
 
     const { postIdFromNotification, categoryIdFromNotification, sdomDatastate, setSdomDatastate, currentPostIndexForProfileRef,
-        optionsState, setOptionsState, loggedInUser, setDrawerOpen, postDetailsRef } = useContext(CategoryContext);
+        optionsState, setOptionsState, drawerOpenStatus, postDetailsRef } = useContext(CategoryContext);
     const viewPagerRef = useRef(null);
     const isFromNotification = useRef(false);
     const isFocused = useIsFocused();
@@ -42,8 +42,7 @@ export const Glance = ({ navigation }) => {
 
     useEffect(() => {
         (async () => {
-            await fetchPostsAndSaveToState(sdomDatastate, setSdomDatastate, optionsState, setOptionsState,
-                categoryIdFromNotification, loggedInUser);
+            await fetchPostsAndSaveToState(sdomDatastate, setSdomDatastate, optionsState, setOptionsState, categoryIdFromNotification);
             postDetailsRef?.current?.setScrollOffset(height);
         })();
     }, jsonConstants.EMPTY);
@@ -73,12 +72,12 @@ export const Glance = ({ navigation }) => {
         <GlanceComponent sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
             currentPostIndexForProfileRef={currentPostIndexForProfileRef} height={height} postIdFromNotification={postId} navigation={navigation}
-            setSdomDatastate={setSdomDatastate} isFromNotification={isFromNotification} setDrawerOpen={setDrawerOpen} loadMinimalLoaderView={loadMinimalLoaderView} />
+            setSdomDatastate={setSdomDatastate} isFromNotification={isFromNotification} drawerOpenStatus={drawerOpenStatus} loadMinimalLoaderView={loadMinimalLoaderView} />
     )
 }
 
 const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRef, optionsState, setOptionsState, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x, currentPostIndexForProfileRef, height,
-    postIdFromNotification, navigation, isFromNotification, setDrawerOpen, loadMinimalLoaderView }) => {
+    postIdFromNotification, navigation, isFromNotification, drawerOpenStatus, loadMinimalLoaderView }) => {
     return <SafeAreaView style={SDGenericStyles.fill}>
         {
             sdomDatastate.posts && sdomDatastate.posts.length &&
@@ -130,7 +129,11 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                     <SDLoaderLogo />
                 </View>
             </View>}
-        <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => { setDrawerOpen(true); navigation.openDrawer(); }}>
+        <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => {
+            drawerOpenStatus.current = true;
+            postDetailsRef?.current?.setPostAnimationVisible(false);
+            navigation.openDrawer();
+        }}>
             <Image source={category_selection} style={glancePostStyles.category_selection_image} />
         </TouchableOpacity>
     </SafeAreaView>;

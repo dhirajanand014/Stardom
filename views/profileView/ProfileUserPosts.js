@@ -2,18 +2,19 @@ import React from 'react';
 import { ImageBackground, Text, TouchableOpacity, View, Image } from "react-native";
 import FastImage from "react-native-fast-image";
 import Shimmer from "react-native-shimmer";
-import { fieldControllerName, height, miscMessage, numericConstants, screens, width } from "../../constants/Constants"
+import { fieldControllerName, height, keyChainConstansts, miscMessage, numericConstants, screens, width } from "../../constants/Constants"
+import { saveDetailsToKeyChain } from '../../helper/Helper';
 import { flatListItemStyles, SDGenericStyles } from "../../styles/Styles";
 
-export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isSameUser, navigation, postIdRef }) => {
+export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isSameUser, navigation }) => {
 
     const allowPrivate = hasPrivateAccess && item.postType == fieldControllerName.POST_TYPE_PRIVATE;
     return (
         <View key={index}>
-            <TouchableOpacity activeOpacity={.7} onPress={() => {
+            <TouchableOpacity activeOpacity={.7} onPress={async () => {
                 if (item.postType == fieldControllerName.POST_TYPE_PUBLIC) {
-                    postIdRef.current = item.id;
-                    navigation.navigate(screens.VIEW_USER_POSTS, { userId: item.user.id, postId: postIdRef });
+                    await saveDetailsToKeyChain(keyChainConstansts.POST_ID_KEY, keyChainConstansts.POST_ID, JSON.stringify(item));
+                    navigation.navigate(screens.VIEW_USER_POSTS, { userId: item.user.id });
                 }
             }}>
                 <View key={index} style={[{

@@ -16,9 +16,10 @@ export const EULAAcceptance = () => {
     const route = useRoute();
     const onSubmit = route.params?.onSubmit;
     const data = route.params?.data;
+    const isFrom = route.params?.isFrom
 
-    const saveEULAAcceptance = async (acceptedEULA) => {
-        await saveEULA(acceptedEULA);
+    const saveEULAAcceptance = async (acceptedEULA, isFrom) => {
+        isFrom == miscMessage.ADD_POST && await saveEULA(acceptedEULA);
         await onSubmit(data);
     }
 
@@ -63,7 +64,7 @@ export const EULAAcceptance = () => {
                 <Text style={[SDGenericStyles.mb25, SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoBold]}>{EULATexts.P19_T2}</Text>
             </ScrollView>
             <View style={SDGenericStyles.paddingBottom10}>
-                <TouchableOpacity activeOpacity={.7} disabled={!acceptedEULA} onPress={async () => await saveEULAAcceptance(acceptedEULA)}
+                <TouchableOpacity activeOpacity={.7} disabled={!acceptedEULA} onPress={async () => await saveEULAAcceptance(acceptedEULA, isFrom)}
                     style={acceptedEULA ? glancePostStyles.eulaButton : glancePostStyles.eulaButtonDisabled}>
                     <Text style={[SDGenericStyles.ft18, SDGenericStyles.colorWhite]}>{actionButtonTextConstants.PROCEED}</Text>
                 </TouchableOpacity>

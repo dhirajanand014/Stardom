@@ -35,6 +35,7 @@ export default function App({ navigationRef }) {
   const postDetailsRef = useRef(null);
   const postIdFromNotification = useRef(null);
   const viewPagerPostsRef = useRef(null);
+  const drawerOpenStatus = useRef(false);
   const currentPostIndexForProfileRef = useRef(numericConstants.ZERO);
 
   const [downloadProgressState, setDownloadProgressState] = useState({
@@ -46,8 +47,6 @@ export default function App({ navigationRef }) {
     isConnected: false,
     renderModal: false
   });
-
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [sdomDatastate, setSdomDatastate] = useState(jsonConstants.EMPTY);
   const [optionsState, setOptionsState] = useState({
@@ -137,7 +136,7 @@ export default function App({ navigationRef }) {
         optionsState, setOptionsState, profileDetail, setProfileDetail,
         currentPostIndexForProfileRef, loader, setLoaderCallback,
         downloadProgressState, setDownloadProgressState, viewPagerPostsRef,
-        postDetailsRef, drawerOpen, setDrawerOpen
+        postDetailsRef, drawerOpenStatus
       }}>
         <TourGuideProvider androidStatusBarVisible={true}
           backdropColor={navigationRef && navigationRef.initialCategorySelection == screens.INTRO && `rgba(145, 63, 146, 0.6)`}>

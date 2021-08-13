@@ -188,7 +188,7 @@ const RenderProfileDetails = React.memo(({ profile, profileDetail, isDisabled, s
                                 setLoaderCallback(true, profileDetail.isFollowing && alertTextMessages.UNFOLLOWING_USER || alertTextMessages.FOLLOWING_USER);
                                 await handleUserPostAction(profileDetail.isFollowing && actionButtonTextConstants.UNFOLLOW || actionButtonTextConstants.FOLLOW,
                                     profile, sdomDatastate, setSdomDatastate, loggedInUser, profileDetail, setProfileDetail, navigation, false);
-                                await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
+                                setTimeout(async () => await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail), numericConstants.ONE_HUNDRED);
                                 setLoaderCallback(false);
                             }} disabled={isDisabled}>
                                 <Text style={[SDGenericStyles.textCenterAlign, SDGenericStyles.justifyContentCenter,

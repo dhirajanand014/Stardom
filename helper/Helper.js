@@ -64,9 +64,9 @@ export const fetchAndUpdateCategoryState = async (category, setCategory) => {
 }
 
 export const fetchPostsAndSaveToState = async (sdomDatastate, setSdomDatastate, optionsState,
-    setOptionsState, categoryIdFromNotification, loggedInUser) => {
+    setOptionsState, categoryIdFromNotification) => {
     try {
-        const categoryPostsData = await retrievePostData(categoryIdFromNotification, loggedInUser);
+        const categoryPostsData = await retrievePostData(categoryIdFromNotification);
         setSdomDatastate({ ...sdomDatastate, posts: categoryPostsData });
         setOptionsState({ ...optionsState, showSearch: true });
     } catch (error) {
@@ -79,6 +79,14 @@ export const fetchPostsAndSaveToState = async (sdomDatastate, setSdomDatastate, 
 export const getSelectedCategoryIdsFromStorage = async () => {
     try {
         return await getKeyChainDetails(keyChainConstansts.SAVE_CATEGORY_ID);
+    } catch (error) {
+        console.error(errorMessages.CANNOT_FETCH_CATEGORIES_FROM_STORAGE, error);
+    }
+}
+
+export const getPostIdFromStorage = async () => {
+    try {
+        return await getKeyChainDetails(keyChainConstansts.POST_ID_KEY);
     } catch (error) {
         console.error(errorMessages.CANNOT_FETCH_CATEGORIES_FROM_STORAGE, error);
     }
@@ -466,8 +474,7 @@ export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, 
         if ((isFromNotification && isFromNotification.current) || (!postDetailsRef?.current?.newPostViewed
             && postIdFromNotification?.current && viewPagerRef?.current)) {
             const index = posts.findIndex(post => post.id == postIdFromNotification.current) || numericConstants.ZERO;
-            isFromNotification && isFromNotification.current && viewPagerRef.current.scrollTo(numericConstants.ONE)
-                || setTimeout(() => viewPagerRef.current.scrollBy(index, false), numericConstants.FOUR_HUNDRED_ONE);
+            isFromNotification && isFromNotification.current && viewPagerRef.current.scrollTo(numericConstants.ONE);
             postDetailsRef?.current?.setPostIndex(isFromNotification && numericConstants.ZERO || index);
             postDetailsRef?.current?.setNewPostViewed(true);
             postIdFromNotification.current = null;
@@ -1207,7 +1214,7 @@ export const fetchUpdateLoggedInUserProfile = async (loggedInUser, setLoggedInUs
                 const JSONDetails = JSON.stringify(responseData);
                 await saveDetailsToKeyChain(keyChainConstansts.LOGGED_IN_USER,
                     `${user.phoneNumber}${stringConstants.SEMI_COLON}${user.token}`, JSONDetails);
-                await fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, false);
+                fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, false);
             } else {
                 console.error(errorMessages.COULD_NOT_FETCH_UPDATED_USER_PROFILE, error);
             }
@@ -1647,11 +1654,18 @@ export const userPostAction = async (request, data, token, uploadProgressCallbac
         switch (request) {
             case requestConstants.USER_VERIFY:
                 url = `${urlConstants.userSaveAction}${stringConstants.SLASH}${requestConstants.USER_VERIFY}`
-                requestJSON = JSON.stringify({ details: data.verifyUserDetails });
+                requestJSON = JSON.stringify({
+                    facebook_link: data.facebookLink,
+                    instagram_link: data.instagramLink,
+                    details: data.verifyUserDetails
+                });
                 response = await axiosPostWithHeadersAndToken(url, requestJSON, token);
                 break;
             case requestConstants.EDIT:
                 url = `${urlConstants.userSaveAction}${stringConstants.SLASH}${requestConstants.EDIT}`
+                if (data.bio == null)
+                    data.bio = stringConstants.EMPTY
+
                 const formData = new FormData();
                 formData.append(requestConstants.NAME, data.name);
                 formData.append(requestConstants.EMAIL_ID, data.email);
@@ -1917,10 +1931,10 @@ export const saveEULA = async (acceptedEULA) => {
     }
 }
 
-export const prepareLoggedInMenu = async (profileMenu, loggedInUser, setLoggedInUser, drawerOpen, filterOutLoginMenus) => {
-    drawerOpen && fetchUpdateLoggedInUserProfile(loggedInUser, setLoggedInUser, true);
+export const prepareLoggedInMenu = async (profileMenu, menuLoggedInUser, setMenuLoggedInUser, drawerOpenStatus, filterOutLoginMenus) => {
+    drawerOpenStatus.current && fetchUpdateLoggedInUserProfile(menuLoggedInUser, setMenuLoggedInUser, true);
     profileMenu.userMenus = prepareSDOMMenu();
-    const details = JSON.parse(loggedInUser.loginDetails.details);
+    const details = JSON.parse(menuLoggedInUser.loginDetails.details);
     const counts = await fetchProfilePostsCounts(details.id);
     filterOutLoginMenus(profileMenu.userMenus, details);
     profileMenu.profileImage = details.profile_picture;

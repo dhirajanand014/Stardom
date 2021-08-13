@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StatusBar, Dimensions, Image } from 'react-native';
 import {
-    width, miscMessage, numericConstants, jsonConstants, stringConstants
+    width, miscMessage, numericConstants, jsonConstants, stringConstants, keyChainConstansts
 } from '../../constants/Constants';
 import {
-    fetchUserProfilePosts, onSwiperScrollEnd,
+    fetchUserProfilePosts, getPostIdFromStorage, onSwiperScrollEnd,
     resetAnimatePostTextDetails, setImageLoadError
 } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import Animated, { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import Swiper from 'react-native-swiper';
+import * as Keychain from 'react-native-keychain';
 import { SwipeItem } from '../../components/swiper/SwipeItem';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { ViewUserPostDetails } from './ViewUserPostDetails';
@@ -81,8 +82,14 @@ const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOp
             posts && posts.length &&
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
                 <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
-                    bounces loadMinimal loadMinimalSize={numericConstants.TWENTY_FIVE} loadMinimalLoader={loadMinimalLoaderView(height)}
-                    onMomentumScrollBegin={(event) => {
+                    bounces loadMinimal loadMinimalSize={numericConstants.TWENTY_FIVE} loadMinimalLoader={loadMinimalLoaderView(height)} onContentSizeChange={async () => {
+                        const postIdStorage = await getPostIdFromStorage();
+                        if (postIdStorage) {
+                            const index = posts.findIndex(post => post.id == JSON.parse(postIdStorage.password).id)
+                            viewPagerRef.current.scrollBy(index, false);
+                            await Keychain.resetGenericPassword({ service: keyChainConstansts.POST_ID_KEY });
+                        }
+                    }} onMomentumScrollBegin={(event) => {
                         const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
                         if ((index == numericConstants.ZERO && ((postDetailsRef?.current?.scrollOffset == height && postDetailsRef?.current?.scrollOffset > event.nativeEvent.contentOffset.y)
                             || postDetailsRef?.current?.scrollOffset > event.nativeEvent.contentOffset.y)) || index == posts.length - numericConstants.ONE

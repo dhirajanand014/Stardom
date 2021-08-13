@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { actionButtonTextConstants, numericConstants } from "../../constants/Constants";
 import { handleUserPostAction } from "../../helper/Helper";
 import { ProfileUserPosts } from "../../views/profileView/ProfileUserPosts"
@@ -8,13 +8,12 @@ import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import { useNavigation } from '@react-navigation/core';
 
 export const ProfilePosts = props => {
-    const postIdRef = useRef(null);
     const navigation = useNavigation();
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backgroundColorWhite]}>
-            <FlatList data={props.profileDetail.userPosts} numColumns={numericConstants.THREE}
+            <FlatList contentContainerStyle={SDGenericStyles.bottom18} data={props.profileDetail.userPosts} numColumns={numericConstants.THREE} initialNumToRender={numericConstants.THIRTY}
                 keyExtractor={(item) => item.id} renderItem={({ item, index }) => <ProfileUserPosts item={item} index={index} navigation={navigation}
-                    loggedInUserHasPrivateAccess={props.loggedInUserHasPrivateAccess} isSameUser={props.profileDetail.isSameUser} postIdRef={postIdRef} />} />
+                    loggedInUserHasPrivateAccess={props.loggedInUserHasPrivateAccess} isSameUser={props.profileDetail.isSameUser} />} />
             {
                 !props.profileDetail.isSameUser &&
                 <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingBottom10, SDGenericStyles.paddingTop5, SDGenericStyles.elevation8]}>
