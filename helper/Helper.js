@@ -88,7 +88,7 @@ export const getPostIdFromStorage = async () => {
     try {
         return await getKeyChainDetails(keyChainConstansts.POST_ID_KEY);
     } catch (error) {
-        console.error(errorMessages.CANNOT_FETCH_CATEGORIES_FROM_STORAGE, error);
+        console.error(errorMessages.CANNOT_FETCH_POST_ID_VALUE, error);
     }
 }
 

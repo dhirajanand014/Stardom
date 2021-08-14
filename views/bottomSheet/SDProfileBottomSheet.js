@@ -72,7 +72,8 @@ export const SDProfileBottomSheet = props => {
         return (
             <View style={[glancePostStyles.bottomSheetHeader, SDGenericStyles.backgroundColorWhite]}>
                 <View style={SDGenericStyles.alignItemsCenter}>
-                    <View style={[glancePostStyles.panelHandle, SDGenericStyles.backGroundColorGray]} />
+                    <Image source={props.expanded && require(`../../assets/profile_posts_arrow_down_icon.png`) ||
+                        require(`../../assets/profile_posts_arrow_up_icon.png`)} style={SDGenericStyles.menuEditIcon} />
                 </View>
             </View>
         )

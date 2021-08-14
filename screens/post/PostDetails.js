@@ -240,8 +240,7 @@ export const PostDetails = forwardRef((props, ref) => {
             </ActionButton>
             <PostDescriptionModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
                 setPostDetailsState={setPostDetailsState} />
-            <PostReportAbuseModal optionsState={optionsState} postDetailsState={postDetailsState}
-                setPostDetailsState={setPostDetailsState} />
+            <PostReportAbuseModal postDetailsState={postDetailsState} setPostDetailsState={setPostDetailsState} />
             <SDWallpaperModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
                 setPostDetailsState={setPostDetailsState} />
             {

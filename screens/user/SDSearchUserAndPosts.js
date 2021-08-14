@@ -93,12 +93,15 @@ export const SDSearchUserAndPosts = () => {
         )
     }
 
-    const actionCallBack = useCallback(async (action, index, userItem) => {
+    const actionCallBack = useCallback(async (action, postItem, userItem) => {
         switch (action) {
             case screens.POSTS_TAB:
                 postDetailsRef?.current?.setPostAnimationVisible(false);
                 navigation.navigate(screens.GLANCE);
-                InteractionManager.runAfterInteractions(() => viewPagerPostsRef.current?.scrollBy(index - viewPagerPostsRef.current?.state.index, false));
+                const index = userPosts.findIndex(post => post.id == postItem.id);
+                setTimeout(() => {
+                    viewPagerPostsRef.current?.scrollBy(index - viewPagerPostsRef.current?.state.index, false)
+                }, numericConstants.TWO_HUNDRED);
                 break;
             case screens.USERS_TAB:
                 let item = { ...userItem, profile_image: userItem.profile_picture };
@@ -117,7 +120,7 @@ export const SDSearchUserAndPosts = () => {
     const RenderPostSearchContent = props => {
         return <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingVertical12,
         SDGenericStyles.marginBottom15]} onPress={() =>
-            props.actionCallBack(screens.POSTS_TAB, props.index)}>
+            props.actionCallBack(screens.POSTS_TAB, props.item)}>
             <FastImage source={{
                 uri: props.item.postImage, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
             }} style={[userMenuStyles.followerFollowingImageStyle, SDGenericStyles.alignItemsCenter, SDGenericStyles.justifyContentCenter,

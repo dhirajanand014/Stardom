@@ -15,7 +15,7 @@ export const SDCameraView = () => {
     const navigation = useNavigation();
 
     const route = useRoute();
-    const isFrom = route.params?.isFrom || stringConstants.EMPTY;
+    const isFrom = route.params?.isFrom || screens.CAMERA;
 
     const [cameraState, setCameraState] = useState({
         type: RNCamera.Constants.Type.back,

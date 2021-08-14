@@ -49,7 +49,7 @@ export const SDSplashScreen = () => {
     return (
         <SafeAreaView style={[SDGenericStyles.fill, SDGenericStyles.justifyContentCenter, SDGenericStyles.alignItemsCenter, SDGenericStyles.backGroundColorBlack]}>
             <ImageBackground style={[SDGenericStyles.justifyItemsEnd, SDGenericStyles.paddingBottom150,
-            { height: height, width: width }]} source={require(`../assets/splash_screen_image.gif`)} >
+            { height: height, width: width }]} source={require(`../assets/splash_screen_image.png`)} >
                 <Text style={[SDGenericStyles.ft18, SDGenericStyles.textCenterAlign, SDGenericStyles.fontFamilyRobotoRegular,
                 SDGenericStyles.textColorWhite, SDGenericStyles.paddingVertical10]}>{miscMessage.LOADING}</Text>
                 <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.mt5]}>

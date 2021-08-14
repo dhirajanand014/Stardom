@@ -36,6 +36,8 @@ export const SDCameraImagePreview = () => {
                     navigation.navigate(screens.ADD_POST_DETAILS, { toAction: miscMessage.UPDATE });
                 } else if (isFrom == screens.POSTS) {
                     navigation.navigate(screens.ADD_POST_DETAILS, { toAction: miscMessage.CREATE });
+                } else if (isFrom == screens.CAMERA) {
+                    navigation.navigate(screens.ADD_POST_DETAILS, { toAction: miscMessage.CREATE });
                 } else {
                     navigation.navigate(screens.ADD_POST_DETAILS);
                 }

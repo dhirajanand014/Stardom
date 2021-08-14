@@ -29,6 +29,10 @@ export const SDGenericStyles = StyleSheet.create({
         width: numericConstants.TWENTY_ONE,
         height: numericConstants.TWENTY_ONE
     },
+    loaderIcon: {
+        width: numericConstants.SIXTEEN,
+        height: numericConstants.SIXTEEN
+    },
     lockUnlockIconStyle: {
         width: numericConstants.TWENTY,
         height: numericConstants.TWENTY
@@ -1085,13 +1089,7 @@ export const glancePostStyles = StyleSheet.create({
         shadowOffset: { width: - 1, height: -3 },
         shadowRadius: 2,
         shadowOpacity: 0.4,
-        paddingTop: 10
-    },
-    panelHandle: {
-        width: 40,
-        height: 8,
-        borderRadius: 4,
-        marginBottom: 10
+        paddingVertical: 4
     },
     bottomSheetPanelButton: {
         padding: 13,
