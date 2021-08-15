@@ -12,7 +12,6 @@ import {
     jsonConstants, defaultProfilesValue, SDMenuOptions, AUTO_SUBMIT_OTP_TIME_LIMIT, formRequiredRules, countRanges
 } from '../constants/Constants';
 import {
-    InteractionManager,
     NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
@@ -1468,11 +1467,11 @@ export const updateProfileActionValueToState = async (responseData, action, prof
                 default:
                     break;
             }
-            InteractionManager.runAfterInteractions(() => {
+            setTimeout(() => {
                 profileDetail.isFollowing = profile.followers.some(follower => follower.follower_id == user.id);
                 setProfileDetail({ ...profileDetail });
                 setSdomDatastate({ ...sdomDatastate });
-            });
+            }, numericConstants.TWENTY);
         }
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);

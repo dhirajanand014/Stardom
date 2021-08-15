@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, StatusBar, Dimensions, Image } from 'react-native';
 import {
     width, miscMessage, numericConstants, jsonConstants, stringConstants, keyChainConstansts
@@ -17,10 +17,12 @@ import { ViewUserPostDetails } from './ViewUserPostDetails';
 import FastImage from 'react-native-fast-image';
 import { BackButton } from '../../components/button/BackButton';
 import { SDLoaderLogo } from '../../views/absoluteView/SDLoaderLogo';
+import { CategoryContext } from '../../App';
 
 export const ViewUserPost = () => {
 
     const navigation = useNavigation();
+    const { loggedInUser } = useContext(CategoryContext);
     const route = useRoute();
     const userId = route.params?.userId;
     const postId = route.params?.postId;
@@ -70,12 +72,12 @@ export const ViewUserPost = () => {
     return (
         <UserPostsView posts={posts} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} postsOptions={postsOptions} setPostOptions={setPostOptions}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
-            height={height} navigation={navigation} postIdFromNotification={postId} loadMinimalLoaderView={loadMinimalLoaderView} />
+            height={height} navigation={navigation} postIdFromNotification={postId} loadMinimalLoaderView={loadMinimalLoaderView} loggedInUser={loggedInUser} />
     )
 }
 
 const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOptions, setPostOptions, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x,
-    height, navigation, postIdFromNotification, loadMinimalLoaderView }) => {
+    height, navigation, postIdFromNotification, loadMinimalLoaderView, loggedInUser }) => {
     return <View style={SDGenericStyles.fill}>
         <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
         {
@@ -118,7 +120,7 @@ const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOp
                         })}
                 </Swiper>
                 <ViewUserPostDetails ref={postDetailsRef} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x} width={width} height={height} posts={posts}
-                    navigation={navigation} viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
+                    navigation={navigation} viewPagerRef={viewPagerRef} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} loggedInUser={loggedInUser} />
             </View> || <View>
                 <View style={{ width: width, height: height }} >
                     <View style={glancePostStyles.shimmerViewInit}>

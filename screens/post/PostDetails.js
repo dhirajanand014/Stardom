@@ -104,21 +104,25 @@ export const PostDetails = forwardRef((props, ref) => {
         };
     });
 
-    const downloadCallback = useCallback((received, total) => {
-        const value = received / total;
-        if (!downloadProgressState.isDownloading.value) {
-            downloadProgressState.isDownloading.value = true;
-            showProgressSnackbar(value);
-        }
-        downloadProgressState.progressValue.value = value;
-        setDownloadProgressState({ ...downloadProgressState });
-    });
+    // const downloadCallback = useCallback((received, total) => {
+    //     if (downloadProgressState) {
+    //         const value = received / total;
+    //         if (!downloadProgressState.isDownloading.value) {
+    //             downloadProgressState.isDownloading.value = true;
+    //             showProgressSnackbar(value);
+    //         }
+    //         downloadProgressState.progressValue.value = value;
+    //         setDownloadProgressState({ ...downloadProgressState });
+    //     }
+    // });
 
-    const resetFlashMessage = useCallback(() => {
-        downloadProgressState.isDownloading.value = false;
-        downloadProgressState.progressValue.value = numericConstants.ZERO;
-        setDownloadProgressState({ ...downloadProgressState });
-    })
+    // const resetFlashMessage = useCallback(() => {
+    //     if (downloadProgressState) {
+    //         downloadProgressState.isDownloading.value = false;
+    //         downloadProgressState.progressValue.value = numericConstants.ZERO;
+    //         setDownloadProgressState({ ...downloadProgressState });
+    //     }
+    // });
 
     const postDescriptionSpringStyle = useAnimatedStyle(() => {
         return {

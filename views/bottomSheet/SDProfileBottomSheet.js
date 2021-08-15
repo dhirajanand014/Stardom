@@ -154,9 +154,9 @@ export const SDProfileBottomSheet = props => {
 
 const RenderProfileDetails = React.memo(({ profile, profileDetail, isDisabled, setLoaderCallback, sdomDatastate, setSdomDatastate, loggedInUser,
     setProfileDetail, navigation }) => {
-    return <View style={{ bottom: height - (height / 1.55) }}>
+    return <View>
         <View style={[SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingLeft10]}>
-            <Animated.View style={SDGenericStyles.alignItemsStart}>
+            <Animated.View style={[{ bottom: profile.bio && height - (height / 1.55) || height - (height / 1.35) }, SDGenericStyles.alignItemsStart]}>
                 <View style={SDGenericStyles.rowFlexDirection}>
                     <Text style={[SDGenericStyles.ft20, SDGenericStyles.fontFamilyRobotoMedium,
                     SDGenericStyles.textCenterAlign, SDGenericStyles.textColorWhite]}>
@@ -179,7 +179,7 @@ const RenderProfileDetails = React.memo(({ profile, profileDetail, isDisabled, s
         </View>
         {
             !profileDetail.isSameUser &&
-            <View style={[SDGenericStyles.alignSelfEnd, SDGenericStyles.paddingRight5, SDGenericStyles.mt24]}>
+            <View style={[{ bottom: height - (height / 1.56) }, SDGenericStyles.alignSelfEnd, SDGenericStyles.paddingRight5, SDGenericStyles.mt24]}>
                 <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentSpaceBetween]}>
                     <SDEntryAnimation index={numericConstants.ONE}>
                         <SDScaleAnimation disabled={false} scaleTo={numericConstants.ZEROPTNINETY}>
@@ -231,5 +231,5 @@ const RenderProfileDetails = React.memo(({ profile, profileDetail, isDisabled, s
                 </View>
             </View>
         }
-    </View >;
+    </View>;
 });

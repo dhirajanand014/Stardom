@@ -2,16 +2,25 @@ import React, { forwardRef, useCallback, useContext, useImperativeHandle, useSta
 import { Text, View, Image, Linking, TouchableOpacity, Switch } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import {
-    stringConstants, postCountTypes, numericConstants, colorConstants, postitionStringConstants, miscMessage, jsonConstants
+    stringConstants, postCountTypes, numericConstants,
+    colorConstants, postitionStringConstants, miscMessage,
+    jsonConstants, alertTextMessages, actionButtonTextConstants,
+    errorMessages, screens
 } from '../../constants/Constants';
-import { increaseAndSetPostCounts, setPostDetailsStateForModal, shareImage } from '../../helper/Helper';
+import {
+    checkTokenStatus, handlePostDelete, increaseAndSetPostCounts,
+    setPostDetailsStateForModal, shareImage, showSnackBar
+} from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
-import { CategoryContext } from '../../App';
 import { RenderLoaderScroll } from '../../views/imagePost/RenderLoaderScroll';
 import ActionButton from '@logvinme/react-native-action-button';
 import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal';
 import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
 import { SDWallpaperModal } from '../../views/imagePost/SDWallpaperModal';
+import { DeleteIcon } from '../../components/icons/DeleteIcon';
+import { UserSelectionOptionModal } from '../../components/modals/UserSelectionOptionModal';
+import { CategoryContext } from '../../App';
+import { TabActions } from '@react-navigation/native';
 
 const post_like = require(`../../assets/post_likes_icon.png`);
 const post_like_selected = require(`../../assets/post_likes_selected_icon.png`);
@@ -21,7 +30,7 @@ const post_wallpaper = require(`../../assets/menu/add_wallpaper_icon.png`);
 const post_share = require(`../../assets/post_share_icon.png`);
 export const ViewUserPostDetails = forwardRef((props, ref) => {
 
-    const { downloadProgressState, setDownloadProgressState } = useContext(CategoryContext);
+    const { setLoaderCallback } = useContext(CategoryContext);
 
     const { textPostTypeAnimationValue, textPostDescriptionAnimationValue } = props;
 
@@ -37,12 +46,14 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
         renderLoaderScroll: false,
         reportAbuseModal: false,
         selectedReportAbuse: {},
+        showUserOptionModal: false,
         reportAbuses: jsonConstants.EMPTY,
         reportAbuseSubmitDisabled: false,
     });
 
     const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
     const post_external_link = require('../../assets/post_external_link_icon.png');
+    const userDetails = props.loggedInUser.isLoggedIn && JSON.parse(props.loggedInUser.loginDetails.details) || stringConstants.EMPTY;
 
     useImperativeHandle(ref,
         () => ({
@@ -90,11 +101,11 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
     });
 
 
-    const resetFlashMessage = useCallback(() => {
-        downloadProgressState.isDownloading.value = false;
-        downloadProgressState.progressValue.value = numericConstants.ZERO;
-        setDownloadProgressState({ ...downloadProgressState });
-    })
+    // const resetFlashMessage = useCallback(() => {
+    //     downloadProgressState.isDownloading.value = false;
+    //     downloadProgressState.progressValue.value = numericConstants.ZERO;
+    //     setDownloadProgressState({ ...downloadProgressState });
+    // })
 
     const postDescriptionSpringStyle = useAnimatedStyle(() => {
         return {
@@ -102,6 +113,22 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                 translateX: textPostDescriptionAnimationValue.value
             }]
         };
+    });
+
+    const loginCallback = useCallback(() => props.navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] }));
+
+    const handleDelete = useCallback(async () => {
+        debugger
+        setPostDetailsState({ ...postDetailsState, showUserOptionModal: false });
+        setLoaderCallback(true, alertTextMessages.DELETING_POST);
+        const responseData = await handlePostDelete(postDetailsState.currentPost.id, props.loggedInUser.loginDetails.token);
+        if (responseData && responseData.message == alertTextMessages.POST_DELETED_SUCCESSFULLY) {
+            props.navigation.dispatch(TabActions.jumpTo(screens.GLANCE))
+        } else if (checkTokenStatus(responseData)) {
+            loginCallback();
+            showSnackBar(errorMessages.YOUR_SESSION_IS_EXPIRED_PLEASE_LOGIN, false, true, loginCallback);
+        }
+        setLoaderCallback(false);
     });
 
     return (
@@ -190,12 +217,23 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                     <Text style={[SDGenericStyles.ft7, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
                     SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{miscMessage.REPORT_ABUSE_TEXT}</Text>
                 </ActionButton.Item>
+                {
+                    userDetails.id == postDetailsState.currentPost.user.id &&
+                    <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
+                        onPress={() => setPostDetailsState({ ...postDetailsState, showUserOptionModal: true })}>
+                        <View style={glancePostStyles.backgroundRoundColor}>
+                            <DeleteIcon width={numericConstants.TWENTY_EIGHT} height={numericConstants.TWENTY_EIGHT} stroke={colors.WHITE} />
+                        </View>
+                    </ActionButton.Item>
+                }
             </ActionButton>
             <PostDescriptionModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
                 setPostDetailsState={setPostDetailsState} />
             <PostReportAbuseModal postDetailsState={postDetailsState} setPostDetailsState={setPostDetailsState} />
             <SDWallpaperModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
                 setPostDetailsState={setPostDetailsState} />
+            <UserSelectionOptionModal bottomSheetState={postDetailsState} setBottomSheetState={setPostDetailsState} textMessage={alertTextMessages.DELETE_USER_POST_IMAGE}
+                successButton={actionButtonTextConstants.YES.toUpperCase()} handleSubmit={handleDelete} />
             {
                 postDetailsState.renderLoaderScroll && <RenderLoaderScroll />
             }

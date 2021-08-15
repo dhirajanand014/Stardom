@@ -7,7 +7,7 @@ import {
     backHandlerConstants, componentErrorConsts, errorMessages, height, jsonConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, urlConstants, width
 } from '../../constants/Constants';
-import { checkLoggedInUserMappedWithUserProfile, checkProfileFrom, fetchUpdateLoggedInUserProfile } from '../../helper/Helper';
+import { checkLoggedInUserMappedWithUserProfile, checkProfileFrom, fetchUpdateLoggedInUserProfile, getLoggedInUserDetails } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from "../../styles/Styles"
 import { SDProfileBottomSheet } from '../../views/bottomSheet/SDProfileBottomSheet';
 import { BackButton } from '../../components/button/BackButton';
@@ -18,8 +18,12 @@ export const Profile = () => {
     const navigation = useNavigation();
     const isFocused = useIsFocused();
 
-    const { sdomDatastate, setSdomDatastate, loggedInUser, setLoggedInUser, profileDetail, setProfileDetail, currentPostIndexForProfileRef,
-        setLoaderCallback } = useContext(CategoryContext);
+    const { sdomDatastate, setSdomDatastate, profileDetail, setProfileDetail, currentPostIndexForProfileRef, setLoaderCallback } = useContext(CategoryContext);
+
+    const [loggedInUser, setLoggedInUser] = useState({
+        loginDetails: stringConstants.EMPTY,
+        isLoggedIn: false
+    })
 
     const [loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess] = useState(false);
     const [expanded, setExpanded] = useState(false);
