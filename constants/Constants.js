@@ -467,7 +467,7 @@ export const placeHolderText = {
     VERIFY_USER_DETAILS: `Enter your social media contact details`,
     SELECT_GENDER: `Select a gender`,
     SEARCH_USERS: `Search Users`,
-    FACEBOOK_LINK: `Enter your FaceBook Profile link`,
+    FACEBOOK_LINK: `Enter your Facebook Profile link`,
     INSTAGRAM_LINK: `Enter your Instagram Profile link`
 }
 
@@ -507,6 +507,7 @@ export const numericConstants = {
     THIRTY: 30,
     THIRTY_THREE: 33,
     THIRTY_EIGHT: 38,
+    FORTY: 40,
     FORTY_TWO: 42,
     FORTY_FIVE: 45,
     FORTY_EIGHT: 48,

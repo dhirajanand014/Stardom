@@ -43,14 +43,14 @@ export const UserVerifyModal = props => {
                         <SDImageFormInput inputName={fieldControllerName.FACEBOOK_LINK} control={control} defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.FACEBOOK_LINK}
                             keyboardType={isAndroid && keyBoardTypeConst.DEFAULT || keyBoardTypeConst.IOS_URL} textContentType={keyBoardTypeConst.URL} formState={formState} autofocus={true}
                             extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite, SDGenericStyles.backGroundColorGray,
-                            SDGenericStyles.borderRadius5, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingLeft10]} icon={<Image source={require(`../../assets/facebook_social_media_icon.png`)}
-                                style={[SDGenericStyles.iconSocialMedia, SDGenericStyles.alignItemsCenter, SDGenericStyles.ml_6]} />} />
+                            SDGenericStyles.borderRadius5, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingLeft10]} startIcon={<Image source={require(`../../assets/facebook_social_media_icon.png`)}
+                                style={[SDGenericStyles.iconSocialMedia, SDGenericStyles.alignItemsCenter, SDGenericStyles.marginRight10]} />} />
 
                         <SDImageFormInput inputName={fieldControllerName.INSTAGRAM_LINK} control={control} defaultValue={stringConstants.EMPTY} placeHolderText={placeHolderText.INSTAGRAM_LINK}
                             keyboardType={isAndroid && keyBoardTypeConst.DEFAULT || keyBoardTypeConst.IOS_URL} textContentType={keyBoardTypeConst.URL} formState={formState}
                             extraStyles={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite, SDGenericStyles.backGroundColorGray,
-                            SDGenericStyles.borderRadius5, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingLeft10]} icon={<Image source={require(`../../assets/instagram_social_media_icon.png`)}
-                                style={[SDGenericStyles.iconSocialMedia, SDGenericStyles.alignItemsCenter, SDGenericStyles.ml_6]} />} />
+                            SDGenericStyles.borderRadius5, SDGenericStyles.justifyContentCenter, SDGenericStyles.paddingLeft10]} startIcon={<Image source={require(`../../assets/instagram_social_media_icon.png`)}
+                                style={[SDGenericStyles.iconSocialMedia, SDGenericStyles.alignItemsCenter, SDGenericStyles.marginRight10]} />} />
 
                         <SDMultiTextInputLengthText value={verifyInputValue} maxLength={numericConstants.TWO_HUNDRED} />
 

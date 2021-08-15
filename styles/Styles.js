@@ -22,8 +22,8 @@ export const SDGenericStyles = StyleSheet.create({
         height: numericConstants.TWENTY_EIGHT
     },
     iconSocialMedia: {
-        width: numericConstants.FORTY_FIVE,
-        height: numericConstants.FORTY_FIVE
+        width: numericConstants.FORTY,
+        height: numericConstants.FORTY
     },
     menuEditIcon: {
         width: numericConstants.TWENTY_ONE,

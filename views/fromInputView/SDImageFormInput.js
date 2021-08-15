@@ -12,6 +12,8 @@ export const SDImageFormInput = props => {
             <View style={[userAuthStyles.userInput, !props.isFeedbackInput && SDGenericStyles.marginVertical2, !props.isFeedbackInput && SDGenericStyles.paddingStart10,
             !props.isFeedbackInput && SDGenericStyles.paddingEnd10, props.formState.errors[props.inputName]?.message && userAuthStyles.errorInputBorder ||
             userAuthStyles.normalInputBorder, props.isUserId && props.isUserIdAvailable?.current && userAuthStyles.noErrorInputBorder]}>
+                {props.startIcon && props.startIcon}
+
                 <SDFormInput {...props} />
 
                 {props.isPasswordInput && <Pressable onPressIn={() => props.setIsSecureTextEntry(false)} onPressOut={() => props.setIsSecureTextEntry(true)}
