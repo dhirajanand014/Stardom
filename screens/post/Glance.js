@@ -83,7 +83,7 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
             sdomDatastate.posts && sdomDatastate.posts.length &&
             <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
                 <Swiper ref={viewPagerRef} index={postDetailsRef?.current?.postIndex} horizontal={false} showsPagination={false} scrollEventThrottle={numericConstants.SIXTEEN}
-                    bounces loadMinimal loadMinimalSize={numericConstants.TWENTY_FIVE} loadMinimalLoader={loadMinimalLoaderView(height)}
+                    bounces loadMinimal loadMinimalSize={numericConstants.TWENTY_FIVE} loadMinimalLoader={loadMinimalLoaderView(height)} decelerationRate={miscMessage.FAST}
                     onMomentumScrollBegin={(event) => {
                         const index = Math.round(event.nativeEvent.contentOffset.y / event.nativeEvent.layoutMeasurement.height) - numericConstants.ONE;
                         if ((index == numericConstants.ZERO && ((postDetailsRef?.current?.scrollOffset == height && postDetailsRef?.current?.scrollOffset > event.nativeEvent.contentOffset.y)

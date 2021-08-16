@@ -742,6 +742,7 @@ export const miscMessage = {
     RESET: `Reset`,
     INFINITE: `infinite`,
     SUCCESSFUL: `Successful`,
+    FAST: `fast`,
     ACCEPTED_EULA: `acceptedEULA`,
     SINGLE_SELECT: `Single select`,
     SELECT_ALL: `Select All`,
