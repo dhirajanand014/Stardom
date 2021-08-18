@@ -1690,7 +1690,8 @@ export const userPostAction = async (request, data, token, uploadProgressCallbac
 }
 
 export const checkProfileFrom = (currentPostIndexForProfileRef, sdomDatastate, isFrom, loggedInUser, followerFollowingProfile) => {
-    if (isFrom == modalTextConstants.VIEW_PROFILE) {
+    if (loggedInUser.isLoggedIn && isFrom == modalTextConstants.VIEW_PROFILE) {
+        debugger
         const profile = JSON.parse(loggedInUser.loginDetails.details);
         return profile && { ...profile, profile_image: profile.profile_picture } || DefaultUserProfile;
     } else if (isFrom == modalTextConstants.VIEW_FOLLOWER_FOLLOWING_PROFILE) {
