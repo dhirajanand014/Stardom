@@ -45,7 +45,7 @@ export const PostDetails = forwardRef((props, ref) => {
         reportAbuses: jsonConstants.EMPTY,
         reportAbuseSubmitDisabled: false,
         scrollOffset: numericConstants.ZERO,
-        renderLoaderScroll: false,
+        renderLoaderScroll: false
     });
 
     const post_report_abuse = require('../../assets/post_report_abuse_icon.png');
@@ -58,6 +58,11 @@ export const PostDetails = forwardRef((props, ref) => {
             currentPost: postDetailsState.currentPost,
             scrollOffset: postDetailsState.scrollOffset,
             renderLoaderScroll: postDetailsState.renderLoaderScroll,
+            switchEnabled: postDetailsState.switchEnabled,
+
+            setSwitchEnabled(bool) {
+                setPostDetailsState({ ...postDetailsState, switchEnabled: bool });
+            },
 
             setNewPostViewed(bool) {
                 setPostDetailsState({ ...postDetailsState, newPostViewed: bool });

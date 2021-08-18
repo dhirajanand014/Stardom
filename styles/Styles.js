@@ -30,8 +30,8 @@ export const SDGenericStyles = StyleSheet.create({
         height: numericConstants.TWENTY_ONE
     },
     loaderIcon: {
-        width: numericConstants.SIXTEEN,
-        height: numericConstants.SIXTEEN
+        width: numericConstants.TWELVE,
+        height: numericConstants.TWELVE
     },
     lockUnlockIconStyle: {
         width: numericConstants.TWENTY,
@@ -46,6 +46,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     tintColorYellow: {
         tintColor: `#eabe05`
+    },
+    tintColorGrey: {
+        tintColor: `#666666`
     },
     tintColorGreen: {
         tintColor: `#7FFF00`
@@ -570,6 +573,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     colorYellow: {
         color: '#eabe05'
+    },
+    colorLogoGrey: {
+        color: '#666666'
     },
     textBoxGray: {
         backgroundColor: `#343642`

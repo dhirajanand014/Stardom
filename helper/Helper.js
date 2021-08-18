@@ -571,7 +571,7 @@ const filterLoggedInUsersPosts = async (allPosts, isForPostWallpaper) => {
             });
         } else {
             allPosts = isForPostWallpaper && allPosts.filter(post => {
-                if (post.user.user_type == miscMessage.VERIFIED_AUTHOR) {
+                if (post.user.user_type == miscMessage.VERIFIED_AUTHOR || post.user.id === numericConstants.ONE) { //1 is always for admin
                     return post.postType == fieldControllerName.POST_TYPE_PUBLIC;
                 }
                 return post.postType == fieldControllerName.POST_TYPE_PUBLIC && post.postLikes >= numericConstants.ONE_HUNDRED

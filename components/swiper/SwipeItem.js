@@ -42,18 +42,21 @@ export const SwipeItem = (props) => {
         }
     })
     return (
-        <TapGestureHandler numberOfTaps={numericConstants.TWO} onActivated={() => postDetailsRef.current?.setWallPaper()}>
-            <Animated.View>
-                <PinchGestureHandler onGestureEvent={pinchGenstureHandler}>
-                    <Animated.View key={`${index}_${item.categoryId}`} style={pinchZoomStyle}>
-                        <FastImage style={[{ width: width, height: height }]} source={{
-                            uri: item.postImage,
-                            priority: FastImage.priority.high,
-                            cache: FastImage.cacheControl.immutable
-                        }} fallback={optionsState.isImageLoadError} onLoadEnd={() =>
-                            scrollWhenPostIdFromNotification(posts, postIdFromNotification, viewPagerRef, postDetailsRef, isFromNotification)} />
-                    </Animated.View>
-                </PinchGestureHandler>
-            </Animated.View>
+        <TapGestureHandler numberOfTaps={numericConstants.ONE}
+            onActivated={() => postDetailsRef.current?.setSwitchEnabled(!postDetailsRef.current?.switchEnabled)}>
+            <TapGestureHandler numberOfTaps={numericConstants.TWO} onActivated={() => postDetailsRef.current?.setWallPaper()}>
+                <Animated.View>
+                    <PinchGestureHandler onGestureEvent={pinchGenstureHandler}>
+                        <Animated.View key={`${index}_${item.categoryId}`} style={pinchZoomStyle}>
+                            <FastImage style={[{ width: width, height: height }]} source={{
+                                uri: item.postImage,
+                                priority: FastImage.priority.high,
+                                cache: FastImage.cacheControl.immutable
+                            }} fallback={optionsState.isImageLoadError} onLoadEnd={() =>
+                                scrollWhenPostIdFromNotification(posts, postIdFromNotification, viewPagerRef, postDetailsRef, isFromNotification)} />
+                        </Animated.View>
+                    </PinchGestureHandler>
+                </Animated.View>
+            </TapGestureHandler>
         </TapGestureHandler >)
 }

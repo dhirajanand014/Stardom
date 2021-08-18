@@ -118,7 +118,6 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
     const loginCallback = useCallback(() => props.navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] }));
 
     const handleDelete = useCallback(async () => {
-        debugger
         setPostDetailsState({ ...postDetailsState, showUserOptionModal: false });
         setLoaderCallback(true, alertTextMessages.DELETING_POST);
         const responseData = await handlePostDelete(postDetailsState.currentPost.id, props.loggedInUser.loginDetails.token);

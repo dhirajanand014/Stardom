@@ -196,11 +196,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
     implementation platform('com.google.firebase:firebase-bom:28.2.0')
 
-//    if (useIntlJsc) {
-//        implementation 'org.webkit:android-jsc-intl:+'
-//    } else {
-//        implementation 'org.webkit:android-jsc:+'
-//    }
+    if (useIntlJsc) {
+        implementation 'org.webkit:android-jsc-intl:+'
+    } else {
+        implementation 'org.webkit:android-jsc:+'
+    }
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group: 'com.facebook.fbjni'

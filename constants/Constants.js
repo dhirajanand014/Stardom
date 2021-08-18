@@ -297,8 +297,8 @@ export const formRequiredRules = {
             message: `Please enter a title`
         },
         maxLength: {
-            value: 15,
-            message: `Enter only 15 characters`
+            value: 25,
+            message: `Enter only 25 characters`
         }
     },
     addPostLinkRule: {
@@ -742,7 +742,6 @@ export const miscMessage = {
     RESET: `Reset`,
     INFINITE: `infinite`,
     SUCCESSFUL: `Successful`,
-    FAST: `fast`,
     ACCEPTED_EULA: `acceptedEULA`,
     SINGLE_SELECT: `Single select`,
     SELECT_ALL: `Select All`,
