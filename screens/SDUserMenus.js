@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
+import { TabActions } from '@react-navigation/native';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Image, InteractionManager, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -42,7 +43,7 @@ export const SDUserMenus = (drawerProps) => {
                 navigation.navigate(screens.EDIT_USER_PROFILE);
                 break;
             case modalTextConstants.VIEW_PROFILE:
-                navigation.navigate(screens.PROFILE, { isFrom: modalTextConstants.VIEW_PROFILE });
+                navigation.dispatch(TabActions.jumpTo(screens.PROFILE, { isFrom: modalTextConstants.VIEW_PROFILE }))
                 break;
             case screens.USER_FOLLOWERS_FOLLOWING:
                 navigation.navigate(screens.USER_FOLLOWERS_FOLLOWING, { listFor: item.label });

@@ -9,10 +9,14 @@ export const BackButton = props => {
 
     const navigation = useNavigation();
     const navigateToPreviousScreen = () => {
-        if (props.goBack)
+        if (props.goBack) {
             navigation.goBack();
-        else
+        } else if (props.action) {
+            props.action();
+            navigation.goBack();
+        } else {
             navigation.navigate(screens.GLANCE);
+        }
     }
 
     return (

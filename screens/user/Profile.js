@@ -7,7 +7,7 @@ import {
     backHandlerConstants, componentErrorConsts, errorMessages, height, jsonConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, urlConstants, width
 } from '../../constants/Constants';
-import { checkLoggedInUserMappedWithUserProfile, checkProfileFrom, fetchUpdateLoggedInUserProfile, getLoggedInUserDetails } from '../../helper/Helper';
+import { checkLoggedInUserMappedWithUserProfile, checkProfileFrom, fetchUpdateLoggedInUserProfile } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from "../../styles/Styles"
 import { SDProfileBottomSheet } from '../../views/bottomSheet/SDProfileBottomSheet';
 import { BackButton } from '../../components/button/BackButton';
@@ -60,6 +60,7 @@ export const Profile = () => {
         profileDetail.isFollowing = false;
         profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
         profile.isSameUser = false;
+        navigation.setParams({ isFrom: stringConstants.EMPTY });
         setLoggedInUserHasPrivateAccess(false);
         setProfileDetail({ ...profileDetail });
     }
@@ -70,17 +71,18 @@ export const Profile = () => {
     return (
         <ProfileRenderer profile={profile} profileDetail={profileDetail} isDisabled={isDisabled} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} expanded={expanded}
             sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} loggedInUser={loggedInUser} setProfileDetail={setProfileDetail} setLoaderCallback={setLoaderCallback}
-            navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setExpanded={setExpanded} />
+            navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setExpanded={setExpanded}
+            resetProfileState={resetProfileState} />
     )
 }
 
 const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, setSdomDatastate, loggedInUser, setLoaderCallback, expanded, setExpanded,
-    setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess }) => {
+    setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess, resetProfileState }) => {
     return <View style={SDGenericStyles.fill}>
         {
             profile.id !== numericConstants.MINUS_ONE &&
             <React.Fragment>
-                <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
+                <BackButton leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} action={resetProfileState} />
                 {
                     profile.profile_image && profile.profile_image !== urlConstants.profileStorageUrl &&
                     <FastImage source={{ uri: profile.profile_image, priority: FastImage.priority.high, cache: FastImage.cacheControl.immutable }}
