@@ -476,6 +476,7 @@ export const numericConstants = {
     HUNDRED_PCNT: `100%`,
     MINUS_ONE: -1,
     ZEROPTFIVE: 0.5,
+    ZEROPTSEVEN: 0.7,
     ZEROPTNINETY: 0.90,
     ONEPTONE: 1.1,
     ZERO: 0,

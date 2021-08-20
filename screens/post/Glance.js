@@ -9,7 +9,7 @@ import {
     resetAnimatePostTextDetails, setImageLoadError
 } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
-import Animated, { useDerivedValue, useSharedValue } from 'react-native-reanimated';
+import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import Swiper from 'react-native-swiper';
 import { PostDetails } from './PostDetails';
 import FastImage from 'react-native-fast-image';
@@ -47,6 +47,7 @@ export const Glance = ({ navigation }) => {
 
     const textPostDescriptionAnimationValue = useSharedValue(-numericConstants.TEN);
     const textPostTypeAnimationValue = useSharedValue(-numericConstants.TEN);
+    const animation = useSharedValue(numericConstants.ZEROPTSEVEN);
 
     const textPostDescriptionAnimationValue_translate_x = useDerivedValue(() => {
         return textPostDescriptionAnimationValue.value * numericConstants.ONE_HUNDRED;
@@ -70,12 +71,12 @@ export const Glance = ({ navigation }) => {
         <GlanceComponent sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
             currentPostIndexForProfileRef={currentPostIndexForProfileRef} height={height} postIdFromNotification={postId} navigation={navigation} isFromNotification={isFromNotification}
-            setSdomDatastate={setSdomDatastate} drawerOpenStatus={drawerOpenStatus} loadMinimalLoaderView={loadMinimalLoaderView} />
+            setSdomDatastate={setSdomDatastate} drawerOpenStatus={drawerOpenStatus} loadMinimalLoaderView={loadMinimalLoaderView} animation={animation} />
     )
 }
 
 const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRef, optionsState, setOptionsState, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x,
-    currentPostIndexForProfileRef, height, postIdFromNotification, navigation, isFromNotification, drawerOpenStatus, loadMinimalLoaderView }) => {
+    currentPostIndexForProfileRef, height, postIdFromNotification, navigation, isFromNotification, drawerOpenStatus, loadMinimalLoaderView, animation }) => {
     return <SafeAreaView style={SDGenericStyles.fill}>
         {
             sdomDatastate.posts && sdomDatastate.posts.length &&
@@ -105,11 +106,9 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                     }}>
                     {
                         sdomDatastate.posts.map((item, index) => {
-                            return <Animated.View key={index} style={glancePostStyles.overlayImage}>
-                                <SwipeItem width={width} height={height} item={item} index={index} posts={sdomDatastate.posts} viewPagerRef={viewPagerRef}
-                                    postIdFromNotification={postIdFromNotification} isFromNotification={isFromNotification} optionsState={optionsState}
-                                    postDetailsRef={postDetailsRef} />
-                            </Animated.View>;
+                            return <SwipeItem width={width} height={height} item={item} index={index} posts={sdomDatastate.posts} viewPagerRef={viewPagerRef}
+                                postIdFromNotification={postIdFromNotification} isFromNotification={isFromNotification} optionsState={optionsState}
+                                postDetailsRef={postDetailsRef} animation={animation} />;
                         })}
                 </Swiper>
                 <PostDetails ref={postDetailsRef} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x} viewPagerRef={viewPagerRef}

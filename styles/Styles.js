@@ -712,7 +712,6 @@ export const glancePostStyles = StyleSheet.create({
     titleName: {
         fontSize: 18,
         fontFamily: 'wallpiper_roman_font',
-        display: 'flex',
         color: 'white',
     },
     backgroundRoundColor_description: {
@@ -1194,7 +1193,6 @@ export const glancePostStyles = StyleSheet.create({
     overlayImage: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgb(0,0,0)',
-        opacity: 0.7
     },
     overlayImageProfile: {
         backgroundColor: 'rgb(0,0,0)',

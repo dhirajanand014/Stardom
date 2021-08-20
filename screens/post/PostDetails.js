@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback, useContext, useImperativeHandle, useState } from 'react';
 import { Text, View, Image, Linking, TouchableOpacity, Switch } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
     stringConstants, postCountTypes, numericConstants, miscMessage, jsonConstants,
@@ -139,10 +139,19 @@ export const PostDetails = forwardRef((props, ref) => {
         };
     });
 
+    const animationFadeStyle = useAnimatedStyle(() => {
+        return {
+            opacity: postDetailsState.tapVisible && withTiming(numericConstants.ONE, {
+                duration: numericConstants.FIVE_HUNDRED
+            }) || withTiming(numericConstants.ZERO, {
+                duration: numericConstants.FIVE_HUNDRED
+            })
+        };
+    });
+
     return (
         <React.Fragment>
             <View key={`1_${postDetailsState.currentPostIndex}_post_details`}>
-
                 <View style={glancePostStyles.innerContainer}>
                     <Animated.View style={[glancePostStyles.smallButtonsContainer, postDetailsState.animationVisible && postTypeSpringStyle]}>
                         {
@@ -155,50 +164,48 @@ export const PostDetails = forwardRef((props, ref) => {
                                 <Animated.Image style={[glancePostStyles.icon_external_link]} source={post_external_link} />
                             </TouchableOpacity>
                         }
+
                     </Animated.View>
-                    <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.rowFlexDirection, SDGenericStyles.marginBottom8,
+                    <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.rowFlexDirection, SDGenericStyles.marginBottom8, animationFadeStyle,
                     postDetailsState.animationVisible && postDescriptionSpringStyle]}>
-                        {
-                            postDetailsState.tapVisible &&
-                            <View>
-                                <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter]}>
-                                    <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.user.name && glancePostStyles.postProfileNameBy, SDGenericStyles.textColorWhite,
-                                    SDGenericStyles.fontFamilyItalicRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft14]}>
-                                        {miscMessage.BY_TEXT}
-                                    </Text>
-                                    <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
-                                    SDGenericStyles.fontFamilyRobotoBold, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
-                                        {postDetailsState.currentPost && postDetailsState.currentPost.user.name && postDetailsState.currentPost.user.name}
-                                    </Text>
-                                    {
-                                        postDetailsState.currentPost && postDetailsState.currentPost.user.user_type == miscMessage.VERIFIED_AUTHOR &&
-                                        <View>
-                                            <Image style={glancePostStyles.verifiedIconStyle} source={require(`../../assets/verified_icon.gif`)} />
-                                        </View>
-                                    }
-                                </View>
-                                <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.mt2]}>
-                                    <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.profile.profile_name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
-                                    SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft10]}>
-                                        {postDetailsState.currentPost && postDetailsState.currentPost.profile && postDetailsState.currentPost.profile.profile_name.toUpperCase()}
-                                    </Text>
-                                    <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft10]}>{
-                                        postDetailsState.currentPost && postDetailsState.currentPost.profile && postDetailsState.currentPost.postCategoriesIn &&
-                                        stringConstants.PIPELINE_JOIN.concat(postDetailsState.currentPost && postDetailsState.currentPost.postCategoriesIn) ||
-                                        postDetailsState.currentPost && postDetailsState.currentPost.postCategoriesIn}
-                                    </Text>
-                                </View>
+                        <View>
+                            <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.alignItemsCenter]}>
+                                <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.user.name && glancePostStyles.postProfileNameBy, SDGenericStyles.textColorWhite,
+                                SDGenericStyles.fontFamilyItalicRegular, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft14]}>
+                                    {miscMessage.BY_TEXT}
+                                </Text>
+                                <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.user.name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
+                                SDGenericStyles.fontFamilyRobotoBold, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft12]}>
+                                    {postDetailsState.currentPost && postDetailsState.currentPost.user.name && postDetailsState.currentPost.user.name}
+                                </Text>
+                                {
+                                    postDetailsState.currentPost && postDetailsState.currentPost.user.user_type == miscMessage.VERIFIED_AUTHOR &&
+                                    <View>
+                                        <Image style={glancePostStyles.verifiedIconStyle} source={require(`../../assets/verified_icon.gif`)} />
+                                    </View>
+                                }
                             </View>
-                        }
+                            <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.mt2]}>
+                                <Text style={[postDetailsState.currentPost && postDetailsState.currentPost.profile.profile_name && glancePostStyles.postProfileName, SDGenericStyles.textColorWhite,
+                                SDGenericStyles.fontFamilyBold, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft10]}>
+                                    {postDetailsState.currentPost && postDetailsState.currentPost.profile && postDetailsState.currentPost.profile.profile_name.toUpperCase()}
+                                </Text>
+                                <Text style={[glancePostStyles.postCategoriesIn, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRoman, SDGenericStyles.justifyContentCenter, SDGenericStyles.ft10]}>{
+                                    postDetailsState.currentPost && postDetailsState.currentPost.profile && postDetailsState.currentPost.postCategoriesIn &&
+                                    stringConstants.PIPELINE_JOIN.concat(postDetailsState.currentPost && postDetailsState.currentPost.postCategoriesIn) ||
+                                    postDetailsState.currentPost && postDetailsState.currentPost.postCategoriesIn}
+                                </Text>
+                            </View>
+                        </View>
                     </Animated.View>
                 </View>
             </View>
-            <View style={glancePostStyles.searchIconContainer}>
+            <Animated.View style={glancePostStyles.searchIconContainer}>
                 {
                     optionsState.showSearch && postDetailsState.tapVisible &&
                     <PostSearch sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={ref} />
                 }
-            </View>
+            </Animated.View>
             {
                 postDetailsState.tapVisible &&
                 <ActionButton buttonColor={colorConstants.TRANSPARENT_BUTTON} backgroundTappable={true} size={numericConstants.TWENTY_EIGHT} useNativeFeedback={false} degrees={numericConstants.ZERO}

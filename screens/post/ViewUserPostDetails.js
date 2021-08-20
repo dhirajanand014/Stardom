@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback, useContext, useImperativeHandle, useState } from 'react';
 import { Text, View, Image, Linking, TouchableOpacity, Switch } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import {
     stringConstants, postCountTypes, numericConstants,
     colorConstants, postitionStringConstants, miscMessage,
@@ -129,6 +129,16 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
         };
     });
 
+    const animationFadeStyle = useAnimatedStyle(() => {
+        return {
+            opacity: postDetailsState.tapVisible && withTiming(numericConstants.ONE, {
+                duration: numericConstants.FIVE_HUNDRED
+            }) || withTiming(numericConstants.ZERO, {
+                duration: numericConstants.FIVE_HUNDRED
+            })
+        };
+    });
+
     const loginCallback = useCallback(() => props.navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] }));
 
     const handleDelete = useCallback(async () => {
@@ -150,7 +160,7 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
             <View key={`1_${postDetailsState.currentPostIndex}_post_details`}>
 
                 <View style={glancePostStyles.innerContainer} colors={[colors.TRANSPARENT, colors.BLACK]}>
-                    <Animated.View style={[glancePostStyles.smallButtonsContainer, postDetailsState.animationVisible && postTypeSpringStyle]}>
+                    <Animated.View style={[glancePostStyles.smallButtonsContainer, postDetailsState.animationVisible && postTypeSpringStyle, animationFadeStyle]}>
                         {
                             postDetailsState.tapVisible &&
                             <Text style={glancePostStyles.titleName}>{postDetailsState.currentPost && postDetailsState.currentPost.postTitle}</Text>
@@ -162,7 +172,7 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                             </TouchableOpacity>
                         }
                     </Animated.View>
-                    <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.rowFlexDirection, SDGenericStyles.marginBottom8,
+                    <Animated.View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.rowFlexDirection, SDGenericStyles.marginBottom8, animationFadeStyle,
                     postDetailsState.animationVisible && postDescriptionSpringStyle]}>
                         {
                             postDetailsState.tapVisible &&

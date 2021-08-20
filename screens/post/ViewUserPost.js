@@ -8,7 +8,7 @@ import {
     resetAnimatePostTextDetails, setImageLoadError
 } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
-import Animated, { useDerivedValue, useSharedValue } from 'react-native-reanimated';
+import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import Swiper from 'react-native-swiper';
 import * as Keychain from 'react-native-keychain';
 import { SwipeItem } from '../../components/swiper/SwipeItem';
@@ -50,6 +50,7 @@ export const ViewUserPost = () => {
 
     const textPostDescriptionAnimationValue = useSharedValue(-numericConstants.TEN);
     const textPostTypeAnimationValue = useSharedValue(-numericConstants.TEN);
+    const animation = useSharedValue(numericConstants.ZEROPTSEVEN);
 
     const textPostDescriptionAnimationValue_translate_x = useDerivedValue(() => {
         return textPostDescriptionAnimationValue.value * numericConstants.ONE_HUNDRED;
@@ -70,14 +71,14 @@ export const ViewUserPost = () => {
     }
 
     return (
-        <UserPostsView posts={posts} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} postsOptions={postsOptions} setPostOptions={setPostOptions}
+        <UserPostsView posts={posts} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} postsOptions={postsOptions} setPostOptions={setPostOptions} animation={animation}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
             height={height} navigation={navigation} postIdFromNotification={postId} loadMinimalLoaderView={loadMinimalLoaderView} loggedInUser={loggedInUser} />
     )
 }
 
 const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOptions, setPostOptions, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x,
-    height, navigation, postIdFromNotification, loadMinimalLoaderView, loggedInUser }) => {
+    height, navigation, postIdFromNotification, loadMinimalLoaderView, loggedInUser, animation }) => {
     return <View style={SDGenericStyles.fill}>
         <BackButton goBack leftStyle={numericConstants.TEN} extraStyles={SDGenericStyles.marginTop20} />
         {
@@ -113,10 +114,8 @@ const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOp
                     }}>
                     {
                         posts.map((item, index) => {
-                            return <Animated.View key={index} style={glancePostStyles.overlayImage}>
-                                <SwipeItem width={width} height={height} item={item} index={index} posts={posts} postIdFromNotification={postIdFromNotification}
-                                    viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={postsOptions} setOptionsState={setPostOptions} />
-                            </Animated.View>;
+                            return <SwipeItem width={width} height={height} item={item} index={index} posts={posts} postIdFromNotification={postIdFromNotification}
+                                viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={postsOptions} setOptionsState={setPostOptions} animation={animation} />;
                         })}
                 </Swiper>
                 <ViewUserPostDetails ref={postDetailsRef} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x} width={width} height={height} posts={posts}
