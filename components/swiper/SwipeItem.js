@@ -10,8 +10,7 @@ import { scrollWhenPostIdFromNotification } from '../../helper/Helper';
 
 export const SwipeItem = (props) => {
 
-    const { width, height, item, index, posts, postIdFromNotification, viewPagerRef,
-        postDetailsRef, optionsState, isFromNotification } = props;
+    const { width, height, item, index, posts, postIdFromNotification, viewPagerRef, postDetailsRef, optionsState, isFromNotification } = props;
 
     const imageScale = useSharedValue(numericConstants.ONE);
     const focalX = useSharedValue(numericConstants.ZERO);
@@ -43,8 +42,8 @@ export const SwipeItem = (props) => {
     })
     return (
         <TapGestureHandler numberOfTaps={numericConstants.ONE}
-            onActivated={() => postDetailsRef.current?.setSwitchEnabled(!postDetailsRef.current?.switchEnabled)}>
-            <TapGestureHandler numberOfTaps={numericConstants.TWO} onActivated={() => postDetailsRef.current?.setWallPaper()}>
+            onActivated={() => postDetailsRef.current?.setTapVisible(!postDetailsRef.current?.tapVisible)}>
+            <TapGestureHandler numberOfTaps={numericConstants.TWO} onActivated={() => postDetailsRef.current.setWallPaper()}>
                 <Animated.View>
                     <PinchGestureHandler onGestureEvent={pinchGenstureHandler}>
                         <Animated.View key={`${index}_${item.categoryId}`} style={pinchZoomStyle}>
@@ -58,5 +57,5 @@ export const SwipeItem = (props) => {
                     </PinchGestureHandler>
                 </Animated.View>
             </TapGestureHandler>
-        </TapGestureHandler >)
+        </TapGestureHandler>)
 }

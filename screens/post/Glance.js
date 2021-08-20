@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useContext } from 'react';
-import { View, Image, StatusBar, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Image, StatusBar, Dimensions, SafeAreaView } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
     width, miscMessage, numericConstants, jsonConstants
@@ -18,8 +18,6 @@ import { SwipeItem } from '../../components/swiper/SwipeItem';
 import { SDFallBackComponent } from '../../views/errorHandleView/SDFallBackComponent';
 import { useIsFocused, useRoute } from '@react-navigation/native';
 import { SDLoaderLogo } from '../../views/absoluteView/SDLoaderLogo';
-
-const category_selection = require('../../assets/category_selection_icon.png');
 
 export const Glance = ({ navigation }) => {
 
@@ -115,7 +113,7 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                         })}
                 </Swiper>
                 <PostDetails ref={postDetailsRef} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x} viewPagerRef={viewPagerRef}
-                    navigation={navigation} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} />
+                    navigation={navigation} textPostDescriptionAnimationValue={textPostDescriptionAnimationValue_translate_x} drawerOpenStatus={drawerOpenStatus} />
             </View> || sdomDatastate.posts && !sdomDatastate.posts.length &&
             <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.CATEGORY_WITHOUT_POST}
                 descriptionText={errorMessages.SELECT_OTHER_CATEGORIES} navigation={navigation} /> || <View>
@@ -129,13 +127,6 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                     <SDLoaderLogo />
                 </View>
             </View>}
-        <TouchableOpacity style={glancePostStyles.category_selection} onPress={() => {
-            drawerOpenStatus.current = true;
-            postDetailsRef?.current?.setPostAnimationVisible(false);
-            navigation.openDrawer();
-        }}>
-            <Image source={category_selection} style={glancePostStyles.category_selection_image} />
-        </TouchableOpacity>
     </SafeAreaView>;
 });
 

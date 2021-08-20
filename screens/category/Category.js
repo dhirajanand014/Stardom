@@ -102,23 +102,23 @@ export const Category = () => {
                 category.initialCategory == actionButtonTextConstants.SKIP_BUTTON &&
                 <View style={[SDGenericStyles.alignItemsCenter, SDGenericStyles.positionAbsolute, categoryViewStyles.buttonBottom, SDGenericStyles.bottom18,
                 SDGenericStyles.justifyItemsEnd]}>
-                    <TourGuideZone zone={numericConstants.THREE} borderRadius={numericConstants.TWENTY}
-                        text={alertTextMessages.SKIP_SAVE_CATEGORIES} shape={miscMessage.RECTANGLE}>
-                        <TouchableOpacity activeOpacity={.7} onPress={async () => {
-                            setLoaderCallback(true);
-                            await saveCategoryDetailsToKeyChain(keyChainConstansts.SAVE_CATEGORY_BUTTON_TYPE,
-                                actionButtonTextConstants.SAVE_BUTTON);
-                            navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
-                            stop();
-                            setLoaderCallback(false);
-                        }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
-                        SDGenericStyles.backgroundColorYellow]}>
-                            <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyRobotoMedium,
-                            SDGenericStyles.textCenterAlign]}>
-                                {actionButtonTextConstants.SKIP_BUTTON_TEXT}
-                            </Text>
-                        </TouchableOpacity>
-                    </TourGuideZone>
+                    {/* <TourGuideZone zone={numericConstants.THREE} borderRadius={numericConstants.TWENTY}
+                        text={alertTextMessages.SKIP_SAVE_CATEGORIES} shape={miscMessage.RECTANGLE}> */}
+                    <TouchableOpacity activeOpacity={.7} onPress={async () => {
+                        setLoaderCallback(true);
+                        await saveCategoryDetailsToKeyChain(keyChainConstansts.SAVE_CATEGORY_BUTTON_TYPE,
+                            actionButtonTextConstants.SAVE_BUTTON);
+                        navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
+                        stop();
+                        setLoaderCallback(false);
+                    }} style={[categoryViewStyles.saveButtonContainer, SDGenericStyles.justifyContentCenter,
+                    SDGenericStyles.backgroundColorYellow]}>
+                        <Text style={[SDGenericStyles.ft18, SDGenericStyles.textBlackColor, SDGenericStyles.fontFamilyRobotoMedium,
+                        SDGenericStyles.textCenterAlign]}>
+                            {actionButtonTextConstants.SKIP_BUTTON_TEXT}
+                        </Text>
+                    </TouchableOpacity>
+                    {/* </TourGuideZone> */}
                 </View>
             }
             {
@@ -149,7 +149,6 @@ export const Category = () => {
                     </TouchableOpacity>
                 </View>
             }
-
-        </View >
+        </View>
     )
 }
