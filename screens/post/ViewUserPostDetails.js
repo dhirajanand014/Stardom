@@ -115,11 +115,13 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
     });
 
 
-    // const resetFlashMessage = useCallback(() => {
-    //     downloadProgressState.isDownloading.value = false;
-    //     downloadProgressState.progressValue.value = numericConstants.ZERO;
-    //     setDownloadProgressState({ ...downloadProgressState });
-    // })
+    const resetFlashMessage = useCallback(() => {
+        if (downloadProgressState) {
+            downloadProgressState.isDownloading.value = false;
+            downloadProgressState.progressValue.value = numericConstants.ZERO;
+            setDownloadProgressState({ ...downloadProgressState });
+        }
+    })
 
     const postDescriptionSpringStyle = useAnimatedStyle(() => {
         return {

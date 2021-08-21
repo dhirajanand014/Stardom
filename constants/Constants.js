@@ -64,6 +64,7 @@ export const screens = {
     POSTS: `Posts`,
     MENU: `Menu`,
     OTP_VERIFICATION: `OTP Verification`,
+    ABOUT_STARDOM: `About Stardom`,
     USER_FOLLOWERS_FOLLOWING: `User Follow Following`,
     POSTS_USERS_SEARCH: `Posts Users Search`,
     IMAGE_PREVIEW_FILTERS: `Image Preview Filters`,
@@ -765,6 +766,7 @@ export const miscMessage = {
     RELOAD: `Reload`,
     SELECT_CATEGORIES: `Select other categories`,
     DISCLAIMER_PRIVACY_POLICY: `Disclaimer and Privacy policy`,
+    ABOUT_STARDOM: `About Stardom`,
     SIGN_UP: `Sign Up`,
     PHOTOS: `Photos`,
     MONTHS: `months`,
@@ -1164,6 +1166,17 @@ export const EULATexts = {
     P18_T6: `shall not be liable to you under any circumstances for declining to replace material. Also, be aware that there can be penalties for false claims under the DMCA.`,
     P19_T1: `For any complaints write to us at:`,
     P19_T2: `newyolkllp@gmail.com`
+}
+
+export const AboutStardomTexts = {
+    P1: `Stardom is a personalisation app where one can click / upload a photo, add filter, select relevant category and BOOM, your photo wallpaper is ready!`,
+    P2: `From movies to sports, from travel to food, one shall choose the categories they love. You will get new wallpapers every day.`,
+    P3: `It's a community of celebrities, photographers, food bloggers, artists etc. Search wallpaper or the user profile with just one click`,
+    P4: `Customise your photo with filters & crop the image manually so that you enjoy the PERFECT FRAME even after the photo is clicked.`,
+    P5: `We don't spam the photos! You need to get 'required likes' to get featured on the category, those who follow you can still enjoy your pics on their feed without any hassle.`,
+    P6: `Choose the wallpaper to your lock screen, home screen or both.`,
+    P7: `You can share the wallpaper to WhatsApp, WhatsApp status, Facebook & Instagram with one click.`,
+    P8: `Keep the public & private photos on the same profile, just set the photo to 'PRIVATE' so that only your permitted family & friends can see those photos. Those secret admirers & fans who doesn't belong to your closed circle can still see your PUBLIC images anyway.`
 }
 
 export const countRanges = [

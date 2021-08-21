@@ -35,8 +35,7 @@ export const EULAAcceptance = () => {
                 <Text style={[SDGenericStyles.ft20, SDGenericStyles.textColorPink, SDGenericStyles.fontFamilyRobotoMedium]}>{miscMessage.DISCLAIMER_PRIVACY_POLICY}</Text>
                 <View style={[glancePostStyles.EULAModalTitleDivider, SDGenericStyles.backgroundColorWhite]} />
             </View>
-            <ScrollView style={[glancePostStyles.EULAContainer, SDGenericStyles.marginHorizontal10, SDGenericStyles.backGroundColorBlack,
-            SDGenericStyles.padding8]} bounces
+            <ScrollView style={[glancePostStyles.EULAContainer, SDGenericStyles.marginHorizontal10, SDGenericStyles.backGroundColorBlack, SDGenericStyles.padding8]} bounces
                 onScroll={({ nativeEvent }) => isCloseToBottom(nativeEvent) && setAcceptedEULA(true)}>
                 <Text style={[SDGenericStyles.mv10, SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoBold, SDGenericStyles.textColorWhite]}>{EULATexts.H1}</Text>
                 <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.textColorWhite]}><Text style={SDGenericStyles.fontFamilyRobotoBold}>{EULATexts.P1_H}</Text>{EULATexts.P1_T}</Text>

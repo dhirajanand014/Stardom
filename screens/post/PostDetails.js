@@ -123,13 +123,13 @@ export const PostDetails = forwardRef((props, ref) => {
     //     }
     // });
 
-    // const resetFlashMessage = useCallback(() => {
-    //     if (downloadProgressState) {
-    //         downloadProgressState.isDownloading.value = false;
-    //         downloadProgressState.progressValue.value = numericConstants.ZERO;
-    //         setDownloadProgressState({ ...downloadProgressState });
-    //     }
-    // });
+    const resetFlashMessage = useCallback(() => {
+        if (downloadProgressState) {
+            downloadProgressState.isDownloading.value = false;
+            downloadProgressState.progressValue.value = numericConstants.ZERO;
+            setDownloadProgressState({ ...downloadProgressState });
+        }
+    });
 
     const postDescriptionSpringStyle = useAnimatedStyle(() => {
         return {
@@ -200,12 +200,12 @@ export const PostDetails = forwardRef((props, ref) => {
                     </Animated.View>
                 </View>
             </View>
-            <Animated.View style={glancePostStyles.searchIconContainer}>
+            <View style={glancePostStyles.searchIconContainer}>
                 {
                     optionsState.showSearch && postDetailsState.tapVisible &&
                     <PostSearch sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={ref} />
                 }
-            </Animated.View>
+            </View>
             {
                 postDetailsState.tapVisible &&
                 <ActionButton buttonColor={colorConstants.TRANSPARENT_BUTTON} backgroundTappable={true} size={numericConstants.TWENTY_EIGHT} useNativeFeedback={false} degrees={numericConstants.ZERO}

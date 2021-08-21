@@ -37,7 +37,6 @@ export const SDUserMenus = (drawerProps) => {
         isLoggedIn: false
     });
     const handleMenuClickAction = useCallback(async (item) => {
-        setLoaderCallback(true);
         switch (item.key) {
             case screens.EDIT_USER_PROFILE:
                 navigation.navigate(screens.EDIT_USER_PROFILE);
@@ -60,11 +59,13 @@ export const SDUserMenus = (drawerProps) => {
             case actionButtonTextConstants.VERIFY_USER:
                 setProfileMenu({ ...profileMenu, showSubmitVerifyModal: true });
                 break;
+            case actionButtonTextConstants.ABOUT_STARDOM:
+                navigation.navigate(screens.ABOUT_STARDOM);
+                break;
             default: navigation.reset({ index: numericConstants.ZERO, routes: [{ name: screens.GLANCE }] });
                 break;
         }
         drawerProps.navigation.closeDrawer();
-        setLoaderCallback(false);
     });
 
     const injectMenuOptions = (index, allMenuOptions, numberOfDeletes, label, key, isLoggedIn, icon) => {
