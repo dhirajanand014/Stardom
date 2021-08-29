@@ -70,7 +70,7 @@ export const Category = () => {
                 <View style={SDGenericStyles.padding10}>
                     <View style={[SDGenericStyles.alignItemsStart, SDGenericStyles.justifyItemsStart, SDGenericStyles.paddingStart10]}>
                         {
-                            loggedInUser.isLoggedIn && JSON.parse(loggedInUser.loginDetails.details).name &&
+                            loggedInUser.isLoggedIn && loggedInUser.loginDetails.details && JSON.parse(loggedInUser.loginDetails.details).name &&
                             <Text style={[SDGenericStyles.ft16, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                                 {miscMessage.HEY} {JSON.parse(loggedInUser.loginDetails.details).name.toUpperCase()}{stringConstants.COMMA}
                             </Text>

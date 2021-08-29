@@ -87,7 +87,8 @@ export default function App({ navigationRef }) {
       [requestConstants.DOWNLOAD_COUNT]: numericConstants.ZERO,
     },
     isFollowing: false,
-    privateRequestAccessStatus: PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED
+    privateRequestAccessStatus: PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED,
+    userPostNotificationsEnabled: false
   })
 
   const [profiles, setProfiles] = useState(jsonConstants.EMPTY);

@@ -1,11 +1,9 @@
 import React, { forwardRef, useCallback, useContext, useImperativeHandle, useState } from 'react';
-import { Text, View, Image, Linking, TouchableOpacity, Switch } from 'react-native';
+import { Text, View, Image, Linking, TouchableOpacity } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import {
-    stringConstants, postCountTypes, numericConstants,
-    colorConstants, postitionStringConstants, miscMessage,
-    jsonConstants, alertTextMessages, actionButtonTextConstants,
-    errorMessages, screens
+    stringConstants, postCountTypes, numericConstants, errorMessages, screens,
+    miscMessage, jsonConstants, alertTextMessages, actionButtonTextConstants
 } from '../../constants/Constants';
 import {
     checkTokenStatus, handlePostDelete, increaseAndSetPostCounts,
@@ -13,7 +11,6 @@ import {
 } from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import { RenderLoaderScroll } from '../../views/imagePost/RenderLoaderScroll';
-import ActionButton from '@logvinme/react-native-action-button';
 import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal';
 import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal';
 import { SDWallpaperModal } from '../../views/imagePost/SDWallpaperModal';
@@ -28,6 +25,7 @@ const post_description = require(`../../assets/post_description_icon.png`);
 const reportAbuseIcon = require('../../assets/post_report_abuse_icon.png');
 const post_wallpaper = require(`../../assets/menu/add_wallpaper_icon.png`);
 const post_share = require(`../../assets/post_share_icon.png`);
+
 export const ViewUserPostDetails = forwardRef((props, ref) => {
 
     const { setLoaderCallback } = useContext(CategoryContext);
@@ -195,72 +193,62 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
             </View>
             {
                 postDetailsState.tapVisible &&
-                <ActionButton buttonColor={colorConstants.TRANSPARENT_BUTTON} backgroundTappable={true} size={numericConstants.TWENTY_EIGHT} useNativeFeedback={false} degrees={numericConstants.ZERO}
-                    verticalOrientation={postitionStringConstants.DOWN} position={postitionStringConstants.RIGHT} offsetX={numericConstants.TEN} offsetY={numericConstants.THIRTY_EIGHT} hideShadow={true}
-                    autoInactive={false} spacing={numericConstants.THIRTY_EIGHT} active={postDetailsState.switchEnabled} renderIcon={(isActive) =>
-                        <Switch trackColor={{ false: colorConstants.GREY, true: colorConstants.YELLOW }}
-                            thumbColor={isActive ? colorConstants.WHITE : colorConstants.WHITE}
-                            style={{ transform: [{ scaleX: .85 }, { scaleY: .85 }] }} value={postDetailsState.switchEnabled}
-                            onValueChange={() => setPostDetailsState({ ...postDetailsState, switchEnabled: !isActive })} />
-                    }>
-                    <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} hideLabelShadow={true}
-                        useNativeFeedback={false} onPress={() => setPostDetailsStateForModal(postDetailsState, setPostDetailsState, miscMessage.POST_DESCRIPTION_MODAL_NAME)}>
-                        <View style={glancePostStyles.backgroundRoundColor_description}>
+                <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10]}>
+                    <View style={SDGenericStyles.paddingTop25}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7}
+                            onPress={() => setPostDetailsStateForModal(postDetailsState, setPostDetailsState, miscMessage.POST_DESCRIPTION_MODAL_NAME)}>
                             <Image style={glancePostStyles.icon_post_description} source={post_description} />
-                        </View>
-                    </ActionButton.Item>
-                    <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} hideLabelShadow={true} fixNativeFeedbackRadius={true}
-                        onPress={async () => await increaseAndSetPostCounts(postCountTypes.POST_LIKE_KEY, postDetailsState, setPostDetailsState,
-                            postCountTypes.POST_LIKES)}>
-                        <View style={glancePostStyles.likesBackgroundRoundColor}>
-                            <Image style={glancePostStyles.icon_post_like} source={postDetailsState.currentPost.likeAdded &&
-                                post_like_selected || post_like} />
-                        </View>
-                        <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                        SDGenericStyles.textCenterAlign, SDGenericStyles.top6]}>{postDetailsState.currentPost && postDetailsState.currentPost.postLikes}</Text>
-                    </ActionButton.Item>
-                    <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={() =>
-                        setPostDetailsState({ ...postDetailsState, wallpaperModal: true })}>
-                        <View style={glancePostStyles.setWallPaperBackgroundRoundColor}>
-                            <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
-                        </View>
-                        <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                        SDGenericStyles.textCenterAlign, SDGenericStyles.top8, SDGenericStyles.marginRight4]}>
-                            {postDetailsState.currentPost && postDetailsState.currentPost.postWallpapers}</Text>
-                    </ActionButton.Item>
-                    {/* <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true} onPress={async () =>
-                    await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback,
-                        resetFlashMessage)}>
-                    <View style={glancePostStyles.backgroundRoundColor}>
-                        <Image style={glancePostStyles.icon_post_details} source={post_download} />
+                        </TouchableOpacity>
                     </View>
-                    <Text style={[SDGenericStyles.ft10, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                    SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{postDetailsState.currentPost.postDownloads}</Text>
-                </ActionButton.Item> */}
-                    <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
-                        onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage)}>
-                        <View style={glancePostStyles.backgroundRoundColor}>
+                    <View style={SDGenericStyles.paddingTop25}>
+                        <TouchableOpacity style={glancePostStyles.likesBackgroundRoundColor} activeOpacity={.7}
+                            onPress={async () => await increaseAndSetPostCounts(postCountTypes.POST_LIKE_KEY, postDetailsState, setPostDetailsState, postCountTypes.POST_LIKES)}>
+                            <Image style={glancePostStyles.icon_post_like} source={postDetailsState.currentPost.likeAdded && post_like_selected || post_like} />
+                        </TouchableOpacity>
+                        <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textCenterAlign, SDGenericStyles.top6]}>
+                            {postDetailsState.currentPost && postDetailsState.currentPost.postLikes}
+                        </Text>
+                    </View>
+                    <View style={SDGenericStyles.paddingTop25}>
+                        <TouchableOpacity style={glancePostStyles.setWallPaperBackgroundRoundColor} activeOpacity={.7} onPress={() => setPostDetailsState({ ...postDetailsState, wallpaperModal: true })}>
+                            <Image style={glancePostStyles.icon_post_details} source={post_wallpaper} />
+                        </TouchableOpacity>
+                        <Text style={[SDGenericStyles.ft14, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textCenterAlign, SDGenericStyles.top8, SDGenericStyles.marginRight4]}>
+                            {postDetailsState.currentPost && postDetailsState.currentPost.postWallpapers}
+                        </Text>
+                    </View>
+                    {/* <View style={SDGenericStyles.paddingTop25}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7} onPress={async () =>
+                            await downloadImageFromURL(postCountTypes.POST_DOWNLOADS_KEY, postDetailsState, setPostDetailsState, downloadCallback, resetFlashMessage)}>
+                            <Image style={glancePostStyles.icon_post_details} source={post_download} />
+                        </TouchableOpacity>
+                        <Text style={[SDGenericStyles.ft10, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>
+                            {postDetailsState.currentPost.postDownloads}
+                        </Text>
+                    </View> */}
+                    <View style={SDGenericStyles.paddingTop25}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7} onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage)}>
                             <Image style={glancePostStyles.icon_post_share} source={post_share} />
-                        </View>
-                    </ActionButton.Item>
-                    <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} hideLabelShadow={true}
-                        useNativeFeedback={false} onPress={() => setPostDetailsStateForModal(postDetailsState, setPostDetailsState, miscMessage.POST_REPORT_ABUSE_MODAL_NAME)}>
-                        <View style={glancePostStyles.backgroundRoundColor_report_abuse}>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={SDGenericStyles.paddingTop25}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor_report_abuse} activeOpacity={.7}
+                            onPress={() => setPostDetailsStateForModal(postDetailsState, setPostDetailsState, miscMessage.POST_REPORT_ABUSE_MODAL_NAME)}>
                             <Image style={glancePostStyles.icon_post_report_abuse} source={reportAbuseIcon} />
-                        </View>
-                        <Text style={[SDGenericStyles.ft7, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium,
-                        SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>{miscMessage.REPORT_ABUSE_TEXT}</Text>
-                    </ActionButton.Item>
+                        </TouchableOpacity>
+                        <Text style={[SDGenericStyles.ft7, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>
+                            {miscMessage.REPORT_ABUSE_TEXT}
+                        </Text>
+                    </View>
                     {
                         userDetails.id == postDetailsState.currentPost.user.id &&
-                        <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
-                            onPress={() => setPostDetailsState({ ...postDetailsState, showUserOptionModal: true })}>
-                            <View style={glancePostStyles.backgroundRoundColor}>
+                        <View style={SDGenericStyles.paddingTop25}>
+                            <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7} onPress={() => setPostDetailsState({ ...postDetailsState, showUserOptionModal: true })}>
                                 <DeleteIcon width={numericConstants.TWENTY_EIGHT} height={numericConstants.TWENTY_EIGHT} stroke={colors.WHITE} />
-                            </View>
-                        </ActionButton.Item>
+                            </TouchableOpacity>
+                        </View>
                     }
-                </ActionButton>
+                </View>
             }
             <PostDescriptionModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
                 setPostDetailsState={setPostDetailsState} />

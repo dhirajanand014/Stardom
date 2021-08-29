@@ -59,6 +59,7 @@ export const Profile = () => {
         };
         profileDetail.isFollowing = false;
         profileDetail.privateRequestAccessStatus = PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
+        profileDetail.userPostNotificationsEnabled = false;
         profile.isSameUser = false;
         navigation.setParams({ isFrom: stringConstants.EMPTY });
         setLoggedInUserHasPrivateAccess(false);

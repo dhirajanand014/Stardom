@@ -9,7 +9,8 @@ import {
     miscMessage, width, height, numericConstants, placeHolderText,
     screens, headerStrings, fieldControllerName, isAndroid, notificationConsts,
     isIOS, OTP_INPUTS, errorMessages, requestConstants, modalTextConstants,
-    jsonConstants, defaultProfilesValue, SDMenuOptions, AUTO_SUBMIT_OTP_TIME_LIMIT, formRequiredRules, countRanges
+    jsonConstants, defaultProfilesValue, SDMenuOptions, AUTO_SUBMIT_OTP_TIME_LIMIT,
+    formRequiredRules, countRanges, RESEND_OTP_TIME_LIMIT
 } from '../constants/Constants';
 import {
     NativeModules,
@@ -567,7 +568,7 @@ const filterLoggedInUsersPosts = async (allPosts, isForPostWallpaper) => {
                     return post.postType == fieldControllerName.POST_TYPE_PUBLIC ||
                         post.postType == fieldControllerName.POST_TYPE_PRIVATE;
                 }
-                return post.postType == fieldControllerName.POST_TYPE_PUBLIC;
+                return post.user.user_type == miscMessage.VERIFIED_AUTHOR && post.postType == fieldControllerName.POST_TYPE_PUBLIC;
             });
         } else {
             allPosts = isForPostWallpaper && allPosts.filter(post => {
@@ -1206,6 +1207,8 @@ export const getLoggedInUserDetails = async () => {
 export const fetchUpdateLoggedInUserProfile = async (loggedInUser, setLoggedInUser, fetchUpdated) => {
     try {
         const user = await getLoggedInUserDetails();
+        loggedInUser.loginDetails = { ...user };
+        loggedInUser.isLoggedIn = true
         if (user && fetchUpdated) {
             const updatedDetails = await axiosGetWithAuthorization(urlConstants.getUserProfile, user.token);
             if (updatedDetails.status == numericConstants.TWO_HUNDRED) {
@@ -1362,6 +1365,11 @@ export const handleUserFollowUnfollowAction = async (action, profileId, isPrivat
                     [requestConstants.FOLLOWING_ID]: userDetails.id,
                 }
                 url = urlConstants.removeFollower;
+            } else if (action == actionButtonTextConstants.UPDATE_NOTIFICATION) {
+                requestData = {
+                    [requestConstants.FOLLOWING_ID]: profileId
+                }
+                url = urlConstants.updateFollowNotificaton;
             } else {
                 requestData = {
                     [requestConstants.FOLLOWING_ID]: profileId,
@@ -1464,13 +1472,16 @@ export const updateProfileActionValueToState = async (responseData, action, prof
                         }
                     });
                     break;
+                case actionButtonTextConstants.UPDATE_NOTIFICATION:
+                    profileDetail.userPostNotificationsEnabled = responseDataMessage == alertTextMessages.UPDATE_NOTIFICATION_TRUE;
+                    break;
                 default:
                     break;
             }
             setTimeout(() => {
                 profileDetail.isFollowing = profile.followers.some(follower => follower.follower_id == user.id);
                 setProfileDetail({ ...profileDetail });
-                setSdomDatastate({ ...sdomDatastate });
+                setSdomDatastate({ ...sdomDatastate })
             }, numericConstants.TWENTY);
         }
     } catch (error) {
@@ -1478,7 +1489,7 @@ export const updateProfileActionValueToState = async (responseData, action, prof
     }
 }
 
-export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUser, profileDetail, setProfileDetail) => {
+export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUser, profileDetail, setProfileDetail, setAgain) => {
     if (loggedInUser.loginDetails && loggedInUser.loginDetails.details) {
         const loggedInUserDetails = JSON.parse(loggedInUser.loginDetails.details);
         profileDetail.isSameUser = loggedInUserDetails.id == profile.id;
@@ -1487,6 +1498,8 @@ export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUs
         if (profileDetail.isFollowing) {
             profileDetail.privateRequestAccessStatus = profile.followers && profile.followers.find(following =>
                 following.follower_id == loggedInUserDetails.id).pvtaccess || PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
+            profileDetail.userPostNotificationsEnabled = profile.followers && profile.followers.some(following =>
+                following.notification_status == numericConstants.ONE) || false;
         }
     }
     profileDetail.count = profile.id == numericConstants.MINUS_ONE && getDefaultProfilePostsCounts ||
@@ -1564,6 +1577,10 @@ const displaySnackBarBasedOnResponseData = (responseData, action) => {
         if (responseData.message == miscMessage.SUCCESSFULLY_UNFOLLOWED_PRIVATE_ACCESS) {
             showSnackBar(alertTextMessages.SUCCESS_PRIVATE_UNFOLLOW, true);
         }
+    } else if (action == actionButtonTextConstants.UPDATE_NOTIFICATION) {
+        showSnackBar(responseData.message == alertTextMessages.UPDATE_NOTIFICATION_TRUE &&
+            alertTextMessages.SUCCESS_UPDATED_NOTIFICATION_TRUE || alertTextMessages.SUCCESS_UPDATED_NOTIFICATION_FALSE,
+            responseData.message == alertTextMessages.UPDATE_NOTIFICATION_TRUE);
     }
 }
 

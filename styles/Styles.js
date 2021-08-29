@@ -397,6 +397,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingTop20: {
         paddingTop: 20
     },
+    paddingTop25: {
+        paddingTop: 25
+    },
     paddingTop30: {
         paddingTop: 30
     },
@@ -1296,6 +1299,13 @@ export const flatListItemStyles = StyleSheet.create({
         top: 2,
         paddingTop: 2,
         left: 10
+    },
+    textsViewUserPosts: {
+        flex: 1,
+        flexDirection: 'column',
+        top: 10,
+        paddingTop: 10,
+        left: 5
     },
 });
 

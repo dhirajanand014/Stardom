@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Image, TouchableOpacity, View } from 'react-native'
+import { Image, TouchableOpacity } from 'react-native'
 import { numericConstants, screens } from '../../constants/Constants';
 import { glancePostStyles } from '../../styles/Styles'
 import { useNavigation } from '@react-navigation/native';

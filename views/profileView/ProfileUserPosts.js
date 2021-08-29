@@ -27,7 +27,7 @@ export const ProfileUserPosts = React.memo(({ item, index, hasPrivateAccess, isS
                                 uri: item.postImage, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable
                             }}
                                 style={flatListItemStyles.imageBackGround}>
-                                <View style={flatListItemStyles.textsView}>
+                                <View style={flatListItemStyles.textsViewUserPosts}>
                                     <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
                                         <Text style={[SDGenericStyles.ft14, SDGenericStyles.fontFamilyRobotoRegular,
                                         SDGenericStyles.colorWhite]}>

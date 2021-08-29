@@ -81,7 +81,7 @@ export const SDUserMenus = (drawerProps) => {
     });
 
     const filterOutLoginMenus = useCallback((allMenuOptions, details) => {
-        let index = allMenuOptions.findIndex(menu => menu.label == miscMessage.FOLLOWING_TEXT)
+        let index = allMenuOptions.findIndex(menu => menu.label == miscMessage.FOLLOWING_TEXT);
         if (details) {
             const followers = details.followers;
             profileMenu.privateRequestCount = followers.filter(follower => follower.pvtaccess == PRIVATE_FOLLOW_UNFOLLOW.REQUESTED).length;
@@ -93,8 +93,7 @@ export const SDUserMenus = (drawerProps) => {
                 if ((details.verification && details.id == details.verification.user) && allMenuOptions.some(menu => menu.label == miscMessage.GET_VERIFIED)) {
                     const index = allMenuOptions.findIndex(menu => menu.label == miscMessage.GET_VERIFIED);
                     allMenuOptions.splice(index, numericConstants.ONE)
-                } else if (!allMenuOptions.some(menu => menu.label == miscMessage.GET_VERIFIED) && (details.user_type !== miscMessage.VERIFIED_AUTHOR
-                    || details.user_type !== miscMessage.AUTHOR_UNAPPROVED) && (!details.verification)) {
+                } else if (!allMenuOptions.some(menu => menu.label == miscMessage.GET_VERIFIED) && (details.user_type == miscMessage.AUTHOR && !details.verification)) {
                     injectMenuOptions(index, allMenuOptions, numericConstants.ZERO, miscMessage.GET_VERIFIED, actionButtonTextConstants.VERIFY_USER,
                         true, require(`../assets/menu/get_verified_icon.gif`));
                 }

@@ -1,17 +1,18 @@
-import ActionButton from '@logvinme/react-native-action-button';
 import { useIsFocused } from '@react-navigation/core';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, InteractionManager, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, Image, InteractionManager } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { CategoryContext } from '../../App';
 import { SDBottomSheet } from '../../components/bottomsheet/SDBottomSheet';
 import { SDScaleAnimation } from '../../components/button/SDScaleAnimation';
 import { DeleteIcon } from '../../components/icons/DeleteIcon';
+import { NotificationDisabledIcon } from '../../components/icons/NotificationDisabledIcon';
+import { NotificationEnabledIcon } from '../../components/icons/NotificationEnabledIcon';
 import { UserSelectionOptionModal } from '../../components/modals/UserSelectionOptionModal';
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
-    actionButtonTextConstants, alertTextMessages, colorConstants, height, jsonConstants, miscMessage,
-    numericConstants, postitionStringConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, urlConstants, width
+    actionButtonTextConstants, alertTextMessages, height, jsonConstants, miscMessage,
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, urlConstants, width
 } from '../../constants/Constants';
 import {
     checkLoggedInUserMappedWithUserProfile, fetchPostsOfUserProfile, handleProfileImageDelete, handleUserPostAction,
@@ -117,27 +118,22 @@ export const SDProfileBottomSheet = props => {
 
     return (
         <React.Fragment>
-            <ActionButton buttonColor={colorConstants.TRANSPARENT_BUTTON} backgroundTappable={true} size={numericConstants.TWENTY_EIGHT} useNativeFeedback={false} degrees={numericConstants.ZERO}
-                verticalOrientation={postitionStringConstants.DOWN} position={postitionStringConstants.RIGHT} offsetX={numericConstants.TEN} offsetY={numericConstants.THIRTY_EIGHT} hideShadow={true}
-                autoInactive={false} spacing={numericConstants.TWENTY_FIVE} active={bottomSheetState.iconsSwitchEnabled} renderIcon={(isActive) => <Switch trackColor={{ false: colorConstants.GREY, true: colorConstants.YELLOW }}
-                    thumbColor={isActive ? colorConstants.WHITE : colorConstants.WHITE} onValueChange={() => setBottomSheetState({ ...bottomSheetState, iconsSwitchEnabled: !isActive })}
-                    style={{ transform: [{ scaleX: .85 }, { scaleY: .85 }] }} value={bottomSheetState.iconsSwitchEnabled} />}>
-                <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
-                    onPress={async () => await shareImage({ postImage: props.profile.profile_image, postTitle: props.profile.name }, downloadCallback, resetFlashMessage)}>
-                    <View style={glancePostStyles.backgroundRoundColor}>
+            <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10]}>
+                <View style={SDGenericStyles.marginTop33}>
+                    <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () => await shareImage({ postImage: props.profile.profile_image, postTitle: props.profile.name },
+                        downloadCallback, resetFlashMessage)} activeOpacity={.7}>
                         <Image style={glancePostStyles.icon_post_share} source={post_share} />
-                    </View>
-                </ActionButton.Item>
+                    </TouchableOpacity>
+                </View>
                 {
                     props.loggedInUser.loginDetails.details && props.profileDetail.isSameUser && props.profile.profile_image !== urlConstants.profileStorageUrl &&
-                    <ActionButton.Item buttonColor={colorConstants.TRANSPARENT_BUTTON} fixNativeFeedbackRadius={true}
-                        onPress={() => setBottomSheetState({ ...bottomSheetState, showUserOptionModal: true })}>
-                        <View style={glancePostStyles.backgroundRoundColor}>
+                    <View style={SDGenericStyles.paddingTop25}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7} onPress={() => setBottomSheetState({ ...bottomSheetState, showUserOptionModal: true })}>
                             <DeleteIcon width={numericConstants.TWENTY_EIGHT} height={numericConstants.TWENTY_EIGHT} stroke={colors.WHITE} />
-                        </View>
-                    </ActionButton.Item>
+                        </TouchableOpacity>
+                    </View>
                 }
-            </ActionButton>
+            </View>
             <RenderProfileDetails profile={props.profile} profileDetail={props.profileDetail} isDisabled={props.isDisabled} setLoaderCallback={props.setLoaderCallback}
                 sdomDatastate={props.sdomDatastate} setSdomDatastate={props.setSdomDatastate} loggedInUser={props.loggedInUser} setProfileDetail={props.setProfileDetail}
                 navigation={props.navigation} />
@@ -201,7 +197,7 @@ const RenderProfileDetails = React.memo(({ profile, profileDetail, isDisabled, s
                     </SDEntryAnimation>
                     <SDEntryAnimation index={numericConstants.TWO}>
                         <SDScaleAnimation disabled={false} scaleTo={numericConstants.ZEROPTNINETY}>
-                            <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingLeft5, SDGenericStyles.elevation3]} onPress={async () => {
+                            <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingHorizontal5, SDGenericStyles.elevation3]} onPress={async () => {
                                 setLoaderCallback(true, profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED
                                     && alertTextMessages.PRIVATE_FOLLOWING_USER || alertTextMessages.PRIVATE_UNFOLLOWING_USER);
                                 await handleUserPostAction(profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED &&
@@ -210,7 +206,8 @@ const RenderProfileDetails = React.memo(({ profile, profileDetail, isDisabled, s
                                 await checkLoggedInUserMappedWithUserProfile(profile, loggedInUser, profileDetail, setProfileDetail);
                                 setLoaderCallback(false, stringConstants.EMPTY);
                             }}>
-                                {profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED &&
+                                {
+                                    profileDetail.isFollowing && profileDetail.privateRequestAccessStatus == PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED &&
                                     (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding4, SDGenericStyles.borderRadius20]}>
                                         <Image style={[SDGenericStyles.lockUnlockIconStyle, SDGenericStyles.tintColorWhite]}
                                             source={require(`../../assets/locked_icon.png`)} />
@@ -224,10 +221,29 @@ const RenderProfileDetails = React.memo(({ profile, profileDetail, isDisabled, s
                                     (<View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding4, SDGenericStyles.borderRadius20]}>
                                         <Image style={[SDGenericStyles.lockUnlockIconStyle, SDGenericStyles.tintColorGreen]}
                                             source={require(`../../assets/unlocked_icon.png`)} />
-                                    </View>)}
+                                    </View>)
+                                }
                             </TouchableOpacity>
                         </SDScaleAnimation>
                     </SDEntryAnimation>
+                    {
+                        profileDetail.isFollowing &&
+                        <SDEntryAnimation index={numericConstants.THREE}>
+                            <SDScaleAnimation disabled={false} scaleTo={numericConstants.ZEROPTNINETY}>
+                                <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.paddingRight5, SDGenericStyles.elevation3]} onPress={async () =>
+                                    await handleUserPostAction(actionButtonTextConstants.UPDATE_NOTIFICATION, profile, sdomDatastate, setSdomDatastate,
+                                        loggedInUser, profileDetail, setProfileDetail, navigation, false)}>
+                                    {
+                                        profileDetail.userPostNotificationsEnabled && <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding4, SDGenericStyles.borderRadius20]}>
+                                            <NotificationEnabledIcon width={numericConstants.TWENTY} height={numericConstants.TWENTY} fill={colors.SDOM_YELLOW} />
+                                        </View> || <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding4, SDGenericStyles.borderRadius20]}>
+                                            <NotificationDisabledIcon width={numericConstants.TWENTY} height={numericConstants.TWENTY} fill={colors.SDOM_YELLOW} />
+                                        </View>
+                                    }
+                                </TouchableOpacity>
+                            </SDScaleAnimation>
+                        </SDEntryAnimation>
+                    }
                 </View>
             </View>
         }

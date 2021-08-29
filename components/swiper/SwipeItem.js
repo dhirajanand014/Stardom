@@ -2,7 +2,7 @@ import React from 'react';
 import FastImage from 'react-native-fast-image';
 import { PinchGestureHandler, TapGestureHandler } from 'react-native-gesture-handler';
 import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { numericConstants } from '../../constants/Constants';
+import { numericConstants, stringConstants } from '../../constants/Constants';
 import { scrollWhenPostIdFromNotification } from '../../helper/Helper';
 import { glancePostStyles } from '../../styles/Styles';
 
@@ -48,16 +48,16 @@ export const SwipeItem = (props) => {
     })
     return (
         <Animated.View key={index} style={glancePostStyles.overlayImage}>
-            <TapGestureHandler numberOfTaps={numericConstants.ONE}
+            <TapGestureHandler key={`${numericConstants.ONE}${stringConstants.UNDERSCORE}${index}`} numberOfTaps={numericConstants.ONE}
                 onActivated={() => {
                     postDetailsRef.current?.setTapVisible(!postDetailsRef.current?.tapVisible);
                     animation.value = animation.value == numericConstants.ONE && numericConstants.ZEROPTSEVEN || numericConstants.ONE;
                 }}>
-                <TapGestureHandler numberOfTaps={numericConstants.TWO} onActivated={() => postDetailsRef.current.setWallPaper()}>
+                <TapGestureHandler key={`${numericConstants.TWO}${stringConstants.UNDERSCORE}${index}`} numberOfTaps={numericConstants.TWO} onActivated={() => postDetailsRef.current.setWallPaper()}>
                     <Animated.View style={animationStyle}>
-                        <PinchGestureHandler onGestureEvent={pinchGenstureHandler}>
-                            <Animated.View key={`${index}_${item.categoryId}`} style={pinchZoomStyle}>
-                                <FastImage style={[{ width: width, height: height }]} source={{
+                        <PinchGestureHandler key={`${numericConstants.THREE}${stringConstants.UNDERSCORE}${index}`} onGestureEvent={pinchGenstureHandler}>
+                            <Animated.View style={pinchZoomStyle}>
+                                <FastImage key={`${numericConstants.FOUR}${stringConstants.UNDERSCORE}${index}`} style={[{ width: width, height: height }]} source={{
                                     uri: item.postImage,
                                     priority: FastImage.priority.high,
                                     cache: FastImage.cacheControl.immutable
