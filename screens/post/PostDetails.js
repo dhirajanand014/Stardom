@@ -23,6 +23,7 @@ const post_description = require(`../../assets/post_description_icon.png`);
 const reportAbuseIcon = require('../../assets/post_report_abuse_icon.png');
 const post_wallpaper = require(`../../assets/menu/add_wallpaper_icon.png`);
 const post_download = require(`../../assets/post_download_icon.png`);
+const scrollToTopIcon = require(`../../assets/scroll_to_top_icon.png`);
 const post_share = require(`../../assets/post_share_icon.png`);
 const category_selection = require('../../assets/category_selection_icon.png');
 
@@ -208,6 +209,15 @@ export const PostDetails = forwardRef((props, ref) => {
             {
                 postDetailsState.tapVisible &&
                 <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10]}>
+                    <View style={SDGenericStyles.paddingTop30}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7}
+                            onPress={() => {
+                                ref?.current?.setPostAnimationVisible(false);
+                                viewPagerRef.current.scrollTo(numericConstants.ONE);
+                            }}>
+                            <Image style={glancePostStyles.icon_scroll_to_top} source={scrollToTopIcon} />
+                        </TouchableOpacity>
+                    </View>
                     <View style={SDGenericStyles.paddingTop25}>
                         <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7}
                             onPress={() => setPostDetailsStateForModal(postDetailsState, setPostDetailsState, miscMessage.POST_DESCRIPTION_MODAL_NAME)}>

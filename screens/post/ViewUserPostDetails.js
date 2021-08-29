@@ -21,6 +21,7 @@ import { TabActions } from '@react-navigation/native';
 
 const post_like = require(`../../assets/post_likes_icon.png`);
 const post_like_selected = require(`../../assets/post_likes_selected_icon.png`);
+const scrollToTopIcon = require(`../../assets/scroll_to_top_icon.png`);
 const post_description = require(`../../assets/post_description_icon.png`);
 const reportAbuseIcon = require('../../assets/post_report_abuse_icon.png');
 const post_wallpaper = require(`../../assets/menu/add_wallpaper_icon.png`);
@@ -30,7 +31,7 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
 
     const { setLoaderCallback } = useContext(CategoryContext);
 
-    const { textPostTypeAnimationValue, textPostDescriptionAnimationValue } = props;
+    const { textPostTypeAnimationValue, textPostDescriptionAnimationValue, viewPagerRef } = props;
 
     const [postDetailsState, setPostDetailsState] = useState({
         currentPostIndex: numericConstants.ZERO,
@@ -194,6 +195,15 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
             {
                 postDetailsState.tapVisible &&
                 <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10]}>
+                    <View style={SDGenericStyles.paddingTop30}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7}
+                            onPress={() => {
+                                ref?.current?.setPostAnimationVisible(false);
+                                viewPagerRef.current.scrollTo(numericConstants.ONE);
+                            }}>
+                            <Image style={glancePostStyles.icon_scroll_to_top} source={scrollToTopIcon} />
+                        </TouchableOpacity>
+                    </View>
                     <View style={SDGenericStyles.paddingTop25}>
                         <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7}
                             onPress={() => setPostDetailsStateForModal(postDetailsState, setPostDetailsState, miscMessage.POST_DESCRIPTION_MODAL_NAME)}>

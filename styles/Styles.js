@@ -814,6 +814,10 @@ export const glancePostStyles = StyleSheet.create({
         width: 26,
         height: 26
     },
+    icon_scroll_to_top: {
+        width: 18,
+        height: 18
+    },
     icon_post_details: {
         width: 26,
         height: 26,

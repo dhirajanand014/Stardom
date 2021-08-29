@@ -235,9 +235,9 @@ const RenderProfileDetails = React.memo(({ profile, profileDetail, isDisabled, s
                                         loggedInUser, profileDetail, setProfileDetail, navigation, false)}>
                                     {
                                         profileDetail.userPostNotificationsEnabled && <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding4, SDGenericStyles.borderRadius20]}>
-                                            <NotificationEnabledIcon width={numericConstants.TWENTY} height={numericConstants.TWENTY} fill={colors.SDOM_YELLOW} />
+                                            <Image style={[SDGenericStyles.lockUnlockIconStyle, SDGenericStyles.tintColorYellow]} source={require(`../../assets/notification_enabled_icon.png`)} />
                                         </View> || <View style={[SDGenericStyles.textBoxGray, SDGenericStyles.padding4, SDGenericStyles.borderRadius20]}>
-                                            <NotificationDisabledIcon width={numericConstants.TWENTY} height={numericConstants.TWENTY} fill={colors.SDOM_YELLOW} />
+                                            <Image style={[SDGenericStyles.lockUnlockIconStyle, SDGenericStyles.tintColorWhite]} source={require(`../../assets/notification_disabled_icon.png`)} />
                                         </View>
                                     }
                                 </TouchableOpacity>

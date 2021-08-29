@@ -1726,12 +1726,12 @@ export const fetchUserProfilePosts = async (userId, setPosts, postDetailsRef) =>
         let responseData = processResponseData(response);
         if (responseData.posts.length) {
             postData = await filterLoggedInUsersPosts(responseData.posts, false) || jsonConstants.EMPTY;
-            postData.map(postItem => postItem.postCategoriesIn = fetchAndDisplayNamesAndCategoryTitles(postItem))
-                .sort((datePost1, datePost2) => {
-                    return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
-                }) || responsePostsData.sort((datePost1, datePost2) => {
-                    return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
-                });
+            postData.map(postItem => postItem.postCategoriesIn = fetchAndDisplayNamesAndCategoryTitles(postItem));
+            postData.sort((datePost1, datePost2) => {
+                return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+            }) || responseData.posts.sort((datePost1, datePost2) => {
+                return Date.parse(datePost2.created_at) - Date.parse(datePost1.created_at);
+            });
             postDetailsRef?.current?.setNewPostViewed(true);
         }
     } catch (error) {
