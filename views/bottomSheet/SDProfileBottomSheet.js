@@ -6,8 +6,6 @@ import { CategoryContext } from '../../App';
 import { SDBottomSheet } from '../../components/bottomsheet/SDBottomSheet';
 import { SDScaleAnimation } from '../../components/button/SDScaleAnimation';
 import { DeleteIcon } from '../../components/icons/DeleteIcon';
-import { NotificationDisabledIcon } from '../../components/icons/NotificationDisabledIcon';
-import { NotificationEnabledIcon } from '../../components/icons/NotificationEnabledIcon';
 import { UserSelectionOptionModal } from '../../components/modals/UserSelectionOptionModal';
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {

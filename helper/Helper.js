@@ -1207,9 +1207,9 @@ export const getLoggedInUserDetails = async () => {
 export const fetchUpdateLoggedInUserProfile = async (loggedInUser, setLoggedInUser, fetchUpdated) => {
     try {
         const user = await getLoggedInUserDetails();
-        loggedInUser.loginDetails = { ...user };
-        loggedInUser.isLoggedIn = true
         if (user && fetchUpdated) {
+            loggedInUser.loginDetails = { ...user };
+            loggedInUser.isLoggedIn = true
             const updatedDetails = await axiosGetWithAuthorization(urlConstants.getUserProfile, user.token);
             if (updatedDetails.status == numericConstants.TWO_HUNDRED) {
                 const responseData = processResponseData(updatedDetails);
@@ -1515,7 +1515,7 @@ export const fetchPostsOfUserProfile = async (profile, profileDetail, setProfile
             response = await axiosGetWithAuthorization(url, loggedInUser.loginDetails.token);
             responseData = processResponseData(response);
             if (responseData == responseStringData.TOKEN_INVALID || responseData == responseStringData.TOKEN_EXPIRED) {
-                showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE, false, actionCallBack);
+                showSnackBar(errorMessages.PLEASE_LOGIN_TO_CONTINUE_TOKEN_EXPIRED, false, actionCallBack);
             } else {
                 userPosts = responseData.posts;
             }

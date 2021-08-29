@@ -339,8 +339,6 @@ PODS:
   - react-native-shimmer (0.6.0):
     - React (>= 0.45.1)
     - Shimmer (~> 1)
-  - react-native-viewpager (5.0.11):
-    - React-Core
   - React-perflogger (0.64.2)
   - React-RCTActionSheet (0.64.2):
     - React-Core/RCTActionSheetHeaders (= 0.64.2)
@@ -526,7 +524,6 @@ DEPENDENCIES:
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-shimmer (from `../node_modules/react-native-shimmer`)
-  - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -629,8 +626,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-shimmer:
     :path: "../node_modules/react-native-shimmer"
-  react-native-viewpager:
-    :path: "../node_modules/@react-native-community/viewpager"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -729,7 +724,6 @@ SPEC CHECKSUMS:
   react-native-restart: 6cc683e208c080581c147d0875609e64572a9443
   react-native-safe-area-context: 8465df05de8106c584b117f0e027e17174d6e02e
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a
-  react-native-viewpager: d054b58bf3d377e6b99558da6766463ff7e9b220
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
   React-RCTAnimation: 6a2e76ab50c6f25b428d81b76a5a45351c4d77aa
