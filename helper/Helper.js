@@ -560,15 +560,19 @@ const filterLoggedInUsersPosts = async (allPosts, isForPostWallpaper) => {
             const user = JSON.parse(loggedInUser.details);
             allPosts = allPosts.filter(post => {
                 const postFollowers = post.user.followers.filter(follower => follower.follower_id == user.id);
-                if (postFollowers && postFollowers.length && post.postType == fieldControllerName.POST_TYPE_PRIVATE) {
-                    const privateAccess = postFollowers.find(follower => follower.follower_id == user.id).pvtaccess ||
-                        PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
-                    return privateAccess == PRIVATE_FOLLOW_UNFOLLOW.APPROVED;
+                if (postFollowers && postFollowers.length) {
+                    if (post.postType == fieldControllerName.POST_TYPE_PRIVATE) {
+                        const privateAccess = postFollowers.find(follower => follower.follower_id == user.id).pvtaccess ||
+                            PRIVATE_FOLLOW_UNFOLLOW.NOT_REQUESTED;
+                        return privateAccess == PRIVATE_FOLLOW_UNFOLLOW.APPROVED;
+                    }
+                    return post.postType == fieldControllerName.POST_TYPE_PUBLIC;
                 } else if (post.user.id == user.id) {
                     return post.postType == fieldControllerName.POST_TYPE_PUBLIC ||
                         post.postType == fieldControllerName.POST_TYPE_PRIVATE;
                 }
-                return post.user.user_type == miscMessage.VERIFIED_AUTHOR && post.postType == fieldControllerName.POST_TYPE_PUBLIC;
+                return (post.user.user_type == miscMessage.VERIFIED_AUTHOR || post.user.id === numericConstants.ONE)
+                    && post.postType == fieldControllerName.POST_TYPE_PUBLIC;
             });
         } else {
             allPosts = isForPostWallpaper && allPosts.filter(post => {
@@ -1481,8 +1485,8 @@ export const updateProfileActionValueToState = async (responseData, action, prof
             setTimeout(() => {
                 profileDetail.isFollowing = profile.followers.some(follower => follower.follower_id == user.id);
                 setProfileDetail({ ...profileDetail });
-                setSdomDatastate({ ...sdomDatastate })
-            }, numericConstants.TWENTY);
+                setSdomDatastate({ ...sdomDatastate });
+            }, numericConstants.FIFTEEN);
         }
     } catch (error) {
         processResponseData(error.response, errorMessages.SOMETHING_WENT_WRONG);

@@ -1094,7 +1094,7 @@ export const CAMERA_IMAGE_FILTERS = [
 ];
 
 export const notificationConsts = {
-    CHANNEL_ID: `com.stardom`,
+    CHANNEL_ID: `com.stardomapp`,
     HIGH_PRIORITY: `high`,
     VIEW_POST_ACTION: `View post`,
     PUBLIC_FOLLOWING: `Public following`,

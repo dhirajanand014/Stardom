@@ -1308,7 +1308,7 @@ export const flatListItemStyles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         top: 10,
-        paddingTop: 10,
+        paddingTop: 5,
         left: 5
     },
 });
