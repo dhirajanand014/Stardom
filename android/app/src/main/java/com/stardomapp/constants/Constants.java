@@ -1,4 +1,4 @@
-package com.stardom.constants;
+package com.stardomapp.constants;
 
 public class Constants {
 
