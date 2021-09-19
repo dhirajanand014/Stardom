@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.stardomapp",
+            "sha256_cert_fingerprints": [
+                "80:CB:51:A1:29:3D:1F:2A:7C:75:CA:8B:40:C8:6B:C6:23:9A:9D:04:43:D2:B5:66:7A:10:A6:49:76:EC:90:92"
+            ]
+        }
+    }
+]
