@@ -11,26 +11,26 @@ PODS:
     - React-Core (= 0.64.2)
     - React-jsi (= 0.64.2)
     - ReactCommon/turbomodule/core (= 0.64.2)
-  - Firebase/CoreOnly (8.6.0):
-    - FirebaseCore (= 8.6.0)
-  - Firebase/Messaging (8.6.0):
+  - Firebase/CoreOnly (8.7.0):
+    - FirebaseCore (= 8.7.0)
+  - Firebase/Messaging (8.7.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 8.6.0)
-  - FirebaseCore (8.6.0):
+    - FirebaseMessaging (~> 8.7.0)
+  - FirebaseCore (8.7.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
-  - FirebaseCoreDiagnostics (8.6.0):
+  - FirebaseCoreDiagnostics (8.7.0):
     - GoogleDataTransport (~> 9.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
     - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (8.6.0):
+  - FirebaseInstallations (8.7.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/UserDefaults (~> 7.4)
     - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseMessaging (8.6.0):
+  - FirebaseMessaging (8.7.0):
     - FirebaseCore (~> 8.0)
     - FirebaseInstallations (~> 8.0)
     - GoogleDataTransport (~> 9.0)
@@ -90,22 +90,22 @@ PODS:
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/AppDelegateSwizzler (7.5.1):
+  - GoogleUtilities/AppDelegateSwizzler (7.5.2):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.5.1):
+  - GoogleUtilities/Environment (7.5.2):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.5.1):
+  - GoogleUtilities/Logger (7.5.2):
     - GoogleUtilities/Environment
-  - GoogleUtilities/Network (7.5.1):
+  - GoogleUtilities/Network (7.5.2):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.5.1)"
-  - GoogleUtilities/Reachability (7.5.1):
+  - "GoogleUtilities/NSData+zlib (7.5.2)"
+  - GoogleUtilities/Reachability (7.5.2):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.5.1):
+  - GoogleUtilities/UserDefaults (7.5.2):
     - GoogleUtilities/Logger
   - libevent (2.1.12)
   - libwebp (1.2.0):
@@ -330,11 +330,11 @@ PODS:
   - react-native-image-filter-kit (0.8.0):
     - Bolts/Tasks (= 1.9.0)
     - React
-  - react-native-netinfo (6.0.1):
+  - react-native-netinfo (6.0.2):
     - React-Core
   - react-native-restart (0.0.20):
     - React-Core
-  - react-native-safe-area-context (3.3.0):
+  - react-native-safe-area-context (3.3.2):
     - React-Core
   - react-native-shimmer (0.6.0):
     - React (>= 0.45.1)
@@ -409,15 +409,15 @@ PODS:
     - React
   - RNDateTimePicker (3.5.2):
     - React-Core
-  - RNFastImage (8.3.7):
+  - RNFastImage (8.5.8):
     - React-Core
-    - SDWebImage (~> 5.8)
-    - SDWebImageWebPCoder (~> 0.6.1)
-  - RNFBApp (12.7.3):
-    - Firebase/CoreOnly (= 8.6.0)
+    - SDWebImage (~> 5.11.1)
+    - SDWebImageWebPCoder (~> 0.8.4)
+  - RNFBApp (12.8.0):
+    - Firebase/CoreOnly (= 8.7.0)
     - React-Core
-  - RNFBMessaging (12.7.3):
-    - Firebase/Messaging (= 8.6.0)
+  - RNFBMessaging (12.8.0):
+    - Firebase/Messaging (= 8.7.0)
     - React-Core
     - RNFBApp
   - RNGestureHandler (1.10.3):
@@ -471,9 +471,9 @@ PODS:
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
-  - SDWebImageWebPCoder (0.6.1):
+  - SDWebImageWebPCoder (0.8.4):
     - libwebp (~> 1.0)
-    - SDWebImage/Core (~> 5.7)
+    - SDWebImage/Core (~> 5.10)
   - Shimmer (1.0.2)
   - TOCropViewController (2.6.0)
   - Yoga (1.14.0)
@@ -686,11 +686,11 @@ SPEC CHECKSUMS:
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
   FBReactNativeSpec: 4f7f21e895c30b888e0d905909396d2ac915e2ef
-  Firebase: 21ac9f28b09a8bdfc005f34c984fca84e7e8786d
-  FirebaseCore: 620b677f70f5470a8e59cb77f3ddc666f6f09785
-  FirebaseCoreDiagnostics: 3721920bde3a9a6d5aa093c1d25e9d3e47f694af
-  FirebaseInstallations: 0ede6ffcd215b8f93c19d9b06c1c54e2d4107e98
-  FirebaseMessaging: ce0a5ee974f7bfe83b6cc5acce88c2d969e37c41
+  Firebase: bc9325d5ee2041524bac78a5213d0e530c651309
+  FirebaseCore: f4804c1d3f4bbbefc88904d15653038f2c99ddf7
+  FirebaseCoreDiagnostics: b63732f581a1c6a453ec7241f9ab60b3a5bd3450
+  FirebaseInstallations: ede6fb72bb6337914e5888b399271259d0c4910c
+  FirebaseMessaging: 93227dd71d7888e200baef65043f81acb2b6596e
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -700,7 +700,7 @@ SPEC CHECKSUMS:
   FlipperKit: 8a20b5c5fcf9436cac58551dc049867247f64b00
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
-  GoogleUtilities: 3df19e3c24f7bbc291d8b5809aa6b0d41e642437
+  GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
@@ -720,9 +720,9 @@ SPEC CHECKSUMS:
   react-native-camera: fefef39fcd20850d17c3780638b04f741e0ccaae
   react-native-cameraroll: 7c6c7ca84844f93b3dac9a87670bbad6541684ec
   react-native-image-filter-kit: b9eca5dfedde622e3801c4657bcdead62896cf00
-  react-native-netinfo: 0f64266bbaa1989ebd51b43ee1723d582f6b3e47
+  react-native-netinfo: 8917788f12f8c422d16a56f840a1b06faa56e2b6
   react-native-restart: 6cc683e208c080581c147d0875609e64572a9443
-  react-native-safe-area-context: 8465df05de8106c584b117f0e027e17174d6e02e
+  react-native-safe-area-context: 5cf05f49df9d17261e40e518481f2e334c6cd4b5
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
@@ -739,9 +739,9 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
   RNDateTimePicker: c9911be59b1f8670b9f244b85af3a7c295e175ed
-  RNFastImage: a7384db75df352500261e8e8f1ac2026def26102
-  RNFBApp: 348de8df1e2e281c05bd6cf69ff99cc85c74da63
-  RNFBMessaging: 3fc0aa060e9af42e76b80a20632ea3b29fcf09f7
+  RNFastImage: adef7f9c9a7aeca0141807ee5a8be8a3eb240dd8
+  RNFBApp: b97d6654509a5852d49f0abf93be76b300fd2e2c
+  RNFBMessaging: c1de144b096aaeec85e9fa3f0def62cc7a39b271
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 35a3ceb837446fa11547704709bb22b5fac6d584
   RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
@@ -750,7 +750,7 @@ SPEC CHECKSUMS:
   RNShare: 047d42214f875d731bde73a2b67418638af85ad9
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
-  SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
+  SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac

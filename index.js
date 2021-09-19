@@ -73,9 +73,23 @@ export const DrawerNavigation = () => {
     )
 }
 
+const Linking = {
+    prefixes: ['https://stardom.wallpiper.app/', 'stardom://'],
+    config: {
+        screens: {
+            Glance: {
+                screens: {
+                    Glance: `post/:action/:postIdFromNotification`,
+                    Profile: `profile/:action/:id`,
+                }
+            }
+        }
+    },
+};
+
 export const ScreenNavigator = () => {
     return (
-        <NavigationContainer ref={navigationRef}>
+        <NavigationContainer linking={Linking} ref={navigationRef}>
             {
                 isAndroid && <StatusBar backgroundColor={colors.TRANSPARENT} translucent barStyle={colors.DARK_CONTENT} />
             }

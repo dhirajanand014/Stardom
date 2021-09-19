@@ -10,9 +10,10 @@ import {
     screens, headerStrings, fieldControllerName, isAndroid, notificationConsts,
     isIOS, OTP_INPUTS, errorMessages, requestConstants, modalTextConstants,
     jsonConstants, defaultProfilesValue, SDMenuOptions, AUTO_SUBMIT_OTP_TIME_LIMIT,
-    formRequiredRules, countRanges, RESEND_OTP_TIME_LIMIT
+    formRequiredRules, countRanges, RESEND_OTP_TIME_LIMIT, BASE_DOMAIN
 } from '../constants/Constants';
 import {
+    Linking,
     NativeModules,
     PermissionsAndroid, ToastAndroid
 } from 'react-native';
@@ -207,9 +208,11 @@ export const shareImage = async (post, resetFlashMessage) => {
         if (response) {
             const base64Image = await response.readFile(miscMessage.BASE64);
             const base64Data = `${miscMessage.BASE64_BLOB}${base64Image}`;
+            const url = `${BASE_DOMAIN}${urlConstants.sharedPostUrl}${post.id}`
             await Share.open({
                 url: base64Data, filename: postTitle, excludedActivityTypes: [miscMessage.EXCLUDE_TYPE],
                 type: miscMessage.IMAGE_TYPE, title: post.postLink, subject: postTitle,
+                message: `${post.user.name} shared a post - ${url} from Stardom App. Download the Stardom App from the store - `
             });
         } else {
             showSnackBar(errorMessages.COULD_NOT_SHARE_IMAGE, false);
@@ -469,7 +472,8 @@ export const setAnimationVisible = (postDetailsState, setPostDetailsState, isVis
     });
 }
 
-export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, viewPagerRef, postDetailsRef, isFromNotification) => {
+export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, viewPagerRef, postDetailsRef,
+    isFromNotification, viewSharedPost, navigation) => {
     try {
         if ((isFromNotification && isFromNotification.current) || (!postDetailsRef?.current?.newPostViewed
             && postIdFromNotification?.current && viewPagerRef?.current)) {
@@ -479,6 +483,12 @@ export const scrollWhenPostIdFromNotification = (posts, postIdFromNotification, 
             postDetailsRef?.current?.setNewPostViewed(true);
             postIdFromNotification.current = null;
             if (isFromNotification) isFromNotification.current = false;
+        } else if (viewSharedPost && postIdFromNotification && postDetailsRef.current.currentPost.id !== parseInt(postIdFromNotification)) {
+            const postIndex = posts.findIndex(post => post.id == parseInt(postIdFromNotification)) || numericConstants.ZERO;
+            viewPagerRef.current?.scrollBy(postIndex - viewPagerRef.current?.state.index, false);
+            navigation.setParams({ postIdFromNotification: null, action: stringConstants.EMPTY });
+        } else {
+            viewSharedPostFromClosedApp(viewPagerRef, posts, postDetailsRef, navigation);
         }
     } catch (error) {
         console.error(errorMessages.COULD_NOT_PERFORM_SCROLL_POST, error);
@@ -541,11 +551,8 @@ const retrievePostData = async (categoryIdFromNotification) => {
                 });
 
         categoryPostsData.map(postItem => {
-            const postHasLikes = postCounts && postCounts[savePostCountKeys.SELECTED_POST_LIKES] &&
-                postCounts[savePostCountKeys.SELECTED_POST_LIKES].some(postId => postItem.id == postId);
-            if (postHasLikes) {
-                postItem.likeAdded = postHasLikes;
-            }
+            postItem.likeAdded = postCounts && postCounts[savePostCountKeys.SELECTED_POST_LIKES] &&
+                postCounts[savePostCountKeys.SELECTED_POST_LIKES].some(postId => postItem.id == postId) || false;
             postItem.postCategoriesIn = fetchAndDisplayNamesAndCategoryTitles(postItem);
         });
         categoryPostsData = await filterLoggedInUsersPosts(categoryPostsData, true);
@@ -1493,7 +1500,7 @@ export const updateProfileActionValueToState = async (responseData, action, prof
     }
 }
 
-export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUser, profileDetail, setProfileDetail, setAgain) => {
+export const checkLoggedInUserMappedWithUserProfile = async (profile, loggedInUser, profileDetail, setProfileDetail) => {
     if (loggedInUser.loginDetails && loggedInUser.loginDetails.details) {
         const loggedInUserDetails = JSON.parse(loggedInUser.loginDetails.details);
         profileDetail.isSameUser = loggedInUserDetails.id == profile.id;
@@ -1971,4 +1978,40 @@ export const formatNumber = (inputNumber) => {
         }
     }
     return inputNumber.toString();
+}
+
+export const updateScreenWhenFromSharedPost = (postDetailsRef, posts, viewPagerRef, postIdFromNotification, navigation) => {
+    try {
+        if (posts && postDetailsRef.current && postDetailsRef.current.currentPost && postDetailsRef.current.postIndex !== parseInt(postIdFromNotification)) {
+            const postIndex = posts.findIndex(post => post.id == parseInt(postIdFromNotification)) || numericConstants.ZERO;
+            setTimeout(() => {
+                viewPagerRef.current?.scrollBy(postIndex - viewPagerRef.current?.state.index, false);
+                navigation.setParams({ postIdFromNotification: null, action: stringConstants.EMPTY });
+            }, numericConstants.TWO_HUNDRED);
+        }
+    } catch (error) {
+        console.error(errorMessages.CANNOT_VIEW_SHARED_POST, error);
+    }
+}
+
+export const viewSharedPostFromClosedApp = async (viewPagerRef, posts, postDetailsRef, navigation) => {
+    try {
+        const urlValue = await Linking.getInitialURL();
+        if (posts && urlValue != null) {
+            if (urlValue.startsWith(urlConstants.stardomUriSchema) || urlValue.includes(BASE_DOMAIN)) {
+                const route = urlValue.includes(BASE_DOMAIN) && urlValue.replace(stringConstants.STARDOM_URL_REPLACE_REGEX, stringConstants.EMPTY)
+                    || urlValue.replace(stringConstants.STARDOM_SCHEMA_REPLACE_REGEX, stringConstants.EMPTY);
+                if (route.startsWith(requestConstants.POST)) {
+                    const postId = route.match(stringConstants.URL_POST_ID_VALUE_REGEX)[numericConstants.ONE];
+                    const postIndex = posts.findIndex(post => post.id == parseInt(postId)) || numericConstants.ZERO;
+                    if (postDetailsRef.current.currentPost.id !== parseInt(postId)) {
+                        viewPagerRef.current?.scrollBy(postIndex - viewPagerRef.current?.state.index, false);
+                        navigation.setParams({ postIdFromNotification: null, action: stringConstants.EMPTY });
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error(errorMessages.CANNOT_VIEW_CLOSED_APP_FROM_SHARE, error);
+    }
 }
