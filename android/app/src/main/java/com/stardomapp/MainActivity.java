@@ -1,4 +1,4 @@
-package com.stardom;
+package com.stardomapp;
 
 import com.facebook.react.ReactActivity;
 

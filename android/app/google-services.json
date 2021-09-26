@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "889718412166",
-    "project_id": "stardom-c3602",
-    "storage_bucket": "stardom-c3602.appspot.com"
+    "project_number": "351260107630",
+    "project_id": "stardomapp-d827a",
+    "storage_bucket": "stardomapp-d827a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:889718412166:android:d1d8fe420c4c5edd7a5207",
+        "mobilesdk_app_id": "1:351260107630:android:c1d13f3b9a36a139d9177f",
         "android_client_info": {
-          "package_name": "com.stardom"
+          "package_name": "com.stardomapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "889718412166-6prgve9pionbqm1a0s2ppiebmldml3qi.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.stardom",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "889718412166-0jbiv582nernvlkkn2t8komgrh063dr3.apps.googleusercontent.com",
+          "client_id": "351260107630-4g88reof9j4pn55aicmis4qbgnsipusl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBLuZak9Yx6ARkUe_CMrZrA7gftp7wm4NQ"
+          "current_key": "AIzaSyDknzjPPIsxlE__hTz-ofQjEKMJuVOnvt0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "889718412166-0jbiv582nernvlkkn2t8komgrh063dr3.apps.googleusercontent.com",
+              "client_id": "351260107630-4g88reof9j4pn55aicmis4qbgnsipusl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

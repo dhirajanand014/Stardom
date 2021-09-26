@@ -1,4 +1,4 @@
-package com.stardom.api;
+package com.stardomapp.api;
 
 import android.app.NotificationManager;
 import android.app.WallpaperManager;
@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.stardom.constants.Constants;
+import com.stardomapp.constants.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;

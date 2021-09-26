@@ -8,7 +8,8 @@ import { glancePostStyles } from '../../styles/Styles';
 
 export const SwipeItem = (props) => {
 
-    const { width, height, item, index, posts, postIdFromNotification, viewPagerRef, postDetailsRef, optionsState, isFromNotification, animation } = props;
+    const { width, height, item, index, posts, postIdFromNotification, viewPagerRef, postDetailsRef,
+        optionsState, isFromNotification, animation, viewSharedAction, navigation, profileIdShared } = props;
 
     const imageScale = useSharedValue(numericConstants.ONE);
     const focalX = useSharedValue(numericConstants.ZERO);
@@ -62,7 +63,7 @@ export const SwipeItem = (props) => {
                                     priority: FastImage.priority.high,
                                     cache: FastImage.cacheControl.immutable
                                 }} fallback={optionsState.isImageLoadError} onLoadEnd={() =>
-                                    scrollWhenPostIdFromNotification(posts, postIdFromNotification, viewPagerRef, postDetailsRef, isFromNotification)} />
+                                    scrollWhenPostIdFromNotification(posts, postIdFromNotification, profileIdShared, viewPagerRef, postDetailsRef, isFromNotification, viewSharedAction, navigation)} />
                             </Animated.View>
                         </PinchGestureHandler>
                     </Animated.View>

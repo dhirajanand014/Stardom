@@ -1,10 +1,10 @@
-package com.stardom.packages;
+package com.stardomapp.packages;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
-import com.stardom.api.StardomApiModule;
+import com.stardomapp.api.StardomApiModule;
 
 import java.util.ArrayList;
 import java.util.Collections;
