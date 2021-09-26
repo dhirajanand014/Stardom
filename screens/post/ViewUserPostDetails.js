@@ -3,7 +3,7 @@ import { Text, View, Image, Linking, TouchableOpacity } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import {
     stringConstants, postCountTypes, numericConstants, errorMessages, screens,
-    miscMessage, jsonConstants, alertTextMessages, actionButtonTextConstants
+    miscMessage, jsonConstants, alertTextMessages, actionButtonTextConstants, requestConstants
 } from '../../constants/Constants';
 import {
     checkTokenStatus, handlePostDelete, increaseAndSetPostCounts,
@@ -237,7 +237,7 @@ export const ViewUserPostDetails = forwardRef((props, ref) => {
                         </Text>
                     </View> */}
                     <View style={SDGenericStyles.paddingTop25}>
-                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7} onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage)}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7} onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage, requestConstants.POST)}>
                             <Image style={glancePostStyles.icon_post_share} source={post_share} />
                         </TouchableOpacity>
                     </View>

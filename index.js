@@ -9,8 +9,9 @@ import { AppRegistry, LogBox, StatusBar } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
 import {
+    BASE_DOMAIN,
     headerLessStackOptions, isAndroid, numericConstants, profileScreenOptions,
-    screenOptions, screens, tabBarOptions, width
+    screenOptions, screens, tabBarOptions, urlConstants, width
 } from './constants/Constants';
 import { authorizationHeader, categoryHeader, getNotificationConfiguration } from './helper/Helper';
 import { Category } from './screens/category/Category';
@@ -73,9 +74,23 @@ export const DrawerNavigation = () => {
     )
 }
 
+const Linking = {
+    prefixes: [BASE_DOMAIN, urlConstants.stardomDomain],
+    config: {
+        screens: {
+            Glance: {
+                screens: {
+                    Glance: urlConstants.glanceShare,
+                    Profile: urlConstants.profileShare,
+                }
+            }
+        }
+    },
+};
+
 export const ScreenNavigator = () => {
     return (
-        <NavigationContainer ref={navigationRef}>
+        <NavigationContainer linking={Linking} ref={navigationRef}>
             {
                 isAndroid && <StatusBar backgroundColor={colors.TRANSPARENT} translucent barStyle={colors.DARK_CONTENT} />
             }

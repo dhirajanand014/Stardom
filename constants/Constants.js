@@ -17,7 +17,8 @@ export const { width, height } = Dimensions.get(`screen`);
 export const RESEND_OTP_TIME_LIMIT = 20; // 30 secs
 export const AUTO_SUBMIT_OTP_TIME_LIMIT = 1;
 export const OTP_INPUTS = 6;
-const BASE_URI = `https://stardom.wallpiper.app/api`;
+export const BASE_DOMAIN = `https://stardom.wallpiper.app`;
+const BASE_URI = `${BASE_DOMAIN}/api`;
 
 
 export const screenOptions = {
@@ -108,7 +109,14 @@ export const urlConstants = {
     fetchUsersFollowings: `${BASE_URI}/user/following/fetch`,
     fetchAllUsers: `${BASE_URI}/user/allusers/fetch`,
     updateDeviceToken: `${BASE_URI}/auth/updatedeviceid`,
-    profileStorageUrl: `https://stardom.wallpiper.app/main/public/storage/profile/`
+    likesCount: `${BASE_URI}/likescount`,
+    profileStorageUrl: `https://stardom.wallpiper.app/main/public/storage/profile/`,
+    stardomUriSchema: `stardom://`,
+    sharedPostUrl: `/post/sharedpost/`,
+    sharedProfileUrl: `/profile/sharedprofile/`,
+    stardomDomain: `stardom://`,
+    glanceShare: `post/:action/:postIdFromNotification`,
+    profileShare: `profile/:action/:profileIdFromShare`
 }
 
 export const fieldControllerName = {
@@ -411,6 +419,9 @@ export const stringConstants = {
     NODE: {},
     EMPTY: ``,
     REPLACE_REGEX: /[- #*;,.<>\{\}\[\]\\\/]/gi,
+    STARDOM_URL_REPLACE_REGEX: /.*?:\/\/stardom\.wallpiper\.app\//g,
+    STARDOM_SCHEMA_REPLACE_REGEX: /.*?:\/\//g,
+    URL_ID_VALUE_REGEX: /\/([^\/]+)\/?$/,
     COMMA: `,`,
     UNDERSCORE: `_`,
     PLUS: `+`,
@@ -633,6 +644,7 @@ export const errorMessages = {
     USER_DENIED_NOTIFICATION: `Permission denied by user`,
     FAILED_TO_UPDATE_REGISTRATION_DETAILS: `Failed to update Registration Details`,
     CANNOT_REGISITER_USER: `Could not register user`,
+    CANNOT_VIEW_CLOSED_APP_FROM_SHARE: `Cannot view shared post from closed application`,
     COULD_NOT_PERFORM_SCROLL_POST: `Could not perform post scroll`,
     OTP_MESSAGE_READ_ERROR: `RnotpVerification - read message error`,
     COULD_NOT_HANDLE_NOTIFICATION_ACTION: `Could not handle notification action`,
@@ -647,6 +659,7 @@ export const errorMessages = {
     COULD_NOT_RESET_KEYCHAIN_VALUES: `Could not reset keychain values`,
     COULD_NOT_FETCH_ALL_POSTS: `Could not fetch all posts`,
     COULD_NOT_FETCH_ALL_USERS: `Could not fetch all users`,
+    CANNOT_VIEW_SHARED_CONTENT: `Cannot view shared content`,
     CANNOT_FETCH_SAVE_BUTTON_TYPE: `Cannot fetch the save button type from the storage`,
     COULD_NOT_UPLOAD_POST: `Could not upload post`,
     COULD_NOT_UPDATE_POST: `Could not update post`,
@@ -754,6 +767,8 @@ export const miscMessage = {
     ACCEPTED_EULA: `acceptedEULA`,
     SINGLE_SELECT: `Single select`,
     SELECT_ALL: `Select All`,
+    SHAREDPOST: `sharedpost`,
+    SHAREDPROFILE: `sharedprofile`,
     USER_VERIFY: `User Verification`,
     BY_TEXT: `by`,
     UNSELECT_ALL: `Unselect All`,
@@ -784,6 +799,9 @@ export const miscMessage = {
     ATTEMPT_REMAINING: `Attempts remaining`,
     SMALL: `small`,
     INITIATIVE: `Initiative`,
+    STARDOM_POST_SHARE: `Stardom post`,
+    STARDOM_PROFILE_SHARE: `Stardom profile`,
+    SHARING_IMAGE: `Sharing image`,
     RECTANGLE: `rectangle`,
     CIRCLE: `circle`,
     MESSAGE: `message`,
@@ -828,6 +846,7 @@ export const miscMessage = {
     RESEND_OTP: `Resend OTP`,
     GALLERY: `gallery`,
     SET: `set`,
+    INACTIVE: `inactive`,
     IMAGE_TYPE: `image/*`,
     DETAILS: `details`,
     STARDOM_LOGO_TEXT: `2021 Stardom`,
@@ -881,6 +900,7 @@ export const requestConstants = {
     POST_DESCRIPTION: `post_description`,
     POST_CATEGORIES: `post_categories`,
     POST_TYPE: `post_type`,
+    PROFILE: `profile`,
     POST_IMAGE: `post_image`,
     FOLLOWER_ID: `follower_id`,
     FOLLOWING_ID: `following_id`,

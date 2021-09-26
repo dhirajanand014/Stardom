@@ -10,7 +10,7 @@ import { UserSelectionOptionModal } from '../../components/modals/UserSelectionO
 import { SDProfileBottomTextView } from '../../components/texts/SDProfileBottomTextView';
 import {
     actionButtonTextConstants, alertTextMessages, height, jsonConstants, miscMessage,
-    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, stringConstants, urlConstants, width
+    numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, urlConstants, width
 } from '../../constants/Constants';
 import {
     checkLoggedInUserMappedWithUserProfile, fetchPostsOfUserProfile, handleProfileImageDelete, handleUserPostAction,
@@ -118,8 +118,12 @@ export const SDProfileBottomSheet = props => {
         <React.Fragment>
             <View style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right0, SDGenericStyles.padding10]}>
                 <View style={SDGenericStyles.marginTop33}>
-                    <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () => await shareImage({ postImage: props.profile.profile_image, postTitle: props.profile.name },
-                        downloadCallback, resetFlashMessage)} activeOpacity={.7}>
+                    <TouchableOpacity style={glancePostStyles.backgroundRoundColor} onPress={async () =>
+                        await shareImage({
+                            id: props.profile.id, username: props.profile.name, postImage: props.profile.profile_image,
+                            postTitle: props.profile.name, postLink: props.profile.profile_image
+                        }, resetFlashMessage, requestConstants.PROFILE)
+                    } activeOpacity={.7}>
                         <Image style={glancePostStyles.icon_post_share} source={post_share} />
                     </TouchableOpacity>
                 </View>

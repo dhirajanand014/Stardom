@@ -88,7 +88,7 @@ const UserPostsView = React.memo(({ posts, viewPagerRef, postDetailsRef, postsOp
                     bounces loadMinimal loadMinimalSize={numericConstants.TWENTY_FIVE} loadMinimalLoader={loadMinimalLoaderView(height)} onContentSizeChange={async () => {
                         const postIdStorage = await getPostIdFromStorage();
                         if (postIdStorage) {
-                            const index = posts.findIndex(post => post.id == JSON.parse(postIdStorage.password).id)
+                            const index = posts.findIndex(post => post.id == JSON.parse(postIdStorage.password).id);
                             viewPagerRef.current.scrollBy(index, false);
                             await Keychain.resetGenericPassword({ service: keyChainConstansts.POST_ID_KEY });
                         }
