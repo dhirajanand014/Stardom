@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { PostSearch } from '../../views/imagePost/PostSearch';
 import {
     stringConstants, postCountTypes, numericConstants, miscMessage, jsonConstants,
-    fieldControllerName, width, height
+    fieldControllerName, width, height, requestConstants
 } from '../../constants/Constants';
 import {
     increaseAndSetPostCounts, setPostDetailsStateForModal,
@@ -250,7 +250,7 @@ export const PostDetails = forwardRef((props, ref) => {
                         </Text>
                     </View> */}
                     <View style={SDGenericStyles.paddingTop25}>
-                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7} onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage)}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor} activeOpacity={.7} onPress={async () => await shareImage(postDetailsState.currentPost, resetFlashMessage, requestConstants.POST)}>
                             <Image style={glancePostStyles.icon_post_share} source={post_share} />
                         </TouchableOpacity>
                     </View>

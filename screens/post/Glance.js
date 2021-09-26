@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useContext } from 'react';
-import { View, Image, StatusBar, Dimensions, SafeAreaView, Linking } from 'react-native';
+import { View, Image, StatusBar, Dimensions, SafeAreaView } from 'react-native';
 import {
     componentErrorConsts, errorMessages,
     width, miscMessage, numericConstants, jsonConstants
 } from '../../constants/Constants';
 import {
     onSwiperScrollEnd, fetchPostsAndSaveToState,
-    resetAnimatePostTextDetails, setImageLoadError, updateScreenWhenFromSharedPost
+    resetAnimatePostTextDetails, setImageLoadError, updateScreenWhenFromSharedAction
 } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
@@ -29,8 +29,11 @@ export const Glance = ({ navigation }) => {
 
     const route = useRoute();
     isFromNotification.current = route.params?.isFromNotification || false;
-    const viewSharedPost = route.params?.action || false;
+    const viewSharedAction = route.params?.action || false;
+
     const postId = route.params?.postIdFromNotification || postIdFromNotification;
+    const profileId = route.params?.profileIdFromShare || route.params?.params?.profileIdFromShare;
+
     let { height } = Dimensions.get(miscMessage.WINDOW);
     height += StatusBar.currentHeight;
 
@@ -67,18 +70,19 @@ export const Glance = ({ navigation }) => {
         return textPostTypeAnimationValue.value * numericConstants.ONE_HUNDRED;
     });
 
-    viewSharedPost && updateScreenWhenFromSharedPost(postDetailsRef, sdomDatastate.posts, viewPagerRef, postId, navigation);
+    viewSharedAction && updateScreenWhenFromSharedAction(postDetailsRef, sdomDatastate.posts, viewPagerRef, postId, profileId, viewSharedAction, navigation);
 
     return (
         <GlanceComponent sdomDatastate={sdomDatastate} viewPagerRef={viewPagerRef} postDetailsRef={postDetailsRef} optionsState={optionsState} setOptionsState={setOptionsState}
             textPostDescriptionAnimationValue_translate_x={textPostDescriptionAnimationValue_translate_x} textPostTypeAnimationValue_translate_x={textPostTypeAnimationValue_translate_x}
             currentPostIndexForProfileRef={currentPostIndexForProfileRef} height={height} postIdFromNotification={postId} navigation={navigation} isFromNotification={isFromNotification}
-            setSdomDatastate={setSdomDatastate} drawerOpenStatus={drawerOpenStatus} loadMinimalLoaderView={loadMinimalLoaderView} animation={animation} viewSharedPost={viewSharedPost} />
+            setSdomDatastate={setSdomDatastate} drawerOpenStatus={drawerOpenStatus} loadMinimalLoaderView={loadMinimalLoaderView} animation={animation} viewSharedAction={viewSharedAction}
+            profileIdShared={profileId} />
     )
 }
 
 const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRef, optionsState, setOptionsState, textPostDescriptionAnimationValue_translate_x, textPostTypeAnimationValue_translate_x,
-    currentPostIndexForProfileRef, height, postIdFromNotification, navigation, isFromNotification, drawerOpenStatus, loadMinimalLoaderView, animation, viewSharedPost }) => {
+    currentPostIndexForProfileRef, height, postIdFromNotification, navigation, isFromNotification, drawerOpenStatus, loadMinimalLoaderView, animation, viewSharedAction, profileIdShared }) => {
     return <SafeAreaView style={SDGenericStyles.fill}>
         {
             sdomDatastate.posts && sdomDatastate.posts.length &&
@@ -110,7 +114,8 @@ const GlanceComponent = React.memo(({ sdomDatastate, viewPagerRef, postDetailsRe
                         sdomDatastate.posts.map((item, index) => {
                             return <SwipeItem width={width} height={height} item={item} index={index} posts={sdomDatastate.posts} viewPagerRef={viewPagerRef}
                                 postIdFromNotification={postIdFromNotification} isFromNotification={isFromNotification} optionsState={optionsState}
-                                postDetailsRef={postDetailsRef} animation={animation} viewSharedPost={viewSharedPost} navigation={navigation} />;
+                                postDetailsRef={postDetailsRef} animation={animation} viewSharedAction={viewSharedAction} navigation={navigation}
+                                profileIdShared={profileIdShared} />;
                         })}
                 </Swiper>
                 <PostDetails ref={postDetailsRef} textPostTypeAnimationValue={textPostTypeAnimationValue_translate_x} viewPagerRef={viewPagerRef}

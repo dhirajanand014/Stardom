@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { CategoryContext } from '../../App';
 import {
     backHandlerConstants, componentErrorConsts, errorMessages, height, jsonConstants,
+    miscMessage,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, stringConstants, urlConstants, width
 } from '../../constants/Constants';
 import { checkLoggedInUserMappedWithUserProfile, checkProfileFrom, fetchUpdateLoggedInUserProfile } from '../../helper/Helper';
@@ -73,12 +74,12 @@ export const Profile = () => {
         <ProfileRenderer profile={profile} profileDetail={profileDetail} isDisabled={isDisabled} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} expanded={expanded}
             sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} loggedInUser={loggedInUser} setProfileDetail={setProfileDetail} setLoaderCallback={setLoaderCallback}
             navigation={navigation} snapPoints={snapPoints} setLoggedInUser={setLoggedInUser} loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setExpanded={setExpanded}
-            resetProfileState={resetProfileState} />
+            resetProfileState={resetProfileState} isFrom={isFrom} />
     )
 }
 
 const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDatastate, setSdomDatastate, loggedInUser, setLoaderCallback, expanded, setExpanded,
-    setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess, resetProfileState }) => {
+    setProfileDetail, navigation, snapPoints, setLoggedInUser, loggedInUserHasPrivateAccess, setLoggedInUserHasPrivateAccess, resetProfileState, isFrom }) => {
     return <View style={SDGenericStyles.fill}>
         {
             profile.id !== numericConstants.MINUS_ONE &&
@@ -97,8 +98,9 @@ const ProfileRenderer = React.memo(({ profile, profileDetail, isDisabled, sdomDa
                     setProfileDetail={setProfileDetail} sdomDatastate={sdomDatastate} setSdomDatastate={setSdomDatastate} loggedInUser={loggedInUser} setLoaderCallback={setLoaderCallback}
                     loggedInUserHasPrivateAccess={loggedInUserHasPrivateAccess} setLoggedInUserHasPrivateAccess={setLoggedInUserHasPrivateAccess} isDisabled={isDisabled} setExpanded={setExpanded}
                     expanded={expanded} />
-            </React.Fragment> || <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.POSTS_WITHOUT_PROFILE}
-                descriptionText={errorMessages.NO_USER_PROFILE_FOR_POST} navigation={navigation} />
+            </React.Fragment> || (isFrom != miscMessage.SHAREDPROFILE && <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundAppBlack]} />
+                || <SDFallBackComponent width={width} height={height} componentErrorConst={componentErrorConsts.POSTS_WITHOUT_PROFILE}
+                    descriptionText={errorMessages.NO_USER_PROFILE_FOR_POST} navigation={navigation} />)
         }
     </View>;
 })

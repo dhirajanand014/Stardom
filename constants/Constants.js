@@ -109,9 +109,14 @@ export const urlConstants = {
     fetchUsersFollowings: `${BASE_URI}/user/following/fetch`,
     fetchAllUsers: `${BASE_URI}/user/allusers/fetch`,
     updateDeviceToken: `${BASE_URI}/auth/updatedeviceid`,
+    likesCount: `${BASE_URI}/likescount`,
     profileStorageUrl: `https://stardom.wallpiper.app/main/public/storage/profile/`,
     stardomUriSchema: `stardom://`,
-    sharedPostUrl: `/post/sharedpost/`
+    sharedPostUrl: `/post/sharedpost/`,
+    sharedProfileUrl: `/profile/sharedprofile/`,
+    stardomDomain: `stardom://`,
+    glanceShare: `post/:action/:postIdFromNotification`,
+    profileShare: `profile/:action/:profileIdFromShare`
 }
 
 export const fieldControllerName = {
@@ -416,7 +421,7 @@ export const stringConstants = {
     REPLACE_REGEX: /[- #*;,.<>\{\}\[\]\\\/]/gi,
     STARDOM_URL_REPLACE_REGEX: /.*?:\/\/stardom\.wallpiper\.app\//g,
     STARDOM_SCHEMA_REPLACE_REGEX: /.*?:\/\//g,
-    URL_POST_ID_VALUE_REGEX: /\/([^\/]+)\/?$/,
+    URL_ID_VALUE_REGEX: /\/([^\/]+)\/?$/,
     COMMA: `,`,
     UNDERSCORE: `_`,
     PLUS: `+`,
@@ -654,8 +659,7 @@ export const errorMessages = {
     COULD_NOT_RESET_KEYCHAIN_VALUES: `Could not reset keychain values`,
     COULD_NOT_FETCH_ALL_POSTS: `Could not fetch all posts`,
     COULD_NOT_FETCH_ALL_USERS: `Could not fetch all users`,
-    CANNOT_VIEW_SHARED_POST: `Cannot view shared post`,
-
+    CANNOT_VIEW_SHARED_CONTENT: `Cannot view shared content`,
     CANNOT_FETCH_SAVE_BUTTON_TYPE: `Cannot fetch the save button type from the storage`,
     COULD_NOT_UPLOAD_POST: `Could not upload post`,
     COULD_NOT_UPDATE_POST: `Could not update post`,
@@ -763,6 +767,8 @@ export const miscMessage = {
     ACCEPTED_EULA: `acceptedEULA`,
     SINGLE_SELECT: `Single select`,
     SELECT_ALL: `Select All`,
+    SHAREDPOST: `sharedpost`,
+    SHAREDPROFILE: `sharedprofile`,
     USER_VERIFY: `User Verification`,
     BY_TEXT: `by`,
     UNSELECT_ALL: `Unselect All`,
@@ -793,6 +799,9 @@ export const miscMessage = {
     ATTEMPT_REMAINING: `Attempts remaining`,
     SMALL: `small`,
     INITIATIVE: `Initiative`,
+    STARDOM_POST_SHARE: `Stardom post`,
+    STARDOM_PROFILE_SHARE: `Stardom profile`,
+    SHARING_IMAGE: `Sharing image`,
     RECTANGLE: `rectangle`,
     CIRCLE: `circle`,
     MESSAGE: `message`,
@@ -891,6 +900,7 @@ export const requestConstants = {
     POST_DESCRIPTION: `post_description`,
     POST_CATEGORIES: `post_categories`,
     POST_TYPE: `post_type`,
+    PROFILE: `profile`,
     POST_IMAGE: `post_image`,
     FOLLOWER_ID: `follower_id`,
     FOLLOWING_ID: `following_id`,
