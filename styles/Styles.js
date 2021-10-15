@@ -1668,6 +1668,7 @@ export const colors = {
     GREY: `#7e7e7e`,
     SDOM_BLACK: `#1b1f2b`,
     SDOM_TEXT_BOX: `#343642`,
+    SDOM_INTRO_BACKGROUND: `#fff001`,
     WHITE_GREY: `#d4d4d4`,
     DARK_GREY: `#555555`,
     LIGHT_BLACK: `#212121`,
