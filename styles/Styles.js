@@ -750,6 +750,11 @@ export const glancePostStyles = StyleSheet.create({
         height: 27,
         borderRadius: 16,
     },
+    backgroundRoundColor_wallpaper_changer: {
+        alignItems: 'center',
+        width: 27,
+        height: 27,
+    },
     postProfileName: {
         marginRight: 1,
         display: 'flex',

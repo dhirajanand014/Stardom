@@ -12,7 +12,7 @@ import {
     actionButtonTextConstants, alertTextMessages, fieldControllerName, jsonConstants, miscMessage, modalTextConstants,
     numericConstants, PRIVATE_FOLLOW_UNFOLLOW, requestConstants, screens, stringConstants
 } from '../constants/Constants';
-import { fetchUpdateLoggedInUserProfile, getLoggedInUserDetails, logoutUser, prepareLoggedInMenu, prepareSDOMMenu } from '../helper/Helper';
+import { fetchUpdateLoggedInUserProfile, getLoggedInUserDetails, logoutUser, prepareLoggedInMenu, prepareSDOMMenu, setupWallPaperChanger } from '../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles, userAuthStyles, userMenuStyles } from '../styles/Styles';
 import { MenuRenderer } from '../views/menus/MenuRenderer';
 
@@ -58,6 +58,9 @@ export const SDUserMenus = (drawerProps) => {
                 break;
             case actionButtonTextConstants.VERIFY_USER:
                 setProfileMenu({ ...profileMenu, showSubmitVerifyModal: true });
+                break;
+            case actionButtonTextConstants.WALLPAPER_CHANGE_SETTINGS:
+                setupWallPaperChanger();
                 break;
             case actionButtonTextConstants.ABOUT_STARDOM:
                 navigation.navigate(screens.ABOUT_STARDOM);

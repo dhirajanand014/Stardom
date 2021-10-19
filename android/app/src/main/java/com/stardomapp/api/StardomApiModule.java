@@ -2,16 +2,22 @@ package com.stardomapp.api;
 
 import android.app.NotificationManager;
 import android.app.WallpaperManager;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.stardomapp.constants.Constants;
+import com.stardomapp.utils.StardomUtils;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,6 +60,77 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
                     " as wallpaper or the lockScreen", Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * @param inAction
+     * @param inPostId
+     * @param inURL
+     */
+    @ReactMethod
+    public void addRemoveWallPaperAsyncStorage(String inAction, Integer inPostId, String inPostTitle, String inURL) {
+        try {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(reactContext.getApplicationContext());
+            String wallPaperJSONObject = preferences.getString(Constants.WALLPAPER_CHANGE_LIST, Constants.EMPTY);
+            JSONObject wallPaperObjectJSON;
+            switch (inAction) {
+                case Constants.ADD_WALLPAPER:
+                    if (wallPaperJSONObject.isEmpty()) {
+                        wallPaperObjectJSON = StardomUtils.createNewJSONArray(inPostId, inURL, inPostTitle, reactContext.getApplicationContext());
+                    } else {
+                        wallPaperObjectJSON = StardomUtils.parseAndAddNewJSONObject(wallPaperJSONObject, inPostId, inURL);
+                    }
+                    SharedPreferences.Editor preferencesEditor = preferences.edit();
+                    preferencesEditor.putString(Constants.WALLPAPER_CHANGE_LIST, wallPaperObjectJSON.toString());
+                    preferencesEditor.apply();
+                    break;
+                case Constants.REMOVE_WALLPAPER:
+                    if (!wallPaperJSONObject.isEmpty()) {
+                        wallPaperObjectJSON = StardomUtils.removeFromWallPaperChangeList(wallPaperJSONObject, inPostId);
+                        SharedPreferences.Editor removePreferencesEditor = preferences.edit();
+                        removePreferencesEditor.putString(Constants.WALLPAPER_CHANGE_LIST, wallPaperObjectJSON.toString());
+                        removePreferencesEditor.apply();
+                    }
+                    break;
+                default:
+                    Log.i(Constants.TAG, "No Wallpaper Actions for Async storage matched: " + inAction);
+                    break;
+            }
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Cannot add post " + inPostTitle + " to the wallPaper list", exception);
+            Toast.makeText(reactContext, "Cannot add post " + inPostTitle + " to the wallPaper list", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @ReactMethod
+    public void getWallPaperChangeList() {
+        try {
+            StardomUtils.getSavedWallPaperChangeList(reactContext.getApplicationContext());
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Cannot retrieve wallpaper change list", exception);
+        }
+    }
+
+    /**
+     *
+     */
+    @ReactMethod
+    public void wallPaperChangeActionService(String inAction) {
+        try {
+            WallPaperChangeService wallPaperChangeService = new WallPaperChangeService(reactContext.getApplicationContext());
+            switch (inAction){
+                case Constants.SET_ALARM_MANAGER:
+                    wallPaperChangeService.cancelAlarmManager();
+                    wallPaperChangeService.setAlarmManager();
+                    break;
+                case Constants.CANCEL_ALARM_MANAGER:
+                    wallPaperChangeService.cancelAlarmManager();
+            }
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Cannot start wallpaper change service", exception);
+            Toast.makeText(reactContext, "Cannot start wallpaper change service", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     /**
      * Get the URL and the Post category title to set the wallpaper or the lock Screen image.
@@ -127,7 +204,7 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
         @Override
         protected void onPostExecute(String inResult) {
             if (Constants.POST_WALLPAPER_SET.equals(inResult)) {
-                Toast.makeText(mContext, "Wallpaper set for " + mPostTitle + "!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Wallpaper set for " + mPostTitle, Toast.LENGTH_SHORT).show();
             }
         }
     }

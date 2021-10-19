@@ -413,10 +413,10 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBApp (12.9.1):
+  - RNFBApp (12.9.2):
     - Firebase/CoreOnly (= 8.8.0)
     - React-Core
-  - RNFBMessaging (12.9.1):
+  - RNFBMessaging (12.9.2):
     - Firebase/Messaging (= 8.8.0)
     - React-Core
     - RNFBApp
@@ -740,8 +740,8 @@ SPEC CHECKSUMS:
   RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
   RNDateTimePicker: c9911be59b1f8670b9f244b85af3a7c295e175ed
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
-  RNFBApp: ece97bfe0a926247591c0aa0bdfe384f06cf46b5
-  RNFBMessaging: 01fc1d889000c85f0de97930f471e70776c86e16
+  RNFBApp: c679e71262a98a1ec0f4600e6db51ec7fcdaeb5b
+  RNFBMessaging: 9c1cdb63869ea86f6015c4512d57ab3872df97b7
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 73891a709e6fd8a47d32104d942757971f220aee
   RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f

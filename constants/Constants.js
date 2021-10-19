@@ -1,4 +1,3 @@
-
 import { CardStyleInterpolators } from "@react-navigation/stack";
 import { Dimensions } from "react-native";
 import {
@@ -213,6 +212,7 @@ export const actionButtonTextConstants = {
     WALLPAPER_HOME_SCREEN: `Home Screen`,
     WALLPAPER_LOCK_SCREEN: `Lock Screen`,
     WALLPAPER_BOTH_SCREENS: `Both`,
+    WALLPAPER_CHANGE_SETTINGS: `WallPaper Change Settings`,
     ADD_BIO: `Add bio`,
     VERIFY_USER: `Verify User`,
     FOLLOW: `Follow`,
@@ -489,6 +489,7 @@ export const numericConstants = {
     TWELVE_PCNT: `12%`,
     HUNDRED_PCNT: `100%`,
     MINUS_ONE: -1,
+    TWOPTONEEIGHT: 2.18,
     ZEROPTFIVE: 0.5,
     ZEROPTSEVEN: 0.7,
     ZEROPTNINETY: 0.90,
@@ -669,6 +670,8 @@ export const errorMessages = {
     COULD_NOT_FOllOW_USER: `Could not follow user`,
     COULD_NOT_CROP_IMAGE: `Could not crop image`,
     COULD_NOT_SET_WALLPAPER: "Cannot set current image as wallpaper",
+    COULD_NOT_SETUP_WALLPAPER_CHANGE: `Could not setup wallpaper change`,
+    COULD_NOT_ADD_WALLPAPER_TO_CHANGE_LIST: `Could not add post to wallpaper change list`,
     COULD_NOT_UNFOllOW_USER: `Could not unfollow user`,
     CANNOT_SAVE_EULA: `Cannot save EULA terms`,
     COULD_NOT_VALIDATE_PHONE_NUMBER: `Could not validate phone number`,
@@ -848,6 +851,7 @@ export const miscMessage = {
     SET: `set`,
     INACTIVE: `inactive`,
     IMAGE_TYPE: `image/*`,
+    ADD_WALLPAPER: `addWallPaper`,
     DETAILS: `details`,
     STARDOM_LOGO_TEXT: `2021 Stardom`,
     CONFIRM_SECRET: `OTP Confirmed`,
@@ -871,6 +875,7 @@ export const miscMessage = {
     DOWNLOADS: `DOWNLOADS`,
     REQUEST_FOR_PRIVATE_ACCESS: `Request to access private wallpaper`,
     PRIVATE_POST: `Private post`,
+    SET_ALARM_MANAGER: `setAlarmManager`,
     SUCCESSFULLY_ADDED_FOLLOWER: `Successfully Added Follower`,
     SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER: `Successfully Requested Private Access`,
     SUCCESSFULLY_UNFOLLOWED: `Successfully unfollowed`,
@@ -996,6 +1001,9 @@ export const SDMenuOptions = [
         key: actionButtonTextConstants.LOGOUT,
         loggedIn: true,
         icon: require(`../assets/menu/logout_icon.png`)
+    }, {
+        label: actionButtonTextConstants.WALLPAPER_CHANGE_SETTINGS,
+        key: actionButtonTextConstants.WALLPAPER_CHANGE_SETTINGS
     }, {
         label: actionButtonTextConstants.ABOUT_STARDOM,
         key: actionButtonTextConstants.ABOUT_STARDOM,

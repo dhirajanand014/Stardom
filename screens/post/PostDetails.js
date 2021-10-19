@@ -6,9 +6,10 @@ import {
     stringConstants, postCountTypes, numericConstants, miscMessage, jsonConstants,
     fieldControllerName, width, height, requestConstants
 } from '../../constants/Constants';
+import { colors } from '../../styles/Styles';
 import {
     increaseAndSetPostCounts, setPostDetailsStateForModal,
-    downloadImageFromURL, shareImage, showProgressSnackbar
+    downloadImageFromURL, shareImage, showProgressSnackbar, addRemoveWallPaperChanger
 } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal';
@@ -16,11 +17,13 @@ import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal
 import { SDWallpaperModal } from '../../views/imagePost/SDWallpaperModal';
 import { CategoryContext } from '../../App';
 import { RenderLoaderScroll } from '../../views/imagePost/RenderLoaderScroll';
+import { WallPaperChangerIcon } from '../../components/icons/WallPaperChangerIcon';
 
 const post_like = require(`../../assets/post_likes_icon.png`);
 const post_like_selected = require(`../../assets/post_likes_selected_icon.png`);
 const post_description = require(`../../assets/post_description_icon.png`);
 const reportAbuseIcon = require('../../assets/post_report_abuse_icon.png');
+const wallpaperChangeIcon = require('../../assets/film.png');
 const post_wallpaper = require(`../../assets/menu/add_wallpaper_icon.png`);
 const post_download = require(`../../assets/post_download_icon.png`);
 const scrollToTopIcon = require(`../../assets/scroll_to_top_icon.png`);
@@ -262,6 +265,12 @@ export const PostDetails = forwardRef((props, ref) => {
                         <Text style={[SDGenericStyles.ft7, SDGenericStyles.textColorWhite, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textCenterAlign, SDGenericStyles.top1]}>
                             {miscMessage.REPORT_ABUSE_TEXT}
                         </Text>
+                    </View>
+                    <View style={SDGenericStyles.paddingTop25}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor_wallpaper_changer} activeOpacity={.7}
+                            onPress={async () => await addRemoveWallPaperChanger(miscMessage.ADD_WALLPAPER, postDetailsState.currentPost)}>
+                            <WallPaperChangerIcon stroke={colors.WHITE} />
+                        </TouchableOpacity>
                     </View>
                 </View>
             }

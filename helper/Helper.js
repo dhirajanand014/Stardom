@@ -179,6 +179,23 @@ export const setCurrentImageAsWallPaper = async (postUrl, postTitle, option) => 
     }
 }
 
+export const setupWallPaperChanger = async () => {
+    try {
+        NativeModules.StartomApi.wallPaperChangeActionService(miscMessage.SET_ALARM_MANAGER);
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_SETUP_WALLPAPER_CHANGE, error);
+    }
+}
+
+export const addRemoveWallPaperChanger = async (inAction, currentPost) => {
+    try {
+        NativeModules.StartomApi.addRemoveWallPaperAsyncStorage(inAction, currentPost.id, currentPost.postTitle,
+            currentPost.postImage);
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_ADD_WALLPAPER_TO_CHANGE_LIST, error);
+    }
+}
+
 export const downloadCurrentImage = async (postUrl, postTitle, isDownload, downloadCallback) => {
     try {
         let config = { fileCache: true };
