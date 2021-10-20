@@ -102,12 +102,13 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getWallPaperChangeList() {
+    public String getWallPaperChangeList() {
         try {
-            StardomUtils.getSavedWallPaperChangeList(reactContext.getApplicationContext());
+            return StardomUtils.getSavedWallPaperChangeList(reactContext.getApplicationContext());
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot retrieve wallpaper change list", exception);
         }
+        return Constants.EMPTY;
     }
 
     /**
@@ -117,7 +118,7 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     public void wallPaperChangeActionService(String inAction) {
         try {
             WallPaperChangeService wallPaperChangeService = new WallPaperChangeService(reactContext.getApplicationContext());
-            switch (inAction){
+            switch (inAction) {
                 case Constants.SET_ALARM_MANAGER:
                     wallPaperChangeService.cancelAlarmManager();
                     wallPaperChangeService.setAlarmManager();
