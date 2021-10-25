@@ -58,6 +58,7 @@ export const screens = {
     PROFILE: `Profile`,
     EDIT_USER_PROFILE: `Edit user profile`,
     FOLLOWER_FOLLOWING_PROFILE: `Follower Following profile`,
+    AUTO_WALLPAPER_CHANGER_SETTINGS: `Auto Wallpaper Changer Settings`,
     VIEW_USER_POSTS: `View user posts`,
     EULA_ACCEPTANCE: `EULA Acceptance`,
     CAMERA: `Camera`,
@@ -129,6 +130,9 @@ export const fieldControllerName = {
     DOB: `dob`,
     GENDER: `gender`,
     PROFILE: `profile`,
+    CHANGE_WALLPAPER_CONDITION: `changeWallPaperCondition`,
+    CHANGE_WALLPAPER_INTERVALS: `changeWallPaperIntervals`,
+    CHANGE_WALLPAPER_SPECIFIC_TIME: `changeWallPaperSpecificTime`,
     POST_PROFILE: `postProfile`,
     POST_CATEGORIES: `postCategories`,
     LOCATION: `location`,
@@ -221,7 +225,10 @@ export const actionButtonTextConstants = {
     APPROVE: `Approve`,
     REJECT: `Reject`,
     PUBLIC_FOLLOW: `Public Follow`,
-    REMOVE: `Remove`
+    REMOVE: `Remove`,
+    ADD: `Add`,
+    SCHEDULE_WALLPAPER_CHANGE: `Schedule`,
+    RESCHEDULE_WALLPAPER_CHANGE: `Re-Schedule`
 }
 
 export const formRequiredRules = {
@@ -302,6 +309,12 @@ export const formRequiredRules = {
             message: `Please select a date`
         }
     },
+    timePickerFormRule: {
+        required: {
+            value: true,
+            message: `Please select a time`
+        }
+    },
     addPostTitleRule: {
         required: {
             value: true,
@@ -349,6 +362,18 @@ export const formRequiredRules = {
             message: `Please select your profile`
         }
     },
+    changeWallPaperConditionRule: {
+        required: {
+            value: true,
+            message: `Please select an change condition`
+        }
+    },
+    changeWallPaperIntervalsRule: {
+        required: {
+            value: true,
+            message: `Please select an interval`
+        }
+    },
     postCategoryRule: {
         name: fieldControllerName.CATEGORIES,
         required: {
@@ -377,7 +402,6 @@ export const formRequiredRules = {
         }
     }
 };
-
 
 export const savePostCountKeys = {
     SELECTED_POST_LIKES: `selectedPostIdLikesCount`
@@ -473,6 +497,9 @@ export const placeHolderText = {
     SELECT_CATEGORIES: 'Select Categories',
     SEARCH_FOLLOWERS: `Search Followers`,
     SEARCH_FOLLOWINGS: `Search Followings`,
+    WALLPAPER_CHANGER_CONDITION: `Select a change condition`,
+    WALLPAPER_CHANGER_INTERVALS: `Select a interval`,
+    WALLPAPER_CHANGER_SPECIFIC_TIME: `Select a specfic time`,
     ADD_TITLE: `Title`,
     ADD_URL: `URL`,
     POSTS: `Posts`,
@@ -625,7 +652,12 @@ export const alertTextMessages = {
     ADDING_NEW_POST: `Please wait. Adding new post`,
     UPDATING_POST_DETAILS: `Please wait. Updating post details`,
     DELETING_POST: `Deleting post`,
-    LOADING_CATEGORIES: `Please wait. Loading categories`
+    LOADING_CATEGORIES: `Please wait. Loading categories`,
+    DO_YOU_WANT_TO_ADD: `Do you want to add`,
+    DO_YOU_WANT_TO_REMOVE: `Do you want to remove`,
+    TO_WALLPAPER_LIST: `to the wallpaper list`,
+    FROM_WALLPAPER_LIST: `from wallpaper list`,
+    AUTO_WALLPAPER_NOT_ENABLED: `Auto Wallpaper Changer is not enabled. Select from the below options in the drop down to Activiate.`
 }
 
 export const errorMessages = {
@@ -671,7 +703,9 @@ export const errorMessages = {
     COULD_NOT_CROP_IMAGE: `Could not crop image`,
     COULD_NOT_SET_WALLPAPER: "Cannot set current image as wallpaper",
     COULD_NOT_SETUP_WALLPAPER_CHANGE: `Could not setup wallpaper change`,
+    COULD_NOT_CHECK_WALLPAPER_LIST: `Could not check wallpaper list`,
     COULD_NOT_ADD_WALLPAPER_TO_CHANGE_LIST: `Could not add post to wallpaper change list`,
+    COULD_NOT_FETCH_WALLPAPER_CHANGE_LIST: `Could not fetch wallpaper change list`,
     COULD_NOT_UNFOllOW_USER: `Could not unfollow user`,
     CANNOT_SAVE_EULA: `Cannot save EULA terms`,
     COULD_NOT_VALIDATE_PHONE_NUMBER: `Could not validate phone number`,
@@ -764,6 +798,7 @@ export const miscMessage = {
     CLICK_TO_ADD_IMAGE: `Click + to add or select image`,
     DOB_DATE_FORMAT: `DD / MM / YYYY`,
     DATE: `date`,
+    TIME: `time`,
     RESET: `Reset`,
     INFINITE: `infinite`,
     SUCCESSFUL: `Successful`,
@@ -801,6 +836,8 @@ export const miscMessage = {
     DEVICE_TOKEN: `device_id`,
     ATTEMPT_REMAINING: `Attempts remaining`,
     SMALL: `small`,
+    WALLPAPER_TIME_INTERVAL: `timeInterval`,
+    WALLPAPER_TIME_SPECIFIC: `timeSpecific`,
     INITIATIVE: `Initiative`,
     STARDOM_POST_SHARE: `Stardom post`,
     STARDOM_PROFILE_SHARE: `Stardom profile`,
@@ -814,6 +851,8 @@ export const miscMessage = {
     POST_DESCRIPTION_DATE_FORMAT: `h[.]mm A DD MMMM YYYY`,
     POST_DESCRIPTION_MODAL_NAME: `descriptionModal`,
     POST_REPORT_ABUSE_MODAL_NAME: `reportAbuseModal`,
+    POST_ADD_WALLPAPER_MODAL_NAME: `postAddWallPaperListModal`,
+    POST_REMOVE_WALLPAPER_MODAL_NAME: `postRemoveWallPaperListModal`,
     POST_WALLPAPER_MODAL: `wallpaperModal`,
     USER_ID: `userid`,
     RIGHT: `right`,
@@ -852,6 +891,7 @@ export const miscMessage = {
     INACTIVE: `inactive`,
     IMAGE_TYPE: `image/*`,
     ADD_WALLPAPER: `addWallPaper`,
+    REMOVE_WALLPAPER: `removeWallPaper`,
     DETAILS: `details`,
     STARDOM_LOGO_TEXT: `2021 Stardom`,
     CONFIRM_SECRET: `OTP Confirmed`,
@@ -967,6 +1007,107 @@ export const defaultProfilesValue = {
         fontFamily: `stardom_roboto_regular`,
     }
 }
+
+export const wallpaperChangerConditions = [
+    {
+        label: `Select a condition`,
+        value: -1,
+        untouchable: true,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `At time intervals`,
+        value: `timeInterval`,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `At specific time`,
+        value: `timeSpecific`,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }
+]
+
+export const wallpaperChangerIntervals = [
+    {
+        label: `Select an interval`,
+        value: -1,
+        untouchable: true,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `Change On Phone Unlock`,
+        value: 0,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `15 Minutes`,
+        value: 900000,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `30 Minutes`,
+        value: 1800000,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `45 Minutes`,
+        value: 2700000,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `1 Hour`,
+        value: 3600000,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `2 Hours`,
+        value: 7200000,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `5 Hours`,
+        value: 18000000,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `12 Hours (Half day)`,
+        value: 43200000,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }, {
+        label: `Every day`,
+        value: 86400000,
+        textStyle: {
+            color: `#fafafa`,
+            fontFamily: `stardom_roboto_regular`,
+        }
+    }
+]
 
 export const PRIVATE_FOLLOW_UNFOLLOW = {
     NOT_REQUESTED: numericConstants.ZERO,

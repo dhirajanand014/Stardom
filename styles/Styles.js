@@ -1786,6 +1786,13 @@ export const userMenuStyles = {
         elevation: 3,
         backgroundColor: '#eabe05'
     },
+    userRemoveButton: {
+        borderRadius: 25,
+        paddingVertical: 8,
+        width: 105,
+        elevation: 3,
+        backgroundColor: '#eabe05'
+    },
 }
 
 export const cameraStyles = StyleSheet.create({

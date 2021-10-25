@@ -22,6 +22,10 @@ public class Constants {
 
     public static final String CANCEL_ALARM_MANAGER = "cancelAlarmManager";
     public static final String SET_ALARM_MANAGER = "setAlarmManager";
+    public static final String WALLPAPER_ADDED = "wallPaperAdded";
+    public static final String WALLPAPER_REMOVED = "wallPaperRemoved";
     public static final String RETRIEVE_WALLPAPER = "retrieveWallPaper";
     public static final String INCREMENT_CURRENT_INDEX = "incrementCurrentIndex";
+    public static final String TRIGGER_INTERVALS = "timeInterval";
+    public static final String TRIGGER_SPECIFIC_TIME = "timeSpecific";
 }

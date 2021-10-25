@@ -11,12 +11,14 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.stardomapp.constants.Constants;
 import com.stardomapp.utils.StardomUtils;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -62,8 +64,30 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * @param inPostId
+     * @param callback
+     */
+    @ReactMethod
+    public void checkPostInWallPaperList(Integer inPostId, Callback callback) {
+        try {
+            String wallPaperList = StardomUtils.getSavedWallPaperChangeList(reactContext.getApplicationContext());
+            if (!wallPaperList.isEmpty()) {
+                JSONObject wallPaperJSONObject = StardomUtils.parseJSONObject(wallPaperList);
+                JSONArray wallPaperJSONArray = wallPaperJSONObject.getJSONArray(Constants.WALLPAPERS);
+                callback.invoke(StardomUtils.checkIfPostExists(wallPaperJSONArray, inPostId));
+            } else {
+                callback.invoke(false);
+            }
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Cannot parse wallPaper list", exception);
+            Toast.makeText(reactContext, "Cannot fetch wallPaper list", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
      * @param inAction
      * @param inPostId
+     * @param inPostTitle
      * @param inURL
      */
     @ReactMethod
@@ -75,9 +99,11 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
             switch (inAction) {
                 case Constants.ADD_WALLPAPER:
                     if (wallPaperJSONObject.isEmpty()) {
-                        wallPaperObjectJSON = StardomUtils.createNewJSONArray(inPostId, inURL, inPostTitle, reactContext.getApplicationContext());
+                        wallPaperObjectJSON = StardomUtils.createNewJSONArray(inPostId, inURL, inPostTitle,
+                                reactContext.getApplicationContext());
                     } else {
-                        wallPaperObjectJSON = StardomUtils.parseAndAddNewJSONObject(wallPaperJSONObject, inPostId, inURL);
+                        wallPaperObjectJSON = StardomUtils.parseAndAddNewJSONObject(wallPaperJSONObject, inPostId, inURL,
+                                reactContext.getApplicationContext(), inPostTitle);
                     }
                     SharedPreferences.Editor preferencesEditor = preferences.edit();
                     preferencesEditor.putString(Constants.WALLPAPER_CHANGE_LIST, wallPaperObjectJSON.toString());
@@ -85,7 +111,8 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
                     break;
                 case Constants.REMOVE_WALLPAPER:
                     if (!wallPaperJSONObject.isEmpty()) {
-                        wallPaperObjectJSON = StardomUtils.removeFromWallPaperChangeList(wallPaperJSONObject, inPostId);
+                        wallPaperObjectJSON = StardomUtils.removeFromWallPaperChangeList(wallPaperJSONObject, inPostId,
+                                reactContext.getApplicationContext(), inPostTitle);
                         SharedPreferences.Editor removePreferencesEditor = preferences.edit();
                         removePreferencesEditor.putString(Constants.WALLPAPER_CHANGE_LIST, wallPaperObjectJSON.toString());
                         removePreferencesEditor.apply();
@@ -101,27 +128,30 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
         }
     }
 
+    /**
+     * @param callback
+     */
     @ReactMethod
-    public String getWallPaperChangeList() {
+    public void getWallPaperChangeList(Callback callback) {
         try {
-            return StardomUtils.getSavedWallPaperChangeList(reactContext.getApplicationContext());
+            String wallPaperList = StardomUtils.getSavedWallPaperChangeList(reactContext.getApplicationContext());
+            callback.invoke(wallPaperList);
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot retrieve wallpaper change list", exception);
         }
-        return Constants.EMPTY;
     }
 
     /**
      *
      */
     @ReactMethod
-    public void wallPaperChangeActionService(String inAction) {
+    public void wallPaperChangeActionService(String inAction, String inCondition, String inLongMilliSeconds) {
         try {
             WallPaperChangeService wallPaperChangeService = new WallPaperChangeService(reactContext.getApplicationContext());
             switch (inAction) {
                 case Constants.SET_ALARM_MANAGER:
                     wallPaperChangeService.cancelAlarmManager();
-                    wallPaperChangeService.setAlarmManager();
+                    wallPaperChangeService.setAlarmManager(inCondition, Long.valueOf(inLongMilliSeconds));
                     break;
                 case Constants.CANCEL_ALARM_MANAGER:
                     wallPaperChangeService.cancelAlarmManager();

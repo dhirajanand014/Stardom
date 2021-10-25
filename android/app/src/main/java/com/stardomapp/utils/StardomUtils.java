@@ -11,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 public class StardomUtils {
     /**
      * @param inJsonString
@@ -79,13 +81,12 @@ public class StardomUtils {
      * @return
      * @throws JSONException
      */
-    public static JSONObject parseAndAddNewJSONObject(String inWallPaperObject, Integer inPostId, String inURL) throws JSONException {
+    public static JSONObject parseAndAddNewJSONObject(String inWallPaperObject, Integer inPostId, String inURL, Context inContext, String inPostTile) throws JSONException {
         JSONObject wallPaperJSONObject = StardomUtils.parseJSONObject(inWallPaperObject);
         JSONArray wallPaperJSONArray = wallPaperJSONObject.getJSONArray(Constants.WALLPAPERS);
-        if (!checkIfPostExists(wallPaperJSONArray, inPostId)) {
-            JSONObject newJSONObject = StardomUtils.createWallPaperJSONObject(inPostId, inURL);
-            wallPaperJSONArray.put(newJSONObject);
-        }
+        JSONObject newJSONObject = StardomUtils.createWallPaperJSONObject(inPostId, inURL);
+        wallPaperJSONArray.put(newJSONObject);
+        Toast.makeText(inContext, "Added Post " + inPostTile + " to wallpaper change list", Toast.LENGTH_SHORT).show();
         return wallPaperJSONObject;
     }
 
@@ -95,7 +96,7 @@ public class StardomUtils {
      * @return
      * @throws JSONException
      */
-    private static boolean checkIfPostExists(JSONArray inJSONArray, Integer inPostId) throws JSONException {
+    public static boolean checkIfPostExists(JSONArray inJSONArray, Integer inPostId) throws JSONException {
         for (int index = Constants.INT_ZERO; index < inJSONArray.length(); index++) {
             JSONObject jsonObject = inJSONArray.getJSONObject(index);
             if (jsonObject.has(Constants.POST_ID) && jsonObject.get(Constants.POST_ID).equals(inPostId)) {
@@ -106,19 +107,21 @@ public class StardomUtils {
     }
 
     /**
-     *
      * @param inWallPaperJSONObject
      * @param inPostId
      * @return
      * @throws JSONException
      */
-    public static JSONObject removeFromWallPaperChangeList(String inWallPaperJSONObject, Integer inPostId) throws JSONException {
+    public static JSONObject removeFromWallPaperChangeList(String inWallPaperJSONObject, Integer inPostId, Context inContext, String inPostTitle) throws JSONException {
         JSONObject parsedJSONObject = parseJSONObject(inWallPaperJSONObject);
         JSONArray wallPaperArray = parsedJSONObject.getJSONArray(Constants.WALLPAPERS);
         for (int removeIndex = Constants.INT_ZERO; removeIndex < wallPaperArray.length(); removeIndex++) {
             JSONObject postObject = wallPaperArray.getJSONObject(removeIndex);
             if (postObject.has(Constants.POST_ID) && postObject.get(Constants.POST_ID).equals(inPostId)) {
                 wallPaperArray.remove(removeIndex);
+                Toast.makeText(inContext, "Removed post " + inPostTitle + " from the wallpaper change list", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(inContext, "Could not remove post " + inPostTitle + " from the wallpaper change list", Toast.LENGTH_SHORT).show();
             }
         }
         return parsedJSONObject;
@@ -131,5 +134,27 @@ public class StardomUtils {
     public static String getSavedWallPaperChangeList(Context inContext) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(inContext);
         return preferences.getString(Constants.WALLPAPER_CHANGE_LIST, Constants.EMPTY);
+    }
+
+    /**
+     * @param inCondition
+     * @param inLongMilliSeconds
+     * @return
+     */
+    public static Calendar getCalenderFromMilliSeconds(String inCondition, Long inLongMilliSeconds) {
+        Calendar millisCalendar = Calendar.getInstance();
+        if (Constants.TRIGGER_SPECIFIC_TIME.equals(inCondition)) {
+            millisCalendar.setTimeInMillis(inLongMilliSeconds);
+
+            Calendar newCalendar = Calendar.getInstance();
+            if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= millisCalendar.get(Calendar.HOUR_OF_DAY)) {
+                newCalendar.add(Calendar.DAY_OF_YEAR, Constants.INT_ONE); // add, not set!
+            }
+            newCalendar.set(Calendar.HOUR_OF_DAY, millisCalendar.get(Calendar.HOUR_OF_DAY));
+            newCalendar.set(Calendar.MINUTE, millisCalendar.get(Calendar.MINUTE));
+            newCalendar.set(Calendar.SECOND, Constants.INT_ZERO);
+            return newCalendar; // return for TRIGGER_SPECIFIC_TIME
+        }
+        return millisCalendar; // return for TRIGGER_INTERVALS
     }
 }

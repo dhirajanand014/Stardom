@@ -5,7 +5,7 @@ import {
     urlConstants, keyChainConstansts, permissionsButtons,
     postCountTypes, savePostCountKeys, permissionMessages,
     stringConstants, alertTextMessages, responseStringData, PRIVATE_FOLLOW_UNFOLLOW, keyBoardTypeConst,
-    actionButtonTextConstants, colorConstants, getDefaultProfilePostsCounts,
+    actionButtonTextConstants, getDefaultProfilePostsCounts,
     miscMessage, width, height, numericConstants, placeHolderText,
     screens, headerStrings, fieldControllerName, isAndroid, notificationConsts,
     isIOS, OTP_INPUTS, errorMessages, requestConstants, modalTextConstants,
@@ -173,26 +173,38 @@ export const getPostCounts = async () => {
 
 export const setCurrentImageAsWallPaper = async (postUrl, postTitle, option) => {
     try {
-        NativeModules.StartomApi.setPostAsWallPaper(postTitle, postUrl, option);
+        await NativeModules.StartomApi.setPostAsWallPaper(postTitle, postUrl, option);
     } catch (error) {
         console.error(errorMessages.COULD_NOT_SET_WALLPAPER, error);
     }
 }
 
-export const setupWallPaperChanger = async () => {
+export const setupWallPaperChanger = async (inAction, inCondition, inLongMilliSeconds) => {
     try {
-        NativeModules.StartomApi.wallPaperChangeActionService(miscMessage.SET_ALARM_MANAGER);
+        await NativeModules.StartomApi.wallPaperChangeActionService(inAction, inCondition, inLongMilliSeconds);
     } catch (error) {
         console.error(errorMessages.COULD_NOT_SETUP_WALLPAPER_CHANGE, error);
     }
 }
 
-export const addRemoveWallPaperChanger = async (inAction, currentPost) => {
+export const addRemoveWallPaperChanger = async (postDetailsState, setPostDetailsState) => {
     try {
-        NativeModules.StartomApi.addRemoveWallPaperAsyncStorage(inAction, currentPost.id, currentPost.postTitle,
-            currentPost.postImage);
+        const { currentPost } = postDetailsState;
+        await NativeModules.StartomApi.checkPostInWallPaperList(currentPost.id,
+            (response) => setPostDetailsStateForModal(postDetailsState, setPostDetailsState, response && miscMessage.POST_REMOVE_WALLPAPER_MODAL_NAME
+                || miscMessage.POST_ADD_WALLPAPER_MODAL_NAME));
     } catch (error) {
-        console.error(errorMessages.COULD_NOT_ADD_WALLPAPER_TO_CHANGE_LIST, error);
+        console.error(errorMessages.COULD_NOT_CHECK_WALLPAPER_LIST, error);
+    }
+}
+
+export const checkWallPapersList = async () => {
+    try {
+        await NativeModules.StartomApi.getWallPaperChangeList((response) => {
+            //const jsonReponse = JSON.parse(response);
+        });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_WALLPAPER_CHANGE_LIST, error);
     }
 }
 
@@ -332,6 +344,14 @@ export const setReportAbuseSelectedOption = (postDetailsState, setPostDetailsSta
             [requestConstants.POST_REPORT_ABUSE_SUBMITTED]: false
         }
     });
+}
+
+export const addWallPaperStartdomApi = async (inAction, currentPost) => {
+    try {
+        await NativeModules.StartomApi.addRemoveWallPaperAsyncStorage(inAction, currentPost.id, currentPost.postTitle, currentPost.postImage)
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_ADD_WALLPAPER_TO_CHANGE_LIST, error);
+    }
 }
 
 export const setOptionsStateRadioOptions = (optionsState, setOptionsState) => {
@@ -656,10 +676,18 @@ export const onChangeByValueType = async (inputProps, value, props) => {
                 || props.items;
             props.setState({ ...props.state, users: filteredFollowersFollowings });
             break;
+        case fieldControllerName.CHANGE_WALLPAPER_CONDITION:
+            inputProps.onChange(value);
+            props.setState({ ...props.state, changeCondition: value });
+            break;
         default:
             inputProps.onChange(value);
             break;
     }
+}
+
+export const convertTime = (event, datePickerProps, props) => {
+    onChangeByValueType(datePickerProps, event.nativeEvent.timestamp, props);
 }
 
 export const convertDate = (event, datePickerProps, props, date) => {
@@ -701,7 +729,7 @@ export const categoryHeader = () => {
         headerShown: true,
         headerTitle: headerStrings.SELECT_CATEGORY,
         headerStyle: SDGenericStyles.backGroundColorBlack,
-        headerTintColor: colorConstants.WHITE,
+        headerTintColor: colors.WHITE,
         headerTitleAlign: miscMessage.CENTER,
         headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium,
         navigationOptions: ({ navigation }) => ({
@@ -712,7 +740,22 @@ export const categoryHeader = () => {
                 </TourGuideZone>
             )
         })
-    })
+    });
+}
+
+export const wallPaperChangeSettingHeader = props => {
+    return ({
+        headerShown: true,
+        headerTitle: props.title,
+        headerStyle: SDGenericStyles.backGroundColorBlack,
+        headerTintColor: colors.WHITE,
+        headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium,
+        navigationOptions: ({ navigation }) => ({
+            headerLeft: (
+                <HeaderBackButton tintColor={SDGenericStyles.colorWhite} onPress={() => { navigation.goBack() }} />
+            )
+        })
+    });
 }
 
 export const authorizationHeader = props => {
@@ -720,7 +763,7 @@ export const authorizationHeader = props => {
         headerShown: true,
         headerTitle: props.title,
         headerStyle: SDGenericStyles.backGroundColorBlack,
-        headerTintColor: colorConstants.WHITE,
+        headerTintColor: colors.WHITE,
         headerTitleAlign: miscMessage.CENTER,
         headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium,
         navigationOptions: ({ navigation }) => ({
@@ -728,7 +771,7 @@ export const authorizationHeader = props => {
                 <HeaderBackButton tintColor={SDGenericStyles.colorWhite} onPress={() => { navigation.goBack() }} />
             )
         })
-    })
+    });
 }
 
 export const onResendOtpButtonPress = async (firstTextInputRef, setOtpArray, setResendButtonDisabledTime, setAttemptsRemaining,

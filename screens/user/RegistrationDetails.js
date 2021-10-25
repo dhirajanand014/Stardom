@@ -9,7 +9,7 @@ import {
     modalTextConstants, defaultProfilesValue, alertTextMessages, screens
 } from '../../constants/Constants';
 import { SDGenericStyles, userAuthStyles, colors, glancePostStyles } from '../../styles/Styles';
-import { SDDatePickerView } from '../../views/datePickerView/SDDatePickerView';
+import { SDDateTimePickerView } from '../../views/datePickerView/SDDateTimePickerView';
 import { SDGenderRadioOptionView } from '../../views/fromInputView/SDGenderRadioOptionView';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { CalenderIcon } from '../../components/icons/CalenderIcon';
@@ -79,7 +79,7 @@ export const RegistrationDetails = () => {
                         icon={<RegisterUserIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN}
                             stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
-                    <SDDatePickerView inputName={fieldControllerName.DOB} control={control} rules={formRequiredRules.datePickerFormRule} maximumDate={Date.now()}
+                    <SDDateTimePickerView inputName={fieldControllerName.DOB} control={control} rules={formRequiredRules.datePickerFormRule} maximumDate={Date.now()}
                         defaultValue={stringConstants.EMPTY} formState={formState} mode={miscMessage.DATE} dateFormat={miscMessage.DOB_DATE_FORMAT}
                         display={keyBoardTypeConst.DEFAULT} placeHolderText={placeHolderText.DOB} icon={<CalenderIcon width={numericConstants.EIGHTEEN}
                             height={numericConstants.EIGHTEEN} stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />

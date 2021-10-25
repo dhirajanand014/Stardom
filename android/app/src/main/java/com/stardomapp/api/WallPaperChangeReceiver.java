@@ -133,7 +133,6 @@ public class WallPaperChangeReceiver extends BroadcastReceiver {
                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
                 wallpaperManager.setBitmap(bitmapImage, null, true,
                         WallpaperManager.FLAG_SYSTEM);
-                Toast.makeText(context, "Changed wallpaper", Toast.LENGTH_SHORT).show();
                 return Constants.POST_WALLPAPER_SET;
             } catch (IOException exception) {
                 Log.e(Constants.TAG, "Cannot set wallpaper on change", exception);
@@ -145,6 +144,7 @@ public class WallPaperChangeReceiver extends BroadcastReceiver {
         protected void onPostExecute(String inResult) {
             try {
                 if (!inResult.isEmpty()) {
+                    Toast.makeText(context, "Changed wallpaper", Toast.LENGTH_SHORT).show();
                     wallPaperActions(context, Constants.INCREMENT_CURRENT_INDEX);
                 }
             } catch (Exception exception) {

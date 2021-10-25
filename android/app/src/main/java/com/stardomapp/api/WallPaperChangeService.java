@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.stardomapp.constants.Constants;
+import com.stardomapp.utils.StardomUtils;
+
+import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 
@@ -23,14 +26,19 @@ public class WallPaperChangeService {
 
     /**
      * Start the wallpaper change events.
+     *
+     * @param inCondition
+     * @param inLongMilliSeconds
      */
-    public void setAlarmManager() {
+    public void setAlarmManager(String inCondition, Long inLongMilliSeconds) {
         try {
             Intent alarmIntent = new Intent(context, WallPaperChangeReceiver.class);
-            PendingIntent sender = PendingIntent.getBroadcast(context, Constants.INT_TWO, alarmIntent, Constants.INT_ZERO);
+            PendingIntent sender = PendingIntent.getBroadcast(context, Constants.INT_TWO, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (null != alarmManager) {
-                alarmManager.setRepeating(AlarmManager.RTC, Constants.INT_ZERO, 60000, sender);
+                Calendar calendar = StardomUtils.getCalenderFromMilliSeconds(inCondition, inLongMilliSeconds);
+                alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), Constants.TRIGGER_INTERVALS.equals(inCondition) ? inLongMilliSeconds :
+                        AlarmManager.INTERVAL_DAY, sender);
             }
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Could not start the Alarm Activity", exception);
