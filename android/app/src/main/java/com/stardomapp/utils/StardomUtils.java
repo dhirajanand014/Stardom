@@ -143,18 +143,41 @@ public class StardomUtils {
      */
     public static Calendar getCalenderFromMilliSeconds(String inCondition, Long inLongMilliSeconds) {
         Calendar millisCalendar = Calendar.getInstance();
-        if (Constants.TRIGGER_SPECIFIC_TIME.equals(inCondition)) {
+        if (Constants.TRIGGER_INTERVALS.equals(inCondition)) {
+            // convert it to millisecond and plus it to current time;
+            long remainValue = getRemainingMillis(millisCalendar);
+            millisCalendar.setTimeInMillis(remainValue);
+        } else if (Constants.TRIGGER_SPECIFIC_TIME.equals(inCondition)) {
             millisCalendar.setTimeInMillis(inLongMilliSeconds);
-
             Calendar newCalendar = Calendar.getInstance();
-            if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= millisCalendar.get(Calendar.HOUR_OF_DAY)) {
-                newCalendar.add(Calendar.DAY_OF_YEAR, Constants.INT_ONE); // add, not set!
-            }
+//            if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= millisCalendar.get(Calendar.HOUR_OF_DAY)) {
+//                newCalendar.add(Calendar.DAY_OF_YEAR, Constants.INT_ONE); // add, not set!
+//            }
             newCalendar.set(Calendar.HOUR_OF_DAY, millisCalendar.get(Calendar.HOUR_OF_DAY));
             newCalendar.set(Calendar.MINUTE, millisCalendar.get(Calendar.MINUTE));
             newCalendar.set(Calendar.SECOND, Constants.INT_ZERO);
             return newCalendar; // return for TRIGGER_SPECIFIC_TIME
         }
         return millisCalendar; // return for TRIGGER_INTERVALS
+    }
+
+    /**
+     * @param inMillisCalendar
+     * @return
+     */
+    private static long getRemainingMillis(Calendar inMillisCalendar) {
+        int minute = inMillisCalendar.get(Calendar.MINUTE);
+        long startMillis = System.currentTimeMillis();
+        long remainValue;
+        if (minute < Constants.INT_ZERO) {
+            remainValue = Constants.INT_FIFTEEN - minute;
+        } else if (minute < Constants.INT_THIRTY) {
+            remainValue = Constants.INT_THIRTY - minute;
+        } else if (minute < Constants.INT_FORTY_FIVE) {
+            remainValue = Constants.INT_FORTY_FIVE - minute;
+        } else {
+            remainValue = Constants.INT_SIXTY - minute;
+        }
+        return startMillis + remainValue * Constants.INT_SIXTY * Constants.INT_ONE_THOUSAND;
     }
 }

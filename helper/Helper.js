@@ -179,9 +179,16 @@ export const setCurrentImageAsWallPaper = async (postUrl, postTitle, option) => 
     }
 }
 
-export const setupWallPaperChanger = async (inAction, inCondition, inLongMilliSeconds) => {
+export const setupWallPaperChanger = async (inAction, inData, inLongMilliSeconds, wallPaperChangeSettings, setWallPaperChangeSettings) => {
     try {
-        await NativeModules.StartomApi.wallPaperChangeActionService(inAction, inCondition, inLongMilliSeconds);
+        await NativeModules.StartomApi.wallPaperChangeActionService(inAction, inData.changeWallPaperCondition, inLongMilliSeconds);
+        await saveDetailsToKeyChain(keyChainConstansts.WALLPAPER_CHANGE_SETTINGS, keyChainConstansts.WALLPAPER_CHANGE_SETTINGS,
+            JSON.stringify(inData));
+        wallPaperChangeSettings.changeCondition = inData.changeWallPaperCondition || stringConstants.EMPTY;
+        wallPaperChangeSettings.changeInterval = inData.changeWallPaperIntervals || stringConstants.EMPTY;
+        wallPaperChangeSettings.changeSpecificTime = inData.changeWallPaperSpecificTime || stringConstants.EMPTY;
+        wallPaperChangeSettings.isAlarmActive = true;
+        setWallPaperChangeSettings({ ...wallPaperChangeSettings });
     } catch (error) {
         console.error(errorMessages.COULD_NOT_SETUP_WALLPAPER_CHANGE, error);
     }
@@ -200,7 +207,7 @@ export const addRemoveWallPaperChanger = async (postDetailsState, setPostDetails
 
 export const checkWallPapersList = async () => {
     try {
-        await NativeModules.StartomApi.getWallPaperChangeList((response) => {
+        await NativeModules.StartomApi.getWallPaperChangeList(() => {
             //const jsonReponse = JSON.parse(response);
         });
     } catch (error) {
@@ -2105,5 +2112,33 @@ export const viewSharedActionFromClosedApp = async (viewPagerRef, posts, postDet
         }
     } catch (error) {
         console.error(errorMessages.CANNOT_VIEW_CLOSED_APP_FROM_SHARE, error);
+    }
+}
+
+export const getWallPaperSettingsFromKeyChain = async () => {
+    try {
+        return await getKeyChainDetails(keyChainConstansts.WALLPAPER_CHANGE_SETTINGS);
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_WALLPAPER_CHANGE_SETTINGS_FROM_KEY_CHAIN, error);
+    }
+}
+
+export const checkAlarmActive = async (wallPaperChangeSettings, setWallPaperChangeSettings) => {
+    try {
+        await NativeModules.StartomApi.checkAlarmActive((response) =>
+            setWallPaperChangeSettings({ ...wallPaperChangeSettings, isAlarmActive: response })
+        );
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_ALARM_STATUS, error);
+    }
+}
+
+export const resetWallpaperSettings = async () => {
+    try {
+        await NativeModules.StartomApi.wallPaperChangeActionService(miscMessage.CANCEL_ALARM_MANAGER, stringConstants.EMPTY,
+            stringConstants.EMPTY);
+        await Keychain.resetGenericPassword({ service: keyChainConstansts.WALLPAPER_CHANGE_SETTINGS });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_RESET_WALLPAPER_SETTINGS, error);
     }
 }

@@ -228,7 +228,8 @@ export const actionButtonTextConstants = {
     REMOVE: `Remove`,
     ADD: `Add`,
     SCHEDULE_WALLPAPER_CHANGE: `Schedule`,
-    RESCHEDULE_WALLPAPER_CHANGE: `Re-Schedule`
+    RESCHEDULE_WALLPAPER_CHANGE: `Re-schedule`,
+    DISABLE_WALLPAPER_CHANGE: `Disable Wallpaper Settings`
 }
 
 export const formRequiredRules = {
@@ -657,7 +658,8 @@ export const alertTextMessages = {
     DO_YOU_WANT_TO_REMOVE: `Do you want to remove`,
     TO_WALLPAPER_LIST: `to the wallpaper list`,
     FROM_WALLPAPER_LIST: `from wallpaper list`,
-    AUTO_WALLPAPER_NOT_ENABLED: `Auto Wallpaper Changer is not enabled. Select from the below options in the drop down to Activiate.`
+    AUTO_WALLPAPER_NOT_ENABLED: `Auto Wallpaper Changer is not enabled. Select from the below options in the drop down to Activiate.`,
+    AUTO_WALLPAPER_ENABLED: `Auto Wallpaper Changer is running. You can change the settings or disable settings here.`
 }
 
 export const errorMessages = {
@@ -746,7 +748,10 @@ export const errorMessages = {
     CANNOT_SET_SELECTED_REPORT_ABUSES: 'Cannot set selected report abuse to the storage',
     CANNOT_FETCH_SELECTED_SAVED_REPORT_ABUSE: 'Cannot fetch selected saved report abuses from storage',
     USER_DID_NOT_SHARE: `User did not share`,
-    USER_CANCELLED_SHARE: `You cancelled sharing the image`
+    USER_CANCELLED_SHARE: `You cancelled sharing the image`,
+    COULD_NOT_FETCH_WALLPAPER_CHANGE_SETTINGS_FROM_KEY_CHAIN: `Could not fetch wallpaper change settings from key chain`,
+    COULD_NOT_FETCH_ALARM_STATUS: `Could not fetch alarm status`,
+    COULD_NOT_RESET_WALLPAPER_SETTINGS: `Could not reset keychain wallpaper settings`
 }
 
 export const responseStringData = {
@@ -916,6 +921,7 @@ export const miscMessage = {
     REQUEST_FOR_PRIVATE_ACCESS: `Request to access private wallpaper`,
     PRIVATE_POST: `Private post`,
     SET_ALARM_MANAGER: `setAlarmManager`,
+    CANCEL_ALARM_MANAGER: `cancelAlarmManager`,
     SUCCESSFULLY_ADDED_FOLLOWER: `Successfully Added Follower`,
     SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER: `Successfully Requested Private Access`,
     SUCCESSFULLY_UNFOLLOWED: `Successfully unfollowed`,
@@ -986,7 +992,8 @@ export const keyChainConstansts = {
     SAVE_CATEGORY_BUTTON_TYPE: `save_category_button_type`,
     SAVE_POST_COUNTS: `save_post_counts`,
     SAVE_SELECTED_REPORT: `save_selected_report`,
-    POST_ID: `postId`
+    POST_ID: `postId`,
+    WALLPAPER_CHANGE_SETTINGS: `wallPaperChangeSettings`
 }
 
 export const defaultPickerValue = {

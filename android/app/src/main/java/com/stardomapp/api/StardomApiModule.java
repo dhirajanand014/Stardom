@@ -1,7 +1,9 @@
 package com.stardomapp.api;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.WallpaperManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -159,6 +161,23 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot start wallpaper change service", exception);
             Toast.makeText(reactContext, "Cannot start wallpaper change service", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Check if wallpaper changer alarm is active.
+     *
+     * @param callback
+     */
+    @ReactMethod
+    public void checkAlarmActive(Callback callback) {
+        try {
+            Intent alarmIntent = new Intent(reactContext.getApplicationContext(), WallPaperChangeReceiver.class);
+            PendingIntent checkPendingIntent = PendingIntent.getActivity(reactContext.getApplicationContext(), Constants.INT_TWO,
+                    alarmIntent, Constants.INT_ZERO);
+            callback.invoke(null != checkPendingIntent);
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Cannot check alarm active", exception);
         }
     }
 
