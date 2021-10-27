@@ -35,11 +35,11 @@ public class WallPaperChangeService {
     public void setAlarmManager(String inCondition, Long inLongMilliSeconds) {
         try {
             Intent alarmIntent = new Intent(context, WallPaperChangeReceiver.class);
-            PendingIntent sender = PendingIntent.getBroadcast(context, Constants.INT_TWO, alarmIntent, Constants.INT_ZERO);
+            PendingIntent sender = PendingIntent.getBroadcast(context, Constants.ALARM_MANAGER_REQUEST_CODE, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (null != alarmManager) {
                 Calendar calendar = StardomUtils.getCalenderFromMilliSeconds(inCondition, inLongMilliSeconds);
-                alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), Constants.TRIGGER_INTERVALS.equals(inCondition) ? inLongMilliSeconds :
+                alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), Constants.TRIGGER_INTERVALS.equals(inCondition) ? inLongMilliSeconds :
                         AlarmManager.INTERVAL_DAY, sender);
                 if (Constants.TRIGGER_INTERVALS.equals(inCondition)) {
                     Toast.makeText(context, "Scheduled Wallpaper Changer for interval of " + calendar.get(Calendar.MINUTE) + " minutes", Toast.LENGTH_LONG).show();
@@ -58,7 +58,7 @@ public class WallPaperChangeService {
     public void cancelAlarmManager() {
         try {
             Intent alarmIntent = new Intent(context, WallPaperChangeReceiver.class);
-            PendingIntent sender = PendingIntent.getBroadcast(context, Constants.INT_TWO, alarmIntent, Constants.INT_ZERO);
+            PendingIntent sender = PendingIntent.getBroadcast(context, Constants.ALARM_MANAGER_REQUEST_CODE, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (null != alarmManager && null != sender) {
                 alarmManager.cancel(sender);

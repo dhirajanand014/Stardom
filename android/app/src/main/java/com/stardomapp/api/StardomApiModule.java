@@ -173,11 +173,12 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     public void checkAlarmActive(Callback callback) {
         try {
             Intent alarmIntent = new Intent(reactContext.getApplicationContext(), WallPaperChangeReceiver.class);
-            PendingIntent checkPendingIntent = PendingIntent.getActivity(reactContext.getApplicationContext(), Constants.INT_TWO,
-                    alarmIntent, Constants.INT_ZERO);
+            PendingIntent checkPendingIntent = PendingIntent.getBroadcast(reactContext.getApplicationContext(), Constants.ALARM_MANAGER_REQUEST_CODE,
+                    alarmIntent, PendingIntent.FLAG_NO_CREATE);
             callback.invoke(null != checkPendingIntent);
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot check alarm active", exception);
+            callback.invoke(false);
         }
     }
 

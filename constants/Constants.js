@@ -367,13 +367,17 @@ export const formRequiredRules = {
         required: {
             value: true,
             message: `Please select an change condition`
-        }
+        },
+        validate: value => value == numericConstants.MINUS_ONE && `Please select an change condition` ||
+            true
     },
     changeWallPaperIntervalsRule: {
         required: {
             value: true,
             message: `Please select an interval`
-        }
+        },
+        validate: value => value == numericConstants.MINUS_ONE && `Please select an interval` ||
+            true
     },
     postCategoryRule: {
         name: fieldControllerName.CATEGORIES,

@@ -2123,11 +2123,20 @@ export const getWallPaperSettingsFromKeyChain = async () => {
     }
 }
 
-export const checkAlarmActive = async (wallPaperChangeSettings, setWallPaperChangeSettings) => {
+export const checkAlarmActive = async (wallPaperChangeSettings, setWallPaperChangeSettings, changeSettings, setValue) => {
     try {
-        await NativeModules.StartomApi.checkAlarmActive((response) =>
-            setWallPaperChangeSettings({ ...wallPaperChangeSettings, isAlarmActive: response })
-        );
+        await NativeModules.StartomApi.checkAlarmActive((response) => {
+            if (changeSettings) {
+                const parsedSettings = JSON.parse(changeSettings.password);
+                wallPaperChangeSettings.changeCondition = parsedSettings.changeWallPaperCondition || stringConstants.EMPTY;
+                wallPaperChangeSettings.changeInterval = parsedSettings.changeWallPaperIntervals || stringConstants.EMPTY;
+                wallPaperChangeSettings.changeSpecificTime = new Date(parsedSettings.changeWallPaperSpecificTime) || stringConstants.EMPTY;
+                wallPaperChangeSettings.isAlarmActive = response;
+                setValue(fieldControllerName.CHANGE_WALLPAPER_CONDITION, wallPaperChangeSettings.changeCondition);
+                setValue(fieldControllerName.CHANGE_WALLPAPER_INTERVALS, wallPaperChangeSettings.changeInterval);
+                setWallPaperChangeSettings({ ...wallPaperChangeSettings });
+            }
+        });
     } catch (error) {
         console.error(errorMessages.COULD_NOT_FETCH_ALARM_STATUS, error);
     }

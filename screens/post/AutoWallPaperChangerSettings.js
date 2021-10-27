@@ -16,7 +16,7 @@ import { SDDateTimePickerView } from '../../views/datePickerView/SDDateTimePicke
 import { SDDropDownView } from '../../views/dropDownView/SDDropDownView';
 
 export const AutoWallPaperChangerSettings = () => {
-    const { control, formState, handleSubmit } = useForm();
+    const { control, formState, setValue, handleSubmit } = useForm();
 
     const [wallPaperChangeSettings, setWallPaperChangeSettings] = useState({
         changeCondition: stringConstants.EMPTY,
@@ -28,14 +28,7 @@ export const AutoWallPaperChangerSettings = () => {
     useEffect(() => {
         (async () => {
             const changeSettings = await getWallPaperSettingsFromKeyChain();
-            if (changeSettings) {
-                const parsedSettings = JSON.parse(changeSettings.password);
-                wallPaperChangeSettings.changeCondition = parsedSettings.changeWallPaperCondition || stringConstants.EMPTY;
-                wallPaperChangeSettings.changeInterval = parsedSettings.changeWallPaperIntervals || stringConstants.EMPTY;
-                wallPaperChangeSettings.changeSpecificTime = new Date(parsedSettings.changeWallPaperSpecificTime) || stringConstants.EMPTY;
-                setWallPaperChangeSettings({ ...wallPaperChangeSettings });
-            }
-            await checkAlarmActive(wallPaperChangeSettings, setWallPaperChangeSettings);
+            await checkAlarmActive(wallPaperChangeSettings, setWallPaperChangeSettings, changeSettings, setValue);
         })();
     }, jsonConstants.EMPTY)
 
@@ -52,8 +45,8 @@ export const AutoWallPaperChangerSettings = () => {
 
     const disableWallpaperSettings = async () => {
         await resetWallpaperSettings();
-        wallPaperChangeSettings.changeCondition = wallpaperChangerConditions.find(condition => condition.value == numericConstants.MINUS_ONE).value;
-        wallPaperChangeSettings.changeInterval = wallpaperChangerIntervals.find(interval => interval.value == numericConstants.MINUS_ONE).value;
+        wallPaperChangeSettings.changeCondition = stringConstants.EMPTY;
+        wallPaperChangeSettings.changeInterval = stringConstants.EMPTY;
         wallPaperChangeSettings.changeSpecificTime = stringConstants.EMPTY;
         wallPaperChangeSettings.isAlarmActive = false;
         setWallPaperChangeSettings({ ...wallPaperChangeSettings });
@@ -68,15 +61,14 @@ export const AutoWallPaperChangerSettings = () => {
                 <SDDropDownView inputName={fieldControllerName.CHANGE_WALLPAPER_CONDITION} control={control} rules={formRequiredRules.changeWallPaperConditionRule} selectedLabelStyle={SDGenericStyles.textColorWhite}
                     containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle} placeHolderText={placeHolderText.WALLPAPER_CHANGER_CONDITION} formState={formState}
                     defaultValue={wallPaperChangeSettings.changeCondition && wallpaperChangerConditions.find(condition => condition.value == wallPaperChangeSettings.changeCondition).value ||
-                        wallpaperChangerConditions.find(condition => condition.value == numericConstants.MINUS_ONE).value} setState={setWallPaperChangeSettings} state={wallPaperChangeSettings} extraStyles={[SDGenericStyles.textBoxGray]}
-                    list={wallpaperChangerConditions.filter(condition => condition.value != numericConstants.MINUS_ONE)} globalTextStyle={[SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />
+                        wallpaperChangerConditions.find(condition => condition.value == numericConstants.MINUS_ONE).value} setState={setWallPaperChangeSettings} state={wallPaperChangeSettings}
+                    list={wallpaperChangerConditions} globalTextStyle={[SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} extraStyles={SDGenericStyles.textBoxGray} />
                 {
                     wallPaperChangeSettings.changeCondition == miscMessage.WALLPAPER_TIME_INTERVAL &&
                     <SDDropDownView inputName={fieldControllerName.CHANGE_WALLPAPER_INTERVALS} control={control} rules={formRequiredRules.changeWallPaperIntervalsRule} selectedLabelStyle={SDGenericStyles.textColorWhite}
                         containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle} placeHolderText={placeHolderText.WALLPAPER_CHANGER_INTERVALS}
                         defaultValue={wallPaperChangeSettings.changeInterval && wallpaperChangerIntervals.find(interval => interval.value == wallPaperChangeSettings.changeInterval).value ||
-                            wallpaperChangerIntervals.find(interval => interval.value == numericConstants.MINUS_ONE).value}
-                        formState={formState} extraStyles={[SDGenericStyles.textBoxGray]} list={wallpaperChangerIntervals.filter(interval => interval.value != numericConstants.MINUS_ONE)}
+                            wallpaperChangerIntervals.find(interval => interval.value == numericConstants.MINUS_ONE).value} list={wallpaperChangerIntervals} formState={formState} extraStyles={SDGenericStyles.textBoxGray}
                         globalTextStyle={[SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />
                 }
                 {
