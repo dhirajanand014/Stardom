@@ -17,6 +17,7 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.stardomapp.constants.Constants;
 import com.stardomapp.utils.StardomUtils;
 
@@ -27,10 +28,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 public class StardomApiModule extends ReactContextBaseJavaModule {
     private static ReactApplicationContext reactContext;
@@ -151,16 +158,54 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
         try {
             WallPaperChangeService wallPaperChangeService = new WallPaperChangeService(reactContext.getApplicationContext());
             switch (inAction) {
+                case Constants.SET_WALLPAPER_CHANGE_ON_UNLOCK:
+                    stopServiceWorker();
+                    startServiceViaWorker();
+                    break;
+                case Constants.STOP_UNLOCK_WALLPAPER_SERVICE:
+                    stopServiceWorker();
+                    break;
                 case Constants.SET_ALARM_MANAGER:
                     wallPaperChangeService.cancelAlarmManager();
                     wallPaperChangeService.setAlarmManager(inCondition, Long.valueOf(inLongMilliSeconds));
                     break;
                 case Constants.CANCEL_ALARM_MANAGER:
                     wallPaperChangeService.cancelAlarmManager();
+                    break;
+                default:
+                    Toast.makeText(reactContext, "No Action Matched", Toast.LENGTH_SHORT).show();
+                    break;
             }
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot start wallpaper change service", exception);
             Toast.makeText(reactContext, "Cannot start wallpaper change service", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     *
+     */
+    private void stopServiceWorker() {
+        try {
+            WorkManager workManager = WorkManager.getInstance(reactContext.getApplicationContext());
+            workManager.cancelUniqueWork(Constants.UNIQUE_WORK_NAME);
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Cannot stop unlock work manager for " + Constants.UNIQUE_WORK_NAME, exception);
+        }
+    }
+
+    /**
+     * @param callback
+     */
+    @ReactMethod
+    public void redirectAutoStartPermission(Callback callback) {
+        try {
+            boolean isAutoStartEnabled = StardomUtils.openAutoStartPermission(reactContext.getApplicationContext());
+            callback.invoke(isAutoStartEnabled);
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Cannot start auto start permissions", exception);
+            Toast.makeText(reactContext, "Cannot start auto start permissions", Toast.LENGTH_SHORT).show();
+            callback.invoke(false);
         }
     }
 
@@ -182,6 +227,25 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
         }
     }
 
+    public void startServiceViaWorker() {
+        try {
+            WorkManager workManager = WorkManager.getInstance(reactContext.getApplicationContext());
+
+            // As per Documentation: The minimum repeat interval that can be defined is 15 minutes (
+            // same as the JobScheduler API), but in practice 15 doesn't work. Using 16 here
+            PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(PhoneUnlockWorker.class, Constants.INT_SIXTEEN, TimeUnit.MINUTES)
+                    .build();
+            // below method will schedule a new work, each time app is opened
+            //workManager.enqueue(request);
+
+            // to schedule a unique work, no matter how many times app is opened i.e. startServiceViaWorker gets called
+            // https://developer.android.com/topic/libraries/architecture/workmanager/how-to/unique-work
+            // do check for AutoStart permission
+            workManager.enqueueUniquePeriodicWork(Constants.UNIQUE_WORK_NAME, ExistingPeriodicWorkPolicy.KEEP, request);
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Cannot start unlock work manager for " + Constants.UNIQUE_WORK_NAME, exception);
+        }
+    }
 
     /**
      * Get the URL and the Post category title to set the wallpaper or the lock Screen image.

@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.stardomapp">
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".MainApplication"
@@ -49,11 +49,19 @@
         </activity>
 
         <receiver
+            android:name=".api.PhoneUnlockWorkerReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
             android:name=".api.WallPaperChangeReceiver"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.SET_WALLPAPER" />
-
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions" />
+
+        <service
+            android:name=".api.PhoneUnlockService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 </manifest>

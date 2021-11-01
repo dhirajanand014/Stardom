@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text, TouchableOpacity, View, Modal, NativeModules } from 'react-native';
+import { Text, TouchableOpacity, View, Modal } from 'react-native';
 import { actionButtonTextConstants, alertTextMessages, miscMessage, stringConstants } from '../../constants/Constants';
-import { addWallPaperStartdomApi, fetchReportAbuseValues, resetModalState } from '../../helper/Helper';
+import { addWallPaperStartdomApi, resetModalState } from '../../helper/Helper';
 import { SDGenericStyles, userMenuStyles } from '../../styles/Styles';
 
 export const WallPaperAddRemoveListModal = React.memo(({ postDetailsState, setPostDetailsState }) => {
@@ -13,8 +13,7 @@ export const WallPaperAddRemoveListModal = React.memo(({ postDetailsState, setPo
     }
 
     return (
-        <Modal animationType="fade" transparent={true} visible={postAddWallPaperListModal || postRemoveWallPaperListModal}
-            onRequestClose={() => resetModal(postDetailsState, setPostDetailsState)} onShow={async () => await fetchReportAbuseValues(postDetailsState, setPostDetailsState)}>
+        <Modal animationType="fade" transparent={true} visible={postAddWallPaperListModal || postRemoveWallPaperListModal} onRequestClose={() => resetModal(postDetailsState, setPostDetailsState)}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter]}>
                 <View style={[userMenuStyles.userSelectionOptionModalView, SDGenericStyles.alignItemsCenter, SDGenericStyles.textBoxGray]}>
                     <Text style={[SDGenericStyles.ft20, SDGenericStyles.textCenterAlign, SDGenericStyles.mv15, SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>

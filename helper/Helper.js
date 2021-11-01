@@ -355,9 +355,21 @@ export const setReportAbuseSelectedOption = (postDetailsState, setPostDetailsSta
 
 export const addWallPaperStartdomApi = async (inAction, currentPost) => {
     try {
-        await NativeModules.StartomApi.addRemoveWallPaperAsyncStorage(inAction, currentPost.id, currentPost.postTitle, currentPost.postImage)
+        await NativeModules.StartomApi.addRemoveWallPaperAsyncStorage(inAction, currentPost.id, currentPost.postTitle, currentPost.postImage);
     } catch (error) {
         console.error(errorMessages.COULD_NOT_ADD_WALLPAPER_TO_CHANGE_LIST, error);
+    }
+}
+
+export const enableAutoStartPermission = async (resetModal) => {
+    try {
+        await NativeModules.StartomApi.redirectAutoStartPermission(async (isAutoStartEnabled) => {
+            await saveDetailsToKeyChain(keyChainConstansts.AUTO_START_WALLPAPER_CHANGE_UNLOCK, keyChainConstansts.AUTO_START_WALLPAPER_CHANGE_UNLOCK,
+                JSON.stringify(isAutoStartEnabled));
+            resetModal();
+        });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_AUTO_START_PERMISSION, error);
     }
 }
 
@@ -687,9 +699,27 @@ export const onChangeByValueType = async (inputProps, value, props) => {
             inputProps.onChange(value);
             props.setState({ ...props.state, changeCondition: value });
             break;
+        case actionButtonTextConstants.SCHEDULE_WALLPAPER_CHANGE:
+            value && props.handleSubmit(props.onSubmit)() || props.disableWallPaperSettings();
+            break;
         default:
             inputProps.onChange(value);
             break;
+    }
+}
+
+export const checkAndOpenWallPaperChangeAutoStartModal = async (state, setState) => {
+    try {
+        const autoStartSetting = await getKeyChainDetails(keyChainConstansts.AUTO_START_WALLPAPER_CHANGE_UNLOCK);
+        if (autoStartSetting) {
+            const autoStartEnableModal = JSON.parse(autoStartSetting.password);
+            if (!autoStartEnableModal) state.showAutoStartEnableModal = true;
+        } else {
+            state.showAutoStartEnableModal = true;
+        }
+        setState({ ...state });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_GET_WALLPAPER_CHANGE_UNLOCK_SETTING, error);
     }
 }
 
@@ -2131,6 +2161,7 @@ export const checkAlarmActive = async (wallPaperChangeSettings, setWallPaperChan
                 wallPaperChangeSettings.changeCondition = parsedSettings.changeWallPaperCondition || stringConstants.EMPTY;
                 wallPaperChangeSettings.changeInterval = parsedSettings.changeWallPaperIntervals || stringConstants.EMPTY;
                 wallPaperChangeSettings.changeSpecificTime = new Date(parsedSettings.changeWallPaperSpecificTime) || stringConstants.EMPTY;
+                wallPaperChangeSettings.scheduleWallPaperEnabled = parsedSettings.scheduleWallPaperEnabled || false;
                 wallPaperChangeSettings.isAlarmActive = response;
                 setValue(fieldControllerName.CHANGE_WALLPAPER_CONDITION, wallPaperChangeSettings.changeCondition);
                 setValue(fieldControllerName.CHANGE_WALLPAPER_INTERVALS, wallPaperChangeSettings.changeInterval);
@@ -2146,7 +2177,16 @@ export const resetWallpaperSettings = async () => {
     try {
         await NativeModules.StartomApi.wallPaperChangeActionService(miscMessage.CANCEL_ALARM_MANAGER, stringConstants.EMPTY,
             stringConstants.EMPTY);
+        await setScreenUnLockWallpaperService(miscMessage.STOP_UNLOCK_WALLPAPER_SERVICE);
         await Keychain.resetGenericPassword({ service: keyChainConstansts.WALLPAPER_CHANGE_SETTINGS });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_RESET_WALLPAPER_SETTINGS, error);
+    }
+}
+export const setScreenUnLockWallpaperService = async (inAction) => {
+    try {
+        await NativeModules.StartomApi.wallPaperChangeActionService(inAction, stringConstants.EMPTY,
+            stringConstants.EMPTY);
     } catch (error) {
         console.error(errorMessages.COULD_NOT_RESET_WALLPAPER_SETTINGS, error);
     }

@@ -206,6 +206,7 @@ export const actionButtonTextConstants = {
     FORGOT_PASSWORD: `Forgot Password`,
     CHECK_AVAILABILITY: `Check Availability`,
     OK: `OK`,
+    ENABLE: `Enable`,
     DATE: `Date`,
     FEEDBACK: `Feedback`,
     SHARE: `Share`,
@@ -227,9 +228,7 @@ export const actionButtonTextConstants = {
     PUBLIC_FOLLOW: `Public Follow`,
     REMOVE: `Remove`,
     ADD: `Add`,
-    SCHEDULE_WALLPAPER_CHANGE: `Schedule`,
-    RESCHEDULE_WALLPAPER_CHANGE: `Re-schedule`,
-    DISABLE_WALLPAPER_CHANGE: `Disable Wallpaper Settings`
+    CLEAR_ALL: `Clear All`
 }
 
 export const formRequiredRules = {
@@ -520,6 +519,7 @@ export const placeHolderText = {
 export const numericConstants = {
     TWELVE_PCNT: `12%`,
     HUNDRED_PCNT: `100%`,
+    STRING_ZERO: `0`,
     MINUS_ONE: -1,
     TWOPTONEEIGHT: 2.18,
     ZEROPTFIVE: 0.5,
@@ -663,6 +663,7 @@ export const alertTextMessages = {
     TO_WALLPAPER_LIST: `to the wallpaper list`,
     FROM_WALLPAPER_LIST: `from wallpaper list`,
     AUTO_WALLPAPER_NOT_ENABLED: `Auto Wallpaper Changer is not enabled. Select from the below options in the drop down to Activiate.`,
+    ENABLE_AUTOSTART_OPTION: `Enable Auto Start option to change wallpaper on device unlock`,
     AUTO_WALLPAPER_ENABLED: `Auto Wallpaper Changer is running. You can change the settings or disable settings here.`
 }
 
@@ -711,6 +712,7 @@ export const errorMessages = {
     COULD_NOT_SETUP_WALLPAPER_CHANGE: `Could not setup wallpaper change`,
     COULD_NOT_CHECK_WALLPAPER_LIST: `Could not check wallpaper list`,
     COULD_NOT_ADD_WALLPAPER_TO_CHANGE_LIST: `Could not add post to wallpaper change list`,
+    COULD_NOT_AUTO_START_PERMISSION: `Could not enable auto start permission`,
     COULD_NOT_FETCH_WALLPAPER_CHANGE_LIST: `Could not fetch wallpaper change list`,
     COULD_NOT_UNFOllOW_USER: `Could not unfollow user`,
     CANNOT_SAVE_EULA: `Cannot save EULA terms`,
@@ -720,6 +722,7 @@ export const errorMessages = {
     COULD_NOT_PARSE_RESPONSE: `Could not parse response`,
     CANNOT_SAVE_ACCOUNT_STATUS: `Cannot save account status`,
     COULD_NOT_SHOW_SELECTED_IMAGE: `Could not show selected image`,
+    COULD_NOT_GET_WALLPAPER_CHANGE_UNLOCK_SETTING: `Could not get wallpaper change unlock setting`,
     COULD_NOT_FETCH_CATEGORIES: `Could not fetch categories`,
     COULD_NOT_SAVE_CATEGORY_DETAILS_TO_KEYCHAIN: `Could not save category details to Key Chain`,
     COULD_NOT_FETCH_PROFILES: `Could not fetch all profiles`,
@@ -924,8 +927,10 @@ export const miscMessage = {
     DOWNLOADS: `DOWNLOADS`,
     REQUEST_FOR_PRIVATE_ACCESS: `Request to access private wallpaper`,
     PRIVATE_POST: `Private post`,
+    SET_WALLPAPER_CHANGE_ON_UNLOCK: `startUnLockWallPaperService`,
     SET_ALARM_MANAGER: `setAlarmManager`,
     CANCEL_ALARM_MANAGER: `cancelAlarmManager`,
+    STOP_UNLOCK_WALLPAPER_SERVICE: `stopUnLockWallPaperService`,
     SUCCESSFULLY_ADDED_FOLLOWER: `Successfully Added Follower`,
     SUCCESSFULLY_ADDED_PRIVATE_FOLLOWER: `Successfully Requested Private Access`,
     SUCCESSFULLY_UNFOLLOWED: `Successfully unfollowed`,
@@ -934,6 +939,7 @@ export const miscMessage = {
     PRIVATE_REQUEST_ACCESS: `Private request access`,
     TYPE: `type`,
     FLASH_MODE: `flashMode`,
+    CHANGE_WALLPAPER_AUTOMATICALLY_TEXT: `Automatically Change WallPaper`
 }
 
 export const requestConstants = {
@@ -997,7 +1003,8 @@ export const keyChainConstansts = {
     SAVE_POST_COUNTS: `save_post_counts`,
     SAVE_SELECTED_REPORT: `save_selected_report`,
     POST_ID: `postId`,
-    WALLPAPER_CHANGE_SETTINGS: `wallPaperChangeSettings`
+    WALLPAPER_CHANGE_SETTINGS: `wallPaperChangeSettings`,
+    AUTO_START_WALLPAPER_CHANGE_UNLOCK: `autoStartWallPaperChangeUnlock`
 }
 
 export const defaultPickerValue = {
@@ -1050,13 +1057,6 @@ export const wallpaperChangerIntervals = [
         label: `Select an interval`,
         value: -1,
         untouchable: true,
-        textStyle: {
-            color: `#fafafa`,
-            fontFamily: `stardom_roboto_regular`,
-        }
-    }, {
-        label: `Change On Phone Unlock`,
-        value: 0,
         textStyle: {
             color: `#fafafa`,
             fontFamily: `stardom_roboto_regular`,

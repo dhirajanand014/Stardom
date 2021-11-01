@@ -1,8 +1,12 @@
 package com.stardomapp.utils;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.stardomapp.constants.Constants;
@@ -179,5 +183,104 @@ public class StardomUtils {
             remainValue = Constants.INT_SIXTY - minute;
         }
         return startMillis + remainValue * Constants.INT_SIXTY * Constants.INT_ONE_THOUSAND;
+    }
+
+    /**
+     * @param inContext
+     * @return
+     */
+    public static boolean openAutoStartPermission(Context inContext) {
+        String buildInfo = Build.BRAND.toLowerCase();
+        try {
+            switch (buildInfo) {
+                case Constants.BRAND_ASUS:
+                    startIntent(inContext, Constants.PACKAGE_ASUS_MAIN, Constants.PACKAGE_ASUS_COMPONENT);
+                    return true;
+                case Constants.BRAND_XIAOMI:
+                    startIntent(inContext, Constants.PACKAGE_XIAOMI_MAIN, Constants.PACKAGE_XIAOMI_COMPONENT);
+                    return true;
+                case Constants.BRAND_LETV:
+                    startIntent(inContext, Constants.PACKAGE_LETV_MAIN, Constants.PACKAGE_LETV_COMPONENT);
+                    return true;
+                case Constants.BRAND_HONOR:
+                    startIntent(inContext, Constants.PACKAGE_HONOR_MAIN, Constants.PACKAGE_HONOR_COMPONENT);
+                    return true;
+                case Constants.BRAND_OPPO:
+                    autoStartOppo(inContext);
+                    return true;
+                case Constants.BRAND_VIVO:
+                    autoStartVivo(inContext);
+                    return true;
+                case Constants.BRAND_NOKIA:
+                    startIntent(inContext, Constants.PACKAGE_NOKIA_MAIN, Constants.PACKAGE_NOKIA_COMPONENT);
+                    return true;
+                default:
+                    return true;
+            }
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Could not open auto start settings", exception);
+            Toast.makeText(inContext, "Failed to open auto start settings", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    /**
+     * @param inContext
+     * @param inPackageName
+     * @param inComponentName
+     * @throws Exception
+     */
+    private static void startIntent(Context inContext, String inPackageName, String inComponentName) throws Exception {
+        try {
+            Intent intent = new Intent();
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setComponent(new ComponentName(inPackageName, inComponentName));
+            inContext.startActivity(intent);
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Could not autoStart intent", exception);
+            throw exception;
+        }
+    }
+
+    /**
+     * @param inContext
+     */
+    private static void autoStartOppo(Context inContext) {
+        try {
+            startIntent(inContext, Constants.PACKAGE_OPPO_MAIN, Constants.PACKAGE_OPPO_COMPONENT);
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Could not autoStart OPPO main intent", exception);
+            try {
+                startIntent(inContext, Constants.PACKAGE_OPPO_FALLBACK, Constants.PACKAGE_OPPO_COMPONENT_FALLBACK);
+            } catch (Exception fallbackException) {
+                Log.e(Constants.TAG, "Could not autoStart OPPO fallback intent", fallbackException);
+                try {
+                    startIntent(inContext, Constants.PACKAGE_OPPO_MAIN, Constants.PACKAGE_OPPO_COMPONENT_FALLBACK_A);
+                } catch (Exception mainFallbackException) {
+                    Log.e(Constants.TAG, "Could not autoStart OPPO main fallback intent", mainFallbackException);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param inContext
+     */
+    private static void autoStartVivo(Context inContext) {
+        try {
+            startIntent(inContext, Constants.PACKAGE_VIVO_MAIN, Constants.PACKAGE_VIVO_COMPONENT);
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Could not autoStart VIVO main intent", exception);
+            try {
+                startIntent(inContext, Constants.PACKAGE_VIVO_FALLBACK, Constants.PACKAGE_VIVO_COMPONENT_FALLBACK);
+            } catch (Exception fallbackException) {
+                Log.e(Constants.TAG, "Could not autoStart VIVO fallback intent", fallbackException);
+                try {
+                    startIntent(inContext, Constants.PACKAGE_VIVO_MAIN, Constants.PACKAGE_VIVO_COMPONENT_FALLBACK_A);
+                } catch (Exception mainFallbackException) {
+                    Log.e(Constants.TAG, "Could not autoStart VIVO main fallback intent", mainFallbackException);
+                }
+            }
+        }
     }
 }

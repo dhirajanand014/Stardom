@@ -1684,6 +1684,7 @@ export const colors = {
     YELLOW: `#fec72e`,
     SDOM_YELLOW: `#eabe05`,
     SDOM_PLACEHOLDER: `#969696`,
+    TEXT_WHITE: `#f4f4f4`,
     LIGHT_GREY: `#a9a9a9`,
     PALE_YELLOW: `#fff6ef`,
     DARK_CONTENT: `dark-content`,
@@ -1743,6 +1744,16 @@ export const userMenuStyles = {
         paddingStart: 25,
         width: width / 1.35,
         height: 180,
+        elevation: 5
+    },
+    autoStartModalView: {
+        margin: 250,
+        borderRadius: 20,
+        paddingTop: 10,
+        paddingEnd: 20,
+        paddingStart: 20,
+        width: width / 1.35,
+        height: 270,
         elevation: 5
     },
     verifyUserTextHeight: {
