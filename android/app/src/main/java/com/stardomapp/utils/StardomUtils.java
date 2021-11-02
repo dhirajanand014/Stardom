@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class StardomUtils {
     /**
@@ -111,7 +112,6 @@ public class StardomUtils {
     }
 
     /**
-     *
      * @param wallPaperArray
      * @param inPostId
      * @return
@@ -173,9 +173,9 @@ public class StardomUtils {
         } else if (Constants.TRIGGER_SPECIFIC_TIME.equals(inCondition)) {
             millisCalendar.setTimeInMillis(inLongMilliSeconds);
             Calendar newCalendar = Calendar.getInstance();
-//            if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= millisCalendar.get(Calendar.HOUR_OF_DAY)) {
-//                newCalendar.add(Calendar.DAY_OF_YEAR, Constants.INT_ONE); // add, not set!
-//            }
+            if (millisCalendar.get(Calendar.HOUR_OF_DAY) <= Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+                newCalendar.add(Calendar.DAY_OF_YEAR, Constants.INT_ONE); // add, not set!
+            }
             newCalendar.set(Calendar.HOUR_OF_DAY, millisCalendar.get(Calendar.HOUR_OF_DAY));
             newCalendar.set(Calendar.MINUTE, millisCalendar.get(Calendar.MINUTE));
             newCalendar.set(Calendar.SECOND, Constants.INT_ZERO);
@@ -302,5 +302,17 @@ public class StardomUtils {
                 }
             }
         }
+    }
+
+    /**
+     * @param inMillis
+     * @return
+     */
+    public static String formatTimeFromMillis(Long inMillis) {
+        long time = TimeUnit.MILLISECONDS.toMinutes(inMillis);
+        if (time >= Constants.INT_SIXTY) {
+            return String.valueOf(TimeUnit.MINUTES.toHours(time)).concat(" hours.");
+        }
+        return String.valueOf(time).concat(" minutes.");
     }
 }

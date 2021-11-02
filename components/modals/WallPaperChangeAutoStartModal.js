@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Text, TouchableOpacity, View, Modal, Image } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { actionButtonTextConstants, alertTextMessages, height, width } from '../../constants/Constants';
+import { actionButtonTextConstants, alertTextMessages, height, numericConstants, width } from '../../constants/Constants';
 import { enableAutoStartPermission } from '../../helper/Helper';
 import { SDGenericStyles, userMenuStyles } from '../../styles/Styles';
 
@@ -16,7 +16,7 @@ export const WallPaperChangeAutoStartModal = React.memo(({ wallPaperChangeSettin
                     <Text style={[SDGenericStyles.ft20, SDGenericStyles.textCenterAlign, SDGenericStyles.paddingTop16, SDGenericStyles.colorWhite, SDGenericStyles.fontFamilyRobotoMedium]}>
                         {alertTextMessages.ENABLE_AUTOSTART_OPTION}
                     </Text>
-                    <Image style={{ width: width / 1.45, height: height / 8 }} source={require('../../assets/auto_start_sample.jpg')} resizeMode={FastImage.resizeMode.center} />
+                    <Image style={{ width: width / numericConstants.ONEPTFOURFIVE, height: height / numericConstants.EIGHT }} source={require('../../assets/auto_start_sample.jpg')} resizeMode={FastImage.resizeMode.center} />
                     <View style={[SDGenericStyles.rowFlexDirection, SDGenericStyles.justifyContentCenter, SDGenericStyles.mt5]}>
                         <View style={SDGenericStyles.paddingRight15}>
                             <TouchableOpacity activeOpacity={.7} style={userMenuStyles.userNoButton}
@@ -27,7 +27,7 @@ export const WallPaperChangeAutoStartModal = React.memo(({ wallPaperChangeSettin
                             </TouchableOpacity>
                         </View>
                         <View>
-                            <TouchableOpacity activeOpacity={.7} style={userMenuStyles.userYesButton} onPress={async () => await enableAutoStartPermission(resetModal)}>
+                            <TouchableOpacity activeOpacity={.7} style={userMenuStyles.userRemoveButton} onPress={async () => await enableAutoStartPermission(resetModal)}>
                                 <Text style={[SDGenericStyles.colorWhite, SDGenericStyles.centerAlignedText, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.ft16, SDGenericStyles.colorBlack]}>
                                     {actionButtonTextConstants.ENABLE.toUpperCase()}
                                 </Text>

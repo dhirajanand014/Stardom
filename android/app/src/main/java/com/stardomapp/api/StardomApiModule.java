@@ -226,6 +226,7 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
         try {
             if (PhoneUnlockService.isServiceRunning) {
                 Intent serviceIntent = new Intent(reactContext.getApplicationContext(), PhoneUnlockService.class);
+                PhoneUnlockService.isStopServiceExplicit = true;
                 reactContext.getApplicationContext().stopService(serviceIntent);
                 WorkManager workManager = WorkManager.getInstance(reactContext.getApplicationContext());
                 workManager.cancelAllWork();
@@ -266,6 +267,16 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
             Log.e(Constants.TAG, "Cannot check alarm active", exception);
             callback.invoke(false);
         }
+    }
+
+    /**
+     * @return
+     */
+    @ReactMethod
+    public void isOneOfPhoneBrand(Callback callback) {
+        callback.invoke(Constants.BRAND_ASUS.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_XIAOMI.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_LETV.equals(Build.BRAND.toLowerCase())
+                || Constants.BRAND_HONOR.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_OPPO.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_VIVO.equals(Build.BRAND.toLowerCase())
+                || Constants.BRAND_NOKIA.equals(Build.BRAND.toLowerCase()));
     }
 
     public void startServiceViaWorker() {

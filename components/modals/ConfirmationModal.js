@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View, Modal } from 'react-native';
 import { actionButtonTextConstants } from '../../constants/Constants';
 import { SDGenericStyles, userMenuStyles } from '../../styles/Styles';
 
-export const ConfirmationModal = React.memo(({ state, setState, confirmationMessage, confirmationButtonText, confirmationCallback, resetModal }) => {
+export const ConfirmationModal = React.memo(({ state, confirmationMessage, confirmationButtonText, confirmationCallback, resetModal }) => {
     return (
         <Modal animationType="fade" transparent={true} visible={state.showConfirmationModal} onRequestClose={() => resetModal()}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter]}>

@@ -47,8 +47,8 @@ export const AutoWallPaperChangerPosts = props => {
             }
             <FlatList data={autoWallPaperChangerPosts.posts} numColumns={numericConstants.THREE} keyExtractor={(item) => item.postId} ListEmptyComponent={emptyListMessage}
                 renderItem={({ item }) => <WallPaperChangerPostRenderer item={item} postCallback={postCallback} />} />
-            <ConfirmationModal state={autoWallPaperChangerPosts} setState={setAutoWallPaperChangerPosts} confirmationMessage={alertTextMessages.DELETING_WALLPAPER_CHANGER_POST}
-                confirmationButtonText={actionButtonTextConstants.YES} confirmationCallback={confrimationCallback} resetModal={resetModal} />
+            <ConfirmationModal state={autoWallPaperChangerPosts} confirmationMessage={alertTextMessages.DELETING_WALLPAPER_CHANGER_POST} resetModal={resetModal}
+                confirmationButtonText={actionButtonTextConstants.YES} confirmationCallback={confrimationCallback} />
         </View>
     )
 }

@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.stardomapp.constants.Constants;
 import com.stardomapp.utils.StardomUtils;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Calendar;
 
 import androidx.annotation.NonNull;
@@ -42,9 +42,11 @@ public class WallPaperChangeService {
                 alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), Constants.TRIGGER_INTERVALS.equals(inCondition) ? inLongMilliSeconds :
                         AlarmManager.INTERVAL_DAY, sender);
                 if (Constants.TRIGGER_INTERVALS.equals(inCondition)) {
-                    Toast.makeText(context, "Scheduled Wallpaper Changer for interval of " + calendar.get(Calendar.MINUTE) + " minutes", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Scheduled Wallpaper Changer for interval of " + StardomUtils.formatTimeFromMillis(inLongMilliSeconds)
+                            + " Starting schedule at: " + DateFormat.getTimeInstance(DateFormat.MEDIUM).format(calendar.getTime()), Toast.LENGTH_LONG).show();
                 } else if (Constants.TRIGGER_SPECIFIC_TIME.equals(inCondition)) {
-                    Toast.makeText(context, "Scheduled Wallpaper Changer at " + SimpleDateFormat.getTimeInstance().format(calendar.getTime()), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Scheduled Wallpaper Changer at " + DateFormat.getTimeInstance(DateFormat.MEDIUM).format(calendar.getTime()),
+                            Toast.LENGTH_LONG).show();
                 }
             }
         } catch (Exception exception) {

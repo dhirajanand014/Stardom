@@ -1755,6 +1755,16 @@ export const userMenuStyles = {
         height: 180,
         elevation: 5
     },
+    reschedueWallpaperChangeModalView: {
+        margin: 280,
+        borderRadius: 20,
+        paddingTop: 20,
+        paddingEnd: 25,
+        paddingStart: 25,
+        width: width / 1.2,
+        height: 180,
+        elevation: 5
+    },
     autoStartModalView: {
         margin: 250,
         borderRadius: 20,
@@ -1810,6 +1820,14 @@ export const userMenuStyles = {
         borderRadius: 25,
         paddingVertical: 8,
         width: 105,
+        elevation: 3,
+        backgroundColor: '#eabe05'
+    },
+    userRescheduleButton: {
+        borderRadius: 25,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        width: 120,
         elevation: 3,
         backgroundColor: '#eabe05'
     },

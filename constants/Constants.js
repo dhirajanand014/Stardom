@@ -231,6 +231,7 @@ export const actionButtonTextConstants = {
     REMOVE: `Remove`,
     ADD: `Add`,
     SETTINGS: `Settings`,
+    RE_SCHEDULE: `ReSchedule`,
     SCHEDULE_WALLPAPER_CHANGE: `Schedule Wallpaper Change`,
     CLEAR_ALL: `Clear All`
 }
@@ -525,6 +526,7 @@ export const numericConstants = {
     HUNDRED_PCNT: `100%`,
     STRING_ZERO: `0`,
     MINUS_ONE: -1,
+    ONEPTFOURFIVE: 1.45,
     TWOPTONEEIGHT: 2.18,
     ZEROPTFIVE: 0.5,
     ZEROPTSEVEN: 0.7,
@@ -662,6 +664,7 @@ export const alertTextMessages = {
     UPDATING_POST_DETAILS: `Please wait. Updating post details`,
     DELETING_POST: `Deleting post`,
     DELETING_WALLPAPER_CHANGER_POST: `Are you sure you want to remove the post from wallpaper changer list?`,
+    STOP_WALLPAPER_CHANGER_SERVICE: `Are you sure you want to stop auto wallpaper changer?`,
     LOADING_CATEGORIES: `Please wait. Loading categories`,
     DO_YOU_WANT_TO_ADD: `Do you want to add`,
     DO_YOU_WANT_TO_REMOVE: `Do you want to remove`,

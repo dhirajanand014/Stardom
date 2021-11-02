@@ -18,6 +18,7 @@ import { SDDateTimePickerView } from '../../views/datePickerView/SDDateTimePicke
 import { SDDropDownView } from '../../views/dropDownView/SDDropDownView';
 import { SDSwitchInputView } from '../../views/fromInputView/SDSwitchInputView';
 import { WallPaperChangeAutoStartModal } from '../../components/modals/WallPaperChangeAutoStartModal';
+import { ConfirmationModal } from '../../components/modals/ConfirmationModal';
 
 export const AutoWallPaperChangerSettings = () => {
     const { control, formState, setValue, handleSubmit } = useForm();
@@ -27,6 +28,7 @@ export const AutoWallPaperChangerSettings = () => {
         changeInterval: stringConstants.EMPTY,
         changeSpecificTime: stringConstants.EMPTY,
         scheduleWallPaperEnabled: false,
+        showConfirmationModal: false,
         showAutoStartEnableModal: false,
         isAlarmActive: false,
     });
@@ -39,7 +41,7 @@ export const AutoWallPaperChangerSettings = () => {
     }, jsonConstants.EMPTY)
 
     const onSubmit = async (data) => {
-        wallPaperChangeSettings.scheduleWallPaperEnabled = !wallPaperChangeSettings.scheduleWallPaperEnabled;
+        wallPaperChangeSettings.scheduleWallPaperEnabled = true;
         data.scheduleWallPaperEnabled = wallPaperChangeSettings.scheduleWallPaperEnabled;
         await checkAndOpenWallPaperChangeAutoStartModal(wallPaperChangeSettings, setWallPaperChangeSettings);
         if (data.changeWallPaperCondition == miscMessage.WALLPAPER_TIME_INTERVAL) {
@@ -63,8 +65,12 @@ export const AutoWallPaperChangerSettings = () => {
         wallPaperChangeSettings.isAlarmActive = false;
         setValue(fieldControllerName.CHANGE_WALLPAPER_CONDITION, wallPaperChangeSettings.changeCondition);
         setValue(fieldControllerName.CHANGE_WALLPAPER_INTERVALS, wallPaperChangeSettings.changeInterval);
+        wallPaperChangeSettings.showConfirmationModal = false;
         setWallPaperChangeSettings({ ...wallPaperChangeSettings });
     });
+
+    const confirmationCallback = useCallback(() => setWallPaperChangeSettings({ ...wallPaperChangeSettings, showConfirmationModal: true }));
+    const closeConfirmationModal = useCallback(() => setWallPaperChangeSettings({ ...wallPaperChangeSettings, showConfirmationModal: false }));
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
@@ -72,8 +78,9 @@ export const AutoWallPaperChangerSettings = () => {
                 {wallPaperChangeSettings.isAlarmActive && alertTextMessages.AUTO_WALLPAPER_ENABLED || alertTextMessages.AUTO_WALLPAPER_NOT_ENABLED}
             </Text>
             <View style={[SDGenericStyles.paddingHorizontal25, SDGenericStyles.paddingVertical5]}>
-                <SDSwitchInputView inputName={actionButtonTextConstants.SCHEDULE_WALLPAPER_CHANGE} falseColor={colors.SDOM_PLACEHOLDER} trueColor={colors.SDOM_YELLOW} thumbColor={colors.TEXT_WHITE} iosThumbColor={colors.TEXT_WHITE}
-                    value={wallPaperChangeSettings.scheduleWallPaperEnabled} textValue={miscMessage.CHANGE_WALLPAPER_AUTOMATICALLY_TEXT} onSubmit={onSubmit} disableWallPaperSettings={disableWallPaperSettings} handleSubmit={handleSubmit} />
+                <SDSwitchInputView inputName={actionButtonTextConstants.SCHEDULE_WALLPAPER_CHANGE} falseColor={colors.SDOM_PLACEHOLDER} trueColor={colors.SDOM_YELLOW} thumbColor={colors.TEXT_WHITE}
+                    iosThumbColor={colors.TEXT_WHITE} textValue={miscMessage.CHANGE_WALLPAPER_AUTOMATICALLY_TEXT} onSubmit={onSubmit} disableWallPaperSettings={confirmationCallback} handleSubmit={handleSubmit}
+                    value={wallPaperChangeSettings.scheduleWallPaperEnabled} />
 
                 <SDDropDownView inputName={fieldControllerName.CHANGE_WALLPAPER_CONDITION} control={control} selectedLabelStyle={SDGenericStyles.textColorWhite} extraStyles={SDGenericStyles.textBoxGray}
                     containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle} placeHolderText={placeHolderText.WALLPAPER_CHANGER_CONDITION}
@@ -87,18 +94,21 @@ export const AutoWallPaperChangerSettings = () => {
                         containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle} placeHolderText={placeHolderText.WALLPAPER_CHANGER_INTERVALS}
                         defaultValue={wallPaperChangeSettings.changeInterval && wallpaperChangerIntervals.find(interval => interval.value == wallPaperChangeSettings.changeInterval).value ||
                             wallpaperChangerIntervals.find(interval => interval.value == numericConstants.MINUS_ONE).value} list={wallpaperChangerIntervals} extraStyles={SDGenericStyles.textBoxGray}
-                        globalTextStyle={[SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} rules={formRequiredRules.changeWallPaperIntervalsRule} />
+                        globalTextStyle={[SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} rules={formRequiredRules.changeWallPaperIntervalsRule}
+                        state={wallPaperChangeSettings} handleSubmit={handleSubmit} onSubmit={onSubmit} />
                 }
                 {
                     wallPaperChangeSettings.changeCondition == miscMessage.WALLPAPER_TIME_SPECIFIC &&
                     <SDDateTimePickerView inputName={fieldControllerName.CHANGE_WALLPAPER_SPECIFIC_TIME} control={control} rules={formRequiredRules.timePickerFormRule} display={keyBoardTypeConst.DEFAULT}
                         defaultValue={wallPaperChangeSettings.changeSpecificTime || stringConstants.EMPTY} formState={formState} mode={miscMessage.TIME} placeHolderText={placeHolderText.WALLPAPER_CHANGER_SPECIFIC_TIME}
-                        icon={<CalenderIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN} stroke={colors.SDOM_PLACEHOLDER} />} />
+                        icon={<CalenderIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN} stroke={colors.SDOM_PLACEHOLDER} />} state={wallPaperChangeSettings} onSubmit={onSubmit}
+                        handleSubmit={handleSubmit} />
                 }
                 {
                     wallPaperChangeSettings.scheduleWallPaperEnabled && wallPaperChangeSettings.changeCondition &&
                     <View style={SDGenericStyles.paddingVertical25}>
-                        <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]} onPress={async () => await disableWallPaperSettings()}>
+                        <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]}
+                            onPress={() => confirmationCallback()}>
                             <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>
                                 {actionButtonTextConstants.CLEAR_ALL}
                             </Text>
@@ -107,6 +117,8 @@ export const AutoWallPaperChangerSettings = () => {
                 }
             </View>
             <WallPaperChangeAutoStartModal wallPaperChangeSettings={wallPaperChangeSettings} setWallPaperChangeSettings={setWallPaperChangeSettings} />
+            <ConfirmationModal state={wallPaperChangeSettings} confirmationMessage={alertTextMessages.STOP_WALLPAPER_CHANGER_SERVICE} resetModal={closeConfirmationModal}
+                confirmationButtonText={actionButtonTextConstants.YES} confirmationCallback={disableWallPaperSettings} />
         </View>
     );
 }

@@ -13,9 +13,8 @@ import {
     formRequiredRules, countRanges, RESEND_OTP_TIME_LIMIT, BASE_DOMAIN
 } from '../constants/Constants';
 import {
-    Linking,
-    NativeModules,
-    PermissionsAndroid, Text, ToastAndroid, TouchableOpacity, View
+    Linking, NativeModules, PermissionsAndroid,
+    Text, ToastAndroid, TouchableOpacity, View
 } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 import { withDelay, withSpring } from 'react-native-reanimated';
@@ -696,13 +695,20 @@ export const onChangeByValueType = async (inputProps, value, props) => {
             break;
         case fieldControllerName.SEARCH_FOLLOWERS:
         case fieldControllerName.SEARCH_FOLLOWINGS:
-            const filteredFollowersFollowings = value && props.items.filter(user => user.name && user.name.toLowerCase().includes(value.toString().toLowerCase()))
-                || props.items;
+            const filteredFollowersFollowings = value && props.items.filter(user => user.name &&
+                user.name.toLowerCase().includes(value.toString().toLowerCase())) || props.items;
             props.setState({ ...props.state, users: filteredFollowersFollowings });
             break;
         case fieldControllerName.CHANGE_WALLPAPER_CONDITION:
-            inputProps.onChange(value);
             props.setState({ ...props.state, changeCondition: value });
+            inputProps.onChange(value);
+            break;
+        case fieldControllerName.CHANGE_WALLPAPER_INTERVALS:
+        case fieldControllerName.CHANGE_WALLPAPER_SPECIFIC_TIME:
+            inputProps.onChange(value);
+            if (props.state.scheduleWallPaperEnabled && (props.state.changeInterval !== value || props.state.changeSpecificTime !== value)) {
+                props.handleSubmit(props.onSubmit)();
+            }
             break;
         case actionButtonTextConstants.SCHEDULE_WALLPAPER_CHANGE:
             value && props.handleSubmit(props.onSubmit)() || props.disableWallPaperSettings();
@@ -718,15 +724,21 @@ export const checkAndOpenWallPaperChangeAutoStartModal = async (state, setState)
         const autoStartSetting = await getKeyChainDetails(keyChainConstansts.AUTO_START_WALLPAPER_CHANGE_UNLOCK);
         if (autoStartSetting) {
             const autoStartEnableModal = JSON.parse(autoStartSetting.password);
-            if (!autoStartEnableModal) state.showAutoStartEnableModal = true;
+            if (!autoStartEnableModal) checkPhoneBrand(state, setState);
         } else {
-            state.showAutoStartEnableModal = true;
+            checkPhoneBrand(state, setState);
         }
-        setState({ ...state });
     } catch (error) {
         console.error(errorMessages.COULD_NOT_GET_WALLPAPER_CHANGE_UNLOCK_SETTING, error);
     }
 }
+
+const checkPhoneBrand = async (state, setState) => await NativeModules.StartomApi.isOneOfPhoneBrand((response) => {
+    if (response) {
+        state.showAutoStartEnableModal = true;
+    }
+    setState({ ...state });
+});
 
 export const convertTime = (event, datePickerProps, props) => {
     onChangeByValueType(datePickerProps, event.nativeEvent.timestamp, props);

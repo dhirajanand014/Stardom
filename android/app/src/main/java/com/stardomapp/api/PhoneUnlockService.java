@@ -10,6 +10,7 @@ import java.util.Timer;
 
 public class PhoneUnlockService extends Service {
     public static boolean isServiceRunning;
+    public static boolean isStopServiceExplicit;
     private ScreenLockReceiver screenLockReceiver;
     private Timer timer;
 
@@ -38,7 +39,6 @@ public class PhoneUnlockService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(getApplicationContext(), "Ondestroy called", Toast.LENGTH_LONG).show();
         isServiceRunning = false;
         stopSelf();
         // unregister receiver
@@ -49,11 +49,24 @@ public class PhoneUnlockService extends Service {
             timer.cancel();
         }
 
-        // call WallpaperReceiver which will restart this service
-//        Intent broadcastIntent = new Intent(this, PhoneUnlockWorkerReceiver.class);
-//        sendBroadcast(broadcastIntent);
-
+        if (!isStopServiceExplicit) {
+            Toast.makeText(getApplicationContext(), "Stop service not invoked", Toast.LENGTH_LONG).show();
+            // call WallpaperReceiver which will restart this service
+            Intent broadcastIntent = new Intent(this, PhoneUnlockWorkerReceiver.class);
+            sendBroadcast(broadcastIntent);
+        }
+        isStopServiceExplicit = false;
         super.onDestroy();
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        if (isServiceRunning) {
+            // call WallpaperReceiver which will restart this service
+            Intent broadcastIntent = new Intent(this, PhoneUnlockWorkerReceiver.class);
+            sendBroadcast(broadcastIntent);
+            super.onTaskRemoved(rootIntent);
+        }
     }
 
     @Override
