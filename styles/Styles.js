@@ -1794,7 +1794,7 @@ export const userMenuStyles = {
         borderRadius: 25,
         paddingHorizontal: 20,
         paddingVertical: 8,
-        width: 100,
+        width: 85,
         elevation: 3,
         backgroundColor: '#eabe05'
     },

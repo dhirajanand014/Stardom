@@ -111,24 +111,21 @@ public class StardomUtils {
     }
 
     /**
-     * @param inWallPaperJSONObject
+     *
+     * @param wallPaperArray
      * @param inPostId
      * @return
      * @throws JSONException
      */
-    public static JSONObject removeFromWallPaperChangeList(String inWallPaperJSONObject, Integer inPostId, Context inContext, String inPostTitle) throws JSONException {
-        JSONObject parsedJSONObject = parseJSONObject(inWallPaperJSONObject);
-        JSONArray wallPaperArray = parsedJSONObject.getJSONArray(Constants.WALLPAPERS);
+    public static boolean removeFromWallPaperChangeList(JSONArray wallPaperArray, Integer inPostId) throws JSONException {
         for (int removeIndex = Constants.INT_ZERO; removeIndex < wallPaperArray.length(); removeIndex++) {
             JSONObject postObject = wallPaperArray.getJSONObject(removeIndex);
             if (postObject.has(Constants.POST_ID) && postObject.get(Constants.POST_ID).equals(inPostId)) {
                 wallPaperArray.remove(removeIndex);
-                Toast.makeText(inContext, "Removed post " + inPostTitle + " from the wallpaper change list", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(inContext, "Could not remove post " + inPostTitle + " from the wallpaper change list", Toast.LENGTH_SHORT).show();
+                return true;
             }
         }
-        return parsedJSONObject;
+        return false;
     }
 
     /**
@@ -146,7 +143,8 @@ public class StardomUtils {
      * @return
      * @throws JSONException
      */
-    public static boolean removePostFromWallPaperChangeList(JSONArray inWallPaperJSONArray, JSONObject inSelectedPost)
+    public static boolean removePostFromWallPaperChangeList(JSONArray
+                                                                    inWallPaperJSONArray, JSONObject inSelectedPost)
             throws JSONException {
         for (int index = Constants.INT_ZERO; index < inWallPaperJSONArray.length(); index++) {
             JSONObject jsonObject = inWallPaperJSONArray.getJSONObject(index);
@@ -165,7 +163,8 @@ public class StardomUtils {
      * @param inLongMilliSeconds
      * @return
      */
-    public static Calendar getCalenderFromMilliSeconds(String inCondition, Long inLongMilliSeconds) {
+    public static Calendar getCalenderFromMilliSeconds(String inCondition, Long
+            inLongMilliSeconds) {
         Calendar millisCalendar = Calendar.getInstance();
         if (Constants.TRIGGER_INTERVALS.equals(inCondition)) {
             // convert it to millisecond and plus it to current time;
@@ -250,7 +249,8 @@ public class StardomUtils {
      * @param inComponentName
      * @throws Exception
      */
-    private static void startIntent(Context inContext, String inPackageName, String inComponentName) throws Exception {
+    private static void startIntent(Context inContext, String inPackageName, String
+            inComponentName) throws Exception {
         try {
             Intent intent = new Intent();
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

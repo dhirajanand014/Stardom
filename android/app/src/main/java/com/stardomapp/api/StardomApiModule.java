@@ -101,9 +101,9 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
         try {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(reactContext.getApplicationContext());
             String wallPaperJSONObject = preferences.getString(Constants.WALLPAPER_CHANGE_LIST, Constants.EMPTY);
-            JSONObject wallPaperObjectJSON;
             switch (inAction) {
                 case Constants.ADD_WALLPAPER:
+                    JSONObject wallPaperObjectJSON;
                     if (wallPaperJSONObject.isEmpty()) {
                         wallPaperObjectJSON = StardomUtils.createNewJSONArray(inPostId, inURL, inPostTitle,
                                 reactContext.getApplicationContext());
@@ -117,11 +117,19 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
                     break;
                 case Constants.REMOVE_WALLPAPER:
                     if (!wallPaperJSONObject.isEmpty()) {
-                        wallPaperObjectJSON = StardomUtils.removeFromWallPaperChangeList(wallPaperJSONObject, inPostId,
-                                reactContext.getApplicationContext(), inPostTitle);
-                        SharedPreferences.Editor removePreferencesEditor = preferences.edit();
-                        removePreferencesEditor.putString(Constants.WALLPAPER_CHANGE_LIST, wallPaperObjectJSON.toString());
-                        removePreferencesEditor.apply();
+                        JSONObject parsedJSONObject = StardomUtils.parseJSONObject(wallPaperJSONObject);
+                        JSONArray wallPaperArray = parsedJSONObject.getJSONArray(Constants.WALLPAPERS);
+                        boolean isRemoved = StardomUtils.removeFromWallPaperChangeList(wallPaperArray, inPostId);
+                        if (isRemoved) {
+                            Toast.makeText(reactContext.getApplicationContext(), "Removed post " + inPostTitle + " from the wallpaper change list",
+                                    Toast.LENGTH_SHORT).show();
+                            SharedPreferences.Editor removePreferencesEditor = preferences.edit();
+                            removePreferencesEditor.putString(Constants.WALLPAPER_CHANGE_LIST, parsedJSONObject.toString());
+                            removePreferencesEditor.apply();
+                        } else {
+                            Toast.makeText(reactContext.getApplicationContext(), "Could not remove post " + inPostTitle + " from the wallpaper change list",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                     break;
                 default:
@@ -187,31 +195,22 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
         try {
             if (!inWallPaperPost.isEmpty()) {
                 JSONObject selectedPost = StardomUtils.parseJSONObject(inWallPaperPost);
-                String savedWallPaperChangeList = StardomUtils.getSavedWallPaperChangeList(reactContext.getApplicationContext());
-                if (!savedWallPaperChangeList.isEmpty()) {
-                    JSONObject wallPaperJSONObject = StardomUtils.parseJSONObject(savedWallPaperChangeList);
-                    JSONArray wallPaperJSONArray = wallPaperJSONObject.getJSONArray(Constants.WALLPAPERS);
-                    boolean isRemoved = StardomUtils.removePostFromWallPaperChangeList(wallPaperJSONArray, selectedPost);
+                String wallPaperList = StardomUtils.getSavedWallPaperChangeList(reactContext.getApplicationContext());
+                if (!wallPaperList.isEmpty()) {
+                    JSONObject parsedJSONObject = StardomUtils.parseJSONObject(wallPaperList);
+                    JSONArray wallPaperArray = parsedJSONObject.getJSONArray(Constants.WALLPAPERS);
+                    boolean isRemoved = StardomUtils.removeFromWallPaperChangeList(wallPaperArray, selectedPost.getInt(Constants.POST_ID));
                     if (isRemoved) {
-                        Toast.makeText(reactContext, "Selected post removed from the wallpaper changer list!",
-                                Toast.LENGTH_SHORT).show();
                         callback.invoke(true);
+                        Toast.makeText(reactContext, "Selected post removed from wallpaper change list", Toast.LENGTH_SHORT).show();
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(reactContext.getApplicationContext());
-                        SharedPreferences.Editor preferencesEditor = preferences.edit();
-                        preferencesEditor.putString(Constants.WALLPAPER_CHANGE_LIST, wallPaperJSONObject.toString());
-                        preferencesEditor.apply();
+                        SharedPreferences.Editor removePreferencesEditor = preferences.edit();
+                        removePreferencesEditor.putString(Constants.WALLPAPER_CHANGE_LIST, parsedJSONObject.toString());
+                        removePreferencesEditor.apply();
                     } else {
-                        Toast.makeText(reactContext, "Selected post to remove from the wallpaper changer list not found",
-                                Toast.LENGTH_SHORT).show();
-                        callback.invoke(false);
+                        Toast.makeText(reactContext, "Selected post not removed from wallpaper change list", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(reactContext, "Could not remove selected post!", Toast.LENGTH_SHORT).show();
-                    callback.invoke(false);
                 }
-            } else {
-                Toast.makeText(reactContext, "Selected post to remove is empty!", Toast.LENGTH_SHORT).show();
-                callback.invoke(false);
             }
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot remove post from wallpaper changer list", exception);

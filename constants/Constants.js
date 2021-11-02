@@ -872,6 +872,7 @@ export const miscMessage = {
     POST_ADD_WALLPAPER_MODAL_NAME: `postAddWallPaperListModal`,
     POST_REMOVE_WALLPAPER_MODAL_NAME: `postRemoveWallPaperListModal`,
     POST_WALLPAPER_MODAL: `wallpaperModal`,
+    WALLPAPER_POSTS_COUNT: `Wallpaper posts count`,
     USER_ID: `userid`,
     RIGHT: `right`,
     TRANSPARENT: `transparent`,
