@@ -59,6 +59,7 @@ export const screens = {
     EDIT_USER_PROFILE: `Edit user profile`,
     FOLLOWER_FOLLOWING_PROFILE: `Follower Following profile`,
     AUTO_WALLPAPER_CHANGER_SETTINGS: `Auto Wallpaper Changer Settings`,
+    WALLPAPER_POSTS: `Wallpaper Posts`,
     VIEW_USER_POSTS: `View user posts`,
     EULA_ACCEPTANCE: `EULA Acceptance`,
     CAMERA: `Camera`,
@@ -217,6 +218,7 @@ export const actionButtonTextConstants = {
     WALLPAPER_HOME_SCREEN: `Home Screen`,
     WALLPAPER_LOCK_SCREEN: `Lock Screen`,
     WALLPAPER_BOTH_SCREENS: `Both`,
+    WALLPAPER_CHANGE_POSTS: `WallPaper Change Posts`,
     WALLPAPER_CHANGE_SETTINGS: `WallPaper Change Settings`,
     ADD_BIO: `Add bio`,
     VERIFY_USER: `Verify User`,
@@ -228,6 +230,8 @@ export const actionButtonTextConstants = {
     PUBLIC_FOLLOW: `Public Follow`,
     REMOVE: `Remove`,
     ADD: `Add`,
+    SETTINGS: `Settings`,
+    SCHEDULE_WALLPAPER_CHANGE: `Schedule Wallpaper Change`,
     CLEAR_ALL: `Clear All`
 }
 
@@ -657,6 +661,7 @@ export const alertTextMessages = {
     ADDING_NEW_POST: `Please wait. Adding new post`,
     UPDATING_POST_DETAILS: `Please wait. Updating post details`,
     DELETING_POST: `Deleting post`,
+    DELETING_WALLPAPER_CHANGER_POST: `Are you sure you want to remove the post from wallpaper changer list?`,
     LOADING_CATEGORIES: `Please wait. Loading categories`,
     DO_YOU_WANT_TO_ADD: `Do you want to add`,
     DO_YOU_WANT_TO_REMOVE: `Do you want to remove`,
@@ -758,7 +763,8 @@ export const errorMessages = {
     USER_CANCELLED_SHARE: `You cancelled sharing the image`,
     COULD_NOT_FETCH_WALLPAPER_CHANGE_SETTINGS_FROM_KEY_CHAIN: `Could not fetch wallpaper change settings from key chain`,
     COULD_NOT_FETCH_ALARM_STATUS: `Could not fetch alarm status`,
-    COULD_NOT_RESET_WALLPAPER_SETTINGS: `Could not reset keychain wallpaper settings`
+    COULD_NOT_RESET_WALLPAPER_SETTINGS: `Could not reset keychain wallpaper settings`,
+    COULD_NOT_UPDATE_WALLPAPER_CHANGER_POSTS: `Could not update wallpaper changer posts`
 }
 
 export const responseStringData = {
@@ -939,7 +945,7 @@ export const miscMessage = {
     PRIVATE_REQUEST_ACCESS: `Private request access`,
     TYPE: `type`,
     FLASH_MODE: `flashMode`,
-    CHANGE_WALLPAPER_AUTOMATICALLY_TEXT: `Automatically Change WallPaper`
+    CHANGE_WALLPAPER_AUTOMATICALLY_TEXT: `Automatically Change Wallpaper`
 }
 
 export const requestConstants = {
@@ -1154,8 +1160,8 @@ export const SDMenuOptions = [
         loggedIn: true,
         icon: require(`../assets/menu/logout_icon.png`)
     }, {
-        label: actionButtonTextConstants.WALLPAPER_CHANGE_SETTINGS,
-        key: actionButtonTextConstants.WALLPAPER_CHANGE_SETTINGS
+        label: actionButtonTextConstants.WALLPAPER_CHANGE_POSTS,
+        key: actionButtonTextConstants.WALLPAPER_CHANGE_POSTS
     }, {
         label: actionButtonTextConstants.ABOUT_STARDOM,
         key: actionButtonTextConstants.ABOUT_STARDOM,

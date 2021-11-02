@@ -17,7 +17,6 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.stardomapp.constants.Constants;
 import com.stardomapp.utils.StardomUtils;
 
@@ -28,7 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
@@ -36,7 +34,6 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 public class StardomApiModule extends ReactContextBaseJavaModule {
@@ -183,12 +180,57 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * @param inWallPaperPost
+     */
+    @ReactMethod
+    public void updateWallPaperChangerPosts(String inWallPaperPost, Callback callback) {
+        try {
+            if (!inWallPaperPost.isEmpty()) {
+                JSONObject selectedPost = StardomUtils.parseJSONObject(inWallPaperPost);
+                String savedWallPaperChangeList = StardomUtils.getSavedWallPaperChangeList(reactContext.getApplicationContext());
+                if (!savedWallPaperChangeList.isEmpty()) {
+                    JSONObject wallPaperJSONObject = StardomUtils.parseJSONObject(savedWallPaperChangeList);
+                    JSONArray wallPaperJSONArray = wallPaperJSONObject.getJSONArray(Constants.WALLPAPERS);
+                    boolean isRemoved = StardomUtils.removePostFromWallPaperChangeList(wallPaperJSONArray, selectedPost);
+                    if (isRemoved) {
+                        Toast.makeText(reactContext, "Selected post removed from the wallpaper changer list!",
+                                Toast.LENGTH_SHORT).show();
+                        callback.invoke(true);
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(reactContext.getApplicationContext());
+                        SharedPreferences.Editor preferencesEditor = preferences.edit();
+                        preferencesEditor.putString(Constants.WALLPAPER_CHANGE_LIST, wallPaperJSONObject.toString());
+                        preferencesEditor.apply();
+                    } else {
+                        Toast.makeText(reactContext, "Selected post to remove from the wallpaper changer list not found",
+                                Toast.LENGTH_SHORT).show();
+                        callback.invoke(false);
+                    }
+                } else {
+                    Toast.makeText(reactContext, "Could not remove selected post!", Toast.LENGTH_SHORT).show();
+                    callback.invoke(false);
+                }
+            } else {
+                Toast.makeText(reactContext, "Selected post to remove is empty!", Toast.LENGTH_SHORT).show();
+                callback.invoke(false);
+            }
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Cannot remove post from wallpaper changer list", exception);
+            Toast.makeText(reactContext, "Cannot remove post from wallpaper changer list", Toast.LENGTH_SHORT).show();
+            callback.invoke(false);
+        }
+    }
+
+    /**
      *
      */
     private void stopServiceWorker() {
         try {
-            WorkManager workManager = WorkManager.getInstance(reactContext.getApplicationContext());
-            workManager.cancelUniqueWork(Constants.UNIQUE_WORK_NAME);
+            if (PhoneUnlockService.isServiceRunning) {
+                Intent serviceIntent = new Intent(reactContext.getApplicationContext(), PhoneUnlockService.class);
+                reactContext.getApplicationContext().stopService(serviceIntent);
+                WorkManager workManager = WorkManager.getInstance(reactContext.getApplicationContext());
+                workManager.cancelAllWork();
+            }
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot stop unlock work manager for " + Constants.UNIQUE_WORK_NAME, exception);
         }
@@ -241,7 +283,7 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
             // to schedule a unique work, no matter how many times app is opened i.e. startServiceViaWorker gets called
             // https://developer.android.com/topic/libraries/architecture/workmanager/how-to/unique-work
             // do check for AutoStart permission
-            workManager.enqueueUniquePeriodicWork(Constants.UNIQUE_WORK_NAME, ExistingPeriodicWorkPolicy.KEEP, request);
+            workManager.enqueueUniquePeriodicWork(Constants.UNIQUE_WORK_NAME, ExistingPeriodicWorkPolicy.REPLACE, request);
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot start unlock work manager for " + Constants.UNIQUE_WORK_NAME, exception);
         }

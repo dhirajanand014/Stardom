@@ -15,11 +15,11 @@ import {
 import {
     Linking,
     NativeModules,
-    PermissionsAndroid, ToastAndroid
+    PermissionsAndroid, Text, ToastAndroid, TouchableOpacity, View
 } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 import { withDelay, withSpring } from 'react-native-reanimated';
-import { colors, SDGenericStyles } from '../styles/Styles';
+import { colors, SDGenericStyles, userAuthStyles } from '../styles/Styles';
 import RNOtpVerify from 'react-native-otp-verify';
 import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -33,6 +33,7 @@ import CameraRoll from '@react-native-community/cameraroll';
 import { createChannel } from '../notification/notification';
 import { Importance } from 'react-native-push-notification';
 import { TabActions } from '@react-navigation/routers';
+import { SettingsIcon } from '../components/icons/SettingsIcon';
 
 export const fetchCategoryData = async () => {
     try {
@@ -205,10 +206,14 @@ export const addRemoveWallPaperChanger = async (postDetailsState, setPostDetails
     }
 }
 
-export const checkWallPapersList = async () => {
+export const getWallPapersList = async (state, setState) => {
     try {
-        await NativeModules.StartomApi.getWallPaperChangeList(() => {
-            //const jsonReponse = JSON.parse(response);
+        await NativeModules.StartomApi.getWallPaperChangeList((wallPaperPosts) => {
+            if (wallPaperPosts) {
+                const posts = JSON.parse(wallPaperPosts);
+                state.posts = posts.wallPapers || jsonConstants.EMPTY;
+            }
+            setState({ ...state });
         });
     } catch (error) {
         console.error(errorMessages.COULD_NOT_FETCH_WALLPAPER_CHANGE_LIST, error);
@@ -780,18 +785,35 @@ export const categoryHeader = () => {
     });
 }
 
-export const wallPaperChangeSettingHeader = props => {
+export const wallPaperPostsHeader = props => {
     return ({
         headerShown: true,
         headerTitle: props.title,
         headerStyle: SDGenericStyles.backGroundColorBlack,
         headerTintColor: colors.WHITE,
         headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium,
-        navigationOptions: ({ navigation }) => ({
-            headerLeft: (
-                <HeaderBackButton tintColor={SDGenericStyles.colorWhite} onPress={() => { navigation.goBack() }} />
-            )
-        })
+        headerRight: () => (
+            <View style={SDGenericStyles.marginRight10} >
+                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryHeaderButtonText, SDGenericStyles.headerButtonBackgroundColor,
+                SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingHorizontal10, SDGenericStyles.alignItemsCenter]}
+                    onPress={async () => props.navigation.navigate(screens.AUTO_WALLPAPER_CHANGER_SETTINGS)}>
+                    <SettingsIcon height={numericConstants.TWENTY_FOUR} width={numericConstants.TWENTY_FOUR} stroke={colors.SDOM_BLACK} />
+                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.paddingLeft5]}>
+                        {actionButtonTextConstants.SETTINGS}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        )
+    });
+}
+
+export const wallPaperChangeSettingHeader = props => {
+    return ({
+        headerShown: true,
+        headerTitle: props.title,
+        headerStyle: SDGenericStyles.backGroundColorBlack,
+        headerTintColor: colors.WHITE,
+        headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium
     });
 }
 
@@ -2189,5 +2211,25 @@ export const setScreenUnLockWallpaperService = async (inAction) => {
             stringConstants.EMPTY);
     } catch (error) {
         console.error(errorMessages.COULD_NOT_RESET_WALLPAPER_SETTINGS, error);
+    }
+}
+
+export const updateWallPaperPosts = async (autoWallPaperChangerPosts, setAutoWallPaperChangerPosts) => {
+    try {
+        if (autoWallPaperChangerPosts.selectedPost) {
+            const jsonRequest = JSON.stringify(autoWallPaperChangerPosts.selectedPost);
+            await NativeModules.StartomApi.updateWallPaperChangerPosts(jsonRequest, (isRemoved) => {
+                if (isRemoved) {
+                    const removalIndex = autoWallPaperChangerPosts.posts.findIndex(post =>
+                        post.postId == autoWallPaperChangerPosts.selectedPost.postId);
+                    autoWallPaperChangerPosts.posts.splice(removalIndex, numericConstants.ONE);
+                }
+                autoWallPaperChangerPosts.selectedPost = stringConstants.EMPTY;
+                autoWallPaperChangerPosts.showConfirmationModal = false;
+                setAutoWallPaperChangerPosts({ ...autoWallPaperChangerPosts });
+            });
+        }
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_UPDATE_WALLPAPER_CHANGER_POSTS, error);
     }
 }

@@ -6,7 +6,7 @@ import { SDGenericStyles } from "../../styles/Styles"
 
 export const SDSwitchInputView = props => {
     return (
-        <View style={[SDGenericStyles.justifyContentSpaceBetween, SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingVertical10]}>
+        <View style={[SDGenericStyles.justifyContentSpaceBetween, SDGenericStyles.rowFlexDirection, SDGenericStyles.mb25]}>
             <Text style={[SDGenericStyles.ft16, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textColorWhite]}>
                 {props.textValue}
             </Text>

@@ -40,7 +40,7 @@ public class PhoneUnlockService extends Service {
     public void onDestroy() {
         Toast.makeText(getApplicationContext(), "Ondestroy called", Toast.LENGTH_LONG).show();
         isServiceRunning = false;
-        stopForeground(true);
+        stopSelf();
         // unregister receiver
         unregisterReceiver(screenLockReceiver);
 
@@ -50,8 +50,8 @@ public class PhoneUnlockService extends Service {
         }
 
         // call WallpaperReceiver which will restart this service
-        Intent broadcastIntent = new Intent(this, PhoneUnlockWorkerReceiver.class);
-        sendBroadcast(broadcastIntent);
+//        Intent broadcastIntent = new Intent(this, PhoneUnlockWorkerReceiver.class);
+//        sendBroadcast(broadcastIntent);
 
         super.onDestroy();
     }

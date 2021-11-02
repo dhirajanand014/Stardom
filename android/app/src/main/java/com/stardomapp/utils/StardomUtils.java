@@ -141,6 +141,26 @@ public class StardomUtils {
     }
 
     /**
+     * @param inWallPaperJSONArray
+     * @param inSelectedPost
+     * @return
+     * @throws JSONException
+     */
+    public static boolean removePostFromWallPaperChangeList(JSONArray inWallPaperJSONArray, JSONObject inSelectedPost)
+            throws JSONException {
+        for (int index = Constants.INT_ZERO; index < inWallPaperJSONArray.length(); index++) {
+            JSONObject jsonObject = inWallPaperJSONArray.getJSONObject(index);
+            if (jsonObject.has(Constants.POST_ID) && jsonObject.get(Constants.POST_ID)
+                    .equals(inSelectedPost.get(Constants.POST_ID))) {
+                inWallPaperJSONArray.remove(index);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
      * @param inCondition
      * @param inLongMilliSeconds
      * @return

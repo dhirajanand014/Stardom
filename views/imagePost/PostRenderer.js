@@ -24,10 +24,10 @@ export const PostRenderer = React.memo(({ item, postCallback }) => {
                         style={flatListItemStyles.imageBackGround}>
                         <View style={flatListItemStyles.textsView}>
                             <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
-                                <Text style={flatListItemStyles.textCategoryTitle}>{item.postTitle}</Text>
+                                <Text style={SDGenericStyles.fontFamilyRobotoRegular}>{item.postTitle}</Text>
                             </Shimmer>
                             <Shimmer direction={miscMessage.RIGHT} duration={numericConstants.FIVE_THOUSAND}>
-                                <Text style={flatListItemStyles.textCategoryCity}>{item.postType}</Text>
+                                <Text style={SDGenericStyles.fontFamilyRobotoRegular}>{item.postType}</Text>
                             </Shimmer>
                         </View>
                     </FastImage>

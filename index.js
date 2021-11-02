@@ -13,7 +13,7 @@ import {
     headerLessStackOptions, isAndroid, numericConstants, profileScreenOptions,
     screenOptions, screens, tabBarOptions, urlConstants, width
 } from './constants/Constants';
-import { authorizationHeader, categoryHeader, getNotificationConfiguration, wallPaperChangeSettingHeader } from './helper/Helper';
+import { authorizationHeader, categoryHeader, getNotificationConfiguration, wallPaperChangeSettingHeader, wallPaperPostsHeader } from './helper/Helper';
 import { Category } from './screens/category/Category';
 import { Intro } from './screens/Intro';
 import { AddPostDetails } from './screens/post/AddPostDetails';
@@ -41,6 +41,7 @@ import PushNotification from 'react-native-push-notification';
 import { EULAAcceptance } from './screens/EULAAcceptance';
 import { AboutStardom } from './screens/AboutStardom';
 import { AutoWallPaperChangerSettings } from './screens/post/AutoWallPaperChangerSettings';
+import { AutoWallPaperChangerPosts } from './screens/post/AutoWallPaperChangerPosts';
 
 LogBox.ignoreLogs(['Remote debugger is in a background tab which may cause apps to perform slowly',
     'Require cycle: node_modules/rn-fetch-blob/index.js',
@@ -117,6 +118,7 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.USER_FOLLOWERS_FOLLOWING} component={UserFollowFollowing} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.POSTS_USERS_SEARCH} component={SDSearchUserAndPosts} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.IMAGE_PREVIEW_FILTERS} component={SDCameraImagePreview} options={headerLessStackOptions} />
+                <Stack.Screen name={screens.WALLPAPER_POSTS} component={AutoWallPaperChangerPosts} options={wallPaperPostsHeader} />
                 <Stack.Screen name={screens.AUTO_WALLPAPER_CHANGER_SETTINGS} component={AutoWallPaperChangerSettings} options={wallPaperChangeSettingHeader} />
             </Stack.Navigator>
         </NavigationContainer>

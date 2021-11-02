@@ -59,8 +59,8 @@ export const SDUserMenus = (drawerProps) => {
             case actionButtonTextConstants.VERIFY_USER:
                 setProfileMenu({ ...profileMenu, showSubmitVerifyModal: true });
                 break;
-            case actionButtonTextConstants.WALLPAPER_CHANGE_SETTINGS:
-                navigation.navigate(screens.AUTO_WALLPAPER_CHANGER_SETTINGS);
+            case actionButtonTextConstants.WALLPAPER_CHANGE_POSTS:
+                navigation.navigate(screens.WALLPAPER_POSTS);
                 break;
             case actionButtonTextConstants.ABOUT_STARDOM:
                 navigation.navigate(screens.ABOUT_STARDOM);

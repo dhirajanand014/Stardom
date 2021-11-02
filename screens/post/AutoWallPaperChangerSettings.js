@@ -17,7 +17,7 @@ import { colors, glancePostStyles, SDGenericStyles, userAuthStyles } from '../..
 import { SDDateTimePickerView } from '../../views/datePickerView/SDDateTimePickerView';
 import { SDDropDownView } from '../../views/dropDownView/SDDropDownView';
 import { SDSwitchInputView } from '../../views/fromInputView/SDSwitchInputView';
-import { WallPaperChangeAutoStartModal } from '../../views/imagePost/WallPaperChangeAutoStartModal';
+import { WallPaperChangeAutoStartModal } from '../../components/modals/WallPaperChangeAutoStartModal';
 
 export const AutoWallPaperChangerSettings = () => {
     const { control, formState, setValue, handleSubmit } = useForm();
@@ -95,17 +95,17 @@ export const AutoWallPaperChangerSettings = () => {
                         defaultValue={wallPaperChangeSettings.changeSpecificTime || stringConstants.EMPTY} formState={formState} mode={miscMessage.TIME} placeHolderText={placeHolderText.WALLPAPER_CHANGER_SPECIFIC_TIME}
                         icon={<CalenderIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN} stroke={colors.SDOM_PLACEHOLDER} />} />
                 }
+                {
+                    wallPaperChangeSettings.scheduleWallPaperEnabled && wallPaperChangeSettings.changeCondition &&
+                    <View style={SDGenericStyles.paddingVertical25}>
+                        <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]} onPress={async () => await disableWallPaperSettings()}>
+                            <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium]}>
+                                {actionButtonTextConstants.CLEAR_ALL}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                }
             </View>
-            {
-                wallPaperChangeSettings.scheduleWallPaperEnabled && wallPaperChangeSettings.changeCondition &&
-                <View style={SDGenericStyles.paddingVertical20}>
-                    <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.backgroundColorYellow]} onPress={async () => await disableWallPaperSettings()}>
-                        <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoRegular]}>
-                            {actionButtonTextConstants.CLEAR_ALL}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            }
             <WallPaperChangeAutoStartModal wallPaperChangeSettings={wallPaperChangeSettings} setWallPaperChangeSettings={setWallPaperChangeSettings} />
         </View>
     );

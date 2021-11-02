@@ -1,7 +1,6 @@
 
 import React from 'react';
 import Svg, { Path } from "react-native-svg";
-import { miscMessage } from '../../constants/Constants';
 import { colors } from '../../styles/Styles';
 export const RotateCameraIcon = props => {
     return (<Svg viewBox="0 0 512 512" width={props.width} height={props.height} fill={colors.WHITE} stroke={colors.WHITE}>

@@ -286,6 +286,9 @@ export const SDGenericStyles = StyleSheet.create({
     placeHolderTextColor: {
         color: `#969696`
     },
+    headerButtonBackgroundColor: {
+        backgroundColor: `#969696`
+    },
     borderWidth2: {
         borderWidth: 2
     },
@@ -1455,6 +1458,12 @@ export const userAuthStyles = StyleSheet.create({
         paddingVertical: 8,
         width: width / 2,
         paddingBottom: 12
+    },
+    primaryHeaderButtonText: {
+        fontSize: 12,
+        textAlign: 'center',
+        borderRadius: 8,
+        color: '#1b1f2b'
     },
     primaryActionButtonButtonText: {
         fontSize: 18,

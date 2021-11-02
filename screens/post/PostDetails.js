@@ -18,7 +18,7 @@ import { SDWallpaperModal } from '../../views/imagePost/SDWallpaperModal';
 import { CategoryContext } from '../../App';
 import { RenderLoaderScroll } from '../../views/imagePost/RenderLoaderScroll';
 import { WallPaperChangerIcon } from '../../components/icons/WallPaperChangerIcon';
-import { WallPaperAddRemoveListModal } from '../../views/imagePost/WallPaperAddRemoveListModal';
+import { WallPaperAddRemoveListModal } from '../../components/modals/WallPaperAddRemoveListModal';
 
 const post_like = require(`../../assets/post_likes_icon.png`);
 const post_like_selected = require(`../../assets/post_likes_selected_icon.png`);
