@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+/**
+ * Worker service called when starting the wallpaper changer on device unlock.
+ */
 public class PhoneUnlockWorker extends Worker {
 
     private final Context context;

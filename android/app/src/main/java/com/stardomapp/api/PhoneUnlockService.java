@@ -8,6 +8,9 @@ import android.widget.Toast;
 
 import java.util.Timer;
 
+/**
+ * Service to change the Home Scree Wallpaper when user unlocks the device.
+ */
 public class PhoneUnlockService extends Service {
     public static boolean isServiceRunning;
     public static boolean isStopServiceExplicit;
@@ -40,6 +43,10 @@ public class PhoneUnlockService extends Service {
     @Override
     public void onDestroy() {
         isServiceRunning = false;
+
+        //stopForeground(true);
+
+        //Stop the service by itself on destroy of the application.
         stopSelf();
         // unregister receiver
         unregisterReceiver(screenLockReceiver);
@@ -49,6 +56,7 @@ public class PhoneUnlockService extends Service {
             timer.cancel();
         }
 
+        // Do execute the below code when the Wallpaper changer service is stopped on button click.
         if (!isStopServiceExplicit) {
             Toast.makeText(getApplicationContext(), "Stop service not invoked", Toast.LENGTH_LONG).show();
             // call WallpaperReceiver which will restart this service
@@ -59,6 +67,11 @@ public class PhoneUnlockService extends Service {
         super.onDestroy();
     }
 
+    /**
+     * Called when the app is removed from the recent apps section.
+     *
+     * @param rootIntent
+     */
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         if (isServiceRunning) {

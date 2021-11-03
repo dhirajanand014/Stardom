@@ -28,7 +28,7 @@ import java.net.URL;
 import androidx.annotation.RequiresApi;
 
 /**
- *
+ * Broadcast receiver called when the interval or the specific time change condition is set and scheduled.
  */
 public class WallPaperChangeReceiver extends BroadcastReceiver {
 

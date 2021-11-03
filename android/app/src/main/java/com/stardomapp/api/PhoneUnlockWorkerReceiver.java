@@ -7,6 +7,9 @@ import android.content.Intent;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
+/**
+ * Main receiver called when initiating the start of the wallpaper changer server on phone unlock.
+ */
 public class PhoneUnlockWorkerReceiver extends BroadcastReceiver {
 
     @Override

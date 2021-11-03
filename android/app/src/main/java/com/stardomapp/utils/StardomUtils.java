@@ -18,17 +18,14 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Startdom Utility class.
+ */
 public class StardomUtils {
-    /**
-     * @param inJsonString
-     * @return
-     * @throws JSONException
-     */
-    public static JSONArray parseJSONArray(String inJsonString) throws JSONException {
-        return new JSONArray(inJsonString);
-    }
 
     /**
+     * Parse JSON String value to JSON Object instance. Returns the parsed JSON Object.
+     *
      * @param inJsonString
      * @return
      * @throws JSONException
@@ -38,6 +35,8 @@ public class StardomUtils {
     }
 
     /**
+     * Create initial JSON array with preliminary wallpaper post JSON Object. Returns the created JSON Object
+     *
      * @param inPostId
      * @param inURL
      * @return
@@ -56,6 +55,8 @@ public class StardomUtils {
     }
 
     /**
+     * Create the Wallpaper Changer JSON object with Post ID and Post URL. Returns created JSON Object.
+     *
      * @param inPostId
      * @param inURL
      * @return
@@ -69,6 +70,8 @@ public class StardomUtils {
     }
 
     /**
+     * Prepare JSON Array for the Wallpaper Changer with Post ID and Post URL.Returns the prepared JSON Array.
+     *
      * @param inPostId
      * @param inURL
      * @return
@@ -80,6 +83,8 @@ public class StardomUtils {
     }
 
     /**
+     * Parse the existing Wallpaper Changer JSON Array and adds new item. Returns the updated JSON Object.
+     *
      * @param inWallPaperObject
      * @param inPostId
      * @param inURL
@@ -96,6 +101,8 @@ public class StardomUtils {
     }
 
     /**
+     * Check if the post to be added to the Wallpaper Changer list already exists.
+     *
      * @param inJSONArray
      * @param inPostId
      * @return
@@ -112,6 +119,8 @@ public class StardomUtils {
     }
 
     /**
+     * Remove the Wallpaper Changer Post item from the Wallpaper Changer list based on the Post iD.
+     *
      * @param wallPaperArray
      * @param inPostId
      * @return
@@ -129,6 +138,8 @@ public class StardomUtils {
     }
 
     /**
+     * Get the Wallpaper Changer list stored in as Shared Preferences. Returns the JSON String.
+     *
      * @param inContext
      * @return
      */
@@ -138,27 +149,9 @@ public class StardomUtils {
     }
 
     /**
-     * @param inWallPaperJSONArray
-     * @param inSelectedPost
-     * @return
-     * @throws JSONException
-     */
-    public static boolean removePostFromWallPaperChangeList(JSONArray
-                                                                    inWallPaperJSONArray, JSONObject inSelectedPost)
-            throws JSONException {
-        for (int index = Constants.INT_ZERO; index < inWallPaperJSONArray.length(); index++) {
-            JSONObject jsonObject = inWallPaperJSONArray.getJSONObject(index);
-            if (jsonObject.has(Constants.POST_ID) && jsonObject.get(Constants.POST_ID)
-                    .equals(inSelectedPost.get(Constants.POST_ID))) {
-                inWallPaperJSONArray.remove(index);
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    /**
+     * Prepares the calender instance with the input of time in milliseconds to the required time in milliseconds to trigger the
+     * Wallpaper Changer Service based on the condition in intervals or specific time.
+     *
      * @param inCondition
      * @param inLongMilliSeconds
      * @return
@@ -185,6 +178,9 @@ public class StardomUtils {
     }
 
     /**
+     * For the time in intervals, get and start from the next available quarter minutes of the hour.
+     * Returns the nearest 15th minute in milliseconds.
+     *
      * @param inMillisCalendar
      * @return
      */
@@ -205,6 +201,9 @@ public class StardomUtils {
     }
 
     /**
+     * Open the auto start permission. This permission allows the Unlock Wallpaper Changer service to be called even after the
+     * Stardom app is killed or cleared from the recent apps.
+     *
      * @param inContext
      * @return
      */
@@ -233,6 +232,12 @@ public class StardomUtils {
                 case Constants.BRAND_NOKIA:
                     startIntent(inContext, Constants.PACKAGE_NOKIA_MAIN, Constants.PACKAGE_NOKIA_COMPONENT);
                     return true;
+                case Constants.BRAND_SAMSUNG:
+                    autoStartSamsung(inContext);
+                    return true;
+                case Constants.BRAND_ONE_PLUS:
+                    startIntent(inContext, Constants.PACKAGE_ONE_PLUS_MAIN, Constants.PACKAGE_ONE_PLUS_COMPONENT);
+                    return true;
                 default:
                     return true;
             }
@@ -244,6 +249,8 @@ public class StardomUtils {
     }
 
     /**
+     * Start the Auto start permission as an activity within the Startom Application.
+     *
      * @param inContext
      * @param inPackageName
      * @param inComponentName
@@ -263,6 +270,8 @@ public class StardomUtils {
     }
 
     /**
+     * Auto start permission for Oppo devices with fallback autostart components.
+     *
      * @param inContext
      */
     private static void autoStartOppo(Context inContext) {
@@ -284,6 +293,8 @@ public class StardomUtils {
     }
 
     /**
+     * Auto start permission for Vivo devices with fallback autostart components.
+     *
      * @param inContext
      */
     private static void autoStartVivo(Context inContext) {
@@ -305,6 +316,31 @@ public class StardomUtils {
     }
 
     /**
+     * Auto start permission for Samsung devices with fallback autostart components.
+     *
+     * @param inContext
+     */
+    private static void autoStartSamsung(Context inContext) {
+        try {
+            startIntent(inContext, Constants.PACKAGE_SAMSUNG_MAIN, Constants.PACKAGE_SAMSUNG_COMPONENT);
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Could not autoStart SAMSUNG main intent", exception);
+            try {
+                startIntent(inContext, Constants.PACKAGE_SAMSUNG_MAIN, Constants.PACKAGE_SAMSUNG_COMPONENT_2);
+            } catch (Exception fallbackException) {
+                Log.e(Constants.TAG, "Could not autoStart VIVO fallback intent", fallbackException);
+                try {
+                    startIntent(inContext, Constants.PACKAGE_SAMSUNG_MAIN, Constants.PACKAGE_SAMSUNG_COMPONENT_3);
+                } catch (Exception mainFallbackException) {
+                    Log.e(Constants.TAG, "Could not autoStart VIVO main fallback intent", mainFallbackException);
+                }
+            }
+        }
+    }
+
+    /**
+     * Get time from milliseconds to minute or hour to display in the toast message.
+     *
      * @param inMillis
      * @return
      */

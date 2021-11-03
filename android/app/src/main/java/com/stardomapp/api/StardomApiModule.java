@@ -70,6 +70,8 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Check of the post already exists in Wallpaper Changer JSON list and invoke the React callback with the required response.
+     *
      * @param inPostId
      * @param callback
      */
@@ -91,6 +93,10 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Adds or Removes the post selected from the Stardom application to the Wallpaper Changer List.
+     * Wallpaper changer list is first created and saved in the Shared Preferences when first post is added.
+     * Consecutive additions and deletion update the Wallpaper changer list and is updated to the Shared preferences.
+     *
      * @param inAction
      * @param inPostId
      * @param inPostTitle
@@ -143,6 +149,8 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Gets the Wallpaper Changer list containing the looper count and post wallpapers.
+     *
      * @param callback
      */
     @ReactMethod
@@ -156,7 +164,9 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     *
+     * Handler to manage the Set/Start/Stop of the Wallpaper changer list.
+     * Starts/Stops the Alarm Manager based on the condition of interval or specific time.
+     * Starts/Stops the Screen Unlock service when the Wallpaper Changer toggle is active and inactive.
      */
     @ReactMethod
     public void wallPaperChangeActionService(String inAction, String inCondition, String inLongMilliSeconds) {
@@ -188,6 +198,10 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Updates the Wallpaper Changer posts when user deletes the post from the Stardom application.
+     * This method is used to remove the posts from the Wallpaper Changer list when user does not want the particular post
+     * in the Wallpaper Changer list to be looped.
+     *
      * @param inWallPaperPost
      */
     @ReactMethod
@@ -220,7 +234,7 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     *
+     * Stop the Phone Unlock Service worker and cancel the Wallpaper Changer on Phone Unlock.
      */
     private void stopServiceWorker() {
         try {
@@ -237,6 +251,8 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Perform the Autostart permission check and starts the activity in the same Stardom application to enablement.
+     *
      * @param callback
      */
     @ReactMethod
@@ -270,15 +286,21 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Checks if the current device matches one of the particular device listed. This is needed for the UI to display the Enable Modal
+     * to allow the device to enable the option of Auto Start.
+     *
      * @return
      */
     @ReactMethod
     public void isOneOfPhoneBrand(Callback callback) {
         callback.invoke(Constants.BRAND_ASUS.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_XIAOMI.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_LETV.equals(Build.BRAND.toLowerCase())
                 || Constants.BRAND_HONOR.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_OPPO.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_VIVO.equals(Build.BRAND.toLowerCase())
-                || Constants.BRAND_NOKIA.equals(Build.BRAND.toLowerCase()));
+                || Constants.BRAND_NOKIA.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_ONE_PLUS.equals(Build.BRAND.toLowerCase()));
     }
 
+    /**
+     * Starts the periodic work manager and enqueues to the existing work manager list to enable the Wallpaper Changer on Phone unlock.
+     */
     public void startServiceViaWorker() {
         try {
             WorkManager workManager = WorkManager.getInstance(reactContext.getApplicationContext());

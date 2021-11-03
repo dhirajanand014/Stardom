@@ -76,4 +76,17 @@ public class Constants {
     public static final String BRAND_NOKIA = "nokia";
     public static final String PACKAGE_NOKIA_MAIN = "com.evenwell.powersaving.g3";
     public static final String PACKAGE_NOKIA_COMPONENT = "com.evenwell.powersaving.g3.exception.PowerSaverExceptionActivity";
+
+    //Samsung
+    public static final String BRAND_SAMSUNG = "samsung";
+    public static final String PACKAGE_SAMSUNG_MAIN = "com.samsung.android.lool";
+    public static final String PACKAGE_SAMSUNG_COMPONENT = "com.samsung.android.sm.ui.battery.BatteryActivity";
+    public static final String PACKAGE_SAMSUNG_COMPONENT_2 = "com.samsung.android.sm.battery.ui.usage.CheckableAppListActivity";
+    public static final String PACKAGE_SAMSUNG_COMPONENT_3 = "com.samsung.android.sm.battery.ui.BatteryActivity";
+
+    //One plus
+    public static final String BRAND_ONE_PLUS = "oneplus";
+    public static final String PACKAGE_ONE_PLUS_MAIN = "com.oneplus.security";
+    public static final String PACKAGE_ONE_PLUS_COMPONENT = "com.oneplus.security.chainlaunch.view.ChainLaunchAppListActivity";
+    public static final String PACKAGE_ONE_PLUS_ACTION = "com.android.settings.action.BACKGROUND_OPTIMIZE";
 }

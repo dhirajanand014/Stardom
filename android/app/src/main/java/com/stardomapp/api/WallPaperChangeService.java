@@ -16,7 +16,8 @@ import java.util.Calendar;
 import androidx.annotation.NonNull;
 
 /**
- *
+ * WallPaper changer service that is responsible to start/cancel the Alarm Manager. The Alarm Manager is set periodically to auto
+ * change the wallpaper based on the time in milliseconds.
  */
 public class WallPaperChangeService {
 

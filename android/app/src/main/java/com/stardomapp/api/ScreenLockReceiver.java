@@ -28,7 +28,7 @@ import java.net.URL;
 import androidx.annotation.RequiresApi;
 
 /**
- *
+ * Broadcast receiver called when phone device unlocks everytime.
  */
 public class ScreenLockReceiver extends BroadcastReceiver {
 
@@ -50,6 +50,9 @@ public class ScreenLockReceiver extends BroadcastReceiver {
     }
 
     /**
+     * Wallpaper changer actions to retrieve the wallpaper to be set from the Shared preferences and then increment the count to
+     * be available to fetch the next wallpaper in loop.
+     *
      * @param inContext
      * @param inAction
      * @return
@@ -89,6 +92,8 @@ public class ScreenLockReceiver extends BroadcastReceiver {
     }
 
     /**
+     * Set the updated index of the wallpaper changer count while setting the Home screen wallpaper.
+     *
      * @param preferences
      * @param jsonObject
      * @throws JSONException
@@ -101,7 +106,8 @@ public class ScreenLockReceiver extends BroadcastReceiver {
     }
 
     /**
-     *
+     * Async method to set the wallpaper in the device home screen by fetching the wallpaper image by the post wallpaper url.
+     * This method returns the increment function called when wallpaper is set to the device home screen.
      */
     private class AsyncSetWallPaper extends AsyncTask<String, Integer, String> {
 
