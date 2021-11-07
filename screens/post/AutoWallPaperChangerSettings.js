@@ -30,6 +30,7 @@ export const AutoWallPaperChangerSettings = () => {
         scheduleWallPaperEnabled: false,
         showConfirmationModal: false,
         showAutoStartEnableModal: false,
+        otherOEM: false,
         isAlarmActive: false,
     });
 

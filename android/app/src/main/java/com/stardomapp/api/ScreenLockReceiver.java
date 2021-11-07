@@ -36,13 +36,13 @@ public class ScreenLockReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         if (Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
+            Toast.makeText(context, "Receiver called", Toast.LENGTH_SHORT).show();
             try {
                 JSONObject wallPaper = wallPaperActions(context, Constants.RETRIEVE_WALLPAPER);
                 if (null != wallPaper && wallPaper.has(Constants.POST_WALLPAPER_URL)) {
                     String postURL = wallPaper.get(Constants.POST_WALLPAPER_URL).toString();
                     new ScreenLockReceiver.AsyncSetWallPaper(context).execute(postURL);
                 }
-                Toast.makeText(context, "Receiver called", Toast.LENGTH_SHORT).show();
             } catch (Exception exception) {
                 Log.e(Constants.TAG, "Cannot process wallpaper change", exception);
             }

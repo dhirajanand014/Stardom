@@ -377,6 +377,15 @@ export const enableAutoStartPermission = async (resetModal) => {
     }
 }
 
+const checkOtherOEMBatteryOptimizationEnabled = async (state, setState) => {
+    try {
+        await NativeModules.StartomApi.checkOtherOEMBatteryOptimization((isBatteryOptimizationDisabled) =>
+            !isBatteryOptimizationDisabled && checkPhoneBrand(state, setState));
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_CHECK_BATTERY_OPTIMIZATION, error);
+    }
+}
+
 export const setOptionsStateRadioOptions = (optionsState, setOptionsState) => {
     setOptionsState({
         ...optionsState,
@@ -724,7 +733,7 @@ export const checkAndOpenWallPaperChangeAutoStartModal = async (state, setState)
         const autoStartSetting = await getKeyChainDetails(keyChainConstansts.AUTO_START_WALLPAPER_CHANGE_UNLOCK);
         if (autoStartSetting) {
             const autoStartEnableModal = JSON.parse(autoStartSetting.password);
-            if (!autoStartEnableModal) checkPhoneBrand(state, setState);
+            autoStartEnableModal && checkOtherOEMBatteryOptimizationEnabled(state, setState) || checkPhoneBrand(state, setState);
         } else {
             checkPhoneBrand(state, setState);
         }
@@ -735,9 +744,19 @@ export const checkAndOpenWallPaperChangeAutoStartModal = async (state, setState)
 
 const checkPhoneBrand = async (state, setState) => await NativeModules.StartomApi.isOneOfPhoneBrand((response) => {
     if (response) {
-        state.showAutoStartEnableModal = true;
+        try {
+            const phoneBrandJSON = JSON.parse(response);
+            if (phoneBrandJSON.brand) {
+                if (phoneBrandJSON.otherOEM && !phoneBrandJSON.isBatteryOptimized) {
+                    state.otherOEM = true;
+                }
+                state.showAutoStartEnableModal = true;
+            }
+            setState({ ...state });
+        } catch (error) {
+            console.error(errorMessages.COULD_NOT_PARSE_PHONE_BRAND_CHECK, error);
+        }
     }
-    setState({ ...state });
 });
 
 export const convertTime = (event, datePickerProps, props) => {
@@ -806,11 +825,12 @@ export const wallPaperPostsHeader = props => {
         headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium,
         headerRight: () => (
             <View style={SDGenericStyles.marginRight10} >
-                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryHeaderButtonText, SDGenericStyles.headerButtonBackgroundColor,
+                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryHeaderButtonText, SDGenericStyles.backgroundColorYellow,
                 SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingHorizontal10, SDGenericStyles.alignItemsCenter]}
-                    onPress={async () => props.navigation.navigate(screens.AUTO_WALLPAPER_CHANGER_SETTINGS)}>
+                    onPress={async () => props.navigation.navigate(screens.AUTO_WALLPAPER_SETTINGS)}>
                     <SettingsIcon height={numericConstants.TWENTY_FOUR} width={numericConstants.TWENTY_FOUR} stroke={colors.SDOM_BLACK} />
-                    <Text style={[userAuthStyles.primaryActionButtonButtonText, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.paddingLeft5]}>
+                    <Text style={[SDGenericStyles.ft12, SDGenericStyles.paddingVertical8, SDGenericStyles.textCenterAlign,
+                    SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.paddingLeft5]}>
                         {actionButtonTextConstants.SETTINGS}
                     </Text>
                 </TouchableOpacity>

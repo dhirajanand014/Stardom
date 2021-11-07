@@ -13,7 +13,10 @@ import {
     headerLessStackOptions, isAndroid, numericConstants, profileScreenOptions,
     screenOptions, screens, tabBarOptions, urlConstants, width
 } from './constants/Constants';
-import { authorizationHeader, categoryHeader, getNotificationConfiguration, wallPaperChangeSettingHeader, wallPaperPostsHeader } from './helper/Helper';
+import {
+    authorizationHeader, categoryHeader, getNotificationConfiguration,
+    wallPaperChangeSettingHeader, wallPaperPostsHeader
+} from './helper/Helper';
 import { Category } from './screens/category/Category';
 import { Intro } from './screens/Intro';
 import { AddPostDetails } from './screens/post/AddPostDetails';
@@ -119,7 +122,7 @@ export const ScreenNavigator = () => {
                 <Stack.Screen name={screens.POSTS_USERS_SEARCH} component={SDSearchUserAndPosts} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.IMAGE_PREVIEW_FILTERS} component={SDCameraImagePreview} options={headerLessStackOptions} />
                 <Stack.Screen name={screens.WALLPAPER_POSTS} component={AutoWallPaperChangerPosts} options={wallPaperPostsHeader} />
-                <Stack.Screen name={screens.AUTO_WALLPAPER_CHANGER_SETTINGS} component={AutoWallPaperChangerSettings} options={wallPaperChangeSettingHeader} />
+                <Stack.Screen name={screens.AUTO_WALLPAPER_SETTINGS} component={AutoWallPaperChangerSettings} options={wallPaperChangeSettingHeader} />
             </Stack.Navigator>
         </NavigationContainer>
     )

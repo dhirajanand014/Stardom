@@ -1,14 +1,15 @@
 package com.stardomapp.api;
 
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.WallpaperManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -186,6 +186,10 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
                     break;
                 case Constants.CANCEL_ALARM_MANAGER:
                     wallPaperChangeService.cancelAlarmManager();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        WallpaperManager wallpaperManager = WallpaperManager.getInstance(reactContext.getApplicationContext());
+                        wallpaperManager.clear(WallpaperManager.FLAG_SYSTEM);
+                    }
                     break;
                 default:
                     Toast.makeText(reactContext, "No Action Matched", Toast.LENGTH_SHORT).show();
@@ -293,9 +297,49 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isOneOfPhoneBrand(Callback callback) {
-        callback.invoke(Constants.BRAND_ASUS.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_XIAOMI.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_LETV.equals(Build.BRAND.toLowerCase())
-                || Constants.BRAND_HONOR.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_OPPO.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_VIVO.equals(Build.BRAND.toLowerCase())
-                || Constants.BRAND_NOKIA.equals(Build.BRAND.toLowerCase()) || Constants.BRAND_ONE_PLUS.equals(Build.BRAND.toLowerCase()));
+        try {
+            String brand = Build.BRAND.toLowerCase();
+            JSONObject phoneBrandJSON = new JSONObject();
+            phoneBrandJSON.put("brand", brand);
+            if (Constants.BRAND_ASUS.equals(brand) || Constants.BRAND_XIAOMI.equals(brand) || Constants.BRAND_LETV.equals(brand)
+                    || Constants.BRAND_HONOR.equals(brand) || Constants.BRAND_OPPO.equals(brand) || Constants.BRAND_VIVO.equals(brand)
+                    || Constants.BRAND_NOKIA.equals(brand)) {
+                phoneBrandJSON.put("otherOEM", false);
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    phoneBrandJSON.put("otherOEM", true);
+                    phoneBrandJSON.put("isBatteryOptimized", ((PowerManager) reactContext.getApplicationContext()
+                            .getSystemService(Context.POWER_SERVICE))
+                            .isIgnoringBatteryOptimizations(reactContext.getApplicationContext().getPackageName()));
+                }
+            }
+            callback.invoke(phoneBrandJSON.toString());
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Could not identify device brand", exception);
+        }
+    }
+
+    /**
+     * Check for device brand that matches original OEMs for disbalement of battery optimization.
+     *
+     * @param callback
+     */
+    @ReactMethod
+    public void checkOtherOEMBatteryOptimization(Callback callback) {
+        try {
+            String brand = Build.BRAND.toLowerCase();
+            if (!(Constants.BRAND_ASUS.equals(brand) || Constants.BRAND_XIAOMI.equals(brand) || Constants.BRAND_LETV.equals(brand)
+                    || Constants.BRAND_HONOR.equals(brand) || Constants.BRAND_OPPO.equals(brand) || Constants.BRAND_VIVO.equals(brand)
+                    || Constants.BRAND_NOKIA.equals(brand)) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PowerManager pm = (PowerManager) reactContext.getApplicationContext().getSystemService(Context.POWER_SERVICE);
+                callback.invoke(pm.isIgnoringBatteryOptimizations(reactContext.getApplicationContext().getPackageName()));
+            } else {
+                callback.invoke(true);
+            }
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Could not identify device brand", exception);
+            callback.invoke(true);
+        }
     }
 
     /**
@@ -328,8 +372,6 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
 
         private ReactApplicationContext mContext;
         private String mPostTitle;
-        private NotificationManager notificationManager;
-        private NotificationCompat.Builder notificationBuilder;
 
         private AsyncSetImage(ReactApplicationContext reactApplicationContext) {
             this.mContext = reactApplicationContext;

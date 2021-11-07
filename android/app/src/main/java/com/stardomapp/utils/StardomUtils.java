@@ -4,8 +4,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -232,20 +235,37 @@ public class StardomUtils {
                 case Constants.BRAND_NOKIA:
                     startIntent(inContext, Constants.PACKAGE_NOKIA_MAIN, Constants.PACKAGE_NOKIA_COMPONENT);
                     return true;
-                case Constants.BRAND_SAMSUNG:
-                    autoStartSamsung(inContext);
-                    return true;
                 case Constants.BRAND_ONE_PLUS:
-                    startIntent(inContext, Constants.PACKAGE_ONE_PLUS_MAIN, Constants.PACKAGE_ONE_PLUS_COMPONENT);
+                    autoStartOnePlus(inContext);
                     return true;
                 default:
-                    return true;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        PowerManager pm = (PowerManager) inContext.getSystemService(Context.POWER_SERVICE);
+                        if (!pm.isIgnoringBatteryOptimizations(inContext.getPackageName())) {
+                            Intent intent = new Intent();
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                            inContext.startActivity(intent);
+                            return true;
+                        }
+                    }
             }
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Could not open auto start settings", exception);
             Toast.makeText(inContext, "Failed to open auto start settings", Toast.LENGTH_SHORT).show();
         }
         return false;
+    }
+
+    /**
+     * @param inContext
+     */
+    private static void autoStartOnePlus(Context inContext) {
+        Intent intent = new Intent();
+        intent.setData(Uri.parse("package:" + inContext.getPackageName()));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Constants.PACKAGE_ONE_PLUS_ACTION);
+        inContext.startActivity(intent);
     }
 
     /**
@@ -308,29 +328,6 @@ public class StardomUtils {
                 Log.e(Constants.TAG, "Could not autoStart VIVO fallback intent", fallbackException);
                 try {
                     startIntent(inContext, Constants.PACKAGE_VIVO_MAIN, Constants.PACKAGE_VIVO_COMPONENT_FALLBACK_A);
-                } catch (Exception mainFallbackException) {
-                    Log.e(Constants.TAG, "Could not autoStart VIVO main fallback intent", mainFallbackException);
-                }
-            }
-        }
-    }
-
-    /**
-     * Auto start permission for Samsung devices with fallback autostart components.
-     *
-     * @param inContext
-     */
-    private static void autoStartSamsung(Context inContext) {
-        try {
-            startIntent(inContext, Constants.PACKAGE_SAMSUNG_MAIN, Constants.PACKAGE_SAMSUNG_COMPONENT);
-        } catch (Exception exception) {
-            Log.e(Constants.TAG, "Could not autoStart SAMSUNG main intent", exception);
-            try {
-                startIntent(inContext, Constants.PACKAGE_SAMSUNG_MAIN, Constants.PACKAGE_SAMSUNG_COMPONENT_2);
-            } catch (Exception fallbackException) {
-                Log.e(Constants.TAG, "Could not autoStart VIVO fallback intent", fallbackException);
-                try {
-                    startIntent(inContext, Constants.PACKAGE_SAMSUNG_MAIN, Constants.PACKAGE_SAMSUNG_COMPONENT_3);
                 } catch (Exception mainFallbackException) {
                     Log.e(Constants.TAG, "Could not autoStart VIVO main fallback intent", mainFallbackException);
                 }

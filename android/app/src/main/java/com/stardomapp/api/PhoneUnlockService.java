@@ -74,11 +74,11 @@ public class PhoneUnlockService extends Service {
      */
     @Override
     public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
         if (isServiceRunning) {
             // call WallpaperReceiver which will restart this service
             Intent broadcastIntent = new Intent(this, PhoneUnlockWorkerReceiver.class);
             sendBroadcast(broadcastIntent);
-            super.onTaskRemoved(rootIntent);
         }
     }
 

@@ -286,9 +286,6 @@ export const SDGenericStyles = StyleSheet.create({
     placeHolderTextColor: {
         color: `#969696`
     },
-    headerButtonBackgroundColor: {
-        backgroundColor: `#969696`
-    },
     borderWidth2: {
         borderWidth: 2
     },
@@ -504,6 +501,9 @@ export const SDGenericStyles = StyleSheet.create({
     },
     paddingVertical5: {
         paddingVertical: 5
+    },
+    paddingVertical8: {
+        paddingVertical: 8
     },
     paddingVertical10: {
         paddingVertical: 10
@@ -1773,6 +1773,16 @@ export const userMenuStyles = {
         paddingStart: 20,
         width: width / 1.35,
         height: 270,
+        elevation: 5
+    },
+    autoBatteryOptimizeModalView: {
+        margin: 250,
+        borderRadius: 20,
+        paddingTop: 10,
+        paddingEnd: 20,
+        paddingStart: 20,
+        width: width / 1.35,
+        height: 320,
         elevation: 5
     },
     verifyUserTextHeight: {
