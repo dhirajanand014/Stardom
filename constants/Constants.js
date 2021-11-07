@@ -689,6 +689,7 @@ export const errorMessages = {
     CONTACT_US_MAIL: `error@stardom.app`,
     COULD_NOT_SET_COLORS: `Could not set colors`,
     COULD_NOT_FETCH_PHOTOS_FROM_GALLERY: `Could not fetch photos from gallery`,
+    COULD_NOT_REQUEST_READ_EXTERNAL_STORAGE_PHOTOS: `Could not request read external storage for photos`,
     CONTACT_US_2: `, if this issue persists`,
     COULD_NOT_PERFORM_ACTION: `Could not perform action`,
     COULD_NOT_RENDER_MENUS: `Could not render menus in useEffect`,

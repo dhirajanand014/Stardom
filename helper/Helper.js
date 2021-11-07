@@ -1916,19 +1916,34 @@ export const fetchUserProfilePosts = async (userId, setPosts, postDetailsRef) =>
 
 export const fetchGalleryImages = async (cameraState, setCameraState) => {
     try {
-        const photos = await CameraRoll.getPhotos({
-            first: numericConstants.ONE_HUNDRED,
-            assetType: miscMessage.PHOTOS,
-            fromTime: moment().subtract(numericConstants.TWO, miscMessage.MONTHS).valueOf()
-        });
-        setCameraState({
-            ...cameraState, galleryImages: photos.edges && photos.edges.map(item => item.node) || jsonConstants.EMPTY,
-            uploadFromGallery: true
-        });
+        const permission = await requestReadExternalStoragePermission();
+        if (permission) {
+            const photos = await CameraRoll.getPhotos({
+                first: numericConstants.ONE_HUNDRED,
+                assetType: miscMessage.PHOTOS,
+                fromTime: moment().subtract(numericConstants.TWO, miscMessage.MONTHS).valueOf()
+            });
+            setCameraState({
+                ...cameraState, galleryImages: photos.edges && photos.edges.map(item => item.node) || jsonConstants.EMPTY,
+                uploadFromGallery: true
+            });
+        }
     } catch (error) {
         console.error(errorMessages.COULD_NOT_FETCH_PHOTOS_FROM_GALLERY, error);
     }
 }
+
+const requestReadExternalStoragePermission = async () => {
+    try {
+        let checkReadStoragePermission = PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+        if (checkReadStoragePermission !== PermissionsAndroid.RESULTS.GRANTED) {
+            checkReadStoragePermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+        }
+        return checkReadStoragePermission === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_REQUEST_READ_EXTERNAL_STORAGE_PHOTOS, error);
+    }
+};
 
 export const openGalleryFromCamera = async (selectImageCallback) => {
     try {
