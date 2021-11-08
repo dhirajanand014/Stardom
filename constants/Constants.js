@@ -1173,7 +1173,8 @@ export const SDMenuOptions = [
         icon: require(`../assets/menu/logout_icon.png`)
     }, {
         label: actionButtonTextConstants.WALLPAPER_CHANGE_POSTS,
-        key: actionButtonTextConstants.WALLPAPER_CHANGE_POSTS
+        key: actionButtonTextConstants.WALLPAPER_CHANGE_POSTS,
+        icon: require(`../assets/menu/wallpaper_change_posts_icon.png`)
     }, {
         label: actionButtonTextConstants.ABOUT_STARDOM,
         key: actionButtonTextConstants.ABOUT_STARDOM,

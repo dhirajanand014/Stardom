@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
@@ -262,8 +261,7 @@ public class StardomUtils {
      */
     private static void autoStartOnePlus(Context inContext) {
         Intent intent = new Intent();
-        intent.setData(Uri.parse("package:" + inContext.getPackageName()));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setAction(Constants.PACKAGE_ONE_PLUS_ACTION);
         inContext.startActivity(intent);
     }
