@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import java.util.Timer;
 
@@ -58,7 +57,6 @@ public class PhoneUnlockService extends Service {
 
         // Do execute the below code when the Wallpaper changer service is stopped on button click.
         if (!isStopServiceExplicit) {
-            Toast.makeText(getApplicationContext(), "Stop service not invoked", Toast.LENGTH_LONG).show();
             // call WallpaperReceiver which will restart this service
             Intent broadcastIntent = new Intent(this, PhoneUnlockWorkerReceiver.class);
             sendBroadcast(broadcastIntent);

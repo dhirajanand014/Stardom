@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.stardomapp.constants.Constants;
 import com.stardomapp.utils.StardomUtils;
@@ -28,7 +27,6 @@ public class ScreenLockReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         if (Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
-            Toast.makeText(context, "Receiver called", Toast.LENGTH_SHORT).show();
             try {
                 JSONObject wallPaper = StardomUtils.wallPaperActions(context, Constants.RETRIEVE_WALLPAPER);
                 if (null != wallPaper && wallPaper.has(Constants.POST_WALLPAPER_URL)) {
@@ -79,7 +77,6 @@ public class ScreenLockReceiver extends BroadcastReceiver {
         protected void onPostExecute(String inResult) {
             try {
                 if (!inResult.isEmpty()) {
-                    Toast.makeText(context, "Changed wallpaper", Toast.LENGTH_SHORT).show();
                     StardomUtils.wallPaperActions(context, Constants.INCREMENT_CURRENT_INDEX);
                 }
             } catch (Exception exception) {

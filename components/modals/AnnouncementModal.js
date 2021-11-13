@@ -17,12 +17,6 @@ export const AnnouncementModal = React.memo(({ postDetailsState, setPostDetailsS
         <Modal animationType="fade" transparent={true} visible={postDetailsState.announcementModal} onRequestClose={() => resetModal(postDetailsState, setPostDetailsState)}>
             <View style={[SDGenericStyles.fill, SDGenericStyles.alignItemsCenter]}>
                 <View style={[userMenuStyles.announcementModalView, SDGenericStyles.alignItemsCenter, SDGenericStyles.textBoxGray]}>
-                    {
-                        postDetailsState.announcement && postDetailsState.announcement.name &&
-                        <Text style={[SDGenericStyles.ft18, SDGenericStyles.fontFamilyRobotoMedium, SDGenericStyles.textColorWhite, SDGenericStyles.top20]}>
-                            {postDetailsState.announcement.name}
-                        </Text>
-                    }
                     <TouchableOpacity activeOpacity={.7} style={[SDGenericStyles.positionAbsolute, SDGenericStyles.right8, SDGenericStyles.padding8, SDGenericStyles.top6]}
                         onPress={() => resetModal()} >
                         <Image style={[glancePostStyles.icon_modal_close, SDGenericStyles.tintColorWhite]} source={require('../../assets/post_modal_close_icon.png')} />

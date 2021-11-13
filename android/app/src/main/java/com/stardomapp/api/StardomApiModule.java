@@ -233,7 +233,6 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
             }
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot remove post from wallpaper changer list", exception);
-            Toast.makeText(reactContext, "Cannot remove post from wallpaper changer list", Toast.LENGTH_SHORT).show();
             callback.invoke(false);
         }
     }
@@ -268,7 +267,6 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
             callback.invoke(isAutoStartEnabled);
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot start auto start permissions", exception);
-            Toast.makeText(reactContext, "Cannot start auto start permissions", Toast.LENGTH_SHORT).show();
             callback.invoke(false);
         }
     }

@@ -86,7 +86,6 @@ public class WallPaperChangeService {
         try {
             new Handler().postDelayed(this::handleImmediateWallpaperChange, Constants.INT_TWO_THOUSAND);
         } catch (Exception exception) {
-            Toast.makeText(context, "Could not handle delay of the wallpaper immediately!", Toast.LENGTH_SHORT).show();
             Log.e(Constants.TAG, "Could not handle delay of the wallpaper immediately on Alarm Set!", exception);
         }
     }
@@ -102,7 +101,6 @@ public class WallPaperChangeService {
                     WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
                     wallpaperManager.setBitmap(bitmapImage, null, true,
                             WallpaperManager.FLAG_SYSTEM);
-                    Toast.makeText(context, "Changed wallpaper", Toast.LENGTH_SHORT).show();
                     StardomUtils.wallPaperActions(context, Constants.INCREMENT_CURRENT_INDEX);
                 }
             }

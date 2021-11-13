@@ -257,7 +257,6 @@ public class StardomUtils {
             }
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Could not open auto start settings", exception);
-            Toast.makeText(inContext, "Failed to open auto start settings", Toast.LENGTH_SHORT).show();
         }
         return false;
     }

@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.stardomapp.constants.Constants;
 import com.stardomapp.utils.StardomUtils;
@@ -32,7 +31,6 @@ public class WallPaperChangeReceiver extends BroadcastReceiver {
                 String postURL = wallPaper.get(Constants.POST_WALLPAPER_URL).toString();
                 new AsyncSetWallPaper(context).execute(postURL);
             }
-            Toast.makeText(context, "Receiver called", Toast.LENGTH_SHORT).show();
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot process wallpaper change", exception);
         }
@@ -75,7 +73,6 @@ public class WallPaperChangeReceiver extends BroadcastReceiver {
         protected void onPostExecute(String inResult) {
             try {
                 if (!inResult.isEmpty()) {
-                    Toast.makeText(context, "Changed wallpaper", Toast.LENGTH_SHORT).show();
                     StardomUtils.wallPaperActions(context, Constants.INCREMENT_CURRENT_INDEX);
                 }
             } catch (Exception exception) {

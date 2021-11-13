@@ -1763,6 +1763,7 @@ export const userMenuStyles = {
         marginLeft: 20,
         marginRight: 50,
         marginBottom: 50,
+        paddingTop: 15,
         borderRadius: 20,
         paddingEnd: 20,
         paddingStart: 20,
