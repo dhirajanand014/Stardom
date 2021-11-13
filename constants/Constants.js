@@ -235,6 +235,7 @@ export const actionButtonTextConstants = {
     SETTINGS: `Settings`,
     RE_SCHEDULE: `ReSchedule`,
     SCHEDULE_WALLPAPER_CHANGE: `Schedule Wallpaper Change`,
+    UNLOCK_WALLPAPER_CHANGE: `Unlock Wallpaper Change`,
     CLEAR_ALL: `Clear All`
 }
 
@@ -775,10 +776,13 @@ export const errorMessages = {
     USER_DID_NOT_SHARE: `User did not share`,
     USER_CANCELLED_SHARE: `You cancelled sharing the image`,
     COULD_NOT_FETCH_WALLPAPER_CHANGE_SETTINGS_FROM_KEY_CHAIN: `Could not fetch wallpaper change settings from key chain`,
+    COULD_NOT_FETCH_UNLOCK_WALLPAPER_CHANGE_SETTINGS_FROM_KEY_CHAIN: `Could not fetch unlock wallpaper change settings from key chain`,
     COULD_NOT_FETCH_ALARM_STATUS: `Could not fetch alarm status`,
     COULD_NOT_RESET_WALLPAPER_SETTINGS: `Could not reset keychain wallpaper settings`,
     COULD_NOT_UPDATE_WALLPAPER_CHANGER_POSTS: `Could not update wallpaper changer posts`,
-    COULD_NOT_FETCH_ANNOUNCEMENTS: `Could not fetch announcements`
+    COULD_NOT_FETCH_ANNOUNCEMENTS: `Could not fetch announcements`,
+    COULD_NOT_SUBMIT_WALLPAPER_CHANGE_UNLOCK: `Could not submit change wallpaper on unlock`,
+    COULD_NOT_DISABLE_WALLPAPER_CHANGE_UNLOCK: `Could not disable change wallpaper on unlock`
 }
 
 export const responseStringData = {
@@ -960,7 +964,8 @@ export const miscMessage = {
     PRIVATE_REQUEST_ACCESS: `Private request access`,
     TYPE: `type`,
     FLASH_MODE: `flashMode`,
-    CHANGE_WALLPAPER_AUTOMATICALLY_TEXT: `Automatically Change Wallpaper`
+    CHANGE_WALLPAPER_AUTOMATICALLY_TEXT: `Automatically Change Wallpaper`,
+    CHANGE_WALLPAPER_UNLOCK_TEXT: `Change Wallpaper on Unlock`
 }
 
 export const requestConstants = {
@@ -1026,6 +1031,7 @@ export const keyChainConstansts = {
     POST_ID: `postId`,
     ANNOUNCEMENT_ID: `announcementId`,
     WALLPAPER_CHANGE_SETTINGS: `wallPaperChangeSettings`,
+    WALLPAPER_CHANGE_UNLOCK_SETTINGS: `wallPaperChangeUnlockSettings`,
     AUTO_START_WALLPAPER_CHANGE_UNLOCK: `autoStartWallPaperChangeUnlock`
 }
 

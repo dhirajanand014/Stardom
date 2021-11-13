@@ -10,8 +10,8 @@ import {
     stringConstants, wallpaperChangerConditions, wallpaperChangerIntervals
 } from '../../constants/Constants';
 import {
-    checkAlarmActive, checkAndOpenWallPaperChangeAutoStartModal, getWallPaperSettingsFromKeyChain,
-    resetWallpaperSettings, setScreenUnLockWallpaperService, setupWallPaperChanger,
+    checkAlarmActive, disableUnlockChange, getUnlockWallPaperSettingsFromKeyChain, getWallPaperSettingsFromKeyChain,
+    resetWallpaperSettings, setupWallPaperChanger, submitUnlockWallpaperChange,
 } from '../../helper/Helper';
 import { colors, glancePostStyles, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { SDDateTimePickerView } from '../../views/datePickerView/SDDateTimePickerView';
@@ -28,6 +28,7 @@ export const AutoWallPaperChangerSettings = () => {
         changeInterval: stringConstants.EMPTY,
         changeSpecificTime: stringConstants.EMPTY,
         scheduleWallPaperEnabled: false,
+        unlockWallPaperEnabled: false,
         showConfirmationModal: false,
         showAutoStartEnableModal: false,
         otherOEM: false,
@@ -37,25 +38,30 @@ export const AutoWallPaperChangerSettings = () => {
     useEffect(() => {
         (async () => {
             const changeSettings = await getWallPaperSettingsFromKeyChain();
-            await checkAlarmActive(wallPaperChangeSettings, setWallPaperChangeSettings, changeSettings, setValue);
+            const changeUnlockSettings = await getUnlockWallPaperSettingsFromKeyChain();
+            await checkAlarmActive(wallPaperChangeSettings, setWallPaperChangeSettings, changeSettings, changeUnlockSettings, setValue);
         })();
     }, jsonConstants.EMPTY)
 
     const onSubmit = async (data) => {
         wallPaperChangeSettings.scheduleWallPaperEnabled = true;
         data.scheduleWallPaperEnabled = wallPaperChangeSettings.scheduleWallPaperEnabled;
-        await checkAndOpenWallPaperChangeAutoStartModal(wallPaperChangeSettings, setWallPaperChangeSettings);
+        //await checkAndOpenWallPaperChangeAutoStartModal(wallPaperChangeSettings, setWallPaperChangeSettings);
         if (data.changeWallPaperCondition == miscMessage.WALLPAPER_TIME_INTERVAL) {
             await setupWallPaperChanger(miscMessage.SET_ALARM_MANAGER, data, stringConstants.EMPTY + data.changeWallPaperIntervals,
                 wallPaperChangeSettings, setWallPaperChangeSettings);
-            await setScreenUnLockWallpaperService(miscMessage.SET_WALLPAPER_CHANGE_ON_UNLOCK);
+            //await setScreenUnLockWallpaperService(miscMessage.SET_WALLPAPER_CHANGE_ON_UNLOCK);
         } else if (data.changeWallPaperCondition == miscMessage.WALLPAPER_TIME_SPECIFIC) {
             const millisValue = moment(data.changeWallPaperSpecificTime).valueOf();
             await setupWallPaperChanger(miscMessage.SET_ALARM_MANAGER, data, stringConstants.EMPTY + millisValue, wallPaperChangeSettings,
                 setWallPaperChangeSettings);
-            await setScreenUnLockWallpaperService(miscMessage.SET_WALLPAPER_CHANGE_ON_UNLOCK);
+            //await setScreenUnLockWallpaperService(miscMessage.STOP_UNLOCK_WALLPAPER_SERVICE);
         }
     };
+
+    const onSubmitUnlockWallpaperChange = async () => await submitUnlockWallpaperChange(wallPaperChangeSettings, setWallPaperChangeSettings);
+
+    const disableUnlockWallpaperChange = async () => await disableUnlockChange(wallPaperChangeSettings, setWallPaperChangeSettings);
 
     const disableWallPaperSettings = useCallback(async () => {
         await resetWallpaperSettings();
@@ -69,6 +75,11 @@ export const AutoWallPaperChangerSettings = () => {
         wallPaperChangeSettings.showConfirmationModal = false;
         setWallPaperChangeSettings({ ...wallPaperChangeSettings });
     });
+
+    const clearAllAction = async () => {
+        await disableWallPaperSettings();
+        await disableUnlockWallpaperChange();
+    }
 
     const confirmationCallback = useCallback(() => setWallPaperChangeSettings({ ...wallPaperChangeSettings, showConfirmationModal: true }));
     const closeConfirmationModal = useCallback(() => setWallPaperChangeSettings({ ...wallPaperChangeSettings, showConfirmationModal: false }));
@@ -105,6 +116,9 @@ export const AutoWallPaperChangerSettings = () => {
                         icon={<CalenderIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN} stroke={colors.SDOM_PLACEHOLDER} />} state={wallPaperChangeSettings} onSubmit={onSubmit}
                         handleSubmit={handleSubmit} />
                 }
+                <SDSwitchInputView inputName={actionButtonTextConstants.UNLOCK_WALLPAPER_CHANGE} falseColor={colors.SDOM_PLACEHOLDER} trueColor={colors.SDOM_YELLOW} thumbColor={colors.TEXT_WHITE}
+                    iosThumbColor={colors.TEXT_WHITE} textValue={miscMessage.CHANGE_WALLPAPER_UNLOCK_TEXT} onSubmit={onSubmitUnlockWallpaperChange} disableWallPaperSettings={disableUnlockWallpaperChange}
+                    value={wallPaperChangeSettings.unlockWallPaperEnabled} />
                 {
                     wallPaperChangeSettings.scheduleWallPaperEnabled && wallPaperChangeSettings.changeCondition &&
                     <View style={SDGenericStyles.paddingVertical25}>
@@ -119,7 +133,7 @@ export const AutoWallPaperChangerSettings = () => {
             </View>
             <WallPaperChangeAutoStartModal wallPaperChangeSettings={wallPaperChangeSettings} setWallPaperChangeSettings={setWallPaperChangeSettings} />
             <ConfirmationModal state={wallPaperChangeSettings} confirmationMessage={alertTextMessages.STOP_WALLPAPER_CHANGER_SERVICE} resetModal={closeConfirmationModal}
-                confirmationButtonText={actionButtonTextConstants.YES} confirmationCallback={disableWallPaperSettings} />
+                confirmationButtonText={actionButtonTextConstants.YES} confirmationCallback={clearAllAction} />
         </View>
     );
 }

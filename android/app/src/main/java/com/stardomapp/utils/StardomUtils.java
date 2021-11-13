@@ -4,6 +4,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
@@ -17,6 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -261,7 +267,7 @@ public class StardomUtils {
      */
     private static void autoStartOnePlus(Context inContext) {
         Intent intent = new Intent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setAction(Constants.PACKAGE_ONE_PLUS_ACTION);
         inContext.startActivity(intent);
     }
@@ -345,5 +351,81 @@ public class StardomUtils {
             return String.valueOf(TimeUnit.MINUTES.toHours(time)).concat(" hours.");
         }
         return String.valueOf(time).concat(" minutes.");
+    }
+
+    /**
+     * Perform the Auto increment of the wallpaper to be set based on the action. If the action is to retrive the wallpaper, it fetch the
+     * next application wallpaper to be applied to the device. If the action is to increment the auto wallpaper change index, then
+     * ii increments the loop index that would be helpful to fetch the next wallpaper to be applied in the next interval.
+     *
+     * @param inContext
+     * @param inAction
+     * @return
+     * @throws JSONException
+     */
+    public static JSONObject wallPaperActions(Context inContext, String inAction) throws JSONException {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(inContext);
+        String wallPaperJSONObject = preferences.getString(Constants.WALLPAPER_CHANGE_LIST, Constants.EMPTY);
+        JSONObject jsonObject = StardomUtils.parseJSONObject(wallPaperJSONObject);
+        if (!wallPaperJSONObject.isEmpty()) {
+            int currentIndex = (int) jsonObject.get(Constants.WALLPAPER_INDEX);
+            JSONArray wallPaperArray = jsonObject.getJSONArray(Constants.WALLPAPERS);
+            switch (inAction) {
+                case Constants.RETRIEVE_WALLPAPER:
+                    if (currentIndex < wallPaperArray.length() || currentIndex == wallPaperArray.length() - Constants.INT_ONE) {
+                        return wallPaperArray.getJSONObject(currentIndex);
+                    } else if (currentIndex > wallPaperArray.length() && wallPaperArray.length() > Constants.INT_ONE) {
+                        setWallPaperIndex(preferences, jsonObject, Constants.INT_ZERO);
+                        return wallPaperArray.getJSONObject(Constants.INT_ZERO);
+                    } else {
+                        setWallPaperIndex(preferences, jsonObject, Constants.INT_ZERO);
+                    }
+                    break;
+                case Constants.INCREMENT_CURRENT_INDEX:
+                    if (currentIndex < wallPaperArray.length() - Constants.INT_ONE) {
+                        setWallPaperIndex(preferences, jsonObject, currentIndex + Constants.INT_ONE);
+                    } else {
+                        setWallPaperIndex(preferences, jsonObject, Constants.INT_ZERO);
+                    }
+                    break;
+                default:
+                    Log.i(Constants.TAG, "No Wallpaper Actions matched: " + inAction);
+                    break;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Sets the updated Auto Wallpaper Change loop index in the Shared Preferences.
+     *
+     * @param preferences
+     * @param jsonObject
+     * @throws JSONException
+     */
+    private static void setWallPaperIndex(SharedPreferences preferences, JSONObject jsonObject, int inValue) throws JSONException {
+        jsonObject.put(Constants.WALLPAPER_INDEX, inValue);
+        SharedPreferences.Editor preferencesEditor = preferences.edit();
+        preferencesEditor.putString(Constants.WALLPAPER_CHANGE_LIST, jsonObject.toString());
+        preferencesEditor.apply();
+    }
+
+    /**
+     * Get the bitmap image by parsing the json that is stored in the async storage.
+     *
+     * @param inSrc
+     * @return
+     */
+    public static Bitmap getBitmapFromURL(String inSrc) throws IOException {
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(inSrc).openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            return BitmapFactory.decodeStream(input);
+        } catch (Exception exception) {
+            Log.e(Constants.TAG, "Could not get bitmap image from URL", exception);
+        }
+        return null;
     }
 }

@@ -719,6 +719,9 @@ export const onChangeByValueType = async (inputProps, value, props) => {
                 props.handleSubmit(props.onSubmit)();
             }
             break;
+        case actionButtonTextConstants.UNLOCK_WALLPAPER_CHANGE:
+            value && props.onSubmit() || props.disableWallPaperSettings();
+            break;
         case actionButtonTextConstants.SCHEDULE_WALLPAPER_CHANGE:
             value && props.handleSubmit(props.onSubmit)() || props.disableWallPaperSettings();
             break;
@@ -2222,7 +2225,15 @@ export const getWallPaperSettingsFromKeyChain = async () => {
     }
 }
 
-export const checkAlarmActive = async (wallPaperChangeSettings, setWallPaperChangeSettings, changeSettings, setValue) => {
+export const getUnlockWallPaperSettingsFromKeyChain = async () => {
+    try {
+        return await getKeyChainDetails(keyChainConstansts.WALLPAPER_CHANGE_UNLOCK_SETTINGS);
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_UNLOCK_WALLPAPER_CHANGE_SETTINGS_FROM_KEY_CHAIN, error);
+    }
+}
+
+export const checkAlarmActive = async (wallPaperChangeSettings, setWallPaperChangeSettings, changeSettings, changeUnlockSettings, setValue) => {
     try {
         await NativeModules.StartomApi.checkAlarmActive((response) => {
             if (changeSettings) {
@@ -2234,8 +2245,12 @@ export const checkAlarmActive = async (wallPaperChangeSettings, setWallPaperChan
                 wallPaperChangeSettings.isAlarmActive = response;
                 setValue(fieldControllerName.CHANGE_WALLPAPER_CONDITION, wallPaperChangeSettings.changeCondition);
                 setValue(fieldControllerName.CHANGE_WALLPAPER_INTERVALS, wallPaperChangeSettings.changeInterval);
-                setWallPaperChangeSettings({ ...wallPaperChangeSettings });
             }
+            if (changeUnlockSettings) {
+                const parsedUnlockSettings = JSON.parse(changeUnlockSettings.password);
+                wallPaperChangeSettings.unlockWallPaperEnabled = parsedUnlockSettings;
+            }
+            setWallPaperChangeSettings({ ...wallPaperChangeSettings });
         });
     } catch (error) {
         console.error(errorMessages.COULD_NOT_FETCH_ALARM_STATUS, error);
@@ -2246,7 +2261,6 @@ export const resetWallpaperSettings = async () => {
     try {
         await NativeModules.StartomApi.wallPaperChangeActionService(miscMessage.CANCEL_ALARM_MANAGER, stringConstants.EMPTY,
             stringConstants.EMPTY);
-        await setScreenUnLockWallpaperService(miscMessage.STOP_UNLOCK_WALLPAPER_SERVICE);
         await Keychain.resetGenericPassword({ service: keyChainConstansts.WALLPAPER_CHANGE_SETTINGS });
     } catch (error) {
         console.error(errorMessages.COULD_NOT_RESET_WALLPAPER_SETTINGS, error);
@@ -2296,5 +2310,28 @@ export const fetchAndDisplayAnnouncement = async (postDetailsState, setPostDetai
         }
     } catch (error) {
         console.log(errorMessages.COULD_NOT_FETCH_ANNOUNCEMENTS, error);
+    }
+}
+
+export const submitUnlockWallpaperChange = async (wallPaperChangeSettings, setWallPaperChangeSettings) => {
+    try {
+        await checkAndOpenWallPaperChangeAutoStartModal(wallPaperChangeSettings, setWallPaperChangeSettings);
+        await setScreenUnLockWallpaperService(miscMessage.SET_WALLPAPER_CHANGE_ON_UNLOCK);
+        await saveDetailsToKeyChain(keyChainConstansts.WALLPAPER_CHANGE_UNLOCK_SETTINGS, keyChainConstansts.WALLPAPER_CHANGE_UNLOCK_SETTINGS,
+            JSON.stringify(true));
+        setWallPaperChangeSettings({ ...wallPaperChangeSettings, unlockWallPaperEnabled: true });
+    } catch (error) {
+        console.log(errorMessages.COULD_NOT_SUBMIT_WALLPAPER_CHANGE_UNLOCK, error);
+    }
+}
+
+export const disableUnlockChange = async (wallPaperChangeSettings, setWallPaperChangeSettings) => {
+    try {
+        await setScreenUnLockWallpaperService(miscMessage.STOP_UNLOCK_WALLPAPER_SERVICE);
+        await saveDetailsToKeyChain(keyChainConstansts.WALLPAPER_CHANGE_UNLOCK_SETTINGS, keyChainConstansts.WALLPAPER_CHANGE_UNLOCK_SETTINGS,
+            JSON.stringify(false));
+        setWallPaperChangeSettings({ ...wallPaperChangeSettings, unlockWallPaperEnabled: false });
+    } catch (error) {
+        console.log(errorMessages.COULD_NOT_DISABLE_WALLPAPER_CHANGE_UNLOCK, error);
     }
 }

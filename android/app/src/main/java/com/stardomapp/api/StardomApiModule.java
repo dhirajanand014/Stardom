@@ -183,6 +183,7 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
                 case Constants.SET_ALARM_MANAGER:
                     wallPaperChangeService.cancelAlarmManager();
                     wallPaperChangeService.setAlarmManager(inCondition, Long.valueOf(inLongMilliSeconds));
+                    wallPaperChangeService.callDelaySetWallpaper();
                     break;
                 case Constants.CANCEL_ALARM_MANAGER:
                     wallPaperChangeService.cancelAlarmManager();
@@ -248,6 +249,7 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
                 reactContext.getApplicationContext().stopService(serviceIntent);
                 WorkManager workManager = WorkManager.getInstance(reactContext.getApplicationContext());
                 workManager.cancelAllWork();
+                Toast.makeText(reactContext.getApplicationContext(), "Disabled Auto Wallpaper change on Unlock!", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot stop unlock work manager for " + Constants.UNIQUE_WORK_NAME, exception);
@@ -360,6 +362,7 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
             // https://developer.android.com/topic/libraries/architecture/workmanager/how-to/unique-work
             // do check for AutoStart permission
             workManager.enqueueUniquePeriodicWork(Constants.UNIQUE_WORK_NAME, ExistingPeriodicWorkPolicy.REPLACE, request);
+            Toast.makeText(reactContext.getApplicationContext(), "Enabled Auto Wallpaper change on Unlock!", Toast.LENGTH_SHORT).show();
         } catch (Exception exception) {
             Log.e(Constants.TAG, "Cannot start unlock work manager for " + Constants.UNIQUE_WORK_NAME, exception);
         }

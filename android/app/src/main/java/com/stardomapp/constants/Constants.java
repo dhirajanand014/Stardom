@@ -11,6 +11,7 @@ public class Constants {
     public static final Integer INT_FORTY_FIVE = 45;
     public static final Integer INT_SIXTY = 60;
     public static final Integer INT_ONE_THOUSAND = 1000;
+    public static final Integer INT_TWO_THOUSAND = 2000;
     public static final Integer ALARM_MANAGER_REQUEST_CODE = 1001;
 
     public static final String EMPTY = "";
