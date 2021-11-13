@@ -2280,3 +2280,21 @@ export const updateWallPaperPosts = async (autoWallPaperChangerPosts, setAutoWal
         console.error(errorMessages.COULD_NOT_UPDATE_WALLPAPER_CHANGER_POSTS, error);
     }
 }
+
+export const fetchAndDisplayAnnouncement = async (postDetailsState, setPostDetailsState) => {
+    try {
+        const response = await axiosGetWithHeaders(urlConstants.fetchAnnouncement);
+        const responseData = processResponseData(response);
+        if (responseData && responseData.announcement) {
+            const currentAnnouncementId = await getKeyChainDetails(keyChainConstansts.ANNOUNCEMENT_ID);
+            if ((!currentAnnouncementId) || (currentAnnouncementId && parseInt(currentAnnouncementId.password) !== responseData.announcement.id)) {
+                setPostDetailsState({
+                    ...postDetailsState, announcementModal: true,
+                    announcement: responseData.announcement
+                });
+            }
+        }
+    } catch (error) {
+        console.log(errorMessages.COULD_NOT_FETCH_ANNOUNCEMENTS, error);
+    }
+}

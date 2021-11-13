@@ -320,7 +320,7 @@ public class StardomApiModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Check for device brand that matches original OEMs for disbalement of battery optimization.
+     * Check for device brand that matches original OEMs for disablement of battery optimization.
      *
      * @param callback
      */

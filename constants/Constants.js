@@ -108,6 +108,7 @@ export const urlConstants = {
     deleteProfileImage: `${BASE_URI}/auth/deleteprofileimage`,
     fetchUsersFollowers: `${BASE_URI}/user/followers/fetch`,
     fetchUsersFollowings: `${BASE_URI}/user/following/fetch`,
+    fetchAnnouncement: `${BASE_URI}/announcement/latest`,
     fetchAllUsers: `${BASE_URI}/user/allusers/fetch`,
     updateDeviceToken: `${BASE_URI}/auth/updatedeviceid`,
     likesCount: `${BASE_URI}/likescount`,
@@ -202,6 +203,7 @@ export const actionButtonTextConstants = {
     NOT_NOW: `Not now`,
     PROCEED: `Proceed`,
     UPLOAD_IMAGE_GALLERY: `Upload from Gallery`,
+    CLOSE: `Close`,
     CLOSE_IMAGE_GALLERY: `Close Gallery`,
     VERIFY: `Verify`,
     FORGOT_PASSWORD: `Forgot Password`,
@@ -775,7 +777,8 @@ export const errorMessages = {
     COULD_NOT_FETCH_WALLPAPER_CHANGE_SETTINGS_FROM_KEY_CHAIN: `Could not fetch wallpaper change settings from key chain`,
     COULD_NOT_FETCH_ALARM_STATUS: `Could not fetch alarm status`,
     COULD_NOT_RESET_WALLPAPER_SETTINGS: `Could not reset keychain wallpaper settings`,
-    COULD_NOT_UPDATE_WALLPAPER_CHANGER_POSTS: `Could not update wallpaper changer posts`
+    COULD_NOT_UPDATE_WALLPAPER_CHANGER_POSTS: `Could not update wallpaper changer posts`,
+    COULD_NOT_FETCH_ANNOUNCEMENTS: `Could not fetch announcements`
 }
 
 export const responseStringData = {
@@ -1021,6 +1024,7 @@ export const keyChainConstansts = {
     SAVE_POST_COUNTS: `save_post_counts`,
     SAVE_SELECTED_REPORT: `save_selected_report`,
     POST_ID: `postId`,
+    ANNOUNCEMENT_ID: `announcementId`,
     WALLPAPER_CHANGE_SETTINGS: `wallPaperChangeSettings`,
     AUTO_START_WALLPAPER_CHANGE_UNLOCK: `autoStartWallPaperChangeUnlock`
 }

@@ -330,7 +330,7 @@ PODS:
   - react-native-image-filter-kit (0.8.0):
     - Bolts/Tasks (= 1.9.0)
     - React
-  - react-native-netinfo (6.0.6):
+  - react-native-netinfo (6.1.0):
     - React-Core
   - react-native-restart (0.0.20):
     - React-Core
@@ -720,7 +720,7 @@ SPEC CHECKSUMS:
   react-native-camera: fefef39fcd20850d17c3780638b04f741e0ccaae
   react-native-cameraroll: 60ac50a5209777cbccfe8d7a62d0743a9da87060
   react-native-image-filter-kit: b9eca5dfedde622e3801c4657bcdead62896cf00
-  react-native-netinfo: 539406ec93567c9cc33d27aeb9e33f6d967a3af2
+  react-native-netinfo: 5127a89b1d2b31766b1e7f0be4579b0d2649d746
   react-native-restart: 6cc683e208c080581c147d0875609e64572a9443
   react-native-safe-area-context: 5cf05f49df9d17261e40e518481f2e334c6cd4b5
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a

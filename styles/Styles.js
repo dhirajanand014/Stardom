@@ -76,6 +76,9 @@ export const SDGenericStyles = StyleSheet.create({
     top8: {
         top: 8
     },
+    top20: {
+        top: 20
+    },
     right8: {
         right: 8
     },
@@ -1755,6 +1758,16 @@ export const userMenuStyles = {
         height: 180,
         elevation: 5
     },
+    announcementModalView: {
+        marginTop: 50,
+        marginLeft: 20,
+        marginRight: 50,
+        marginBottom: 50,
+        borderRadius: 20,
+        paddingEnd: 20,
+        paddingStart: 20,
+        elevation: 5
+    },
     reschedueWallpaperChangeModalView: {
         margin: 280,
         borderRadius: 20,
@@ -1820,7 +1833,7 @@ export const userMenuStyles = {
     },
     userNoButton: {
         borderRadius: 25,
-        paddingHorizontal: 20,
+        paddingHorizontal: 15,
         paddingVertical: 8,
         width: 80,
         elevation: 3,
