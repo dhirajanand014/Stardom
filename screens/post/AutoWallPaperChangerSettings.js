@@ -46,16 +46,13 @@ export const AutoWallPaperChangerSettings = () => {
     const onSubmit = async (data) => {
         wallPaperChangeSettings.scheduleWallPaperEnabled = true;
         data.scheduleWallPaperEnabled = wallPaperChangeSettings.scheduleWallPaperEnabled;
-        //await checkAndOpenWallPaperChangeAutoStartModal(wallPaperChangeSettings, setWallPaperChangeSettings);
         if (data.changeWallPaperCondition == miscMessage.WALLPAPER_TIME_INTERVAL) {
             await setupWallPaperChanger(miscMessage.SET_ALARM_MANAGER, data, stringConstants.EMPTY + data.changeWallPaperIntervals,
                 wallPaperChangeSettings, setWallPaperChangeSettings);
-            //await setScreenUnLockWallpaperService(miscMessage.SET_WALLPAPER_CHANGE_ON_UNLOCK);
         } else if (data.changeWallPaperCondition == miscMessage.WALLPAPER_TIME_SPECIFIC) {
             const millisValue = moment(data.changeWallPaperSpecificTime).valueOf();
             await setupWallPaperChanger(miscMessage.SET_ALARM_MANAGER, data, stringConstants.EMPTY + millisValue, wallPaperChangeSettings,
                 setWallPaperChangeSettings);
-            //await setScreenUnLockWallpaperService(miscMessage.STOP_UNLOCK_WALLPAPER_SERVICE);
         }
     };
 

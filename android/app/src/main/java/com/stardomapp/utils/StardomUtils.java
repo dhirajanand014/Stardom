@@ -174,7 +174,7 @@ public class StardomUtils {
         } else if (Constants.TRIGGER_SPECIFIC_TIME.equals(inCondition)) {
             millisCalendar.setTimeInMillis(inLongMilliSeconds);
             Calendar newCalendar = Calendar.getInstance();
-            if (millisCalendar.get(Calendar.HOUR_OF_DAY) <= Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            if (millisCalendar.get(Calendar.HOUR_OF_DAY) < Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
                 newCalendar.add(Calendar.DAY_OF_YEAR, Constants.INT_ONE); // add, not set!
             }
             newCalendar.set(Calendar.HOUR_OF_DAY, millisCalendar.get(Calendar.HOUR_OF_DAY));
