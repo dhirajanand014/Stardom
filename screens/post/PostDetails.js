@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useContext, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useCallback, useContext, useEffect, useImperativeHandle, useState } from 'react';
 import { Text, View, Image, Linking, TouchableOpacity } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { PostSearch } from '../../views/imagePost/PostSearch';
@@ -6,9 +6,10 @@ import {
     stringConstants, postCountTypes, numericConstants, miscMessage, jsonConstants,
     fieldControllerName, width, height, requestConstants
 } from '../../constants/Constants';
+import { colors } from '../../styles/Styles';
 import {
     increaseAndSetPostCounts, setPostDetailsStateForModal,
-    downloadImageFromURL, shareImage, showProgressSnackbar
+    downloadImageFromURL, shareImage, showProgressSnackbar, addRemoveWallPaperChanger, fetchAndDisplayAnnouncement
 } from '../../helper/Helper';
 import { glancePostStyles, SDGenericStyles } from '../../styles/Styles';
 import { PostDescriptionModal } from '../../views/imagePost/PostDescriptionModal';
@@ -16,6 +17,9 @@ import { PostReportAbuseModal } from '../../views/imagePost/PostReportAbuseModal
 import { SDWallpaperModal } from '../../views/imagePost/SDWallpaperModal';
 import { CategoryContext } from '../../App';
 import { RenderLoaderScroll } from '../../views/imagePost/RenderLoaderScroll';
+import { WallPaperChangerIcon } from '../../components/icons/WallPaperChangerIcon';
+import { WallPaperAddRemoveListModal } from '../../components/modals/WallPaperAddRemoveListModal';
+import { AnnouncementModal } from '../../components/modals/AnnouncementModal';
 
 const post_like = require(`../../assets/post_likes_icon.png`);
 const post_like_selected = require(`../../assets/post_likes_selected_icon.png`);
@@ -42,6 +46,10 @@ export const PostDetails = forwardRef((props, ref) => {
         wallpaperModal: false,
         descriptionModal: false,
         reportAbuseModal: false,
+        announcementModal: false,
+        announcement: stringConstants.EMPTY,
+        postAddWallPaperListModal: false,
+        postRemoveWallPaperListModal: false,
         selectedReportAbuse: {},
         reportAbuses: jsonConstants.EMPTY,
         reportAbuseSubmitDisabled: false,
@@ -98,6 +106,12 @@ export const PostDetails = forwardRef((props, ref) => {
                 setPostDetailsState({ ...postDetailsState, animationVisible: isVisible });
             }
         }));
+
+    useEffect(() => {
+        (async () => {
+            await fetchAndDisplayAnnouncement(postDetailsState, setPostDetailsState);
+        })();
+    }, jsonConstants.EMPTY)
 
     const setWallPaperModal = useCallback((postDetailsState, setPostDetailsState) => {
         setPostDetailsState({ ...postDetailsState, wallpaperModal: true });
@@ -263,6 +277,12 @@ export const PostDetails = forwardRef((props, ref) => {
                             {miscMessage.REPORT_ABUSE_TEXT}
                         </Text>
                     </View>
+                    <View style={SDGenericStyles.paddingTop25}>
+                        <TouchableOpacity style={glancePostStyles.backgroundRoundColor_wallpaper_changer} activeOpacity={.7}
+                            onPress={async () => await addRemoveWallPaperChanger(postDetailsState, setPostDetailsState)}>
+                            <WallPaperChangerIcon stroke={colors.WHITE} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             }
             {
@@ -278,6 +298,8 @@ export const PostDetails = forwardRef((props, ref) => {
             <PostDescriptionModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
                 setPostDetailsState={setPostDetailsState} />
             <PostReportAbuseModal postDetailsState={postDetailsState} setPostDetailsState={setPostDetailsState} />
+            <WallPaperAddRemoveListModal postDetailsState={postDetailsState} setPostDetailsState={setPostDetailsState} />
+            <AnnouncementModal postDetailsState={postDetailsState} setPostDetailsState={setPostDetailsState} />
             <SDWallpaperModal postDetailsState={postDetailsState} reportAbuseIcon={post_report_abuse}
                 setPostDetailsState={setPostDetailsState} />
             {

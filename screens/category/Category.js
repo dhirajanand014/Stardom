@@ -5,7 +5,7 @@ import { categoryViewStyles, SDGenericStyles } from '../../styles/Styles';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { getCategoryButtonType, saveCategoryDetailsToKeyChain } from '../../helper/Helper'
 import { CategoryRenderer } from './CategoryRenderer.js';
-import { TourGuideZone, useTourGuideController } from 'rn-tourguide';
+import { useTourGuideController } from 'rn-tourguide';
 import {
     backHandlerConstants, jsonConstants, stringConstants,
     actionButtonTextConstants, numericConstants,
@@ -62,7 +62,6 @@ export const Category = () => {
             start();
         }
     }, [canStart]);
-
 
     return (
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]} pointerEvents={loader.isLoading && miscMessage.NONE || miscMessage.AUTO}>

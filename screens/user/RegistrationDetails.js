@@ -9,7 +9,7 @@ import {
     modalTextConstants, defaultProfilesValue, alertTextMessages, screens
 } from '../../constants/Constants';
 import { SDGenericStyles, userAuthStyles, colors, glancePostStyles } from '../../styles/Styles';
-import { SDDatePickerView } from '../../views/datePickerView/SDDatePickerView';
+import { SDDateTimePickerView } from '../../views/datePickerView/SDDateTimePickerView';
 import { SDGenderRadioOptionView } from '../../views/fromInputView/SDGenderRadioOptionView';
 import { AuthHeaderText } from '../../views/fromInputView/AuthHeaderText';
 import { CalenderIcon } from '../../components/icons/CalenderIcon';
@@ -79,16 +79,16 @@ export const RegistrationDetails = () => {
                         icon={<RegisterUserIcon width={numericConstants.EIGHTEEN} height={numericConstants.EIGHTEEN}
                             stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
-                    <SDDatePickerView inputName={fieldControllerName.DOB} control={control} rules={formRequiredRules.datePickerFormRule} maximumDate={Date.now()}
+                    <SDDateTimePickerView inputName={fieldControllerName.DOB} control={control} rules={formRequiredRules.datePickerFormRule} maximumDate={Date.now()}
                         defaultValue={stringConstants.EMPTY} formState={formState} mode={miscMessage.DATE} dateFormat={miscMessage.DOB_DATE_FORMAT}
                         display={keyBoardTypeConst.DEFAULT} placeHolderText={placeHolderText.DOB} icon={<CalenderIcon width={numericConstants.EIGHTEEN}
                             height={numericConstants.EIGHTEEN} stroke={formState.errors[fieldControllerName.USER_ID]?.message && colors.RED || colors.SDOM_PLACEHOLDER} />} />
 
                     <SDDropDownView inputName={fieldControllerName.PROFILE} control={control} rules={formRequiredRules.profileRule} selectedLabelStyle={SDGenericStyles.textColorWhite}
                         containerStyle={userAuthStyles.dropDownPickerStyle} dropDownPickerStyle={glancePostStyles.addPostDropDownStyle} placeHolderText={placeHolderText.SELECT_A_PROFILE}
-                        defaultValue={stringConstants.EMPTY} formState={formState} list={profiles.filter(role => role.value != numericConstants.MINUS_ONE)}
-                        dropDownDefaultValue={profiles.length && profiles.find(role => role.value == numericConstants.ZERO).value || defaultProfilesValue.value}
-                        extraStyles={[SDGenericStyles.textBoxGray]} globalTextStyle={[SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />
+                        formState={formState} list={profiles.filter(role => role.value != numericConstants.MINUS_ONE)} extraStyles={[SDGenericStyles.textBoxGray]}
+                        defaultValue={profiles.length && profiles.find(role => role.value == numericConstants.ZERO).value || defaultProfilesValue.value}
+                        globalTextStyle={[SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.ft16, SDGenericStyles.textColorWhite]} />
 
                     <SDGenderRadioOptionView inputName={fieldControllerName.GENDER} control={control} rules={formRequiredRules.genderRule} formState={formState}
                         defaultValue={stringConstants.EMPTY} checkValue={genderValue} />

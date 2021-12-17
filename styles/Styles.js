@@ -76,6 +76,9 @@ export const SDGenericStyles = StyleSheet.create({
     top8: {
         top: 8
     },
+    top20: {
+        top: 20
+    },
     right8: {
         right: 8
     },
@@ -502,6 +505,9 @@ export const SDGenericStyles = StyleSheet.create({
     paddingVertical5: {
         paddingVertical: 5
     },
+    paddingVertical8: {
+        paddingVertical: 8
+    },
     paddingVertical10: {
         paddingVertical: 10
     },
@@ -749,6 +755,11 @@ export const glancePostStyles = StyleSheet.create({
         width: 27,
         height: 27,
         borderRadius: 16,
+    },
+    backgroundRoundColor_wallpaper_changer: {
+        alignItems: 'center',
+        width: 27,
+        height: 27,
     },
     postProfileName: {
         marginRight: 1,
@@ -1451,6 +1462,12 @@ export const userAuthStyles = StyleSheet.create({
         width: width / 2,
         paddingBottom: 12
     },
+    primaryHeaderButtonText: {
+        fontSize: 12,
+        textAlign: 'center',
+        borderRadius: 8,
+        color: '#1b1f2b'
+    },
     primaryActionButtonButtonText: {
         fontSize: 18,
         textAlign: 'center',
@@ -1668,6 +1685,7 @@ export const colors = {
     GREY: `#7e7e7e`,
     SDOM_BLACK: `#1b1f2b`,
     SDOM_TEXT_BOX: `#343642`,
+    SDOM_INTRO_BACKGROUND: `#fff001`,
     WHITE_GREY: `#d4d4d4`,
     DARK_GREY: `#555555`,
     LIGHT_BLACK: `#212121`,
@@ -1678,6 +1696,7 @@ export const colors = {
     YELLOW: `#fec72e`,
     SDOM_YELLOW: `#eabe05`,
     SDOM_PLACEHOLDER: `#969696`,
+    TEXT_WHITE: `#f4f4f4`,
     LIGHT_GREY: `#a9a9a9`,
     PALE_YELLOW: `#fff6ef`,
     DARK_CONTENT: `dark-content`,
@@ -1739,6 +1758,47 @@ export const userMenuStyles = {
         height: 180,
         elevation: 5
     },
+    announcementModalView: {
+        marginTop: 50,
+        marginLeft: 20,
+        marginRight: 50,
+        marginBottom: 50,
+        paddingTop: 15,
+        borderRadius: 20,
+        paddingEnd: 20,
+        paddingStart: 20,
+        elevation: 5
+    },
+    reschedueWallpaperChangeModalView: {
+        margin: 280,
+        borderRadius: 20,
+        paddingTop: 20,
+        paddingEnd: 25,
+        paddingStart: 25,
+        width: width / 1.2,
+        height: 180,
+        elevation: 5
+    },
+    autoStartModalView: {
+        margin: 250,
+        borderRadius: 20,
+        paddingTop: 10,
+        paddingEnd: 20,
+        paddingStart: 20,
+        width: width / 1.35,
+        height: 270,
+        elevation: 5
+    },
+    autoBatteryOptimizeModalView: {
+        margin: 250,
+        borderRadius: 20,
+        paddingTop: 10,
+        paddingEnd: 20,
+        paddingStart: 20,
+        width: width / 1.35,
+        height: 320,
+        elevation: 5
+    },
     verifyUserTextHeight: {
         justifyContent: 'center',
         maxHeight: 150
@@ -1768,15 +1828,30 @@ export const userMenuStyles = {
         borderRadius: 25,
         paddingHorizontal: 20,
         paddingVertical: 8,
-        width: 100,
+        width: 85,
         elevation: 3,
         backgroundColor: '#eabe05'
     },
     userNoButton: {
         borderRadius: 25,
-        paddingHorizontal: 20,
+        paddingHorizontal: 15,
         paddingVertical: 8,
         width: 80,
+        elevation: 3,
+        backgroundColor: '#eabe05'
+    },
+    userRemoveButton: {
+        borderRadius: 25,
+        paddingVertical: 8,
+        width: 105,
+        elevation: 3,
+        backgroundColor: '#eabe05'
+    },
+    userRescheduleButton: {
+        borderRadius: 25,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        width: 120,
         elevation: 3,
         backgroundColor: '#eabe05'
     },

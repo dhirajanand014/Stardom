@@ -46,7 +46,6 @@ export const Posts = props => {
         <View style={[SDGenericStyles.fill, SDGenericStyles.backGroundColorBlack]}>
             <FlatList data={userPosts.posts} numColumns={numericConstants.THREE} keyExtractor={(item) => item.id}
                 renderItem={({ item }) => <PostRenderer item={item} postCallback={postCallback} />} />
-
             <AddPostSelectionModal isFrom={screens.POSTS} navigation={navigation} setShowSelection={setShowSelection}
                 showSelection={showSelection} />
         </View>

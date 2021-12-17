@@ -34,7 +34,7 @@ export const Glance = ({ navigation }) => {
     const postId = route.params?.postIdFromNotification || postIdFromNotification;
     const profileId = route.params?.profileIdFromShare || route.params?.params?.profileIdFromShare;
 
-    let { height } = Dimensions.get(miscMessage.WINDOW);
+    let { height } = Dimensions.get(miscMessage.SCREEN);
     height += StatusBar.currentHeight;
 
     useEffect(() => {

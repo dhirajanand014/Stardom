@@ -5,7 +5,7 @@ import {
     urlConstants, keyChainConstansts, permissionsButtons,
     postCountTypes, savePostCountKeys, permissionMessages,
     stringConstants, alertTextMessages, responseStringData, PRIVATE_FOLLOW_UNFOLLOW, keyBoardTypeConst,
-    actionButtonTextConstants, colorConstants, getDefaultProfilePostsCounts,
+    actionButtonTextConstants, getDefaultProfilePostsCounts,
     miscMessage, width, height, numericConstants, placeHolderText,
     screens, headerStrings, fieldControllerName, isAndroid, notificationConsts,
     isIOS, OTP_INPUTS, errorMessages, requestConstants, modalTextConstants,
@@ -13,13 +13,12 @@ import {
     formRequiredRules, countRanges, RESEND_OTP_TIME_LIMIT, BASE_DOMAIN
 } from '../constants/Constants';
 import {
-    Linking,
-    NativeModules,
-    PermissionsAndroid, ToastAndroid
+    Linking, NativeModules, PermissionsAndroid,
+    Text, ToastAndroid, TouchableOpacity, View
 } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 import { withDelay, withSpring } from 'react-native-reanimated';
-import { colors, SDGenericStyles } from '../styles/Styles';
+import { colors, SDGenericStyles, userAuthStyles } from '../styles/Styles';
 import RNOtpVerify from 'react-native-otp-verify';
 import { TourGuideZone } from 'rn-tourguide';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -33,6 +32,7 @@ import CameraRoll from '@react-native-community/cameraroll';
 import { createChannel } from '../notification/notification';
 import { Importance } from 'react-native-push-notification';
 import { TabActions } from '@react-navigation/routers';
+import { SettingsIcon } from '../components/icons/SettingsIcon';
 
 export const fetchCategoryData = async () => {
     try {
@@ -173,9 +173,49 @@ export const getPostCounts = async () => {
 
 export const setCurrentImageAsWallPaper = async (postUrl, postTitle, option) => {
     try {
-        NativeModules.StartomApi.setPostAsWallPaper(postTitle, postUrl, option);
+        await NativeModules.StartomApi.setPostAsWallPaper(postTitle, postUrl, option);
     } catch (error) {
         console.error(errorMessages.COULD_NOT_SET_WALLPAPER, error);
+    }
+}
+
+export const setupWallPaperChanger = async (inAction, inData, inLongMilliSeconds, wallPaperChangeSettings, setWallPaperChangeSettings) => {
+    try {
+        await NativeModules.StartomApi.wallPaperChangeActionService(inAction, inData.changeWallPaperCondition, inLongMilliSeconds);
+        await saveDetailsToKeyChain(keyChainConstansts.WALLPAPER_CHANGE_SETTINGS, keyChainConstansts.WALLPAPER_CHANGE_SETTINGS,
+            JSON.stringify(inData));
+        wallPaperChangeSettings.changeCondition = inData.changeWallPaperCondition || stringConstants.EMPTY;
+        wallPaperChangeSettings.changeInterval = inData.changeWallPaperIntervals || stringConstants.EMPTY;
+        wallPaperChangeSettings.changeSpecificTime = inData.changeWallPaperSpecificTime || stringConstants.EMPTY;
+        wallPaperChangeSettings.isAlarmActive = true;
+        setWallPaperChangeSettings({ ...wallPaperChangeSettings });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_SETUP_WALLPAPER_CHANGE, error);
+    }
+}
+
+export const addRemoveWallPaperChanger = async (postDetailsState, setPostDetailsState) => {
+    try {
+        const { currentPost } = postDetailsState;
+        await NativeModules.StartomApi.checkPostInWallPaperList(currentPost.id,
+            (response) => setPostDetailsStateForModal(postDetailsState, setPostDetailsState, response && miscMessage.POST_REMOVE_WALLPAPER_MODAL_NAME
+                || miscMessage.POST_ADD_WALLPAPER_MODAL_NAME));
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_CHECK_WALLPAPER_LIST, error);
+    }
+}
+
+export const getWallPapersList = async (state, setState) => {
+    try {
+        await NativeModules.StartomApi.getWallPaperChangeList((wallPaperPosts) => {
+            if (wallPaperPosts) {
+                const posts = JSON.parse(wallPaperPosts);
+                state.posts = posts.wallPapers || jsonConstants.EMPTY;
+            }
+            setState({ ...state });
+        });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_WALLPAPER_CHANGE_LIST, error);
     }
 }
 
@@ -315,6 +355,35 @@ export const setReportAbuseSelectedOption = (postDetailsState, setPostDetailsSta
             [requestConstants.POST_REPORT_ABUSE_SUBMITTED]: false
         }
     });
+}
+
+export const addWallPaperStartdomApi = async (inAction, currentPost) => {
+    try {
+        await NativeModules.StartomApi.addRemoveWallPaperAsyncStorage(inAction, currentPost.id, currentPost.postTitle, currentPost.postImage);
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_ADD_WALLPAPER_TO_CHANGE_LIST, error);
+    }
+}
+
+export const enableAutoStartPermission = async (resetModal) => {
+    try {
+        await NativeModules.StartomApi.redirectAutoStartPermission(async (isAutoStartEnabled) => {
+            await saveDetailsToKeyChain(keyChainConstansts.AUTO_START_WALLPAPER_CHANGE_UNLOCK, keyChainConstansts.AUTO_START_WALLPAPER_CHANGE_UNLOCK,
+                JSON.stringify(isAutoStartEnabled));
+            resetModal();
+        });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_AUTO_START_PERMISSION, error);
+    }
+}
+
+const checkOtherOEMBatteryOptimizationEnabled = async (state, setState) => {
+    try {
+        await NativeModules.StartomApi.checkOtherOEMBatteryOptimization((isBatteryOptimizationDisabled) =>
+            !isBatteryOptimizationDisabled && checkPhoneBrand(state, setState));
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_CHECK_BATTERY_OPTIMIZATION, error);
+    }
 }
 
 export const setOptionsStateRadioOptions = (optionsState, setOptionsState) => {
@@ -635,14 +704,66 @@ export const onChangeByValueType = async (inputProps, value, props) => {
             break;
         case fieldControllerName.SEARCH_FOLLOWERS:
         case fieldControllerName.SEARCH_FOLLOWINGS:
-            const filteredFollowersFollowings = value && props.items.filter(user => user.name && user.name.toLowerCase().includes(value.toString().toLowerCase()))
-                || props.items;
+            const filteredFollowersFollowings = value && props.items.filter(user => user.name &&
+                user.name.toLowerCase().includes(value.toString().toLowerCase())) || props.items;
             props.setState({ ...props.state, users: filteredFollowersFollowings });
+            break;
+        case fieldControllerName.CHANGE_WALLPAPER_CONDITION:
+            props.setState({ ...props.state, changeCondition: value });
+            inputProps.onChange(value);
+            break;
+        case fieldControllerName.CHANGE_WALLPAPER_INTERVALS:
+        case fieldControllerName.CHANGE_WALLPAPER_SPECIFIC_TIME:
+            inputProps.onChange(value);
+            if (props.state.scheduleWallPaperEnabled && (props.state.changeInterval !== value || props.state.changeSpecificTime !== value)) {
+                props.handleSubmit(props.onSubmit)();
+            }
+            break;
+        case actionButtonTextConstants.UNLOCK_WALLPAPER_CHANGE:
+            value && props.onSubmit() || props.disableWallPaperSettings();
+            break;
+        case actionButtonTextConstants.SCHEDULE_WALLPAPER_CHANGE:
+            value && props.handleSubmit(props.onSubmit)() || props.disableWallPaperSettings();
             break;
         default:
             inputProps.onChange(value);
             break;
     }
+}
+
+export const checkAndOpenWallPaperChangeAutoStartModal = async (state, setState) => {
+    try {
+        const autoStartSetting = await getKeyChainDetails(keyChainConstansts.AUTO_START_WALLPAPER_CHANGE_UNLOCK);
+        if (autoStartSetting) {
+            const autoStartEnableModal = JSON.parse(autoStartSetting.password);
+            autoStartEnableModal && checkOtherOEMBatteryOptimizationEnabled(state, setState) || checkPhoneBrand(state, setState);
+        } else {
+            checkPhoneBrand(state, setState);
+        }
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_GET_WALLPAPER_CHANGE_UNLOCK_SETTING, error);
+    }
+}
+
+const checkPhoneBrand = async (state, setState) => await NativeModules.StartomApi.isOneOfPhoneBrand((response) => {
+    if (response) {
+        try {
+            const phoneBrandJSON = JSON.parse(response);
+            if (phoneBrandJSON.brand) {
+                if (phoneBrandJSON.otherOEM && !phoneBrandJSON.isBatteryOptimized) {
+                    state.otherOEM = true;
+                }
+                state.showAutoStartEnableModal = true;
+            }
+            setState({ ...state });
+        } catch (error) {
+            console.error(errorMessages.COULD_NOT_PARSE_PHONE_BRAND_CHECK, error);
+        }
+    }
+});
+
+export const convertTime = (event, datePickerProps, props) => {
+    onChangeByValueType(datePickerProps, event.nativeEvent.timestamp, props);
 }
 
 export const convertDate = (event, datePickerProps, props, date) => {
@@ -684,7 +805,7 @@ export const categoryHeader = () => {
         headerShown: true,
         headerTitle: headerStrings.SELECT_CATEGORY,
         headerStyle: SDGenericStyles.backGroundColorBlack,
-        headerTintColor: colorConstants.WHITE,
+        headerTintColor: colors.WHITE,
         headerTitleAlign: miscMessage.CENTER,
         headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium,
         navigationOptions: ({ navigation }) => ({
@@ -695,7 +816,40 @@ export const categoryHeader = () => {
                 </TourGuideZone>
             )
         })
-    })
+    });
+}
+
+export const wallPaperPostsHeader = props => {
+    return ({
+        headerShown: true,
+        headerTitle: props.title,
+        headerStyle: SDGenericStyles.backGroundColorBlack,
+        headerTintColor: colors.WHITE,
+        headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium,
+        headerRight: () => (
+            <View style={SDGenericStyles.marginRight10} >
+                <TouchableOpacity activeOpacity={.7} style={[userAuthStyles.primaryHeaderButtonText, SDGenericStyles.backgroundColorYellow,
+                SDGenericStyles.rowFlexDirection, SDGenericStyles.paddingHorizontal10, SDGenericStyles.alignItemsCenter]}
+                    onPress={async () => props.navigation.navigate(screens.AUTO_WALLPAPER_SETTINGS)}>
+                    <SettingsIcon height={numericConstants.TWENTY_FOUR} width={numericConstants.TWENTY_FOUR} stroke={colors.SDOM_BLACK} />
+                    <Text style={[SDGenericStyles.ft12, SDGenericStyles.paddingVertical8, SDGenericStyles.textCenterAlign,
+                    SDGenericStyles.fontFamilyRobotoRegular, SDGenericStyles.paddingLeft5]}>
+                        {actionButtonTextConstants.SETTINGS}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        )
+    });
+}
+
+export const wallPaperChangeSettingHeader = props => {
+    return ({
+        headerShown: true,
+        headerTitle: props.title,
+        headerStyle: SDGenericStyles.backGroundColorBlack,
+        headerTintColor: colors.WHITE,
+        headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium
+    });
 }
 
 export const authorizationHeader = props => {
@@ -703,7 +857,7 @@ export const authorizationHeader = props => {
         headerShown: true,
         headerTitle: props.title,
         headerStyle: SDGenericStyles.backGroundColorBlack,
-        headerTintColor: colorConstants.WHITE,
+        headerTintColor: colors.WHITE,
         headerTitleAlign: miscMessage.CENTER,
         headerTitleStyle: SDGenericStyles.fontFamilyRobotoMedium,
         navigationOptions: ({ navigation }) => ({
@@ -711,7 +865,7 @@ export const authorizationHeader = props => {
                 <HeaderBackButton tintColor={SDGenericStyles.colorWhite} onPress={() => { navigation.goBack() }} />
             )
         })
-    })
+    });
 }
 
 export const onResendOtpButtonPress = async (firstTextInputRef, setOtpArray, setResendButtonDisabledTime, setAttemptsRemaining,
@@ -1765,19 +1919,34 @@ export const fetchUserProfilePosts = async (userId, setPosts, postDetailsRef) =>
 
 export const fetchGalleryImages = async (cameraState, setCameraState) => {
     try {
-        const photos = await CameraRoll.getPhotos({
-            first: numericConstants.ONE_HUNDRED,
-            assetType: miscMessage.PHOTOS,
-            fromTime: moment().subtract(numericConstants.TWO, miscMessage.MONTHS).valueOf()
-        });
-        setCameraState({
-            ...cameraState, galleryImages: photos.edges && photos.edges.map(item => item.node) || jsonConstants.EMPTY,
-            uploadFromGallery: true
-        });
+        const permission = await requestReadExternalStoragePermission();
+        if (permission) {
+            const photos = await CameraRoll.getPhotos({
+                first: numericConstants.ONE_HUNDRED,
+                assetType: miscMessage.PHOTOS,
+                fromTime: moment().subtract(numericConstants.TWO, miscMessage.MONTHS).valueOf()
+            });
+            setCameraState({
+                ...cameraState, galleryImages: photos.edges && photos.edges.map(item => item.node) || jsonConstants.EMPTY,
+                uploadFromGallery: true
+            });
+        }
     } catch (error) {
         console.error(errorMessages.COULD_NOT_FETCH_PHOTOS_FROM_GALLERY, error);
     }
 }
+
+const requestReadExternalStoragePermission = async () => {
+    try {
+        let checkReadStoragePermission = PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+        if (checkReadStoragePermission !== PermissionsAndroid.RESULTS.GRANTED) {
+            checkReadStoragePermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+        }
+        return checkReadStoragePermission === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_REQUEST_READ_EXTERNAL_STORAGE_PHOTOS, error);
+    }
+};
 
 export const openGalleryFromCamera = async (selectImageCallback) => {
     try {
@@ -2045,5 +2214,124 @@ export const viewSharedActionFromClosedApp = async (viewPagerRef, posts, postDet
         }
     } catch (error) {
         console.error(errorMessages.CANNOT_VIEW_CLOSED_APP_FROM_SHARE, error);
+    }
+}
+
+export const getWallPaperSettingsFromKeyChain = async () => {
+    try {
+        return await getKeyChainDetails(keyChainConstansts.WALLPAPER_CHANGE_SETTINGS);
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_WALLPAPER_CHANGE_SETTINGS_FROM_KEY_CHAIN, error);
+    }
+}
+
+export const getUnlockWallPaperSettingsFromKeyChain = async () => {
+    try {
+        return await getKeyChainDetails(keyChainConstansts.WALLPAPER_CHANGE_UNLOCK_SETTINGS);
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_UNLOCK_WALLPAPER_CHANGE_SETTINGS_FROM_KEY_CHAIN, error);
+    }
+}
+
+export const checkAlarmActive = async (wallPaperChangeSettings, setWallPaperChangeSettings, changeSettings, changeUnlockSettings, setValue) => {
+    try {
+        await NativeModules.StartomApi.checkAlarmActive((response) => {
+            if (changeSettings) {
+                const parsedSettings = JSON.parse(changeSettings.password);
+                wallPaperChangeSettings.changeCondition = parsedSettings.changeWallPaperCondition || stringConstants.EMPTY;
+                wallPaperChangeSettings.changeInterval = parsedSettings.changeWallPaperIntervals || stringConstants.EMPTY;
+                wallPaperChangeSettings.changeSpecificTime = new Date(parsedSettings.changeWallPaperSpecificTime) || stringConstants.EMPTY;
+                wallPaperChangeSettings.scheduleWallPaperEnabled = parsedSettings.scheduleWallPaperEnabled || false;
+                wallPaperChangeSettings.isAlarmActive = response;
+                setValue(fieldControllerName.CHANGE_WALLPAPER_CONDITION, wallPaperChangeSettings.changeCondition);
+                setValue(fieldControllerName.CHANGE_WALLPAPER_INTERVALS, wallPaperChangeSettings.changeInterval);
+            }
+            if (changeUnlockSettings) {
+                const parsedUnlockSettings = JSON.parse(changeUnlockSettings.password);
+                wallPaperChangeSettings.unlockWallPaperEnabled = parsedUnlockSettings;
+            }
+            setWallPaperChangeSettings({ ...wallPaperChangeSettings });
+        });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_FETCH_ALARM_STATUS, error);
+    }
+}
+
+export const resetWallpaperSettings = async () => {
+    try {
+        await NativeModules.StartomApi.wallPaperChangeActionService(miscMessage.CANCEL_ALARM_MANAGER, stringConstants.EMPTY,
+            stringConstants.EMPTY);
+        await Keychain.resetGenericPassword({ service: keyChainConstansts.WALLPAPER_CHANGE_SETTINGS });
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_RESET_WALLPAPER_SETTINGS, error);
+    }
+}
+export const setScreenUnLockWallpaperService = async (inAction) => {
+    try {
+        await NativeModules.StartomApi.wallPaperChangeActionService(inAction, stringConstants.EMPTY,
+            stringConstants.EMPTY);
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_RESET_WALLPAPER_SETTINGS, error);
+    }
+}
+
+export const updateWallPaperPosts = async (autoWallPaperChangerPosts, setAutoWallPaperChangerPosts) => {
+    try {
+        if (autoWallPaperChangerPosts.selectedPost) {
+            const jsonRequest = JSON.stringify(autoWallPaperChangerPosts.selectedPost);
+            await NativeModules.StartomApi.updateWallPaperChangerPosts(jsonRequest, (isRemoved) => {
+                if (isRemoved) {
+                    const removalIndex = autoWallPaperChangerPosts.posts.findIndex(post =>
+                        post.postId == autoWallPaperChangerPosts.selectedPost.postId);
+                    autoWallPaperChangerPosts.posts.splice(removalIndex, numericConstants.ONE);
+                }
+                autoWallPaperChangerPosts.selectedPost = stringConstants.EMPTY;
+                autoWallPaperChangerPosts.showConfirmationModal = false;
+                setAutoWallPaperChangerPosts({ ...autoWallPaperChangerPosts });
+            });
+        }
+    } catch (error) {
+        console.error(errorMessages.COULD_NOT_UPDATE_WALLPAPER_CHANGER_POSTS, error);
+    }
+}
+
+export const fetchAndDisplayAnnouncement = async (postDetailsState, setPostDetailsState) => {
+    try {
+        const response = await axiosGetWithHeaders(urlConstants.fetchAnnouncement);
+        const responseData = processResponseData(response);
+        if (responseData && responseData.announcement) {
+            const currentAnnouncementId = await getKeyChainDetails(keyChainConstansts.ANNOUNCEMENT_ID);
+            if ((!currentAnnouncementId) || (currentAnnouncementId && parseInt(currentAnnouncementId.password) !== responseData.announcement.id)) {
+                setPostDetailsState({
+                    ...postDetailsState, announcementModal: true,
+                    announcement: responseData.announcement
+                });
+            }
+        }
+    } catch (error) {
+        console.log(errorMessages.COULD_NOT_FETCH_ANNOUNCEMENTS, error);
+    }
+}
+
+export const submitUnlockWallpaperChange = async (wallPaperChangeSettings, setWallPaperChangeSettings) => {
+    try {
+        await checkAndOpenWallPaperChangeAutoStartModal(wallPaperChangeSettings, setWallPaperChangeSettings);
+        await setScreenUnLockWallpaperService(miscMessage.SET_WALLPAPER_CHANGE_ON_UNLOCK);
+        await saveDetailsToKeyChain(keyChainConstansts.WALLPAPER_CHANGE_UNLOCK_SETTINGS, keyChainConstansts.WALLPAPER_CHANGE_UNLOCK_SETTINGS,
+            JSON.stringify(true));
+        setWallPaperChangeSettings({ ...wallPaperChangeSettings, unlockWallPaperEnabled: true });
+    } catch (error) {
+        console.log(errorMessages.COULD_NOT_SUBMIT_WALLPAPER_CHANGE_UNLOCK, error);
+    }
+}
+
+export const disableUnlockChange = async (wallPaperChangeSettings, setWallPaperChangeSettings) => {
+    try {
+        await setScreenUnLockWallpaperService(miscMessage.STOP_UNLOCK_WALLPAPER_SERVICE);
+        await saveDetailsToKeyChain(keyChainConstansts.WALLPAPER_CHANGE_UNLOCK_SETTINGS, keyChainConstansts.WALLPAPER_CHANGE_UNLOCK_SETTINGS,
+            JSON.stringify(false));
+        setWallPaperChangeSettings({ ...wallPaperChangeSettings, unlockWallPaperEnabled: false });
+    } catch (error) {
+        console.log(errorMessages.COULD_NOT_DISABLE_WALLPAPER_CHANGE_UNLOCK, error);
     }
 }

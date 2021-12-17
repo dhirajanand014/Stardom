@@ -3,7 +3,7 @@ import { Controller } from 'react-hook-form';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { numericConstants } from '../../constants/Constants';
 import { onChangeByValueType } from '../../helper/Helper';
-import { SDGenericStyles, userAuthStyles } from '../../styles/Styles';
+import { colors, SDGenericStyles, userAuthStyles } from '../../styles/Styles';
 import { ArrowDownIcon } from '../icons/ArrowDownIcon';
 import { ArrowUpIcon } from '../icons/ArrowUpIcon';
 
@@ -15,9 +15,9 @@ export const SDDropDownPicker = props => {
                     <DropDownPicker items={props.list} containerStyle={props.containerStyle} dropDownStyle={SDGenericStyles.dropDownBackGround}
                         selectedLabelStyle={props.selectedLabelStyle} dropDownMaxHeight={numericConstants.ONE_HUNDER_EIGHTY}
                         itemStyle={SDGenericStyles.justifyItemsStart} customArrowUp={(size, color) =>
-                            <ArrowUpIcon width={size} height={size} color={color} />} customArrowDown={(size, color) =>
-                                <ArrowDownIcon width={size} height={size} color={color} />}
-                        onChangeItem={item => onChangeByValueType(inputProps, item.value, props)} defaultValue={inputProps.value} activeItemStyle={SDGenericStyles.colorGreen}
+                            <ArrowUpIcon width={size} height={size} color={colors.SDOM_PLACEHOLDER || color} />} customArrowDown={(size, color) =>
+                                <ArrowDownIcon width={size} height={size} color={colors.SDOM_PLACEHOLDER || color} />}
+                        onChangeItem={item => onChangeByValueType(inputProps, item.value, props)} defaultValue={props.defaultValue || inputProps.value} activeItemStyle={SDGenericStyles.colorGreen}
                         placeholder={props.placeHolderText} placeholderStyle={SDGenericStyles.placeHolderTextColor} multiple={props.multiple} searchable={props.searchable}
                         style={[props.formState.errors[props.inputName]?.message && userAuthStyles.errorInputBorder || userAuthStyles.normalInputBorder, props.extraStyles]}
                         globalTextStyle={props.globalTextStyle} />)
